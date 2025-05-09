@@ -5,6 +5,10 @@
 
 The Extendconfig Python library provides convenient access to the Extendconfig API from Python.
 
+## Documentation
+
+API reference documentation is available [here](https://docs.extend.ai/2025-04-21/developers/authentication).
+
 ## Installation
 
 ```sh
