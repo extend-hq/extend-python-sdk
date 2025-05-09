@@ -1,3 +1,3 @@
 from importlib import metadata
 
-__version__ = metadata.version("extendai")
+__version__ = metadata.version("extend_ai")
