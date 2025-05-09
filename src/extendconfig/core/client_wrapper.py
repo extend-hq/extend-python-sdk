@@ -25,7 +25,7 @@ class BaseClientWrapper:
         headers: typing.Dict[str, str] = {
             "X-Fern-Language": "Python",
             "X-Fern-SDK-Name": "extend_ai",
-            "X-Fern-SDK-Version": "0.0.23",
+            "X-Fern-SDK-Version": "0.0.29",
         }
         if self._extend_api_version is not None:
             headers["x-extend-api-version"] = self._extend_api_version
