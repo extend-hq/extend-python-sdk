@@ -24,15 +24,9 @@ A full reference for this library is available [here](./reference.md).
 Instantiate and use the client with the following:
 
 ```python
-from extendconfig import Extend
-
-client = Extend(
-    extend_api_version="YOUR_EXTEND_API_VERSION",
-    token="YOUR_TOKEN",
-)
-client.run_workflow(
-    workflow_id="workflow_id_here",
-)
+from extend_ai import Extend
+client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client.run_workflow(workflow_id='workflow_id_here', )
 ```
 
 ## Async Client
@@ -40,22 +34,11 @@ client.run_workflow(
 The SDK also exports an `async` client so that you can make non-blocking calls to our API.
 
 ```python
+from extend_ai import AsyncExtend
 import asyncio
-
-from extendconfig import AsyncExtend
-
-client = AsyncExtend(
-    extend_api_version="YOUR_EXTEND_API_VERSION",
-    token="YOUR_TOKEN",
-)
-
-
+client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
 async def main() -> None:
-    await client.run_workflow(
-        workflow_id="workflow_id_here",
-    )
-
-
+    await client.run_workflow(workflow_id='workflow_id_here', )
 asyncio.run(main())
 ```
 
@@ -65,8 +48,7 @@ When the API returns a non-success status code (4xx or 5xx response), a subclass
 will be thrown.
 
 ```python
-from extendconfig.core.api_error import ApiError
-
+from extend_ai.core.api_error import ApiError
 try:
     client.run_workflow(...)
 except ApiError as e:
@@ -76,13 +58,26 @@ except ApiError as e:
 
 ## Advanced
 
+### Access Raw Response Data
+
+The SDK provides access to raw response data, including headers, through the `.with_raw_response` property.
+The `.with_raw_response` property returns a "raw" client that can be used to access the `.headers` and `.data` attributes.
+
+```python
+from extend_ai import Extend
+client = Extend(..., )
+response = client.with_raw_response.run_workflow(...)
+print(response.headers)  # access the response headers
+print(response.data)  # access the underlying object
+```
+
 ### Retries
 
 The SDK is instrumented with automatic retries with exponential backoff. A request will be retried as long
-as the request is deemed retriable and the number of retry attempts has not grown larger than the configured
+as the request is deemed retryable and the number of retry attempts has not grown larger than the configured
 retry limit (default: 2).
 
-A request is deemed retriable when any of the following HTTP status codes is returned:
+A request is deemed retryable when any of the following HTTP status codes is returned:
 
 - [408](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/408) (Timeout)
 - [429](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429) (Too Many Requests)
@@ -102,13 +97,8 @@ The SDK defaults to a 60 second timeout. You can configure this with a timeout o
 
 ```python
 
-from extendconfig import Extend
-
-client = Extend(
-    ...,
-    timeout=20.0,
-)
-
+from extend_ai import Extend
+client = Extend(..., timeout=20.0, )
 
 # Override timeout for a specific method
 client.run_workflow(..., request_options={
@@ -120,18 +110,11 @@ client.run_workflow(..., request_options={
 
 You can override the `httpx` client to customize it for your use-case. Some common use-cases include support for proxies
 and transports.
-```python
-import httpx
-from extendconfig import Extend
 
-client = Extend(
-    ...,
-    httpx_client=httpx.Client(
-        proxies="http://my.test.proxy.example.com",
-        transport=httpx.HTTPTransport(local_address="0.0.0.0"),
-    ),
-)
-```
+```python
+from extend_ai import Extend
+import httpx
+client = Extend(..., httpx_client=httpx.Client(proxies="http://my.test.proxy.example.com", transport=httpx.HTTPTransport(local_address="0.0.0.0"), ))```
 
 ## Contributing
 
