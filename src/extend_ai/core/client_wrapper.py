@@ -23,10 +23,10 @@ class BaseClientWrapper:
 
     def get_headers(self) -> typing.Dict[str, str]:
         headers: typing.Dict[str, str] = {
-            "User-Agent": "extend_ai/0.0.32",
+            "User-Agent": "extend_ai/0.0.33",
             "X-Fern-Language": "Python",
             "X-Fern-SDK-Name": "extend_ai",
-            "X-Fern-SDK-Version": "0.0.32",
+            "X-Fern-SDK-Version": "0.0.33",
         }
         if self._extend_api_version is not None:
             headers["x-extend-api-version"] = self._extend_api_version
