@@ -11,7 +11,6 @@ from .environment import ExtendEnvironment
 from .evaluation_set.client import AsyncEvaluationSetClient, EvaluationSetClient
 from .evaluation_set_item.client import AsyncEvaluationSetItemClient, EvaluationSetItemClient
 from .file.client import AsyncFileClient, FileClient
-from .file_endpoints.client import AsyncFileEndpointsClient, FileEndpointsClient
 from .processor.client import AsyncProcessorClient, ProcessorClient
 from .processor_run.client import AsyncProcessorRunClient, ProcessorRunClient
 from .processor_version.client import AsyncProcessorVersionClient, ProcessorVersionClient
@@ -29,7 +28,6 @@ from .types.run_processor_response import RunProcessorResponse
 from .types.run_workflow_response import RunWorkflowResponse
 from .workflow.client import AsyncWorkflowClient, WorkflowClient
 from .workflow_run.client import AsyncWorkflowRunClient, WorkflowRunClient
-from .workflow_run_output.client import AsyncWorkflowRunOutputClient, WorkflowRunOutputClient
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -100,10 +98,8 @@ class Extend:
         self.processor = ProcessorClient(client_wrapper=self._client_wrapper)
         self.processor_version = ProcessorVersionClient(client_wrapper=self._client_wrapper)
         self.file = FileClient(client_wrapper=self._client_wrapper)
-        self.file_endpoints = FileEndpointsClient(client_wrapper=self._client_wrapper)
         self.evaluation_set = EvaluationSetClient(client_wrapper=self._client_wrapper)
         self.evaluation_set_item = EvaluationSetItemClient(client_wrapper=self._client_wrapper)
-        self.workflow_run_output = WorkflowRunOutputClient(client_wrapper=self._client_wrapper)
         self.batch_processor_run = BatchProcessorRunClient(client_wrapper=self._client_wrapper)
         self.workflow = WorkflowClient(client_wrapper=self._client_wrapper)
 
@@ -362,10 +358,8 @@ class AsyncExtend:
         self.processor = AsyncProcessorClient(client_wrapper=self._client_wrapper)
         self.processor_version = AsyncProcessorVersionClient(client_wrapper=self._client_wrapper)
         self.file = AsyncFileClient(client_wrapper=self._client_wrapper)
-        self.file_endpoints = AsyncFileEndpointsClient(client_wrapper=self._client_wrapper)
         self.evaluation_set = AsyncEvaluationSetClient(client_wrapper=self._client_wrapper)
         self.evaluation_set_item = AsyncEvaluationSetItemClient(client_wrapper=self._client_wrapper)
-        self.workflow_run_output = AsyncWorkflowRunOutputClient(client_wrapper=self._client_wrapper)
         self.batch_processor_run = AsyncBatchProcessorRunClient(client_wrapper=self._client_wrapper)
         self.workflow = AsyncWorkflowClient(client_wrapper=self._client_wrapper)
 
