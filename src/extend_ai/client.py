@@ -3,15 +3,33 @@
 import typing
 
 import httpx
+from .batch_processor_run.client import AsyncBatchProcessorRunClient, BatchProcessorRunClient
+from .batch_workflow_run.client import AsyncBatchWorkflowRunClient, BatchWorkflowRunClient
 from .core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from .core.request_options import RequestOptions
 from .environment import ExtendEnvironment
+from .evaluation_set.client import AsyncEvaluationSetClient, EvaluationSetClient
+from .evaluation_set_item.client import AsyncEvaluationSetItemClient, EvaluationSetItemClient
+from .file.client import AsyncFileClient, FileClient
+from .file_endpoints.client import AsyncFileEndpointsClient, FileEndpointsClient
+from .processor.client import AsyncProcessorClient, ProcessorClient
+from .processor_run.client import AsyncProcessorRunClient, ProcessorRunClient
+from .processor_version.client import AsyncProcessorVersionClient, ProcessorVersionClient
 from .raw_client import AsyncRawExtend, RawExtend
 from .types.api_version_enum import ApiVersionEnum
+from .types.file3processor import File3Processor
 from .types.file4 import File4
 from .types.json_object import JsonObject
+from .types.parse_config import ParseConfig
+from .types.parse_request_file import ParseRequestFile
+from .types.parse_response import ParseResponse
+from .types.processor_id import ProcessorId
+from .types.run_processor_request_config import RunProcessorRequestConfig
+from .types.run_processor_response import RunProcessorResponse
 from .types.run_workflow_response import RunWorkflowResponse
+from .workflow.client import AsyncWorkflowClient, WorkflowClient
 from .workflow_run.client import AsyncWorkflowRunClient, WorkflowRunClient
+from .workflow_run_output.client import AsyncWorkflowRunOutputClient, WorkflowRunOutputClient
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -77,6 +95,17 @@ class Extend:
         )
         self._raw_client = RawExtend(client_wrapper=self._client_wrapper)
         self.workflow_run = WorkflowRunClient(client_wrapper=self._client_wrapper)
+        self.batch_workflow_run = BatchWorkflowRunClient(client_wrapper=self._client_wrapper)
+        self.processor_run = ProcessorRunClient(client_wrapper=self._client_wrapper)
+        self.processor = ProcessorClient(client_wrapper=self._client_wrapper)
+        self.processor_version = ProcessorVersionClient(client_wrapper=self._client_wrapper)
+        self.file = FileClient(client_wrapper=self._client_wrapper)
+        self.file_endpoints = FileEndpointsClient(client_wrapper=self._client_wrapper)
+        self.evaluation_set = EvaluationSetClient(client_wrapper=self._client_wrapper)
+        self.evaluation_set_item = EvaluationSetItemClient(client_wrapper=self._client_wrapper)
+        self.workflow_run_output = WorkflowRunOutputClient(client_wrapper=self._client_wrapper)
+        self.batch_processor_run = BatchProcessorRunClient(client_wrapper=self._client_wrapper)
+        self.workflow = WorkflowClient(client_wrapper=self._client_wrapper)
 
     @property
     def with_raw_response(self) -> RawExtend:
@@ -154,6 +183,119 @@ class Extend:
         )
         return _response.data
 
+    def run_processor(
+        self,
+        *,
+        processor_id: ProcessorId,
+        version: typing.Optional[str] = OMIT,
+        file: typing.Optional[File3Processor] = OMIT,
+        raw_text: typing.Optional[str] = OMIT,
+        priority: typing.Optional[int] = OMIT,
+        metadata: typing.Optional[JsonObject] = OMIT,
+        config: typing.Optional[RunProcessorRequestConfig] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> RunProcessorResponse:
+        """
+        Run processors (extraction, classification, splitting, etc.) on a given document.
+
+        In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
+        * file parsing/pre-processing will automatically be reused across multiple processors, which will give you simplicity and cost savings given that many use cases will require multiple processors to be run on the same document.
+        * workflows provide dedicated human in the loop document review, when needed.
+        * workflows allow you to model and manage your pipeline with a single endpoint and corresponding UI for modeling and monitoring.
+
+        However, there are a number of legitimate use cases and systems where it might be easier to model the pipeline via code and run processors directly. This endpoint is provided for this purpose.
+
+        Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+
+        Parameters
+        ----------
+        processor_id : ProcessorId
+
+        version : typing.Optional[str]
+            An optional version of the processor to use. When not supplied, the most recent published version of the processor will be used. Special values include:
+            - `"latest"` for the most recent published version. If there are no published versions, the draft version will be used.
+            - `"draft"` for the draft version.
+            - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
+
+        file : typing.Optional[File3Processor]
+            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/developers/guides/supported-file-types).
+
+        raw_text : typing.Optional[str]
+            A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
+
+        priority : typing.Optional[int]
+            An optional value used to determine the relative order of ProcessorRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
+
+        metadata : typing.Optional[JsonObject]
+            An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
+
+        config : typing.Optional[RunProcessorRequestConfig]
+            The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        RunProcessorResponse
+            Successfully created processor run
+
+        Examples
+        --------
+        from extend_ai import Extend
+        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client.run_processor(processor_id='processor_id_here', )
+        """
+        _response = self._raw_client.run_processor(
+            processor_id=processor_id,
+            version=version,
+            file=file,
+            raw_text=raw_text,
+            priority=priority,
+            metadata=metadata,
+            config=config,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def parse(
+        self, *, file: ParseRequestFile, config: ParseConfig, request_options: typing.Optional[RequestOptions] = None
+    ) -> ParseResponse:
+        """
+        Parse files to get cleaned, chunked target content (e.g. markdown).
+
+        The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
+
+        Unlike processor and workflow runs, parsing is a synchronous endpoint and returns the parsed content in the response. Expected latency depends primarily on file size. This makes it suitable for workflows where you need immediate access to document content without waiting for asynchronous processing.
+
+        For more details, see the [Parse File guide](/developers/guides/parse).
+
+        Parameters
+        ----------
+        file : ParseRequestFile
+            A file object containing either a URL or a fileId.
+
+        config : ParseConfig
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ParseResponse
+            Successfully parsed file
+
+        Examples
+        --------
+        from extend_ai import Extend
+        from extend_ai import ParseRequestFile
+        from extend_ai import ParseConfig
+        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client.parse(file=ParseRequestFile(), config=ParseConfig(), )
+        """
+        _response = self._raw_client.parse(file=file, config=config, request_options=request_options)
+        return _response.data
+
 
 class AsyncExtend:
     """
@@ -215,6 +357,17 @@ class AsyncExtend:
         )
         self._raw_client = AsyncRawExtend(client_wrapper=self._client_wrapper)
         self.workflow_run = AsyncWorkflowRunClient(client_wrapper=self._client_wrapper)
+        self.batch_workflow_run = AsyncBatchWorkflowRunClient(client_wrapper=self._client_wrapper)
+        self.processor_run = AsyncProcessorRunClient(client_wrapper=self._client_wrapper)
+        self.processor = AsyncProcessorClient(client_wrapper=self._client_wrapper)
+        self.processor_version = AsyncProcessorVersionClient(client_wrapper=self._client_wrapper)
+        self.file = AsyncFileClient(client_wrapper=self._client_wrapper)
+        self.file_endpoints = AsyncFileEndpointsClient(client_wrapper=self._client_wrapper)
+        self.evaluation_set = AsyncEvaluationSetClient(client_wrapper=self._client_wrapper)
+        self.evaluation_set_item = AsyncEvaluationSetItemClient(client_wrapper=self._client_wrapper)
+        self.workflow_run_output = AsyncWorkflowRunOutputClient(client_wrapper=self._client_wrapper)
+        self.batch_processor_run = AsyncBatchProcessorRunClient(client_wrapper=self._client_wrapper)
+        self.workflow = AsyncWorkflowClient(client_wrapper=self._client_wrapper)
 
     @property
     def with_raw_response(self) -> AsyncRawExtend:
@@ -293,6 +446,125 @@ class AsyncExtend:
             metadata=metadata,
             request_options=request_options,
         )
+        return _response.data
+
+    async def run_processor(
+        self,
+        *,
+        processor_id: ProcessorId,
+        version: typing.Optional[str] = OMIT,
+        file: typing.Optional[File3Processor] = OMIT,
+        raw_text: typing.Optional[str] = OMIT,
+        priority: typing.Optional[int] = OMIT,
+        metadata: typing.Optional[JsonObject] = OMIT,
+        config: typing.Optional[RunProcessorRequestConfig] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> RunProcessorResponse:
+        """
+        Run processors (extraction, classification, splitting, etc.) on a given document.
+
+        In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
+        * file parsing/pre-processing will automatically be reused across multiple processors, which will give you simplicity and cost savings given that many use cases will require multiple processors to be run on the same document.
+        * workflows provide dedicated human in the loop document review, when needed.
+        * workflows allow you to model and manage your pipeline with a single endpoint and corresponding UI for modeling and monitoring.
+
+        However, there are a number of legitimate use cases and systems where it might be easier to model the pipeline via code and run processors directly. This endpoint is provided for this purpose.
+
+        Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+
+        Parameters
+        ----------
+        processor_id : ProcessorId
+
+        version : typing.Optional[str]
+            An optional version of the processor to use. When not supplied, the most recent published version of the processor will be used. Special values include:
+            - `"latest"` for the most recent published version. If there are no published versions, the draft version will be used.
+            - `"draft"` for the draft version.
+            - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
+
+        file : typing.Optional[File3Processor]
+            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/developers/guides/supported-file-types).
+
+        raw_text : typing.Optional[str]
+            A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
+
+        priority : typing.Optional[int]
+            An optional value used to determine the relative order of ProcessorRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
+
+        metadata : typing.Optional[JsonObject]
+            An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
+
+        config : typing.Optional[RunProcessorRequestConfig]
+            The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        RunProcessorResponse
+            Successfully created processor run
+
+        Examples
+        --------
+        from extend_ai import AsyncExtend
+        import asyncio
+        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        async def main() -> None:
+            await client.run_processor(processor_id='processor_id_here', )
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.run_processor(
+            processor_id=processor_id,
+            version=version,
+            file=file,
+            raw_text=raw_text,
+            priority=priority,
+            metadata=metadata,
+            config=config,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def parse(
+        self, *, file: ParseRequestFile, config: ParseConfig, request_options: typing.Optional[RequestOptions] = None
+    ) -> ParseResponse:
+        """
+        Parse files to get cleaned, chunked target content (e.g. markdown).
+
+        The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
+
+        Unlike processor and workflow runs, parsing is a synchronous endpoint and returns the parsed content in the response. Expected latency depends primarily on file size. This makes it suitable for workflows where you need immediate access to document content without waiting for asynchronous processing.
+
+        For more details, see the [Parse File guide](/developers/guides/parse).
+
+        Parameters
+        ----------
+        file : ParseRequestFile
+            A file object containing either a URL or a fileId.
+
+        config : ParseConfig
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ParseResponse
+            Successfully parsed file
+
+        Examples
+        --------
+        from extend_ai import AsyncExtend
+        from extend_ai import ParseRequestFile
+        from extend_ai import ParseConfig
+        import asyncio
+        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        async def main() -> None:
+            await client.parse(file=ParseRequestFile(), config=ParseConfig(), )
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.parse(file=file, config=config, request_options=request_options)
         return _response.data
 
 
