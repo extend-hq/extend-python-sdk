@@ -4,4 +4,4 @@ import typing
 
 from .extraction_field_result import ExtractionFieldResult
 
-LegacyOutput = typing.Dict[str, ExtractionFieldResult]
+FieldsArrayOutput = typing.Dict[str, ExtractionFieldResult]

@@ -3,9 +3,7 @@
 import typing
 
 import pydantic
-import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
-from ..core.serialization import FieldMetadata
 
 
 class Error(UniversalBaseModel):
@@ -13,23 +11,6 @@ class Error(UniversalBaseModel):
     error: typing.Optional[str] = pydantic.Field(default=None)
     """
     Error message
-    """
-
-    code: typing.Optional[str] = pydantic.Field(default=None)
-    """
-    Error code
-    """
-
-    request_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="requestId")] = pydantic.Field(
-        default=None
-    )
-    """
-    Request ID for troubleshooting
-    """
-
-    retryable: typing.Optional[bool] = pydantic.Field(default=None)
-    """
-    Whether the request can be retried
     """
 
     if IS_PYDANTIC_V2:

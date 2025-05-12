@@ -87,7 +87,7 @@ class RawWorkflowRunClient:
         HttpResponse[WorkflowRunListResponse]
             You will get a list of summaries for each workflow run. These are shortened versions of the full WorkflowRun object.
 
-            To get the full object, use the [Get WorkflowRun](/developers/api-reference/workflow-endpoints/get-workflow-run) endpoint.
+            To get the full object, use the [Get WorkflowRun](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/get-workflow-run) endpoint.
         """
         _response = self._client_wrapper.httpx_client.request(
             "workflow_runs",
@@ -370,7 +370,7 @@ class AsyncRawWorkflowRunClient:
         AsyncHttpResponse[WorkflowRunListResponse]
             You will get a list of summaries for each workflow run. These are shortened versions of the full WorkflowRun object.
 
-            To get the full object, use the [Get WorkflowRun](/developers/api-reference/workflow-endpoints/get-workflow-run) endpoint.
+            To get the full object, use the [Get WorkflowRun](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/get-workflow-run) endpoint.
         """
         _response = await self._client_wrapper.httpx_client.request(
             "workflow_runs",

@@ -2,7 +2,7 @@
 
 import typing
 
+from .fields_array_output import FieldsArrayOutput
 from .json_output import JsonOutput
-from .legacy_output import LegacyOutput
 
-ExtractionOutput = typing.Union[JsonOutput, LegacyOutput]
+ExtractionOutput = typing.Union[JsonOutput, FieldsArrayOutput]

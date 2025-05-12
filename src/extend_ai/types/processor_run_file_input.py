@@ -8,12 +8,9 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
 
 
-class File3Processor(UniversalBaseModel):
-    file_url: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="fileUrl")] = pydantic.Field(
-        default=None
-    )
+class ProcessorRunFileInput(UniversalBaseModel):
     """
-    A URL where the file can be downloaded from. If you use presigned URLs, we recommend an expiration time of 5-15 minutes. One of a `fileUrl` or `fileId` must be provided.
+    Input file for running a single processor.
     """
 
     file_name: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="fileName")] = pydantic.Field(
@@ -23,13 +20,18 @@ class File3Processor(UniversalBaseModel):
     The name of the file to be processed. If not provided, the file name will be inferred from the URL. It is highly recommended to include this parameter for legibility.
     """
 
+    file_url: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="fileUrl")] = pydantic.Field(
+        default=None
+    )
+    """
+    A URL where the file can be downloaded from. If you use presigned URLs, we recommend an expiration time of 5-15 minutes. One of a `fileUrl` or `fileId` must be provided.
+    """
+
     file_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="fileId")] = pydantic.Field(
         default=None
     )
     """
     Extend's internal ID for the file. It will always start with `file_`. One of a `fileUrl` or `fileId` must be provided. You can view a file ID from the Extend UI, for instance from running a parser or from a previous file creation. If you provide a `fileId`, any parsed data will be reused.
-    
-    Example: `"file_Zk9mNP12Qw4yTv8BdR3H"`
     """
 
     if IS_PYDANTIC_V2:

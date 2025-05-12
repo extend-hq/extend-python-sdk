@@ -56,7 +56,7 @@ Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 <dl>
 <dd>
 
-**files:** `typing.Optional[typing.Sequence[File4]]` — An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](/developers/guides/supported-file-types).
+**files:** `typing.Optional[typing.Sequence[WorkflowRunFileInput]]` — An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
     
 </dd>
 </dl>
@@ -128,14 +128,14 @@ Examples:
 
 Run processors (extraction, classification, splitting, etc.) on a given document.
 
-In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
+In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
 * file parsing/pre-processing will automatically be reused across multiple processors, which will give you simplicity and cost savings given that many use cases will require multiple processors to be run on the same document.
 * workflows provide dedicated human in the loop document review, when needed.
 * workflows allow you to model and manage your pipeline with a single endpoint and corresponding UI for modeling and monitoring.
 
 However, there are a number of legitimate use cases and systems where it might be easier to model the pipeline via code and run processors directly. This endpoint is provided for this purpose.
 
-Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
 </dd>
 </dl>
 </dd>
@@ -189,7 +189,7 @@ An optional version of the processor to use. When not supplied, the most recent 
 <dl>
 <dd>
 
-**file:** `typing.Optional[File3Processor]` — The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/developers/guides/supported-file-types).
+**file:** `typing.Optional[ProcessorRunFileInput]` — The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
     
 </dd>
 </dl>
@@ -259,7 +259,7 @@ The Parse endpoint allows you to convert documents into structured, machine-read
 
 Unlike processor and workflow runs, parsing is a synchronous endpoint and returns the parsed content in the response. Expected latency depends primarily on file size. This makes it suitable for workflows where you need immediate access to document content without waiting for asynchronous processing.
 
-For more details, see the [Parse File guide](/developers/guides/parse).
+For more details, see the [Parse File guide](https://docs.extend.ai/2025-04-21/developers/guides/parse).
 </dd>
 </dl>
 </dd>
@@ -627,31 +627,15 @@ You can include any arbitrary `key : value` pairs in this object.
 
 This endpoint allows you to efficiently initiate large batches of workflow runs in a single request (up to 1,000 in a single request, but you can queue up multiple batches in rapid succession). It accepts an array of inputs, each containing a file and metadata pair. The primary use case for this endpoint is for doing large bulk runs of >1000 files at a time that can process over the course of a few hours without needing to manage rate limits that would likely occur using the primary run endpoint.
 
-Unlike the single [Run Workflow](/developers/api-reference/workflow-endpoints/run-workflow) endpoint which returns the details of the created workflow runs immediately, this batch endpoint returns a `batchId`.
+Unlike the single [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint which returns the details of the created workflow runs immediately, this batch endpoint returns a `batchId`.
 
-Our recommended usage pattern is to integrate with [Webhooks](/developers/webhooks/configuration) for consuming results, using the `metadata` and `batchId` to match up results to the original inputs in your downstream systems. However, you can integrate in a polling mechanism by using a combination of the [List Workflow Runs](/developers/workflow-endpoints/list-workflow-runs) endpoint to fetch all runs via a batch, and then [Get Workflow Run](/developers/workflow-endpoints/get-workflow-run) to fetch the full outputs each run.
+Our recommended usage pattern is to integrate with [Webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) for consuming results, using the `metadata` and `batchId` to match up results to the original inputs in your downstream systems. However, you can integrate in a polling mechanism by using a combination of the [List Workflow Runs](https://docs.extend.ai/2025-04-21/developers/workflow-endpoints/list-workflow-runs) endpoint to fetch all runs via a batch, and then [Get Workflow Run](https://docs.extend.ai/2025-04-21/developers/workflow-endpoints/get-workflow-run) to fetch the full outputs each run.
 
 **Processing and Monitoring:**
 Upon successful submission, the endpoint returns a `batchId`. The individual workflow runs are then queued for processing.
 
-- **Monitoring:** Track the progress and consume results of individual runs using [Webhooks](/developers/webhooks/configuration). Subscribe to events like `workflow_run.completed`, `workflow_run.failed`, etc. The webhook payload for these events will include the corresponding `batchId` and the `metadata` you provided for each input.
-- **Fetching Results:** You can also use the [List Workflow Runs](/developers/api-reference/workflow-endpoints/list-workflow-runs) endpoint and filter using the `batchId` query param.
-
-**Error Responses**
-
-Common errors include:
-
-**400 Bad Request**: Invalid request body (e.g., missing required fields, array size limits exceeded, issues with `fileUrl` or `fileId`). The response body will contain an `error` message detailing the specific validation issues. Can also indicate issues accessing a provided `fileUrl`.
-
-**401 Unauthorized**: Missing or invalid API token.
-
-**403 Forbidden**: The API token does not have permission to access the specified workflow.
-
-**404 Not Found**: The specified `workflowId` or `version` does not exist.
-
-**429 Too Many Requests**: The request was rate limited. Please try again later.
-
-**500 Internal Server Error**: An unexpected error occurred on the server.
+- **Monitoring:** Track the progress and consume results of individual runs using [Webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration). Subscribe to events like `workflow_run.completed`, `workflow_run.failed`, etc. The webhook payload for these events will include the corresponding `batchId` and the `metadata` you provided for each input.
+- **Fetching Results:** You can also use the [List Workflow Runs](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/list-workflow-runs) endpoint and filter using the `batchId` query param.
 </dd>
 </dl>
 </dd>
@@ -740,7 +724,7 @@ Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
 Retrieve details about a specific processor run, including its status, outputs, and any edits made during review.
 
-A common use case for this endpoint is to poll for the status and final output of an async processor run when using the [Run Processor](/developers/api-reference/processor-endpoints/run-processor) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
+A common use case for this endpoint is to poll for the status and final output of an async processor run when using the [Run Processor](https://docs.extend.ai/2025-04-21/developers/api-reference/processor-endpoints/run-processor) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
 </dd>
 </dl>
 </dd>
@@ -1447,11 +1431,11 @@ Only available for files with a type of DOCX.
 
 Upload and create a new file in Extend.
 
-This endpoint accepts file contents and registers them as a File in Extend, which can be used for [running workflows](/developers/api-reference/workflow-endpoints/run-workflow), [creating evaluation sets](/developers/api-reference/evaluation-set-endpoints/bulk-create-evaluation-set-items), [parsing](/developers/api-reference/parse-endpoints/parse-file), etc.
+This endpoint accepts file contents and registers them as a File in Extend, which can be used for [running workflows](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow), [creating evaluation set items](https://docs.extend.ai/2025-04-21/developers/api-reference/evaluation-set-endpoints/bulk-create-evaluation-set-items), [parsing](https://docs.extend.ai/2025-04-21/developers/api-reference/parse-endpoints/parse-file), etc.
 
 If an uploaded file is detected as a Word or PowerPoint document, it will be automatically converted to a PDF.
 
-Supported file types can be found [here](/developers/guides/supported-file-types).
+Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
 
 This endpoint requires multipart form encoding. Most HTTP clients will handle this encoding automatically (see the examples).
 </dd>
@@ -1610,7 +1594,7 @@ client.file_endpoints.create_file(name='name', )
 <dl>
 <dd>
 
-Evaluation sets are collections of files and expected outputs that are used to evaluate the performance of a given processor in Extend. This endpoint will create a new evaluation set in Extend, which items can be added to using the [Create Evaluation Set Item](/developers/api-reference/evaluation-set-endpoints/create-evaluation-set-item) endpoint.
+Evaluation sets are collections of files and expected outputs that are used to evaluate the performance of a given processor in Extend. This endpoint will create a new evaluation set in Extend, which items can be added to using the [Create Evaluation Set Item](https://docs.extend.ai/2025-04-21/developers/api-reference/evaluation-set-endpoints/create-evaluation-set-item) endpoint.
 
 Note: it is not necessary to create an evaluation set via API. You can also create an evaluation set via the Extend dashboard and take the ID from there.
 </dd>

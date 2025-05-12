@@ -31,7 +31,7 @@ class ParseRequestFile(UniversalBaseModel):
         default=None
     )
     """
-    If you already have an Extend file id (for instance from running a workflow or a previous [file upload](/developers/api-reference/file-endpoints/upload-file)) then you can use that file id when running the parse endpoint so that it leverage any cached data that might be available. The file id will start with "file_". One of `fileUrl` or `fileId` must be provided.
+    If you already have an Extend file id (for instance from running a workflow or a previous [file upload](https://docs.extend.ai/2025-04-21/developers/api-reference/file-endpoints/upload-file)) then you can use that file id when running the parse endpoint so that it leverage any cached data that might be available. The file id will start with "file_". One of `fileUrl` or `fileId` must be provided.
     
     Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
     """

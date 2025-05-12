@@ -11,6 +11,7 @@ from .batch_processor_run_metrics import BatchProcessorRunMetrics
 from .batch_processor_run_options import BatchProcessorRunOptions
 from .batch_processor_run_source import BatchProcessorRunSource
 from .batch_processor_run_status import BatchProcessorRunStatus
+from .batch_workflow_run_file_input import BatchWorkflowRunFileInput
 from .block import Block
 from .block_bounding_box import BlockBoundingBox
 from .block_details import BlockDetails
@@ -54,13 +55,10 @@ from .extraction_field_result_value import ExtractionFieldResultValue
 from .extraction_field_type import ExtractionFieldType
 from .extraction_output import ExtractionOutput
 from .extraction_output_edits import ExtractionOutputEdits
+from .fields_array_output import FieldsArrayOutput
 from .figure_details import FigureDetails
 from .figure_details_figure_type import FigureDetailsFigureType
 from .file import File
-from .file3batch_run import File3BatchRun
-from .file3processor import File3Processor
-from .file4 import File4
-from .file4outputs_item import File4OutputsItem
 from .file_contents import FileContents
 from .file_contents_pages_item import FileContentsPagesItem
 from .file_contents_sheets_item import FileContentsSheetsItem
@@ -74,7 +72,6 @@ from .json_output_metadata_value import JsonOutputMetadataValue
 from .json_output_metadata_value_citations_item import JsonOutputMetadataValueCitationsItem
 from .json_output_metadata_value_citations_item_polygon_item import JsonOutputMetadataValueCitationsItemPolygonItem
 from .json_output_metadata_value_insights_item import JsonOutputMetadataValueInsightsItem
-from .legacy_output import LegacyOutput
 from .max_page_size import MaxPageSize
 from .next_page_token import NextPageToken
 from .output_metadata import OutputMetadata
@@ -106,6 +103,7 @@ from .processor_run_config import (
     ProcessorRunConfig_Extract,
     ProcessorRunConfig_Splitter,
 )
+from .processor_run_file_input import ProcessorRunFileInput
 from .processor_run_merged_processors_item import ProcessorRunMergedProcessorsItem
 from .processor_run_status import ProcessorRunStatus
 from .processor_run_type import ProcessorRunType
@@ -119,9 +117,9 @@ from .processor_version_config import (
 )
 from .provided_classifier_output import ProvidedClassifierOutput
 from .provided_extraction_output import ProvidedExtractionOutput
+from .provided_fields_array_output import ProvidedFieldsArrayOutput
+from .provided_fields_array_output_value import ProvidedFieldsArrayOutputValue
 from .provided_json_output import ProvidedJsonOutput
-from .provided_legacy_output import ProvidedLegacyOutput
-from .provided_legacy_output_value import ProvidedLegacyOutputValue
 from .provided_processor_output import ProvidedProcessorOutput
 from .provided_splitter_output import ProvidedSplitterOutput
 from .run_processor_request_config import (
@@ -164,6 +162,8 @@ from .webhook_event_workflow_run import WebhookEventWorkflowRun
 from .webhook_event_workflow_run_event_type import WebhookEventWorkflowRunEventType
 from .workflow import Workflow
 from .workflow_run import WorkflowRun
+from .workflow_run_file_input import WorkflowRunFileInput
+from .workflow_run_file_input_outputs_item import WorkflowRunFileInputOutputsItem
 from .workflow_run_summary import WorkflowRunSummary
 from .workflow_status import WorkflowStatus
 
@@ -177,6 +177,7 @@ __all__ = [
     "BatchProcessorRunOptions",
     "BatchProcessorRunSource",
     "BatchProcessorRunStatus",
+    "BatchWorkflowRunFileInput",
     "Block",
     "BlockBoundingBox",
     "BlockDetails",
@@ -220,13 +221,10 @@ __all__ = [
     "ExtractionFieldType",
     "ExtractionOutput",
     "ExtractionOutputEdits",
+    "FieldsArrayOutput",
     "FigureDetails",
     "FigureDetailsFigureType",
     "File",
-    "File3BatchRun",
-    "File3Processor",
-    "File4",
-    "File4OutputsItem",
     "FileContents",
     "FileContentsPagesItem",
     "FileContentsSheetsItem",
@@ -240,7 +238,6 @@ __all__ = [
     "JsonOutputMetadataValueCitationsItem",
     "JsonOutputMetadataValueCitationsItemPolygonItem",
     "JsonOutputMetadataValueInsightsItem",
-    "LegacyOutput",
     "MaxPageSize",
     "NextPageToken",
     "OutputMetadata",
@@ -270,6 +267,7 @@ __all__ = [
     "ProcessorRunConfig_Classify",
     "ProcessorRunConfig_Extract",
     "ProcessorRunConfig_Splitter",
+    "ProcessorRunFileInput",
     "ProcessorRunMergedProcessorsItem",
     "ProcessorRunStatus",
     "ProcessorRunType",
@@ -281,9 +279,9 @@ __all__ = [
     "ProcessorVersionConfig_Splitter",
     "ProvidedClassifierOutput",
     "ProvidedExtractionOutput",
+    "ProvidedFieldsArrayOutput",
+    "ProvidedFieldsArrayOutputValue",
     "ProvidedJsonOutput",
-    "ProvidedLegacyOutput",
-    "ProvidedLegacyOutputValue",
     "ProvidedProcessorOutput",
     "ProvidedSplitterOutput",
     "RunProcessorRequestConfig",
@@ -324,6 +322,8 @@ __all__ = [
     "WebhookEventWorkflowRunEventType",
     "Workflow",
     "WorkflowRun",
+    "WorkflowRunFileInput",
+    "WorkflowRunFileInputOutputsItem",
     "WorkflowRunSummary",
     "WorkflowStatus",
 ]

@@ -6,12 +6,12 @@ import pydantic
 import typing_extensions
 from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ...core.serialization import FieldMetadata
-from ...types.file3batch_run import File3BatchRun
+from ...types.batch_workflow_run_file_input import BatchWorkflowRunFileInput
 from ...types.json_object import JsonObject
 
 
 class BatchWorkflowRunCreateRequestInputsItem(UniversalBaseModel):
-    file: typing.Optional[File3BatchRun] = pydantic.Field(default=None)
+    file: typing.Optional[BatchWorkflowRunFileInput] = pydantic.Field(default=None)
     """
     The file to be processed. Either `file` or `rawText` must be provided for each input.
     """

@@ -6,7 +6,7 @@ import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 
 
-class ProvidedLegacyOutputValue(UniversalBaseModel):
+class ProvidedFieldsArrayOutputValue(UniversalBaseModel):
     id: str = pydantic.Field()
     """
     The unique identifier for this field

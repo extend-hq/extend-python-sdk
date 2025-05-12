@@ -18,14 +18,14 @@ class ExtractionConfig(UniversalBaseModel):
         typing.Optional[ExtractionConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
     ] = pydantic.Field(default=None)
     """
-    The base processor to use. For extractors, this must be either `"extraction_performance"` or `"extraction_light"`. See the [base processor documentation](/changelog/overview) for more details.
+    The base processor to use. For extractors, this must be either `"extraction_performance"` or `"extraction_light"`. See the [base processor documentation](https://docs.extend.ai/2025-04-21/changelog/overview) for more details.
     """
 
     base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
         pydantic.Field(default=None)
     )
     """
-    The version of the `"extraction_performance"` or `"extraction_light"` processor to use. If this is provided, the `baseProcessor` must also be provided. See the [base processor documentation](/changelog/overview) for more details.
+    The version of the `"extraction_performance"` or `"extraction_light"` processor to use. If this is provided, the `baseProcessor` must also be provided. See the [base processor documentation](https://docs.extend.ai/2025-04-21/changelog/overview) for more details.
     """
 
     extraction_rules: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="extractionRules")] = (
@@ -41,12 +41,12 @@ class ExtractionConfig(UniversalBaseModel):
     """
     JSON Schema definition of the data to extract. Either `fields` or `schema` must be provided.
     
-    See the [schema documentation](/developers/guides/processor-configs#json-schema-structure-schema) for details and examples of schema configuration.
+    See the [schema documentation](https://docs.extend.ai/2025-04-21/developers/guides/processor-configs#json-schema-structure-schema) for details and examples of schema configuration.
     """
 
     fields: typing.Optional[typing.List["ExtractionField"]] = pydantic.Field(default=None)
     """
-    (Legacy) Array of fields to extract from the document. Either `fields` or `schema` must be provided.
+    Array of fields to extract from the document. Either `fields` or `schema` must be provided.
     
     We recommend using `schema` for new implementations.
     """

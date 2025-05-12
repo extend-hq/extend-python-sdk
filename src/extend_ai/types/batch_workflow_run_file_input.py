@@ -8,12 +8,9 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
 
 
-class File3BatchRun(UniversalBaseModel):
-    file_url: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="fileUrl")] = pydantic.Field(
-        default=None
-    )
+class BatchWorkflowRunFileInput(UniversalBaseModel):
     """
-    A URL where the file can be downloaded from. If you use presigned URLs, we suggest a slightly longer expiration time, ideally 30 minutes for a worst case scenario. One of a `fileUrl` or `fileId` must be provided.
+    Input file for batch workflow runs.
     """
 
     file_name: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="fileName")] = pydantic.Field(
@@ -21,6 +18,13 @@ class File3BatchRun(UniversalBaseModel):
     )
     """
     The name to associate with the file. If not provided when using `fileUrl`, the name may be inferred from the URL. This param is only for your reference, and will be rendered in our dashboard, it is not used by the workflow.
+    """
+
+    file_url: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="fileUrl")] = pydantic.Field(
+        default=None
+    )
+    """
+    A URL where the file can be downloaded from. If you use presigned URLs, we suggest a slightly longer expiration time, ideally 30 minutes for a worst case scenario. One of a `fileUrl` or `fileId` must be provided.
     """
 
     file_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="fileId")] = pydantic.Field(

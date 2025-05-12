@@ -9,7 +9,7 @@ from ..core.serialization import FieldMetadata
 from .provided_processor_output import ProvidedProcessorOutput
 
 
-class File4OutputsItem(UniversalBaseModel):
+class WorkflowRunFileInputOutputsItem(UniversalBaseModel):
     processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field()
     """
     The ID of the processor that the output is associated with. The ID will start with "dp_".
@@ -18,7 +18,7 @@ class File4OutputsItem(UniversalBaseModel):
 
     output: ProvidedProcessorOutput = pydantic.Field()
     """
-    The output that is being overridden. The structure will depend on the processor type. More details can be found [here](/developers/guides/output-types).
+    The output that is being overridden. The structure will depend on the processor type. More details can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/output-types).
     """
 
     if IS_PYDANTIC_V2:

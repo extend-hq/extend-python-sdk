@@ -6,12 +6,12 @@ import pydantic
 import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from .file4outputs_item import File4OutputsItem
+from .workflow_run_file_input_outputs_item import WorkflowRunFileInputOutputsItem
 
 
-class File4(UniversalBaseModel):
+class WorkflowRunFileInput(UniversalBaseModel):
     """
-    A file object that can be specified using either a URL or an existing file ID.
+    A file object that can be specified using either a URL or an existing file ID for workflow runs.
     """
 
     file_name: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="fileName")] = pydantic.Field(
@@ -37,7 +37,7 @@ class File4(UniversalBaseModel):
     Example: `"file_Zk9mNP12Qw4yTv8BdR3H"`
     """
 
-    outputs: typing.Optional[typing.List[File4OutputsItem]] = pydantic.Field(default=None)
+    outputs: typing.Optional[typing.List[WorkflowRunFileInputOutputsItem]] = pydantic.Field(default=None)
     """
     Predetermined outputs that can be used to override the outputs that are generated. Generally not recommended for most use cases, however, can be useful in cases of overriding a classification in a workflow, or a subset of extraction fields when data is known.
     """

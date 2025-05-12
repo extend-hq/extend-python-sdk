@@ -16,14 +16,14 @@ class ClassificationConfig(UniversalBaseModel):
         typing.Optional[ClassificationConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
     ] = pydantic.Field(default=None)
     """
-    The base processor to use. For classifiers, this must be either `"classifier_performance"` or `"classifier_light"`. See the [base processor documentation](/changelog/overview) for more details.
+    The base processor to use. For classifiers, this must be either `"classifier_performance"` or `"classifier_light"`. See the [base processor documentation](https://docs.extend.ai/2025-04-21/changelog/overview) for more details.
     """
 
     base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
         pydantic.Field(default=None)
     )
     """
-    The version of the `"classifier_performance"` or `"classifier_light"` processor to use. If this is provided, the `baseProcessor` must also be provided. See the [base processor documentation](/changelog/overview) for more details.
+    The version of the `"classifier_performance"` or `"classifier_light"` processor to use. If this is provided, the `baseProcessor` must also be provided. See the [base processor documentation](https://docs.extend.ai/2025-04-21/changelog/overview) for more details.
     """
 
     classifications: typing.List[Classification] = pydantic.Field()

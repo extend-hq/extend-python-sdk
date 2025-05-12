@@ -14,16 +14,16 @@ from .errors.not_found_error import NotFoundError
 from .errors.unauthorized_error import UnauthorizedError
 from .errors.unprocessable_entity_error import UnprocessableEntityError
 from .types.error import Error
-from .types.file3processor import File3Processor
-from .types.file4 import File4
 from .types.json_object import JsonObject
 from .types.parse_config import ParseConfig
 from .types.parse_request_file import ParseRequestFile
 from .types.parse_response import ParseResponse
 from .types.processor_id import ProcessorId
+from .types.processor_run_file_input import ProcessorRunFileInput
 from .types.run_processor_request_config import RunProcessorRequestConfig
 from .types.run_processor_response import RunProcessorResponse
 from .types.run_workflow_response import RunWorkflowResponse
+from .types.workflow_run_file_input import WorkflowRunFileInput
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -37,7 +37,7 @@ class RawExtend:
         self,
         *,
         workflow_id: str,
-        files: typing.Optional[typing.Sequence[File4]] = OMIT,
+        files: typing.Optional[typing.Sequence[WorkflowRunFileInput]] = OMIT,
         raw_texts: typing.Optional[typing.Sequence[str]] = OMIT,
         version: typing.Optional[str] = OMIT,
         priority: typing.Optional[int] = OMIT,
@@ -54,8 +54,8 @@ class RawExtend:
 
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
-        files : typing.Optional[typing.Sequence[File4]]
-            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](/developers/guides/supported-file-types).
+        files : typing.Optional[typing.Sequence[WorkflowRunFileInput]]
+            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
 
         raw_texts : typing.Optional[typing.Sequence[str]]
             An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.
@@ -87,7 +87,7 @@ class RawExtend:
             json={
                 "workflowId": workflow_id,
                 "files": convert_and_respect_annotation_metadata(
-                    object_=files, annotation=typing.Sequence[File4], direction="write"
+                    object_=files, annotation=typing.Sequence[WorkflowRunFileInput], direction="write"
                 ),
                 "rawTexts": raw_texts,
                 "version": version,
@@ -142,7 +142,7 @@ class RawExtend:
         *,
         processor_id: ProcessorId,
         version: typing.Optional[str] = OMIT,
-        file: typing.Optional[File3Processor] = OMIT,
+        file: typing.Optional[ProcessorRunFileInput] = OMIT,
         raw_text: typing.Optional[str] = OMIT,
         priority: typing.Optional[int] = OMIT,
         metadata: typing.Optional[JsonObject] = OMIT,
@@ -152,14 +152,14 @@ class RawExtend:
         """
         Run processors (extraction, classification, splitting, etc.) on a given document.
 
-        In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
+        In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
         * file parsing/pre-processing will automatically be reused across multiple processors, which will give you simplicity and cost savings given that many use cases will require multiple processors to be run on the same document.
         * workflows provide dedicated human in the loop document review, when needed.
         * workflows allow you to model and manage your pipeline with a single endpoint and corresponding UI for modeling and monitoring.
 
         However, there are a number of legitimate use cases and systems where it might be easier to model the pipeline via code and run processors directly. This endpoint is provided for this purpose.
 
-        Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+        Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
 
         Parameters
         ----------
@@ -171,8 +171,8 @@ class RawExtend:
             - `"draft"` for the draft version.
             - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
 
-        file : typing.Optional[File3Processor]
-            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/developers/guides/supported-file-types).
+        file : typing.Optional[ProcessorRunFileInput]
+            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
 
         raw_text : typing.Optional[str]
             A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
@@ -201,7 +201,7 @@ class RawExtend:
                 "processorId": processor_id,
                 "version": version,
                 "file": convert_and_respect_annotation_metadata(
-                    object_=file, annotation=File3Processor, direction="write"
+                    object_=file, annotation=ProcessorRunFileInput, direction="write"
                 ),
                 "rawText": raw_text,
                 "priority": priority,
@@ -274,7 +274,7 @@ class RawExtend:
 
         Unlike processor and workflow runs, parsing is a synchronous endpoint and returns the parsed content in the response. Expected latency depends primarily on file size. This makes it suitable for workflows where you need immediate access to document content without waiting for asynchronous processing.
 
-        For more details, see the [Parse File guide](/developers/guides/parse).
+        For more details, see the [Parse File guide](https://docs.extend.ai/2025-04-21/developers/guides/parse).
 
         Parameters
         ----------
@@ -365,7 +365,7 @@ class AsyncRawExtend:
         self,
         *,
         workflow_id: str,
-        files: typing.Optional[typing.Sequence[File4]] = OMIT,
+        files: typing.Optional[typing.Sequence[WorkflowRunFileInput]] = OMIT,
         raw_texts: typing.Optional[typing.Sequence[str]] = OMIT,
         version: typing.Optional[str] = OMIT,
         priority: typing.Optional[int] = OMIT,
@@ -382,8 +382,8 @@ class AsyncRawExtend:
 
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
-        files : typing.Optional[typing.Sequence[File4]]
-            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](/developers/guides/supported-file-types).
+        files : typing.Optional[typing.Sequence[WorkflowRunFileInput]]
+            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
 
         raw_texts : typing.Optional[typing.Sequence[str]]
             An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.
@@ -415,7 +415,7 @@ class AsyncRawExtend:
             json={
                 "workflowId": workflow_id,
                 "files": convert_and_respect_annotation_metadata(
-                    object_=files, annotation=typing.Sequence[File4], direction="write"
+                    object_=files, annotation=typing.Sequence[WorkflowRunFileInput], direction="write"
                 ),
                 "rawTexts": raw_texts,
                 "version": version,
@@ -470,7 +470,7 @@ class AsyncRawExtend:
         *,
         processor_id: ProcessorId,
         version: typing.Optional[str] = OMIT,
-        file: typing.Optional[File3Processor] = OMIT,
+        file: typing.Optional[ProcessorRunFileInput] = OMIT,
         raw_text: typing.Optional[str] = OMIT,
         priority: typing.Optional[int] = OMIT,
         metadata: typing.Optional[JsonObject] = OMIT,
@@ -480,14 +480,14 @@ class AsyncRawExtend:
         """
         Run processors (extraction, classification, splitting, etc.) on a given document.
 
-        In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
+        In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
         * file parsing/pre-processing will automatically be reused across multiple processors, which will give you simplicity and cost savings given that many use cases will require multiple processors to be run on the same document.
         * workflows provide dedicated human in the loop document review, when needed.
         * workflows allow you to model and manage your pipeline with a single endpoint and corresponding UI for modeling and monitoring.
 
         However, there are a number of legitimate use cases and systems where it might be easier to model the pipeline via code and run processors directly. This endpoint is provided for this purpose.
 
-        Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+        Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
 
         Parameters
         ----------
@@ -499,8 +499,8 @@ class AsyncRawExtend:
             - `"draft"` for the draft version.
             - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
 
-        file : typing.Optional[File3Processor]
-            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/developers/guides/supported-file-types).
+        file : typing.Optional[ProcessorRunFileInput]
+            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
 
         raw_text : typing.Optional[str]
             A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
@@ -529,7 +529,7 @@ class AsyncRawExtend:
                 "processorId": processor_id,
                 "version": version,
                 "file": convert_and_respect_annotation_metadata(
-                    object_=file, annotation=File3Processor, direction="write"
+                    object_=file, annotation=ProcessorRunFileInput, direction="write"
                 ),
                 "rawText": raw_text,
                 "priority": priority,
@@ -602,7 +602,7 @@ class AsyncRawExtend:
 
         Unlike processor and workflow runs, parsing is a synchronous endpoint and returns the parsed content in the response. Expected latency depends primarily on file size. This makes it suitable for workflows where you need immediate access to document content without waiting for asynchronous processing.
 
-        For more details, see the [Parse File guide](/developers/guides/parse).
+        For more details, see the [Parse File guide](https://docs.extend.ai/2025-04-21/developers/guides/parse).
 
         Parameters
         ----------
