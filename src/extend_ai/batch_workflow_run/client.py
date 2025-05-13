@@ -73,7 +73,7 @@ class BatchWorkflowRunClient:
         --------
         from extend_ai import Extend
         from extend_ai.batch_workflow_run import BatchWorkflowRunCreateRequestInputsItem
-        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = Extend(token="YOUR_TOKEN", )
         client.batch_workflow_run.create(workflow_id='workflow_id_here', inputs=[BatchWorkflowRunCreateRequestInputsItem()], )
         """
         _response = self._raw_client.create(
@@ -144,7 +144,7 @@ class AsyncBatchWorkflowRunClient:
         from extend_ai import AsyncExtend
         from extend_ai.batch_workflow_run import BatchWorkflowRunCreateRequestInputsItem
         import asyncio
-        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
             await client.batch_workflow_run.create(workflow_id='workflow_id_here', inputs=[BatchWorkflowRunCreateRequestInputsItem()], )
         asyncio.run(main())

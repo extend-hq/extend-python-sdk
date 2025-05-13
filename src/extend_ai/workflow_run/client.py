@@ -97,7 +97,7 @@ class WorkflowRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = Extend(token="YOUR_TOKEN", )
         client.workflow_run.list(next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
         """
         _response = self._raw_client.list(
@@ -163,7 +163,7 @@ class WorkflowRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = Extend(token="YOUR_TOKEN", )
         client.workflow_run.create(workflow_id='workflow_id_here', )
         """
         _response = self._raw_client.create(
@@ -201,7 +201,7 @@ class WorkflowRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = Extend(token="YOUR_TOKEN", )
         client.workflow_run.get(workflow_run_id='workflow_run_id_here', )
         """
         _response = self._raw_client.get(workflow_run_id, request_options=request_options)
@@ -244,7 +244,7 @@ class WorkflowRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = Extend(token="YOUR_TOKEN", )
         client.workflow_run.update(workflow_run_id='workflow_run_id_here', )
         """
         _response = self._raw_client.update(
@@ -330,7 +330,7 @@ class AsyncWorkflowRunClient:
         --------
         from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
             await client.workflow_run.list(next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
         asyncio.run(main())
@@ -399,7 +399,7 @@ class AsyncWorkflowRunClient:
         --------
         from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
             await client.workflow_run.create(workflow_id='workflow_id_here', )
         asyncio.run(main())
@@ -440,7 +440,7 @@ class AsyncWorkflowRunClient:
         --------
         from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
             await client.workflow_run.get(workflow_run_id='workflow_run_id_here', )
         asyncio.run(main())
@@ -486,7 +486,7 @@ class AsyncWorkflowRunClient:
         --------
         from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
             await client.workflow_run.update(workflow_run_id='workflow_run_id_here', )
         asyncio.run(main())

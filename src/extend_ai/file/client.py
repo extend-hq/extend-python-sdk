@@ -69,7 +69,7 @@ class FileClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = Extend(token="YOUR_TOKEN", )
         client.file.list(next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
         """
         _response = self._raw_client.list(
@@ -124,7 +124,7 @@ class FileClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = Extend(token="YOUR_TOKEN", )
         client.file.get(id='file_id_here', )
         """
         _response = self._raw_client.get(
@@ -160,7 +160,7 @@ class FileClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = Extend(token="YOUR_TOKEN", )
         client.file.upload()
         """
         _response = self._raw_client.upload(file=file, request_options=request_options)
@@ -220,7 +220,7 @@ class AsyncFileClient:
         --------
         from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
             await client.file.list(next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
         asyncio.run(main())
@@ -278,7 +278,7 @@ class AsyncFileClient:
         --------
         from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
             await client.file.get(id='file_id_here', )
         asyncio.run(main())
@@ -319,7 +319,7 @@ class AsyncFileClient:
         --------
         from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
             await client.file.upload()
         asyncio.run(main())

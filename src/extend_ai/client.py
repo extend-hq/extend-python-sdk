@@ -15,7 +15,6 @@ from .processor.client import AsyncProcessorClient, ProcessorClient
 from .processor_run.client import AsyncProcessorRunClient, ProcessorRunClient
 from .processor_version.client import AsyncProcessorVersionClient, ProcessorVersionClient
 from .raw_client import AsyncRawExtend, RawExtend
-from .types.api_version_enum import ApiVersionEnum
 from .types.parse_config import ParseConfig
 from .types.parse_request_file import ParseRequestFile
 from .types.parse_response import ParseResponse
@@ -43,7 +42,6 @@ class Extend:
 
 
 
-    extend_api_version : typing.Optional[ApiVersionEnum]
     token : typing.Union[str, typing.Callable[[], str]]
     timeout : typing.Optional[float]
         The timeout to be used, in seconds, for requests. By default the timeout is 60 seconds, unless a custom httpx client is used, in which case this default is not enforced.
@@ -54,10 +52,11 @@ class Extend:
     httpx_client : typing.Optional[httpx.Client]
         The httpx client to use for making requests, a preconfigured client is used by default, however this is useful should you want to pass in any custom httpx configuration.
 
+    extend_api_version : typing.Optional[str]
     Examples
     --------
     from extend_ai import Extend
-    client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+    client = Extend(token="YOUR_TOKEN", )
     """
 
     def __init__(
@@ -65,18 +64,17 @@ class Extend:
         *,
         base_url: typing.Optional[str] = None,
         environment: ExtendEnvironment = ExtendEnvironment.PRODUCTION,
-        extend_api_version: typing.Optional[ApiVersionEnum] = None,
         token: typing.Union[str, typing.Callable[[], str]],
         timeout: typing.Optional[float] = None,
         follow_redirects: typing.Optional[bool] = True,
         httpx_client: typing.Optional[httpx.Client] = None,
+        extend_api_version: typing.Optional[str] = None,
     ):
         _defaulted_timeout = (
             timeout if timeout is not None else 60 if httpx_client is None else httpx_client.timeout.read
         )
         self._client_wrapper = SyncClientWrapper(
             base_url=_get_base_url(base_url=base_url, environment=environment),
-            extend_api_version=extend_api_version,
             token=token,
             httpx_client=httpx_client
             if httpx_client is not None
@@ -84,6 +82,7 @@ class Extend:
             if follow_redirects is not None
             else httpx.Client(timeout=_defaulted_timeout),
             timeout=_defaulted_timeout,
+            extend_api_version=extend_api_version,
         )
         self._raw_client = RawExtend(client_wrapper=self._client_wrapper)
         self.workflow_run = WorkflowRunClient(client_wrapper=self._client_wrapper)
@@ -110,7 +109,11 @@ class Extend:
         return self._raw_client
 
     def parse(
-        self, *, file: ParseRequestFile, config: ParseConfig, request_options: typing.Optional[RequestOptions] = None
+        self,
+        *,
+        file: ParseRequestFile,
+        config: typing.Optional[ParseConfig] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> ParseResponse:
         """
         Parse files to get cleaned, chunked target content (e.g. markdown).
@@ -126,7 +129,7 @@ class Extend:
         file : ParseRequestFile
             A file object containing either a URL or a fileId.
 
-        config : ParseConfig
+        config : typing.Optional[ParseConfig]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -140,9 +143,8 @@ class Extend:
         --------
         from extend_ai import Extend
         from extend_ai import ParseRequestFile
-        from extend_ai import ParseConfig
-        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
-        client.parse(file=ParseRequestFile(), config=ParseConfig(), )
+        client = Extend(token="YOUR_TOKEN", )
+        client.parse(file=ParseRequestFile(), )
         """
         _response = self._raw_client.parse(file=file, config=config, request_options=request_options)
         return _response.data
@@ -164,7 +166,6 @@ class AsyncExtend:
 
 
 
-    extend_api_version : typing.Optional[ApiVersionEnum]
     token : typing.Union[str, typing.Callable[[], str]]
     timeout : typing.Optional[float]
         The timeout to be used, in seconds, for requests. By default the timeout is 60 seconds, unless a custom httpx client is used, in which case this default is not enforced.
@@ -175,10 +176,11 @@ class AsyncExtend:
     httpx_client : typing.Optional[httpx.AsyncClient]
         The httpx client to use for making requests, a preconfigured client is used by default, however this is useful should you want to pass in any custom httpx configuration.
 
+    extend_api_version : typing.Optional[str]
     Examples
     --------
     from extend_ai import AsyncExtend
-    client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+    client = AsyncExtend(token="YOUR_TOKEN", )
     """
 
     def __init__(
@@ -186,18 +188,17 @@ class AsyncExtend:
         *,
         base_url: typing.Optional[str] = None,
         environment: ExtendEnvironment = ExtendEnvironment.PRODUCTION,
-        extend_api_version: typing.Optional[ApiVersionEnum] = None,
         token: typing.Union[str, typing.Callable[[], str]],
         timeout: typing.Optional[float] = None,
         follow_redirects: typing.Optional[bool] = True,
         httpx_client: typing.Optional[httpx.AsyncClient] = None,
+        extend_api_version: typing.Optional[str] = None,
     ):
         _defaulted_timeout = (
             timeout if timeout is not None else 60 if httpx_client is None else httpx_client.timeout.read
         )
         self._client_wrapper = AsyncClientWrapper(
             base_url=_get_base_url(base_url=base_url, environment=environment),
-            extend_api_version=extend_api_version,
             token=token,
             httpx_client=httpx_client
             if httpx_client is not None
@@ -205,6 +206,7 @@ class AsyncExtend:
             if follow_redirects is not None
             else httpx.AsyncClient(timeout=_defaulted_timeout),
             timeout=_defaulted_timeout,
+            extend_api_version=extend_api_version,
         )
         self._raw_client = AsyncRawExtend(client_wrapper=self._client_wrapper)
         self.workflow_run = AsyncWorkflowRunClient(client_wrapper=self._client_wrapper)
@@ -231,7 +233,11 @@ class AsyncExtend:
         return self._raw_client
 
     async def parse(
-        self, *, file: ParseRequestFile, config: ParseConfig, request_options: typing.Optional[RequestOptions] = None
+        self,
+        *,
+        file: ParseRequestFile,
+        config: typing.Optional[ParseConfig] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> ParseResponse:
         """
         Parse files to get cleaned, chunked target content (e.g. markdown).
@@ -247,7 +253,7 @@ class AsyncExtend:
         file : ParseRequestFile
             A file object containing either a URL or a fileId.
 
-        config : ParseConfig
+        config : typing.Optional[ParseConfig]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -261,11 +267,10 @@ class AsyncExtend:
         --------
         from extend_ai import AsyncExtend
         from extend_ai import ParseRequestFile
-        from extend_ai import ParseConfig
         import asyncio
-        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
-            await client.parse(file=ParseRequestFile(), config=ParseConfig(), )
+            await client.parse(file=ParseRequestFile(), )
         asyncio.run(main())
         """
         _response = await self._raw_client.parse(file=file, config=config, request_options=request_options)

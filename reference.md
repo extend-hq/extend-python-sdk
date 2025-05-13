@@ -34,9 +34,8 @@ For more details, see the [Parse File guide](https://docs.extend.ai/2025-04-21/d
 ```python
 from extend_ai import Extend
 from extend_ai import ParseRequestFile
-from extend_ai import ParseConfig
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
-client.parse(file=ParseRequestFile(), config=ParseConfig(), )
+client = Extend(token="YOUR_TOKEN", )
+client.parse(file=ParseRequestFile(), )
 
 ```
 </dd>
@@ -60,7 +59,7 @@ client.parse(file=ParseRequestFile(), config=ParseConfig(), )
 <dl>
 <dd>
 
-**config:** `ParseConfig` 
+**config:** `typing.Optional[ParseConfig]` 
     
 </dd>
 </dl>
@@ -109,7 +108,7 @@ List runs of a Workflow. Workflows are sequences of steps that process files and
 
 ```python
 from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.workflow_run.list(next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
 
 ```
@@ -240,7 +239,7 @@ Run a Workflow with files. A Workflow is a sequence of steps that process files 
 
 ```python
 from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.workflow_run.create(workflow_id='workflow_id_here', )
 
 ```
@@ -355,7 +354,7 @@ Once a workflow has been run, you can check the status and output of a specific 
 
 ```python
 from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.workflow_run.get(workflow_run_id='workflow_run_id_here', )
 
 ```
@@ -424,7 +423,7 @@ You can update the name and metadata of an in progress WorkflowRun at any time u
 
 ```python
 from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.workflow_run.update(workflow_run_id='workflow_run_id_here', )
 
 ```
@@ -525,7 +524,7 @@ Upon successful submission, the endpoint returns a `batchId`. The individual wor
 ```python
 from extend_ai import Extend
 from extend_ai.batch_workflow_run import BatchWorkflowRunCreateRequestInputsItem
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.batch_workflow_run.create(workflow_id='workflow_id_here', inputs=[BatchWorkflowRunCreateRequestInputsItem()], )
 
 ```
@@ -620,7 +619,7 @@ Similar to workflow runs, processor runs are asynchronous and will return a stat
 
 ```python
 from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.processor_run.create(processor_id='processor_id_here', )
 
 ```
@@ -740,7 +739,7 @@ A common use case for this endpoint is to poll for the status and final output o
 
 ```python
 from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.processor_run.get(id='processor_run_id_here', )
 
 ```
@@ -810,7 +809,7 @@ Create a new processor in Extend, optionally cloning from an existing processor
 
 ```python
 from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.processor.create(name='My Processor Name', type="EXTRACT", )
 
 ```
@@ -863,14 +862,6 @@ Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**json_schema_enabled:** `typing.Optional[bool]` — Whether to enable JSON schema for the processor. Defaults to false.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -911,7 +902,7 @@ Update an existing processor in Extend
 
 ```python
 from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.processor.update(id='processor_id_here', )
 
 ```
@@ -1002,7 +993,7 @@ Retrieve a specific version of a processor in Extend
 
 ```python
 from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.processor_version.get(processor_id='processor_id_here', processor_version_id='processor_version_id_here', )
 
 ```
@@ -1086,7 +1077,7 @@ The `draft` version is the latest unpublished version of the processor, which ca
 
 ```python
 from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.processor_version.list(id='processor_id_here', )
 
 ```
@@ -1157,7 +1148,7 @@ Publishing a new version does not automatically update existing workflows using 
 
 ```python
 from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.processor_version.create(id='processor_id_here', release_type="major", )
 
 ```
@@ -1251,7 +1242,7 @@ List files in your account. Files represent documents that have been uploaded to
 
 ```python
 from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.file.list(next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
 
 ```
@@ -1344,7 +1335,7 @@ Fetch a file by its ID to obtain additional details and the raw file content.
 
 ```python
 from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.file.get(id='file_id_here', )
 
 ```
@@ -1453,7 +1444,7 @@ This endpoint requires multipart form encoding. Most HTTP clients will handle th
 
 ```python
 from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.file.upload()
 
 ```
@@ -1522,7 +1513,7 @@ Note: it is not necessary to create an evaluation set via API. You can also crea
 
 ```python
 from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.evaluation_set.create(name='My Evaluation Set', description='My Evaluation Set Description', processor_id='processor_id_here', )
 
 ```
@@ -1630,7 +1621,7 @@ Best Practices for Outputs in Evaluation Sets:
 ```python
 from extend_ai import Extend
 from extend_ai import ProvidedJsonOutput
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.evaluation_set_item.create(evaluation_set_id='evaluation_set_id_here', file_id='file_id_here', expected_output=ProvidedJsonOutput(value={'key': 'value'
 }, ), )
 
@@ -1721,7 +1712,7 @@ If you need to change the expected output for a given evaluation set item, you c
 ```python
 from extend_ai import Extend
 from extend_ai import ProvidedJsonOutput
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.evaluation_set_item.update(id='evaluation_set_item_id_here', expected_output=ProvidedJsonOutput(value={'key': 'value'
 }, ), )
 
@@ -1803,7 +1794,7 @@ Note: you still need to create each File first using the file API.
 from extend_ai import Extend
 from extend_ai.evaluation_set_item import EvaluationSetItemCreateBatchRequestItemsItem
 from extend_ai import ProvidedJsonOutput
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.evaluation_set_item.create_batch(evaluation_set_id='evaluation_set_id_here', items=[EvaluationSetItemCreateBatchRequestItemsItem(file_id='file_id_here', expected_output=ProvidedJsonOutput(value={'key': 'value'
 }, ), )], )
 
@@ -1887,7 +1878,7 @@ The output ID, would be found in a given entry within the outputs arrays of a Wo
 ```python
 from extend_ai import Extend
 from extend_ai import ProvidedJsonOutput
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.workflow_run_output.update(workflow_run_id='workflow_run_id_here', output_id='output_id_here', reviewed_output=ProvidedJsonOutput(value={'key': 'value'
 }, ), )
 
@@ -1976,7 +1967,7 @@ Retrieve details about a batch processor run, including evaluation runs
 
 ```python
 from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.batch_processor_run.get(id='batch_processor_run_id_here', )
 
 ```
@@ -2048,7 +2039,7 @@ This endpoint will create a new workflow in Extend, which can then be configured
 
 ```python
 from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN", )
 client.workflow.create(name='Invoice Processing', )
 
 ```

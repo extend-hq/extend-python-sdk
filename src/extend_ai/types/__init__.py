@@ -121,6 +121,7 @@ from .provided_fields_array_output import ProvidedFieldsArrayOutput
 from .provided_json_output import ProvidedJsonOutput
 from .provided_processor_output import ProvidedProcessorOutput
 from .provided_splitter_output import ProvidedSplitterOutput
+from .provided_splitter_output_splits_item import ProvidedSplitterOutputSplitsItem
 from .sort_by_enum import SortByEnum
 from .sort_dir_enum import SortDirEnum
 from .splitter_advanced_options import SplitterAdvancedOptions
@@ -273,6 +274,7 @@ __all__ = [
     "ProvidedJsonOutput",
     "ProvidedProcessorOutput",
     "ProvidedSplitterOutput",
+    "ProvidedSplitterOutputSplitsItem",
     "SortByEnum",
     "SortDirEnum",
     "SplitterAdvancedOptions",

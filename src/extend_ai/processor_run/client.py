@@ -91,7 +91,7 @@ class ProcessorRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = Extend(token="YOUR_TOKEN", )
         client.processor_run.create(processor_id='processor_id_here', )
         """
         _response = self._raw_client.create(
@@ -130,7 +130,7 @@ class ProcessorRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = Extend(token="YOUR_TOKEN", )
         client.processor_run.get(id='processor_run_id_here', )
         """
         _response = self._raw_client.get(id, request_options=request_options)
@@ -213,7 +213,7 @@ class AsyncProcessorRunClient:
         --------
         from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
             await client.processor_run.create(processor_id='processor_id_here', )
         asyncio.run(main())
@@ -255,7 +255,7 @@ class AsyncProcessorRunClient:
         --------
         from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
             await client.processor_run.get(id='processor_run_id_here', )
         asyncio.run(main())

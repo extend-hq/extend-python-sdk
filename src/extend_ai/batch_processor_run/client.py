@@ -45,7 +45,7 @@ class BatchProcessorRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = Extend(token="YOUR_TOKEN", )
         client.batch_processor_run.get(id='batch_processor_run_id_here', )
         """
         _response = self._raw_client.get(id, request_options=request_options)
@@ -92,7 +92,7 @@ class AsyncBatchProcessorRunClient:
         --------
         from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
             await client.batch_processor_run.get(id='batch_processor_run_id_here', )
         asyncio.run(main())

@@ -37,7 +37,6 @@ class ProcessorClient:
         type: ProcessorType,
         clone_processor_id: typing.Optional[str] = OMIT,
         config: typing.Optional[ProcessorCreateRequestConfig] = OMIT,
-        json_schema_enabled: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ProcessorCreateResponse:
         """
@@ -58,9 +57,6 @@ class ProcessorClient:
         config : typing.Optional[ProcessorCreateRequestConfig]
             The configuration for the processor. The type of configuration must match the processor type. One of `cloneProcessorId` or `config` must be provided.
 
-        json_schema_enabled : typing.Optional[bool]
-            Whether to enable JSON schema for the processor. Defaults to false.
-
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -72,16 +68,11 @@ class ProcessorClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = Extend(token="YOUR_TOKEN", )
         client.processor.create(name='My Processor Name', type="EXTRACT", )
         """
         _response = self._raw_client.create(
-            name=name,
-            type=type,
-            clone_processor_id=clone_processor_id,
-            config=config,
-            json_schema_enabled=json_schema_enabled,
-            request_options=request_options,
+            name=name, type=type, clone_processor_id=clone_processor_id, config=config, request_options=request_options
         )
         return _response.data
 
@@ -123,7 +114,7 @@ class ProcessorClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = Extend(token="YOUR_TOKEN", )
         client.processor.update(id='processor_id_here', )
         """
         _response = self._raw_client.update(id, name=name, config=config, request_options=request_options)
@@ -152,7 +143,6 @@ class AsyncProcessorClient:
         type: ProcessorType,
         clone_processor_id: typing.Optional[str] = OMIT,
         config: typing.Optional[ProcessorCreateRequestConfig] = OMIT,
-        json_schema_enabled: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ProcessorCreateResponse:
         """
@@ -173,9 +163,6 @@ class AsyncProcessorClient:
         config : typing.Optional[ProcessorCreateRequestConfig]
             The configuration for the processor. The type of configuration must match the processor type. One of `cloneProcessorId` or `config` must be provided.
 
-        json_schema_enabled : typing.Optional[bool]
-            Whether to enable JSON schema for the processor. Defaults to false.
-
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -188,18 +175,13 @@ class AsyncProcessorClient:
         --------
         from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
             await client.processor.create(name='My Processor Name', type="EXTRACT", )
         asyncio.run(main())
         """
         _response = await self._raw_client.create(
-            name=name,
-            type=type,
-            clone_processor_id=clone_processor_id,
-            config=config,
-            json_schema_enabled=json_schema_enabled,
-            request_options=request_options,
+            name=name, type=type, clone_processor_id=clone_processor_id, config=config, request_options=request_options
         )
         return _response.data
 
@@ -242,7 +224,7 @@ class AsyncProcessorClient:
         --------
         from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
             await client.processor.update(id='processor_id_here', )
         asyncio.run(main())

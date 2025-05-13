@@ -3,7 +3,6 @@
 import typing
 
 import httpx
-from ..types.api_version_enum import ApiVersionEnum
 from .http_client import AsyncHttpClient, HttpClient
 
 
@@ -11,26 +10,27 @@ class BaseClientWrapper:
     def __init__(
         self,
         *,
-        extend_api_version: typing.Optional[ApiVersionEnum] = None,
         token: typing.Union[str, typing.Callable[[], str]],
         base_url: str,
         timeout: typing.Optional[float] = None,
+        extend_api_version: typing.Optional[str] = None,
     ):
-        self._extend_api_version = extend_api_version
         self._token = token
         self._base_url = base_url
         self._timeout = timeout
+        self._extend_api_version = extend_api_version
 
     def get_headers(self) -> typing.Dict[str, str]:
         headers: typing.Dict[str, str] = {
-            "User-Agent": "extend_ai/0.0.36",
+            "User-Agent": "extend_ai/0.0.37",
             "X-Fern-Language": "Python",
             "X-Fern-SDK-Name": "extend_ai",
-            "X-Fern-SDK-Version": "0.0.36",
+            "X-Fern-SDK-Version": "0.0.37",
         }
-        if self._extend_api_version is not None:
-            headers["x-extend-api-version"] = self._extend_api_version
         headers["Authorization"] = f"Bearer {self._get_token()}"
+        headers["x-extend-api-version"] = (
+            self._extend_api_version if self._extend_api_version is not None else "2025-04-21"
+        )
         return headers
 
     def _get_token(self) -> str:
@@ -50,13 +50,13 @@ class SyncClientWrapper(BaseClientWrapper):
     def __init__(
         self,
         *,
-        extend_api_version: typing.Optional[ApiVersionEnum] = None,
         token: typing.Union[str, typing.Callable[[], str]],
         base_url: str,
         timeout: typing.Optional[float] = None,
+        extend_api_version: typing.Optional[str] = None,
         httpx_client: httpx.Client,
     ):
-        super().__init__(extend_api_version=extend_api_version, token=token, base_url=base_url, timeout=timeout)
+        super().__init__(token=token, base_url=base_url, timeout=timeout, extend_api_version=extend_api_version)
         self.httpx_client = HttpClient(
             httpx_client=httpx_client,
             base_headers=self.get_headers,
@@ -69,13 +69,13 @@ class AsyncClientWrapper(BaseClientWrapper):
     def __init__(
         self,
         *,
-        extend_api_version: typing.Optional[ApiVersionEnum] = None,
         token: typing.Union[str, typing.Callable[[], str]],
         base_url: str,
         timeout: typing.Optional[float] = None,
+        extend_api_version: typing.Optional[str] = None,
         httpx_client: httpx.AsyncClient,
     ):
-        super().__init__(extend_api_version=extend_api_version, token=token, base_url=base_url, timeout=timeout)
+        super().__init__(token=token, base_url=base_url, timeout=timeout, extend_api_version=extend_api_version)
         self.httpx_client = AsyncHttpClient(
             httpx_client=httpx_client,
             base_headers=self.get_headers,

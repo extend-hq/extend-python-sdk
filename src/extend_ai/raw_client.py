@@ -26,7 +26,11 @@ class RawExtend:
         self._client_wrapper = client_wrapper
 
     def parse(
-        self, *, file: ParseRequestFile, config: ParseConfig, request_options: typing.Optional[RequestOptions] = None
+        self,
+        *,
+        file: ParseRequestFile,
+        config: typing.Optional[ParseConfig] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ParseResponse]:
         """
         Parse files to get cleaned, chunked target content (e.g. markdown).
@@ -42,7 +46,7 @@ class RawExtend:
         file : ParseRequestFile
             A file object containing either a URL or a fileId.
 
-        config : ParseConfig
+        config : typing.Optional[ParseConfig]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -123,7 +127,11 @@ class AsyncRawExtend:
         self._client_wrapper = client_wrapper
 
     async def parse(
-        self, *, file: ParseRequestFile, config: ParseConfig, request_options: typing.Optional[RequestOptions] = None
+        self,
+        *,
+        file: ParseRequestFile,
+        config: typing.Optional[ParseConfig] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ParseResponse]:
         """
         Parse files to get cleaned, chunked target content (e.g. markdown).
@@ -139,7 +147,7 @@ class AsyncRawExtend:
         file : ParseRequestFile
             A file object containing either a URL or a fileId.
 
-        config : ParseConfig
+        config : typing.Optional[ParseConfig]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.

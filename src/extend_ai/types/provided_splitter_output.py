@@ -3,46 +3,12 @@
 import typing
 
 import pydantic
-import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
-from ..core.serialization import FieldMetadata
+from .provided_splitter_output_splits_item import ProvidedSplitterOutputSplitsItem
 
 
 class ProvidedSplitterOutput(UniversalBaseModel):
-    id: str = pydantic.Field()
-    """
-    Unique ID for this split
-    """
-
-    classification_id: typing_extensions.Annotated[str, FieldMetadata(alias="classificationId")] = pydantic.Field()
-    """
-    ID of the classification type (set in the processor config)
-    """
-
-    type: str = pydantic.Field()
-    """
-    The type of the split document (set in the processor config), corresponds to the classificationId
-    """
-
-    observation: typing.Optional[str] = pydantic.Field(default=None)
-    """
-    Explanation of the results
-    """
-
-    identifier: typing.Optional[str] = pydantic.Field(default=None)
-    """
-    Identifier for the split document (e.g. invoice number)
-    """
-
-    start_page: typing_extensions.Annotated[int, FieldMetadata(alias="startPage")] = pydantic.Field()
-    """
-    The start page of the split document
-    """
-
-    end_page: typing_extensions.Annotated[int, FieldMetadata(alias="endPage")] = pydantic.Field()
-    """
-    The end page of the split document
-    """
+    splits: typing.List[ProvidedSplitterOutputSplitsItem]
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

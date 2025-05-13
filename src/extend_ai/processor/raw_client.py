@@ -35,7 +35,6 @@ class RawProcessorClient:
         type: ProcessorType,
         clone_processor_id: typing.Optional[str] = OMIT,
         config: typing.Optional[ProcessorCreateRequestConfig] = OMIT,
-        json_schema_enabled: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ProcessorCreateResponse]:
         """
@@ -56,9 +55,6 @@ class RawProcessorClient:
         config : typing.Optional[ProcessorCreateRequestConfig]
             The configuration for the processor. The type of configuration must match the processor type. One of `cloneProcessorId` or `config` must be provided.
 
-        json_schema_enabled : typing.Optional[bool]
-            Whether to enable JSON schema for the processor. Defaults to false.
-
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -77,7 +73,6 @@ class RawProcessorClient:
                 "config": convert_and_respect_annotation_metadata(
                     object_=config, annotation=ProcessorCreateRequestConfig, direction="write"
                 ),
-                "jsonSchemaEnabled": json_schema_enabled,
             },
             headers={
                 "content-type": "application/json",
@@ -243,7 +238,6 @@ class AsyncRawProcessorClient:
         type: ProcessorType,
         clone_processor_id: typing.Optional[str] = OMIT,
         config: typing.Optional[ProcessorCreateRequestConfig] = OMIT,
-        json_schema_enabled: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ProcessorCreateResponse]:
         """
@@ -264,9 +258,6 @@ class AsyncRawProcessorClient:
         config : typing.Optional[ProcessorCreateRequestConfig]
             The configuration for the processor. The type of configuration must match the processor type. One of `cloneProcessorId` or `config` must be provided.
 
-        json_schema_enabled : typing.Optional[bool]
-            Whether to enable JSON schema for the processor. Defaults to false.
-
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -285,7 +276,6 @@ class AsyncRawProcessorClient:
                 "config": convert_and_respect_annotation_metadata(
                     object_=config, annotation=ProcessorCreateRequestConfig, direction="write"
                 ),
-                "jsonSchemaEnabled": json_schema_enabled,
             },
             headers={
                 "content-type": "application/json",

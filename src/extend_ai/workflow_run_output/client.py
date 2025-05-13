@@ -67,7 +67,7 @@ class WorkflowRunOutputClient:
         --------
         from extend_ai import Extend
         from extend_ai import ProvidedJsonOutput
-        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = Extend(token="YOUR_TOKEN", )
         client.workflow_run_output.update(workflow_run_id='workflow_run_id_here', output_id='output_id_here', reviewed_output=ProvidedJsonOutput(value={'key': 'value'
         }, ), )
         """
@@ -133,7 +133,7 @@ class AsyncWorkflowRunOutputClient:
         from extend_ai import AsyncExtend
         from extend_ai import ProvidedJsonOutput
         import asyncio
-        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
             await client.workflow_run_output.update(workflow_run_id='workflow_run_id_here', output_id='output_id_here', reviewed_output=ProvidedJsonOutput(value={'key': 'value'
             }, ), )
