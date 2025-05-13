@@ -25,7 +25,7 @@ Instantiate and use the client with the following:
 
 ```python
 from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = Extend(token="YOUR_TOKEN")
 client.run_workflow(workflow_id='workflow_id_here', )
 ```
 
@@ -36,7 +36,7 @@ The SDK also exports an `async` client so that you can make non-blocking calls t
 ```python
 from extend_ai import AsyncExtend
 import asyncio
-client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client = AsyncExtend(token="YOUR_TOKEN")
 async def main() -> None:
     await client.run_workflow(workflow_id='workflow_id_here', )
 asyncio.run(main())
