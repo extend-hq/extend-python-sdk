@@ -26,7 +26,7 @@ Instantiate and use the client with the following:
 ```python
 from extend_ai import Extend
 client = Extend(token="YOUR_TOKEN")
-client.run_workflow(workflow_id='workflow_id_here', )
+client.run_workflow(workflow_id='workflow_id_here')
 ```
 
 ## Async Client
@@ -38,7 +38,7 @@ from extend_ai import AsyncExtend
 import asyncio
 client = AsyncExtend(token="YOUR_TOKEN")
 async def main() -> None:
-    await client.run_workflow(workflow_id='workflow_id_here', )
+    await client.run_workflow(workflow_id='workflow_id_here')
 asyncio.run(main())
 ```
 
@@ -93,12 +93,12 @@ client.run_workflow(..., request_options={
 
 ### Timeouts
 
-The SDK defaults to a 60 second timeout. You can configure this with a timeout option at the client or request level.
+The SDK defaults to a 300 second timeout. You can configure this with a timeout option at the client or request level.
 
 ```python
 
 from extend_ai import Extend
-client = Extend(..., timeout=20.0, )
+client = Extend(..., timeout=20.0)
 
 # Override timeout for a specific method
 client.run_workflow(..., request_options={
