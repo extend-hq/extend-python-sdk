@@ -65,18 +65,18 @@ class Extend:
         *,
         base_url: typing.Optional[str] = None,
         environment: ExtendEnvironment = ExtendEnvironment.PRODUCTION,
-        extend_api_version: typing.Optional[ApiVersionEnum] = None,
         token: typing.Union[str, typing.Callable[[], str]],
         timeout: typing.Optional[float] = None,
         follow_redirects: typing.Optional[bool] = True,
         httpx_client: typing.Optional[httpx.Client] = None,
     ):
+        PINNED_API_VERSION = "2025-04-21"
         _defaulted_timeout = (
             timeout if timeout is not None else 60 if httpx_client is None else httpx_client.timeout.read
         )
         self._client_wrapper = SyncClientWrapper(
             base_url=_get_base_url(base_url=base_url, environment=environment),
-            extend_api_version=extend_api_version,
+            extend_api_version=PINNED_API_VERSION,
             token=token,
             httpx_client=httpx_client
             if httpx_client is not None
@@ -85,6 +85,7 @@ class Extend:
             else httpx.Client(timeout=_defaulted_timeout),
             timeout=_defaulted_timeout,
         )
+        self.api_version = PINNED_API_VERSION
         self._raw_client = RawExtend(client_wrapper=self._client_wrapper)
         self.workflow_run = WorkflowRunClient(client_wrapper=self._client_wrapper)
         self.batch_workflow_run = BatchWorkflowRunClient(client_wrapper=self._client_wrapper)
