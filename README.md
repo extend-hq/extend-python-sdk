@@ -26,7 +26,7 @@ Instantiate and use the client with the following:
 ```python
 from extend_ai import Extend
 client = Extend(token="YOUR_TOKEN")
-client.run_workflow(workflow_id='workflow_id_here')
+client.workflow_run.create(workflow_id='workflow_id_here')
 ```
 
 ## Async Client
@@ -38,7 +38,7 @@ from extend_ai import AsyncExtend
 import asyncio
 client = AsyncExtend(token="YOUR_TOKEN")
 async def main() -> None:
-    await client.run_workflow(workflow_id='workflow_id_here')
+    await client.workflow_run.create(workflow_id='workflow_id_here')
 asyncio.run(main())
 ```
 
@@ -50,7 +50,7 @@ will be thrown.
 ```python
 from extend_ai.core.api_error import ApiError
 try:
-    client.run_workflow(...)
+    client.workflow_run.create(...)
 except ApiError as e:
     print(e.status_code)
     print(e.body)
@@ -66,7 +66,7 @@ The `.with_raw_response` property returns a "raw" client that can be used to acc
 ```python
 from extend_ai import Extend
 client = Extend(..., )
-response = client.with_raw_response.run_workflow(...)
+response = client.with_raw_response.workflow_run.create(...)
 print(response.headers)  # access the response headers
 print(response.data)  # access the underlying object
 ```
@@ -86,7 +86,7 @@ A request is deemed retryable when any of the following HTTP status codes is ret
 Use the `max_retries` request option to configure this behavior.
 
 ```python
-client.run_workflow(..., request_options={
+client.workflow_run.create(..., request_options={
     "max_retries": 1
 })
 ```
@@ -101,7 +101,7 @@ from extend_ai import Extend
 client = Extend(..., timeout=20.0)
 
 # Override timeout for a specific method
-client.run_workflow(..., request_options={
+client.workflow_run.create(..., request_options={
     "timeout_in_seconds": 1
 })
 ```
