@@ -21,7 +21,7 @@ class EvaluationSet(UniversalBaseModel):
 
     id: str = pydantic.Field()
     """
-    The ID of the evaluation set. The ID will start with "ev_".
+    The ID of the evaluation set.
     
     Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
     """
@@ -42,7 +42,7 @@ class EvaluationSet(UniversalBaseModel):
 
     processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field()
     """
-    The ID of the processor associated with this evaluation set. The ID will start with "dp_".
+    The ID of the processor associated with this evaluation set.
     
     Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     """

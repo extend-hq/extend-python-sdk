@@ -9,6 +9,7 @@ from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.jsonable_encoder import jsonable_encoder
 from ..core.pydantic_utilities import parse_obj_as
 from ..core.request_options import RequestOptions
+from ..core.serialization import convert_and_respect_annotation_metadata
 from ..errors.bad_request_error import BadRequestError
 from ..errors.not_found_error import NotFoundError
 from ..errors.unauthorized_error import UnauthorizedError
@@ -18,7 +19,9 @@ from ..types.max_page_size import MaxPageSize
 from ..types.next_page_token import NextPageToken
 from ..types.sort_by_enum import SortByEnum
 from ..types.sort_dir_enum import SortDirEnum
+from ..types.workflow_run_file_input import WorkflowRunFileInput
 from ..types.workflow_status import WorkflowStatus
+from .types.workflow_run_create_response import WorkflowRunCreateResponse
 from .types.workflow_run_get_response import WorkflowRunGetResponse
 from .types.workflow_run_list_response import WorkflowRunListResponse
 from .types.workflow_run_update_response import WorkflowRunUpdateResponse
@@ -60,7 +63,7 @@ class RawWorkflowRunClient:
              * `"FAILED"` - The workflow run encountered an error
 
         workflow_id : typing.Optional[str]
-            Filters workflow runs by the workflow ID. If not provided, runs for all workflows are returned. The ID will start with "workflow". This ID can be found when viewing a workflow on the Extend platform.
+            Filters workflow runs by the workflow ID. If not provided, runs for all workflows are returned.
 
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
@@ -140,6 +143,110 @@ class RawWorkflowRunClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
+    def create(
+        self,
+        *,
+        workflow_id: str,
+        files: typing.Optional[typing.Sequence[WorkflowRunFileInput]] = OMIT,
+        raw_texts: typing.Optional[typing.Sequence[str]] = OMIT,
+        version: typing.Optional[str] = OMIT,
+        priority: typing.Optional[int] = OMIT,
+        metadata: typing.Optional[JsonObject] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[WorkflowRunCreateResponse]:
+        """
+        Run a Workflow with files. A Workflow is a sequence of steps that process files and data in a specific order to achieve a desired outcome. A WorkflowRun will be created for each file processed. A WorkflowRun represents a single execution of a workflow against a file.
+
+        Parameters
+        ----------
+        workflow_id : str
+            The ID of the workflow to run.
+
+            Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
+
+        files : typing.Optional[typing.Sequence[WorkflowRunFileInput]]
+            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
+
+        raw_texts : typing.Optional[typing.Sequence[str]]
+            An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.
+
+        version : typing.Optional[str]
+            An optional version of the workflow that files will be run through. This number can be found when viewing the workflow on the Extend platform. When a version number is not supplied, the most recent published version of the workflow will be used. If no published versions exist, the draft version will be used. To run the `"draft"` version of a workflow, use `"draft"` as the version.
+
+            Examples:
+            - `"3"` - Run version 3 of the workflow
+            - `"draft"` - Run the draft version of the workflow
+
+        priority : typing.Optional[int]
+            An optional value used to determine the relative order of WorkflowRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
+
+        metadata : typing.Optional[JsonObject]
+            A optional metadata object that can be assigned to a specific WorkflowRun to help identify it. It will be returned in the response and webhooks. You can place any arbitrary `key : value` pairs in this object.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[WorkflowRunCreateResponse]
+            Successfully created workflow runs
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "workflow_runs",
+            method="POST",
+            json={
+                "workflowId": workflow_id,
+                "files": convert_and_respect_annotation_metadata(
+                    object_=files, annotation=typing.Sequence[WorkflowRunFileInput], direction="write"
+                ),
+                "rawTexts": raw_texts,
+                "version": version,
+                "priority": priority,
+                "metadata": metadata,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    WorkflowRunCreateResponse,
+                    parse_obj_as(
+                        type_=WorkflowRunCreateResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        parse_obj_as(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        parse_obj_as(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
     def get(
         self, workflow_run_id: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> HttpResponse[WorkflowRunGetResponse]:
@@ -149,7 +256,7 @@ class RawWorkflowRunClient:
         Parameters
         ----------
         workflow_run_id : str
-            The ID of the WorkflowRun that was outputted after a Workflow was run through the API. The ID will start with "workflow_run". This ID can be found when creating a WorkflowRun via API, or when viewing the "history" tab of a workflow on the Extend platform.
+            The ID of the WorkflowRun that was outputted after a Workflow was run through the API.
 
             Example: `"workflow_run_8k9m-xyzAB_Pqrst-Nvw4"`
 
@@ -343,7 +450,7 @@ class AsyncRawWorkflowRunClient:
              * `"FAILED"` - The workflow run encountered an error
 
         workflow_id : typing.Optional[str]
-            Filters workflow runs by the workflow ID. If not provided, runs for all workflows are returned. The ID will start with "workflow". This ID can be found when viewing a workflow on the Extend platform.
+            Filters workflow runs by the workflow ID. If not provided, runs for all workflows are returned.
 
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
@@ -423,6 +530,110 @@ class AsyncRawWorkflowRunClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
+    async def create(
+        self,
+        *,
+        workflow_id: str,
+        files: typing.Optional[typing.Sequence[WorkflowRunFileInput]] = OMIT,
+        raw_texts: typing.Optional[typing.Sequence[str]] = OMIT,
+        version: typing.Optional[str] = OMIT,
+        priority: typing.Optional[int] = OMIT,
+        metadata: typing.Optional[JsonObject] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[WorkflowRunCreateResponse]:
+        """
+        Run a Workflow with files. A Workflow is a sequence of steps that process files and data in a specific order to achieve a desired outcome. A WorkflowRun will be created for each file processed. A WorkflowRun represents a single execution of a workflow against a file.
+
+        Parameters
+        ----------
+        workflow_id : str
+            The ID of the workflow to run.
+
+            Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
+
+        files : typing.Optional[typing.Sequence[WorkflowRunFileInput]]
+            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
+
+        raw_texts : typing.Optional[typing.Sequence[str]]
+            An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.
+
+        version : typing.Optional[str]
+            An optional version of the workflow that files will be run through. This number can be found when viewing the workflow on the Extend platform. When a version number is not supplied, the most recent published version of the workflow will be used. If no published versions exist, the draft version will be used. To run the `"draft"` version of a workflow, use `"draft"` as the version.
+
+            Examples:
+            - `"3"` - Run version 3 of the workflow
+            - `"draft"` - Run the draft version of the workflow
+
+        priority : typing.Optional[int]
+            An optional value used to determine the relative order of WorkflowRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
+
+        metadata : typing.Optional[JsonObject]
+            A optional metadata object that can be assigned to a specific WorkflowRun to help identify it. It will be returned in the response and webhooks. You can place any arbitrary `key : value` pairs in this object.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[WorkflowRunCreateResponse]
+            Successfully created workflow runs
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "workflow_runs",
+            method="POST",
+            json={
+                "workflowId": workflow_id,
+                "files": convert_and_respect_annotation_metadata(
+                    object_=files, annotation=typing.Sequence[WorkflowRunFileInput], direction="write"
+                ),
+                "rawTexts": raw_texts,
+                "version": version,
+                "priority": priority,
+                "metadata": metadata,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    WorkflowRunCreateResponse,
+                    parse_obj_as(
+                        type_=WorkflowRunCreateResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        parse_obj_as(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        parse_obj_as(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
     async def get(
         self, workflow_run_id: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> AsyncHttpResponse[WorkflowRunGetResponse]:
@@ -432,7 +643,7 @@ class AsyncRawWorkflowRunClient:
         Parameters
         ----------
         workflow_run_id : str
-            The ID of the WorkflowRun that was outputted after a Workflow was run through the API. The ID will start with "workflow_run". This ID can be found when creating a WorkflowRun via API, or when viewing the "history" tab of a workflow on the Extend platform.
+            The ID of the WorkflowRun that was outputted after a Workflow was run through the API.
 
             Example: `"workflow_run_8k9m-xyzAB_Pqrst-Nvw4"`
 

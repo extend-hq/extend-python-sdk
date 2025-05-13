@@ -21,14 +21,14 @@ class EvaluationSetItem(UniversalBaseModel):
 
     id: str = pydantic.Field()
     """
-    The ID of the evaluation set item. The ID will start with "evi_".
+    The ID of the evaluation set item.
     
     Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
     """
 
     evaluation_set_id: typing_extensions.Annotated[str, FieldMetadata(alias="evaluationSetId")] = pydantic.Field()
     """
-    The ID of the evaluation set that this item belongs to. The ID will start with "ev_".
+    The ID of the evaluation set that this item belongs to.
     
     Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
     """

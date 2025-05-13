@@ -4,8 +4,16 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
+from ..types.json_object import JsonObject
+from ..types.processor_id import ProcessorId
+from ..types.processor_run_file_input import ProcessorRunFileInput
 from .raw_client import AsyncRawProcessorRunClient, RawProcessorRunClient
+from .types.processor_run_create_request_config import ProcessorRunCreateRequestConfig
+from .types.processor_run_create_response import ProcessorRunCreateResponse
 from .types.processor_run_get_response import ProcessorRunGetResponse
+
+# this is used as the default value for optional parameters
+OMIT = typing.cast(typing.Any, ...)
 
 
 class ProcessorRunClient:
@@ -23,6 +31,81 @@ class ProcessorRunClient:
         """
         return self._raw_client
 
+    def create(
+        self,
+        *,
+        processor_id: ProcessorId,
+        version: typing.Optional[str] = OMIT,
+        file: typing.Optional[ProcessorRunFileInput] = OMIT,
+        raw_text: typing.Optional[str] = OMIT,
+        priority: typing.Optional[int] = OMIT,
+        metadata: typing.Optional[JsonObject] = OMIT,
+        config: typing.Optional[ProcessorRunCreateRequestConfig] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ProcessorRunCreateResponse:
+        """
+        Run processors (extraction, classification, splitting, etc.) on a given document.
+
+        In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
+        * file parsing/pre-processing will automatically be reused across multiple processors, which will give you simplicity and cost savings given that many use cases will require multiple processors to be run on the same document.
+        * workflows provide dedicated human in the loop document review, when needed.
+        * workflows allow you to model and manage your pipeline with a single endpoint and corresponding UI for modeling and monitoring.
+
+        However, there are a number of legitimate use cases and systems where it might be easier to model the pipeline via code and run processors directly. This endpoint is provided for this purpose.
+
+        Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+
+        Parameters
+        ----------
+        processor_id : ProcessorId
+
+        version : typing.Optional[str]
+            An optional version of the processor to use. When not supplied, the most recent published version of the processor will be used. Special values include:
+            - `"latest"` for the most recent published version. If there are no published versions, the draft version will be used.
+            - `"draft"` for the draft version.
+            - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
+
+        file : typing.Optional[ProcessorRunFileInput]
+            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
+
+        raw_text : typing.Optional[str]
+            A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
+
+        priority : typing.Optional[int]
+            An optional value used to determine the relative order of ProcessorRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
+
+        metadata : typing.Optional[JsonObject]
+            An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
+
+        config : typing.Optional[ProcessorRunCreateRequestConfig]
+            The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ProcessorRunCreateResponse
+            Successfully created processor run
+
+        Examples
+        --------
+        from extend_ai import Extend
+        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        client.processor_run.create(processor_id='processor_id_here', )
+        """
+        _response = self._raw_client.create(
+            processor_id=processor_id,
+            version=version,
+            file=file,
+            raw_text=raw_text,
+            priority=priority,
+            metadata=metadata,
+            config=config,
+            request_options=request_options,
+        )
+        return _response.data
+
     def get(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> ProcessorRunGetResponse:
         """
         Retrieve details about a specific processor run, including its status, outputs, and any edits made during review.
@@ -32,7 +115,7 @@ class ProcessorRunClient:
         Parameters
         ----------
         id : str
-            The unique identifier for this processor run. The ID will start with "dpr_". This can be fetched from the API response when running a processor, or from the Extend UI in the "history" tab of a processor.
+            The unique identifier for this processor run.
 
             Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
@@ -69,6 +152,84 @@ class AsyncProcessorRunClient:
         """
         return self._raw_client
 
+    async def create(
+        self,
+        *,
+        processor_id: ProcessorId,
+        version: typing.Optional[str] = OMIT,
+        file: typing.Optional[ProcessorRunFileInput] = OMIT,
+        raw_text: typing.Optional[str] = OMIT,
+        priority: typing.Optional[int] = OMIT,
+        metadata: typing.Optional[JsonObject] = OMIT,
+        config: typing.Optional[ProcessorRunCreateRequestConfig] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ProcessorRunCreateResponse:
+        """
+        Run processors (extraction, classification, splitting, etc.) on a given document.
+
+        In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
+        * file parsing/pre-processing will automatically be reused across multiple processors, which will give you simplicity and cost savings given that many use cases will require multiple processors to be run on the same document.
+        * workflows provide dedicated human in the loop document review, when needed.
+        * workflows allow you to model and manage your pipeline with a single endpoint and corresponding UI for modeling and monitoring.
+
+        However, there are a number of legitimate use cases and systems where it might be easier to model the pipeline via code and run processors directly. This endpoint is provided for this purpose.
+
+        Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+
+        Parameters
+        ----------
+        processor_id : ProcessorId
+
+        version : typing.Optional[str]
+            An optional version of the processor to use. When not supplied, the most recent published version of the processor will be used. Special values include:
+            - `"latest"` for the most recent published version. If there are no published versions, the draft version will be used.
+            - `"draft"` for the draft version.
+            - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
+
+        file : typing.Optional[ProcessorRunFileInput]
+            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
+
+        raw_text : typing.Optional[str]
+            A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
+
+        priority : typing.Optional[int]
+            An optional value used to determine the relative order of ProcessorRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
+
+        metadata : typing.Optional[JsonObject]
+            An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
+
+        config : typing.Optional[ProcessorRunCreateRequestConfig]
+            The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ProcessorRunCreateResponse
+            Successfully created processor run
+
+        Examples
+        --------
+        from extend_ai import AsyncExtend
+        import asyncio
+        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+        async def main() -> None:
+            await client.processor_run.create(processor_id='processor_id_here', )
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.create(
+            processor_id=processor_id,
+            version=version,
+            file=file,
+            raw_text=raw_text,
+            priority=priority,
+            metadata=metadata,
+            config=config,
+            request_options=request_options,
+        )
+        return _response.data
+
     async def get(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> ProcessorRunGetResponse:
         """
         Retrieve details about a specific processor run, including its status, outputs, and any edits made during review.
@@ -78,7 +239,7 @@ class AsyncProcessorRunClient:
         Parameters
         ----------
         id : str
-            The unique identifier for this processor run. The ID will start with "dpr_". This can be fetched from the API response when running a processor, or from the Extend UI in the "history" tab of a processor.
+            The unique identifier for this processor run.
 
             Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
 

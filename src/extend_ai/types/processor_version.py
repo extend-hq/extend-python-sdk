@@ -21,14 +21,14 @@ class ProcessorVersion(UniversalBaseModel):
 
     id: str = pydantic.Field()
     """
-    The unique identifier for this version of the document processor. The ID will start with "dpv_".
+    The unique identifier for this version of the document processor.
     
     Example: `"dpv_xK9mLPqRtN3vS8wF5hB2cQ"`
     """
 
     processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field()
     """
-    The ID of the parent document processor. The ID will start with "dp_".
+    The ID of the parent document processor.
     
     Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     """

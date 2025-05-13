@@ -6,12 +6,12 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
-from ..core.serialization import FieldMetadata
-from .processor_run import ProcessorRun
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ...core.serialization import FieldMetadata
+from ...types.processor_run import ProcessorRun
 
 
-class RunProcessorResponse(UniversalBaseModel):
+class ProcessorRunCreateResponse(UniversalBaseModel):
     success: bool
     processor_run: typing_extensions.Annotated[ProcessorRun, FieldMetadata(alias="processorRun")]
 
@@ -25,6 +25,6 @@ class RunProcessorResponse(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-from .extraction_field import ExtractionField  # noqa: E402, F401, I001
+from ...types.extraction_field import ExtractionField  # noqa: E402, F401, I001
 
-update_forward_refs(RunProcessorResponse)
+update_forward_refs(ProcessorRunCreateResponse)

@@ -9,16 +9,152 @@ from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.jsonable_encoder import jsonable_encoder
 from ..core.pydantic_utilities import parse_obj_as
 from ..core.request_options import RequestOptions
+from ..core.serialization import convert_and_respect_annotation_metadata
 from ..errors.bad_request_error import BadRequestError
 from ..errors.not_found_error import NotFoundError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..types.error import Error
+from ..types.json_object import JsonObject
+from ..types.processor_id import ProcessorId
+from ..types.processor_run_file_input import ProcessorRunFileInput
+from .types.processor_run_create_request_config import ProcessorRunCreateRequestConfig
+from .types.processor_run_create_response import ProcessorRunCreateResponse
 from .types.processor_run_get_response import ProcessorRunGetResponse
+
+# this is used as the default value for optional parameters
+OMIT = typing.cast(typing.Any, ...)
 
 
 class RawProcessorRunClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
+
+    def create(
+        self,
+        *,
+        processor_id: ProcessorId,
+        version: typing.Optional[str] = OMIT,
+        file: typing.Optional[ProcessorRunFileInput] = OMIT,
+        raw_text: typing.Optional[str] = OMIT,
+        priority: typing.Optional[int] = OMIT,
+        metadata: typing.Optional[JsonObject] = OMIT,
+        config: typing.Optional[ProcessorRunCreateRequestConfig] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[ProcessorRunCreateResponse]:
+        """
+        Run processors (extraction, classification, splitting, etc.) on a given document.
+
+        In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
+        * file parsing/pre-processing will automatically be reused across multiple processors, which will give you simplicity and cost savings given that many use cases will require multiple processors to be run on the same document.
+        * workflows provide dedicated human in the loop document review, when needed.
+        * workflows allow you to model and manage your pipeline with a single endpoint and corresponding UI for modeling and monitoring.
+
+        However, there are a number of legitimate use cases and systems where it might be easier to model the pipeline via code and run processors directly. This endpoint is provided for this purpose.
+
+        Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+
+        Parameters
+        ----------
+        processor_id : ProcessorId
+
+        version : typing.Optional[str]
+            An optional version of the processor to use. When not supplied, the most recent published version of the processor will be used. Special values include:
+            - `"latest"` for the most recent published version. If there are no published versions, the draft version will be used.
+            - `"draft"` for the draft version.
+            - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
+
+        file : typing.Optional[ProcessorRunFileInput]
+            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
+
+        raw_text : typing.Optional[str]
+            A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
+
+        priority : typing.Optional[int]
+            An optional value used to determine the relative order of ProcessorRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
+
+        metadata : typing.Optional[JsonObject]
+            An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
+
+        config : typing.Optional[ProcessorRunCreateRequestConfig]
+            The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ProcessorRunCreateResponse]
+            Successfully created processor run
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "processor_runs",
+            method="POST",
+            json={
+                "processorId": processor_id,
+                "version": version,
+                "file": convert_and_respect_annotation_metadata(
+                    object_=file, annotation=ProcessorRunFileInput, direction="write"
+                ),
+                "rawText": raw_text,
+                "priority": priority,
+                "metadata": metadata,
+                "config": convert_and_respect_annotation_metadata(
+                    object_=config, annotation=ProcessorRunCreateRequestConfig, direction="write"
+                ),
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ProcessorRunCreateResponse,
+                    parse_obj_as(
+                        type_=ProcessorRunCreateResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        parse_obj_as(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        parse_obj_as(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        parse_obj_as(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     def get(
         self, id: str, *, request_options: typing.Optional[RequestOptions] = None
@@ -31,7 +167,7 @@ class RawProcessorRunClient:
         Parameters
         ----------
         id : str
-            The unique identifier for this processor run. The ID will start with "dpr_". This can be fetched from the API response when running a processor, or from the Extend UI in the "history" tab of a processor.
+            The unique identifier for this processor run.
 
             Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
@@ -101,6 +237,133 @@ class AsyncRawProcessorRunClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
+    async def create(
+        self,
+        *,
+        processor_id: ProcessorId,
+        version: typing.Optional[str] = OMIT,
+        file: typing.Optional[ProcessorRunFileInput] = OMIT,
+        raw_text: typing.Optional[str] = OMIT,
+        priority: typing.Optional[int] = OMIT,
+        metadata: typing.Optional[JsonObject] = OMIT,
+        config: typing.Optional[ProcessorRunCreateRequestConfig] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[ProcessorRunCreateResponse]:
+        """
+        Run processors (extraction, classification, splitting, etc.) on a given document.
+
+        In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
+        * file parsing/pre-processing will automatically be reused across multiple processors, which will give you simplicity and cost savings given that many use cases will require multiple processors to be run on the same document.
+        * workflows provide dedicated human in the loop document review, when needed.
+        * workflows allow you to model and manage your pipeline with a single endpoint and corresponding UI for modeling and monitoring.
+
+        However, there are a number of legitimate use cases and systems where it might be easier to model the pipeline via code and run processors directly. This endpoint is provided for this purpose.
+
+        Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+
+        Parameters
+        ----------
+        processor_id : ProcessorId
+
+        version : typing.Optional[str]
+            An optional version of the processor to use. When not supplied, the most recent published version of the processor will be used. Special values include:
+            - `"latest"` for the most recent published version. If there are no published versions, the draft version will be used.
+            - `"draft"` for the draft version.
+            - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
+
+        file : typing.Optional[ProcessorRunFileInput]
+            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
+
+        raw_text : typing.Optional[str]
+            A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
+
+        priority : typing.Optional[int]
+            An optional value used to determine the relative order of ProcessorRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
+
+        metadata : typing.Optional[JsonObject]
+            An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
+
+        config : typing.Optional[ProcessorRunCreateRequestConfig]
+            The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ProcessorRunCreateResponse]
+            Successfully created processor run
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "processor_runs",
+            method="POST",
+            json={
+                "processorId": processor_id,
+                "version": version,
+                "file": convert_and_respect_annotation_metadata(
+                    object_=file, annotation=ProcessorRunFileInput, direction="write"
+                ),
+                "rawText": raw_text,
+                "priority": priority,
+                "metadata": metadata,
+                "config": convert_and_respect_annotation_metadata(
+                    object_=config, annotation=ProcessorRunCreateRequestConfig, direction="write"
+                ),
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ProcessorRunCreateResponse,
+                    parse_obj_as(
+                        type_=ProcessorRunCreateResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        parse_obj_as(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        parse_obj_as(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        parse_obj_as(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
     async def get(
         self, id: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> AsyncHttpResponse[ProcessorRunGetResponse]:
@@ -112,7 +375,7 @@ class AsyncRawProcessorRunClient:
         Parameters
         ----------
         id : str
-            The unique identifier for this processor run. The ID will start with "dpr_". This can be fetched from the API response when running a processor, or from the Extend UI in the "history" tab of a processor.
+            The unique identifier for this processor run.
 
             Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
 

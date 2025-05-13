@@ -57,7 +57,7 @@ class EvaluationSetItemClient:
         Parameters
         ----------
         evaluation_set_id : str
-            The ID of the evaluation set to add the item to. The ID will start with "ev_".
+            The ID of the evaluation set to add the item to.
 
             Example: `"ev_Xj8mK2pL9nR4vT7qY5wZ"`
 
@@ -106,7 +106,7 @@ class EvaluationSetItemClient:
         Parameters
         ----------
         id : str
-            The ID of the evaluation set item to update. The ID will start with "evi_".
+            The ID of the evaluation set item to update.
 
             Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
 
@@ -147,7 +147,7 @@ class EvaluationSetItemClient:
         Parameters
         ----------
         evaluation_set_id : str
-            The ID of the evaluation set to add the items to. The ID will start with "ev_".
+            The ID of the evaluation set to add the items to.
 
             Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
 
@@ -219,7 +219,7 @@ class AsyncEvaluationSetItemClient:
         Parameters
         ----------
         evaluation_set_id : str
-            The ID of the evaluation set to add the item to. The ID will start with "ev_".
+            The ID of the evaluation set to add the item to.
 
             Example: `"ev_Xj8mK2pL9nR4vT7qY5wZ"`
 
@@ -271,7 +271,7 @@ class AsyncEvaluationSetItemClient:
         Parameters
         ----------
         id : str
-            The ID of the evaluation set item to update. The ID will start with "evi_".
+            The ID of the evaluation set item to update.
 
             Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
 
@@ -315,7 +315,7 @@ class AsyncEvaluationSetItemClient:
         Parameters
         ----------
         evaluation_set_id : str
-            The ID of the evaluation set to add the items to. The ID will start with "ev_".
+            The ID of the evaluation set to add the items to.
 
             Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
 

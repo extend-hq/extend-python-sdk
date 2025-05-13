@@ -31,7 +31,6 @@ from .classification_config import ClassificationConfig
 from .classification_config_base_processor import ClassificationConfigBaseProcessor
 from .classifier_output import ClassifierOutput
 from .classify_metrics import ClassifyMetrics
-from .currency import Currency
 from .empty_block_details import EmptyBlockDetails
 from .enum import Enum
 from .enum_option import EnumOption
@@ -51,7 +50,6 @@ from .extraction_field_result import ExtractionFieldResult
 from .extraction_field_result_reference import ExtractionFieldResultReference
 from .extraction_field_result_reference_bounding_boxes_item import ExtractionFieldResultReferenceBoundingBoxesItem
 from .extraction_field_result_type import ExtractionFieldResultType
-from .extraction_field_result_value import ExtractionFieldResultValue
 from .extraction_field_type import ExtractionFieldType
 from .extraction_output import ExtractionOutput
 from .extraction_output_edits import ExtractionOutputEdits
@@ -116,21 +114,13 @@ from .processor_version_config import (
     ProcessorVersionConfig_Splitter,
 )
 from .provided_classifier_output import ProvidedClassifierOutput
+from .provided_extraction_field_result import ProvidedExtractionFieldResult
+from .provided_extraction_field_result_type import ProvidedExtractionFieldResultType
 from .provided_extraction_output import ProvidedExtractionOutput
 from .provided_fields_array_output import ProvidedFieldsArrayOutput
-from .provided_fields_array_output_value import ProvidedFieldsArrayOutputValue
 from .provided_json_output import ProvidedJsonOutput
 from .provided_processor_output import ProvidedProcessorOutput
 from .provided_splitter_output import ProvidedSplitterOutput
-from .run_processor_request_config import (
-    RunProcessorRequestConfig,
-    RunProcessorRequestConfig_Classify,
-    RunProcessorRequestConfig_Extract,
-    RunProcessorRequestConfig_Splitter,
-)
-from .run_processor_response import RunProcessorResponse
-from .run_workflow_response import RunWorkflowResponse
-from .signature import Signature
 from .sort_by_enum import SortByEnum
 from .sort_dir_enum import SortDirEnum
 from .splitter_advanced_options import SplitterAdvancedOptions
@@ -197,7 +187,6 @@ __all__ = [
     "ClassificationConfigBaseProcessor",
     "ClassifierOutput",
     "ClassifyMetrics",
-    "Currency",
     "EmptyBlockDetails",
     "Enum",
     "EnumOption",
@@ -217,7 +206,6 @@ __all__ = [
     "ExtractionFieldResultReference",
     "ExtractionFieldResultReferenceBoundingBoxesItem",
     "ExtractionFieldResultType",
-    "ExtractionFieldResultValue",
     "ExtractionFieldType",
     "ExtractionOutput",
     "ExtractionOutputEdits",
@@ -278,19 +266,13 @@ __all__ = [
     "ProcessorVersionConfig_Extract",
     "ProcessorVersionConfig_Splitter",
     "ProvidedClassifierOutput",
+    "ProvidedExtractionFieldResult",
+    "ProvidedExtractionFieldResultType",
     "ProvidedExtractionOutput",
     "ProvidedFieldsArrayOutput",
-    "ProvidedFieldsArrayOutputValue",
     "ProvidedJsonOutput",
     "ProvidedProcessorOutput",
     "ProvidedSplitterOutput",
-    "RunProcessorRequestConfig",
-    "RunProcessorRequestConfig_Classify",
-    "RunProcessorRequestConfig_Extract",
-    "RunProcessorRequestConfig_Splitter",
-    "RunProcessorResponse",
-    "RunWorkflowResponse",
-    "Signature",
     "SortByEnum",
     "SortDirEnum",
     "SplitterAdvancedOptions",

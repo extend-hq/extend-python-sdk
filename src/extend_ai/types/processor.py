@@ -21,7 +21,7 @@ class Processor(UniversalBaseModel):
 
     id: str = pydantic.Field()
     """
-    The ID of the processor. The ID will start with "dp_".
+    The ID of the processor.
     
     Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     """

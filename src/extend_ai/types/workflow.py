@@ -14,7 +14,7 @@ class Workflow(UniversalBaseModel):
 
     id: str = pydantic.Field()
     """
-    The ID of the workflow. The ID will start with "workflow".
+    The ID of the workflow.
     
     Example: `"workflow_BMlfq_yWM3sT-ZzvCnA3f"`
     """

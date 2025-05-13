@@ -26,14 +26,14 @@ class ProcessorRun(UniversalBaseModel):
 
     id: str = pydantic.Field()
     """
-    The unique identifier for this processor run. The ID will start with "dpr_".
+    The unique identifier for this processor run.
     
     Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
     processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field()
     """
-    The ID of the processor used for this run. The ID will start with "dp_".
+    The ID of the processor used for this run.
     
     Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     """
@@ -56,6 +56,13 @@ class ProcessorRun(UniversalBaseModel):
     * `"PROCESSING"` - The processor is currently running
     * `"PROCESSED"` - The processor has completed successfully
     * `"FAILED"` - The processor encountered an error
+    """
+
+    output: ProcessorOutput = pydantic.Field()
+    """
+    The final output, either reviewed or initial.
+    
+    Conforms to the shape of output types and depends on the processor type and configuration shape.
     """
 
     failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
@@ -113,13 +120,6 @@ class ProcessorRun(UniversalBaseModel):
     ] = pydantic.Field(default=None)
     """
     The output after review, if any.
-    """
-
-    output: ProcessorOutput = pydantic.Field()
-    """
-    The final output, either reviewed or initial.
-    
-    Conforms to the shape of output types and depends on the processor type and configuration shape.
     """
 
     files: typing.List[File] = pydantic.Field()

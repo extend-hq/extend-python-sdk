@@ -49,7 +49,7 @@ class RawProcessorClient:
         type : ProcessorType
 
         clone_processor_id : typing.Optional[str]
-            The ID of an existing processor to clone. The ID will start with "dp_". One of `cloneProcessorId` or `config` must be provided.
+            The ID of an existing processor to clone. One of `cloneProcessorId` or `config` must be provided.
 
             Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
@@ -147,7 +147,7 @@ class RawProcessorClient:
         Parameters
         ----------
         id : str
-            The ID of the processor to update. The ID will start with "dp_".
+            The ID of the processor to update.
 
             Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
@@ -257,7 +257,7 @@ class AsyncRawProcessorClient:
         type : ProcessorType
 
         clone_processor_id : typing.Optional[str]
-            The ID of an existing processor to clone. The ID will start with "dp_". One of `cloneProcessorId` or `config` must be provided.
+            The ID of an existing processor to clone. One of `cloneProcessorId` or `config` must be provided.
 
             Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
@@ -355,7 +355,7 @@ class AsyncRawProcessorClient:
         Parameters
         ----------
         id : str
-            The ID of the processor to update. The ID will start with "dp_".
+            The ID of the processor to update.
 
             Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 

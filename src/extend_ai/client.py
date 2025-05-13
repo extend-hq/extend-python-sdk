@@ -11,22 +11,14 @@ from .environment import ExtendEnvironment
 from .evaluation_set.client import AsyncEvaluationSetClient, EvaluationSetClient
 from .evaluation_set_item.client import AsyncEvaluationSetItemClient, EvaluationSetItemClient
 from .file.client import AsyncFileClient, FileClient
-from .file_endpoints.client import AsyncFileEndpointsClient, FileEndpointsClient
 from .processor.client import AsyncProcessorClient, ProcessorClient
 from .processor_run.client import AsyncProcessorRunClient, ProcessorRunClient
 from .processor_version.client import AsyncProcessorVersionClient, ProcessorVersionClient
 from .raw_client import AsyncRawExtend, RawExtend
 from .types.api_version_enum import ApiVersionEnum
-from .types.json_object import JsonObject
 from .types.parse_config import ParseConfig
 from .types.parse_request_file import ParseRequestFile
 from .types.parse_response import ParseResponse
-from .types.processor_id import ProcessorId
-from .types.processor_run_file_input import ProcessorRunFileInput
-from .types.run_processor_request_config import RunProcessorRequestConfig
-from .types.run_processor_response import RunProcessorResponse
-from .types.run_workflow_response import RunWorkflowResponse
-from .types.workflow_run_file_input import WorkflowRunFileInput
 from .workflow.client import AsyncWorkflowClient, WorkflowClient
 from .workflow_run.client import AsyncWorkflowRunClient, WorkflowRunClient
 from .workflow_run_output.client import AsyncWorkflowRunOutputClient, WorkflowRunOutputClient
@@ -100,7 +92,6 @@ class Extend:
         self.processor = ProcessorClient(client_wrapper=self._client_wrapper)
         self.processor_version = ProcessorVersionClient(client_wrapper=self._client_wrapper)
         self.file = FileClient(client_wrapper=self._client_wrapper)
-        self.file_endpoints = FileEndpointsClient(client_wrapper=self._client_wrapper)
         self.evaluation_set = EvaluationSetClient(client_wrapper=self._client_wrapper)
         self.evaluation_set_item = EvaluationSetItemClient(client_wrapper=self._client_wrapper)
         self.workflow_run_output = WorkflowRunOutputClient(client_wrapper=self._client_wrapper)
@@ -117,146 +108,6 @@ class Extend:
         RawExtend
         """
         return self._raw_client
-
-    def run_workflow(
-        self,
-        *,
-        workflow_id: str,
-        files: typing.Optional[typing.Sequence[WorkflowRunFileInput]] = OMIT,
-        raw_texts: typing.Optional[typing.Sequence[str]] = OMIT,
-        version: typing.Optional[str] = OMIT,
-        priority: typing.Optional[int] = OMIT,
-        metadata: typing.Optional[JsonObject] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> RunWorkflowResponse:
-        """
-        Run a Workflow with files. A Workflow is a sequence of steps that process files and data in a specific order to achieve a desired outcome. A WorkflowRun will be created for each file processed. A WorkflowRun represents a single execution of a workflow against a file.
-
-        Parameters
-        ----------
-        workflow_id : str
-            The ID of the workflow to run. The ID will start with "workflow". This ID can be found viewing the workflow on the Extend platform.
-
-            Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
-
-        files : typing.Optional[typing.Sequence[WorkflowRunFileInput]]
-            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
-
-        raw_texts : typing.Optional[typing.Sequence[str]]
-            An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.
-
-        version : typing.Optional[str]
-            An optional version of the workflow that files will be run through. This number can be found when viewing the workflow on the Extend platform. When a version number is not supplied, the most recent published version of the workflow will be used. If no published versions exist, the draft version will be used. To run the `"draft"` version of a workflow, use `"draft"` as the version.
-
-            Examples:
-            - `"3"` - Run version 3 of the workflow
-            - `"draft"` - Run the draft version of the workflow
-
-        priority : typing.Optional[int]
-            An optional value used to determine the relative order of WorkflowRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
-
-        metadata : typing.Optional[JsonObject]
-            A optional metadata object that can be assigned to a specific WorkflowRun to help identify it. It will be returned in the response and webhooks. You can place any arbitrary `key : value` pairs in this object.
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        RunWorkflowResponse
-            Successfully created workflow runs
-
-        Examples
-        --------
-        from extend_ai import Extend
-        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
-        client.run_workflow(workflow_id='workflow_id_here', )
-        """
-        _response = self._raw_client.run_workflow(
-            workflow_id=workflow_id,
-            files=files,
-            raw_texts=raw_texts,
-            version=version,
-            priority=priority,
-            metadata=metadata,
-            request_options=request_options,
-        )
-        return _response.data
-
-    def run_processor(
-        self,
-        *,
-        processor_id: ProcessorId,
-        version: typing.Optional[str] = OMIT,
-        file: typing.Optional[ProcessorRunFileInput] = OMIT,
-        raw_text: typing.Optional[str] = OMIT,
-        priority: typing.Optional[int] = OMIT,
-        metadata: typing.Optional[JsonObject] = OMIT,
-        config: typing.Optional[RunProcessorRequestConfig] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> RunProcessorResponse:
-        """
-        Run processors (extraction, classification, splitting, etc.) on a given document.
-
-        In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
-        * file parsing/pre-processing will automatically be reused across multiple processors, which will give you simplicity and cost savings given that many use cases will require multiple processors to be run on the same document.
-        * workflows provide dedicated human in the loop document review, when needed.
-        * workflows allow you to model and manage your pipeline with a single endpoint and corresponding UI for modeling and monitoring.
-
-        However, there are a number of legitimate use cases and systems where it might be easier to model the pipeline via code and run processors directly. This endpoint is provided for this purpose.
-
-        Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
-
-        Parameters
-        ----------
-        processor_id : ProcessorId
-
-        version : typing.Optional[str]
-            An optional version of the processor to use. When not supplied, the most recent published version of the processor will be used. Special values include:
-            - `"latest"` for the most recent published version. If there are no published versions, the draft version will be used.
-            - `"draft"` for the draft version.
-            - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
-
-        file : typing.Optional[ProcessorRunFileInput]
-            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
-
-        raw_text : typing.Optional[str]
-            A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
-
-        priority : typing.Optional[int]
-            An optional value used to determine the relative order of ProcessorRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
-
-        metadata : typing.Optional[JsonObject]
-            An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
-
-        config : typing.Optional[RunProcessorRequestConfig]
-            The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        RunProcessorResponse
-            Successfully created processor run
-
-        Examples
-        --------
-        from extend_ai import Extend
-        client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
-        client.run_processor(processor_id='processor_id_here', )
-        """
-        _response = self._raw_client.run_processor(
-            processor_id=processor_id,
-            version=version,
-            file=file,
-            raw_text=raw_text,
-            priority=priority,
-            metadata=metadata,
-            config=config,
-            request_options=request_options,
-        )
-        return _response.data
 
     def parse(
         self, *, file: ParseRequestFile, config: ParseConfig, request_options: typing.Optional[RequestOptions] = None
@@ -362,7 +213,6 @@ class AsyncExtend:
         self.processor = AsyncProcessorClient(client_wrapper=self._client_wrapper)
         self.processor_version = AsyncProcessorVersionClient(client_wrapper=self._client_wrapper)
         self.file = AsyncFileClient(client_wrapper=self._client_wrapper)
-        self.file_endpoints = AsyncFileEndpointsClient(client_wrapper=self._client_wrapper)
         self.evaluation_set = AsyncEvaluationSetClient(client_wrapper=self._client_wrapper)
         self.evaluation_set_item = AsyncEvaluationSetItemClient(client_wrapper=self._client_wrapper)
         self.workflow_run_output = AsyncWorkflowRunOutputClient(client_wrapper=self._client_wrapper)
@@ -379,152 +229,6 @@ class AsyncExtend:
         AsyncRawExtend
         """
         return self._raw_client
-
-    async def run_workflow(
-        self,
-        *,
-        workflow_id: str,
-        files: typing.Optional[typing.Sequence[WorkflowRunFileInput]] = OMIT,
-        raw_texts: typing.Optional[typing.Sequence[str]] = OMIT,
-        version: typing.Optional[str] = OMIT,
-        priority: typing.Optional[int] = OMIT,
-        metadata: typing.Optional[JsonObject] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> RunWorkflowResponse:
-        """
-        Run a Workflow with files. A Workflow is a sequence of steps that process files and data in a specific order to achieve a desired outcome. A WorkflowRun will be created for each file processed. A WorkflowRun represents a single execution of a workflow against a file.
-
-        Parameters
-        ----------
-        workflow_id : str
-            The ID of the workflow to run. The ID will start with "workflow". This ID can be found viewing the workflow on the Extend platform.
-
-            Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
-
-        files : typing.Optional[typing.Sequence[WorkflowRunFileInput]]
-            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
-
-        raw_texts : typing.Optional[typing.Sequence[str]]
-            An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.
-
-        version : typing.Optional[str]
-            An optional version of the workflow that files will be run through. This number can be found when viewing the workflow on the Extend platform. When a version number is not supplied, the most recent published version of the workflow will be used. If no published versions exist, the draft version will be used. To run the `"draft"` version of a workflow, use `"draft"` as the version.
-
-            Examples:
-            - `"3"` - Run version 3 of the workflow
-            - `"draft"` - Run the draft version of the workflow
-
-        priority : typing.Optional[int]
-            An optional value used to determine the relative order of WorkflowRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
-
-        metadata : typing.Optional[JsonObject]
-            A optional metadata object that can be assigned to a specific WorkflowRun to help identify it. It will be returned in the response and webhooks. You can place any arbitrary `key : value` pairs in this object.
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        RunWorkflowResponse
-            Successfully created workflow runs
-
-        Examples
-        --------
-        from extend_ai import AsyncExtend
-        import asyncio
-        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
-        async def main() -> None:
-            await client.run_workflow(workflow_id='workflow_id_here', )
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.run_workflow(
-            workflow_id=workflow_id,
-            files=files,
-            raw_texts=raw_texts,
-            version=version,
-            priority=priority,
-            metadata=metadata,
-            request_options=request_options,
-        )
-        return _response.data
-
-    async def run_processor(
-        self,
-        *,
-        processor_id: ProcessorId,
-        version: typing.Optional[str] = OMIT,
-        file: typing.Optional[ProcessorRunFileInput] = OMIT,
-        raw_text: typing.Optional[str] = OMIT,
-        priority: typing.Optional[int] = OMIT,
-        metadata: typing.Optional[JsonObject] = OMIT,
-        config: typing.Optional[RunProcessorRequestConfig] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> RunProcessorResponse:
-        """
-        Run processors (extraction, classification, splitting, etc.) on a given document.
-
-        In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
-        * file parsing/pre-processing will automatically be reused across multiple processors, which will give you simplicity and cost savings given that many use cases will require multiple processors to be run on the same document.
-        * workflows provide dedicated human in the loop document review, when needed.
-        * workflows allow you to model and manage your pipeline with a single endpoint and corresponding UI for modeling and monitoring.
-
-        However, there are a number of legitimate use cases and systems where it might be easier to model the pipeline via code and run processors directly. This endpoint is provided for this purpose.
-
-        Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
-
-        Parameters
-        ----------
-        processor_id : ProcessorId
-
-        version : typing.Optional[str]
-            An optional version of the processor to use. When not supplied, the most recent published version of the processor will be used. Special values include:
-            - `"latest"` for the most recent published version. If there are no published versions, the draft version will be used.
-            - `"draft"` for the draft version.
-            - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
-
-        file : typing.Optional[ProcessorRunFileInput]
-            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
-
-        raw_text : typing.Optional[str]
-            A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
-
-        priority : typing.Optional[int]
-            An optional value used to determine the relative order of ProcessorRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
-
-        metadata : typing.Optional[JsonObject]
-            An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
-
-        config : typing.Optional[RunProcessorRequestConfig]
-            The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        RunProcessorResponse
-            Successfully created processor run
-
-        Examples
-        --------
-        from extend_ai import AsyncExtend
-        import asyncio
-        client = AsyncExtend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
-        async def main() -> None:
-            await client.run_processor(processor_id='processor_id_here', )
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.run_processor(
-            processor_id=processor_id,
-            version=version,
-            file=file,
-            raw_text=raw_text,
-            priority=priority,
-            metadata=metadata,
-            config=config,
-            request_options=request_options,
-        )
-        return _response.data
 
     async def parse(
         self, *, file: ParseRequestFile, config: ParseConfig, request_options: typing.Optional[RequestOptions] = None

@@ -6,12 +6,12 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
-from ..core.serialization import FieldMetadata
-from .workflow_run import WorkflowRun
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ...core.serialization import FieldMetadata
+from ...types.workflow_run import WorkflowRun
 
 
-class RunWorkflowResponse(UniversalBaseModel):
+class WorkflowRunCreateResponse(UniversalBaseModel):
     success: bool
     workflow_runs: typing_extensions.Annotated[typing.List[WorkflowRun], FieldMetadata(alias="workflowRuns")] = (
         pydantic.Field()
@@ -30,6 +30,6 @@ class RunWorkflowResponse(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-from .extraction_field import ExtractionField  # noqa: E402, F401, I001
+from ...types.extraction_field import ExtractionField  # noqa: E402, F401, I001
 
-update_forward_refs(RunWorkflowResponse)
+update_forward_refs(WorkflowRunCreateResponse)

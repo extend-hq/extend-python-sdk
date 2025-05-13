@@ -13,7 +13,7 @@ from .workflow_status import WorkflowStatus
 class WorkflowRunSummary(UniversalBaseModel):
     id: str = pydantic.Field()
     """
-    The ID of the workflow run. The ID will start with "workflow_run".
+    The ID of the workflow run.
     
     Example: `"workflow_run_Zk9mNP12Qw4-yTv8BdR3H"`
     """
@@ -46,7 +46,9 @@ class WorkflowRunSummary(UniversalBaseModel):
     Example: `"2024-03-21T16:45:00Z"`
     """
 
-    start_time: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="startTime")] = pydantic.Field()
+    start_time: typing_extensions.Annotated[typing.Optional[dt.datetime], FieldMetadata(alias="startTime")] = (
+        pydantic.Field(default=None)
+    )
     """
     The start time (in UTC) that the workflow actually started executing. This occurs after the `initialRunAt` time. Will follow the RFC 3339 format.
     

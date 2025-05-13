@@ -2,6 +2,20 @@
 
 # isort: skip_file
 
-from .types import ProcessorRunGetResponse
+from .types import (
+    ProcessorRunCreateRequestConfig,
+    ProcessorRunCreateRequestConfig_Classify,
+    ProcessorRunCreateRequestConfig_Extract,
+    ProcessorRunCreateRequestConfig_Splitter,
+    ProcessorRunCreateResponse,
+    ProcessorRunGetResponse,
+)
 
-__all__ = ["ProcessorRunGetResponse"]
+__all__ = [
+    "ProcessorRunCreateRequestConfig",
+    "ProcessorRunCreateRequestConfig_Classify",
+    "ProcessorRunCreateRequestConfig_Extract",
+    "ProcessorRunCreateRequestConfig_Splitter",
+    "ProcessorRunCreateResponse",
+    "ProcessorRunGetResponse",
+]

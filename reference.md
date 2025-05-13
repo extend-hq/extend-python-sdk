@@ -1,246 +1,4 @@
 # Reference
-<details><summary><code>client.<a href="src/extend_ai/client.py">run_workflow</a>(...)</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Run a Workflow with files. A Workflow is a sequence of steps that process files and data in a specific order to achieve a desired outcome. A WorkflowRun will be created for each file processed. A WorkflowRun represents a single execution of a workflow against a file.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
-client.run_workflow(workflow_id='workflow_id_here', )
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**workflow_id:** `str` 
-
-The ID of the workflow to run. The ID will start with "workflow". This ID can be found viewing the workflow on the Extend platform.
-
-Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**files:** `typing.Optional[typing.Sequence[WorkflowRunFileInput]]` — An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**raw_texts:** `typing.Optional[typing.Sequence[str]]` — An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**version:** `typing.Optional[str]` 
-
-An optional version of the workflow that files will be run through. This number can be found when viewing the workflow on the Extend platform. When a version number is not supplied, the most recent published version of the workflow will be used. If no published versions exist, the draft version will be used. To run the `"draft"` version of a workflow, use `"draft"` as the version.
-
-Examples:
-- `"3"` - Run version 3 of the workflow
-- `"draft"` - Run the draft version of the workflow
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**priority:** `typing.Optional[int]` — An optional value used to determine the relative order of WorkflowRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**metadata:** `typing.Optional[JsonObject]` — A optional metadata object that can be assigned to a specific WorkflowRun to help identify it. It will be returned in the response and webhooks. You can place any arbitrary `key : value` pairs in this object.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.<a href="src/extend_ai/client.py">run_processor</a>(...)</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Run processors (extraction, classification, splitting, etc.) on a given document.
-
-In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
-* file parsing/pre-processing will automatically be reused across multiple processors, which will give you simplicity and cost savings given that many use cases will require multiple processors to be run on the same document.
-* workflows provide dedicated human in the loop document review, when needed.
-* workflows allow you to model and manage your pipeline with a single endpoint and corresponding UI for modeling and monitoring.
-
-However, there are a number of legitimate use cases and systems where it might be easier to model the pipeline via code and run processors directly. This endpoint is provided for this purpose.
-
-Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
-client.run_processor(processor_id='processor_id_here', )
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**processor_id:** `ProcessorId` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**version:** `typing.Optional[str]` 
-
-An optional version of the processor to use. When not supplied, the most recent published version of the processor will be used. Special values include:
-- `"latest"` for the most recent published version. If there are no published versions, the draft version will be used.
-- `"draft"` for the draft version.
-- Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**file:** `typing.Optional[ProcessorRunFileInput]` — The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**raw_text:** `typing.Optional[str]` — A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**priority:** `typing.Optional[int]` — An optional value used to determine the relative order of ProcessorRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**metadata:** `typing.Optional[JsonObject]` — An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[RunProcessorRequestConfig]` — The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 <details><summary><code>client.<a href="src/extend_ai/client.py">parse</a>(...)</code></summary>
 <dl>
 <dd>
@@ -388,7 +146,7 @@ Filters workflow runs by their status. If not provided, no filter is applied.
 
 **workflow_id:** `typing.Optional[str]` 
 
-Filters workflow runs by the workflow ID. If not provided, runs for all workflows are returned. The ID will start with "workflow". This ID can be found when viewing a workflow on the Extend platform.
+Filters workflow runs by the workflow ID. If not provided, runs for all workflows are returned.
 
 Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
     
@@ -435,6 +193,121 @@ Example: `"invoice"`
 <dd>
 
 **max_page_size:** `typing.Optional[MaxPageSize]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">create</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Run a Workflow with files. A Workflow is a sequence of steps that process files and data in a specific order to achieve a desired outcome. A WorkflowRun will be created for each file processed. A WorkflowRun represents a single execution of a workflow against a file.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client.workflow_run.create(workflow_id='workflow_id_here', )
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workflow_id:** `str` 
+
+The ID of the workflow to run.
+
+Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**files:** `typing.Optional[typing.Sequence[WorkflowRunFileInput]]` — An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**raw_texts:** `typing.Optional[typing.Sequence[str]]` — An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**version:** `typing.Optional[str]` 
+
+An optional version of the workflow that files will be run through. This number can be found when viewing the workflow on the Extend platform. When a version number is not supplied, the most recent published version of the workflow will be used. If no published versions exist, the draft version will be used. To run the `"draft"` version of a workflow, use `"draft"` as the version.
+
+Examples:
+- `"3"` - Run version 3 of the workflow
+- `"draft"` - Run the draft version of the workflow
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**priority:** `typing.Optional[int]` — An optional value used to determine the relative order of WorkflowRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**metadata:** `typing.Optional[JsonObject]` — A optional metadata object that can be assigned to a specific WorkflowRun to help identify it. It will be returned in the response and webhooks. You can place any arbitrary `key : value` pairs in this object.
     
 </dd>
 </dl>
@@ -501,7 +374,7 @@ client.workflow_run.get(workflow_run_id='workflow_run_id_here', )
 
 **workflow_run_id:** `str` 
 
-The ID of the WorkflowRun that was outputted after a Workflow was run through the API. The ID will start with "workflow_run". This ID can be found when creating a WorkflowRun via API, or when viewing the "history" tab of a workflow on the Extend platform.
+The ID of the WorkflowRun that was outputted after a Workflow was run through the API.
 
 Example: `"workflow_run_8k9m-xyzAB_Pqrst-Nvw4"`
     
@@ -629,7 +502,7 @@ This endpoint allows you to efficiently initiate large batches of workflow runs 
 
 Unlike the single [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint which returns the details of the created workflow runs immediately, this batch endpoint returns a `batchId`.
 
-Our recommended usage pattern is to integrate with [Webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) for consuming results, using the `metadata` and `batchId` to match up results to the original inputs in your downstream systems. However, you can integrate in a polling mechanism by using a combination of the [List Workflow Runs](https://docs.extend.ai/2025-04-21/developers/workflow-endpoints/list-workflow-runs) endpoint to fetch all runs via a batch, and then [Get Workflow Run](https://docs.extend.ai/2025-04-21/developers/workflow-endpoints/get-workflow-run) to fetch the full outputs each run.
+Our recommended usage pattern is to integrate with [Webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) for consuming results, using the `metadata` and `batchId` to match up results to the original inputs in your downstream systems. However, you can integrate in a polling mechanism by using a combination of the [List Workflow Runs](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/list-workflow-runs) endpoint to fetch all runs via a batch, and then [Get Workflow Run](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/get-workflow-run) to fetch the full outputs each run.
 
 **Processing and Monitoring:**
 Upon successful submission, the endpoint returns a `batchId`. The individual workflow runs are then queued for processing.
@@ -710,6 +583,133 @@ Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 </details>
 
 ## ProcessorRun
+<details><summary><code>client.processor_run.<a href="src/extend_ai/processor_run/client.py">create</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Run processors (extraction, classification, splitting, etc.) on a given document.
+
+In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
+* file parsing/pre-processing will automatically be reused across multiple processors, which will give you simplicity and cost savings given that many use cases will require multiple processors to be run on the same document.
+* workflows provide dedicated human in the loop document review, when needed.
+* workflows allow you to model and manage your pipeline with a single endpoint and corresponding UI for modeling and monitoring.
+
+However, there are a number of legitimate use cases and systems where it might be easier to model the pipeline via code and run processors directly. This endpoint is provided for this purpose.
+
+Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
+client.processor_run.create(processor_id='processor_id_here', )
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**processor_id:** `ProcessorId` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**version:** `typing.Optional[str]` 
+
+An optional version of the processor to use. When not supplied, the most recent published version of the processor will be used. Special values include:
+- `"latest"` for the most recent published version. If there are no published versions, the draft version will be used.
+- `"draft"` for the draft version.
+- Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**file:** `typing.Optional[ProcessorRunFileInput]` — The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**raw_text:** `typing.Optional[str]` — A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**priority:** `typing.Optional[int]` — An optional value used to determine the relative order of ProcessorRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**metadata:** `typing.Optional[JsonObject]` — An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**config:** `typing.Optional[ProcessorRunCreateRequestConfig]` — The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.processor_run.<a href="src/extend_ai/processor_run/client.py">get</a>(...)</code></summary>
 <dl>
 <dd>
@@ -759,7 +759,7 @@ client.processor_run.get(id='processor_run_id_here', )
 
 **id:** `str` 
 
-The unique identifier for this processor run. The ID will start with "dpr_". This can be fetched from the API response when running a processor, or from the Extend UI in the "history" tab of a processor.
+The unique identifier for this processor run.
 
 Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
     
@@ -845,7 +845,7 @@ client.processor.create(name='My Processor Name', type="EXTRACT", )
 
 **clone_processor_id:** `typing.Optional[str]` 
 
-The ID of an existing processor to clone. The ID will start with "dp_". One of `cloneProcessorId` or `config` must be provided.
+The ID of an existing processor to clone. One of `cloneProcessorId` or `config` must be provided.
 
 Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     
@@ -930,7 +930,7 @@ client.processor.update(id='processor_id_here', )
 
 **id:** `str` 
 
-The ID of the processor to update. The ID will start with "dp_".
+The ID of the processor to update.
 
 Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     
@@ -1021,7 +1021,7 @@ client.processor_version.get(processor_id='processor_id_here', processor_version
 
 **processor_id:** `str` 
 
-The ID of the processor. The ID will start with "dp_".
+The ID of the processor.
 
 Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     
@@ -1033,7 +1033,7 @@ Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
 **processor_version_id:** `str` 
 
-The ID of the specific processor version to retrieve. The ID will start with "dpv_".
+The ID of the specific processor version to retrieve.
 
 Example: `"dpv_QYk6jgHA_8CsO8rVWhyNC"`
     
@@ -1105,7 +1105,7 @@ client.processor_version.list(id='processor_id_here', )
 
 **id:** `str` 
 
-The ID of the processor to retrieve versions for. The ID will start with "dp_".
+The ID of the processor to retrieve versions for.
 
 Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     
@@ -1176,7 +1176,7 @@ client.processor_version.create(id='processor_id_here', release_type="major", )
 
 **id:** `str` 
 
-The ID of the processor to publish a new version for. The ID will start with "dp_".
+The ID of the processor to publish a new version for.
 
 Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     
@@ -1491,96 +1491,6 @@ core.File` — See core.File for more documentation
 </dl>
 </details>
 
-## FileEndpoints
-<details><summary><code>client.file_endpoints.<a href="src/extend_ai/file_endpoints/client.py">create_file</a>(...)</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Create a new file in Extend for use in an evaluation set. This endpoint is deprecated, use /files/upload instead.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-client = Extend(extend_api_version="YOUR_EXTEND_API_VERSION", token="YOUR_TOKEN", )
-client.file_endpoints.create_file(name='name', )
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**name:** `str` — The name of the file
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**url:** `typing.Optional[str]` — A pre signed URL for the file
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**raw_text:** `typing.Optional[str]` — The raw text content of the file
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**media_type:** `typing.Optional[str]` — The media type of the file (e.g. application/pdf)
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 ## EvaluationSet
 <details><summary><code>client.evaluation_set.<a href="src/extend_ai/evaluation_set/client.py">create</a>(...)</code></summary>
 <dl>
@@ -1655,7 +1565,7 @@ Example: `"Q4 2023 vendor invoices"`
 
 **processor_id:** `str` 
 
-The ID of the processor to create an evaluation set for. The ID will start with "dp_". Evaluation sets can in theory be run against any processor, but it is required to associate the evaluation set with a primary processor.
+The ID of the processor to create an evaluation set for. Evaluation sets can in theory be run against any processor, but it is required to associate the evaluation set with a primary processor.
 
 Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     
@@ -1740,7 +1650,7 @@ client.evaluation_set_item.create(evaluation_set_id='evaluation_set_id_here', fi
 
 **evaluation_set_id:** `str` 
 
-The ID of the evaluation set to add the item to. The ID will start with "ev_".
+The ID of the evaluation set to add the item to.
 
 Example: `"ev_Xj8mK2pL9nR4vT7qY5wZ"`
     
@@ -1831,7 +1741,7 @@ client.evaluation_set_item.update(id='evaluation_set_item_id_here', expected_out
 
 **id:** `str` 
 
-The ID of the evaluation set item to update. The ID will start with "evi_".
+The ID of the evaluation set item to update.
 
 Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
     
@@ -1913,7 +1823,7 @@ client.evaluation_set_item.create_batch(evaluation_set_id='evaluation_set_id_her
 
 **evaluation_set_id:** `str` 
 
-The ID of the evaluation set to add the items to. The ID will start with "ev_".
+The ID of the evaluation set to add the items to.
 
 Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
     

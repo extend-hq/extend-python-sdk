@@ -25,7 +25,7 @@ class WorkflowRun(UniversalBaseModel):
 
     id: str = pydantic.Field()
     """
-    The ID of the workflow run. The ID will start with "workflow_run".
+    The ID of the workflow run.
     
     Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
     """
@@ -54,7 +54,7 @@ class WorkflowRun(UniversalBaseModel):
         default=None
     )
     """
-    The batch ID of the WorkflowRun. If this WorkflowRun was created as part of a batch of files, all runs in that batch will have the same batch ID. The ID will start with "batch".
+    The batch ID of the WorkflowRun. If this WorkflowRun was created as part of a batch of files, all runs in that batch will have the same batch ID.
     
     Example: `"batch_7Ws31-F5"`
     """

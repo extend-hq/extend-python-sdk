@@ -21,21 +21,21 @@ class BatchProcessorRun(UniversalBaseModel):
 
     id: str = pydantic.Field()
     """
-    The unique identifier for this batch processor run. The ID will start with "batch_processor_run_".
+    The unique identifier for this batch processor run.
     
     Example: `"batch_processor_run_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
     processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field()
     """
-    The ID of the processor used for this run. The ID will start with "dp_".
+    The ID of the processor used for this run.
     
     Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
     processor_version_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorVersionId")] = pydantic.Field()
     """
-    The ID of the specific processor version used. The ID will start with "dpv_".
+    The ID of the specific processor version used.
     
     Example: `"dpv_xK9mLPqRtN3vS8wF5hB2cQ"`
     """

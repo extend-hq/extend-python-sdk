@@ -17,7 +17,7 @@ class StepRun(UniversalBaseModel):
 
     id: str = pydantic.Field()
     """
-    The ID of the workflow step run. The ID will start with "workflow_step_run".
+    The ID of the workflow step run.
     
     Example: `"workflow_step_run_xKm9pNv3qWsY_jL2tR5Dh"`
     """

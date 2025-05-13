@@ -39,12 +39,12 @@ class ProcessorVersionClient:
         Parameters
         ----------
         processor_id : str
-            The ID of the processor. The ID will start with "dp_".
+            The ID of the processor.
 
             Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
         processor_version_id : str
-            The ID of the specific processor version to retrieve. The ID will start with "dpv_".
+            The ID of the specific processor version to retrieve.
 
             Example: `"dpv_QYk6jgHA_8CsO8rVWhyNC"`
 
@@ -75,7 +75,7 @@ class ProcessorVersionClient:
         Parameters
         ----------
         id : str
-            The ID of the processor to retrieve versions for. The ID will start with "dp_".
+            The ID of the processor to retrieve versions for.
 
             Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
@@ -113,7 +113,7 @@ class ProcessorVersionClient:
         Parameters
         ----------
         id : str
-            The ID of the processor to publish a new version for. The ID will start with "dp_".
+            The ID of the processor to publish a new version for.
 
             Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
@@ -170,12 +170,12 @@ class AsyncProcessorVersionClient:
         Parameters
         ----------
         processor_id : str
-            The ID of the processor. The ID will start with "dp_".
+            The ID of the processor.
 
             Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
         processor_version_id : str
-            The ID of the specific processor version to retrieve. The ID will start with "dpv_".
+            The ID of the specific processor version to retrieve.
 
             Example: `"dpv_QYk6jgHA_8CsO8rVWhyNC"`
 
@@ -211,7 +211,7 @@ class AsyncProcessorVersionClient:
         Parameters
         ----------
         id : str
-            The ID of the processor to retrieve versions for. The ID will start with "dp_".
+            The ID of the processor to retrieve versions for.
 
             Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
@@ -252,7 +252,7 @@ class AsyncProcessorVersionClient:
         Parameters
         ----------
         id : str
-            The ID of the processor to publish a new version for. The ID will start with "dp_".
+            The ID of the processor to publish a new version for.
 
             Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 

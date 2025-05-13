@@ -11,10 +11,10 @@ class BlockBoundingBox(UniversalBaseModel):
     A simplified bounding box for the block.
     """
 
-    left: float
-    right: float
-    top: float
-    bottom: float
+    left: typing.Optional[float] = None
+    right: typing.Optional[float] = None
+    top: typing.Optional[float] = None
+    bottom: typing.Optional[float] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

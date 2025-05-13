@@ -32,7 +32,6 @@ from .types import (
     ClassificationConfigBaseProcessor,
     ClassifierOutput,
     ClassifyMetrics,
-    Currency,
     EmptyBlockDetails,
     Enum,
     EnumOption,
@@ -52,7 +51,6 @@ from .types import (
     ExtractionFieldResultReference,
     ExtractionFieldResultReferenceBoundingBoxesItem,
     ExtractionFieldResultType,
-    ExtractionFieldResultValue,
     ExtractionFieldType,
     ExtractionOutput,
     ExtractionOutputEdits,
@@ -113,19 +111,13 @@ from .types import (
     ProcessorVersionConfig_Extract,
     ProcessorVersionConfig_Splitter,
     ProvidedClassifierOutput,
+    ProvidedExtractionFieldResult,
+    ProvidedExtractionFieldResultType,
     ProvidedExtractionOutput,
     ProvidedFieldsArrayOutput,
-    ProvidedFieldsArrayOutputValue,
     ProvidedJsonOutput,
     ProvidedProcessorOutput,
     ProvidedSplitterOutput,
-    RunProcessorRequestConfig,
-    RunProcessorRequestConfig_Classify,
-    RunProcessorRequestConfig_Extract,
-    RunProcessorRequestConfig_Splitter,
-    RunProcessorResponse,
-    RunWorkflowResponse,
-    Signature,
     SortByEnum,
     SortDirEnum,
     SplitterAdvancedOptions,
@@ -169,7 +161,6 @@ from . import (
     evaluation_set,
     evaluation_set_item,
     file,
-    file_endpoints,
     processor,
     processor_run,
     processor_version,
@@ -189,7 +180,6 @@ from .evaluation_set_item import (
     EvaluationSetItemUpdateResponse,
 )
 from .file import FileGetResponse, FileListResponse, FileUploadResponse
-from .file_endpoints import PostFilesResponse
 from .processor import (
     ProcessorCreateRequestConfig,
     ProcessorCreateRequestConfig_Classify,
@@ -202,7 +192,14 @@ from .processor import (
     ProcessorUpdateRequestConfig_Splitter,
     ProcessorUpdateResponse,
 )
-from .processor_run import ProcessorRunGetResponse
+from .processor_run import (
+    ProcessorRunCreateRequestConfig,
+    ProcessorRunCreateRequestConfig_Classify,
+    ProcessorRunCreateRequestConfig_Extract,
+    ProcessorRunCreateRequestConfig_Splitter,
+    ProcessorRunCreateResponse,
+    ProcessorRunGetResponse,
+)
 from .processor_version import (
     ProcessorVersionCreateRequestConfig,
     ProcessorVersionCreateRequestConfig_Classify,
@@ -215,7 +212,12 @@ from .processor_version import (
 )
 from .version import __version__
 from .workflow import WorkflowCreateResponse
-from .workflow_run import WorkflowRunGetResponse, WorkflowRunListResponse, WorkflowRunUpdateResponse
+from .workflow_run import (
+    WorkflowRunCreateResponse,
+    WorkflowRunGetResponse,
+    WorkflowRunListResponse,
+    WorkflowRunUpdateResponse,
+)
 from .workflow_run_output import WorkflowRunOutputUpdateResponse
 
 __all__ = [
@@ -253,7 +255,6 @@ __all__ = [
     "ClassificationConfigBaseProcessor",
     "ClassifierOutput",
     "ClassifyMetrics",
-    "Currency",
     "EmptyBlockDetails",
     "Enum",
     "EnumOption",
@@ -280,7 +281,6 @@ __all__ = [
     "ExtractionFieldResultReference",
     "ExtractionFieldResultReferenceBoundingBoxesItem",
     "ExtractionFieldResultType",
-    "ExtractionFieldResultValue",
     "ExtractionFieldType",
     "ExtractionOutput",
     "ExtractionOutputEdits",
@@ -326,7 +326,6 @@ __all__ = [
     "ParseResponseMetrics",
     "ParseResponseStatus",
     "Polygon",
-    "PostFilesResponse",
     "Processor",
     "ProcessorCreateRequestConfig",
     "ProcessorCreateRequestConfig_Classify",
@@ -340,6 +339,11 @@ __all__ = [
     "ProcessorRunConfig_Classify",
     "ProcessorRunConfig_Extract",
     "ProcessorRunConfig_Splitter",
+    "ProcessorRunCreateRequestConfig",
+    "ProcessorRunCreateRequestConfig_Classify",
+    "ProcessorRunCreateRequestConfig_Extract",
+    "ProcessorRunCreateRequestConfig_Splitter",
+    "ProcessorRunCreateResponse",
     "ProcessorRunFileInput",
     "ProcessorRunGetResponse",
     "ProcessorRunMergedProcessorsItem",
@@ -365,19 +369,13 @@ __all__ = [
     "ProcessorVersionGetResponse",
     "ProcessorVersionListResponse",
     "ProvidedClassifierOutput",
+    "ProvidedExtractionFieldResult",
+    "ProvidedExtractionFieldResultType",
     "ProvidedExtractionOutput",
     "ProvidedFieldsArrayOutput",
-    "ProvidedFieldsArrayOutputValue",
     "ProvidedJsonOutput",
     "ProvidedProcessorOutput",
     "ProvidedSplitterOutput",
-    "RunProcessorRequestConfig",
-    "RunProcessorRequestConfig_Classify",
-    "RunProcessorRequestConfig_Extract",
-    "RunProcessorRequestConfig_Splitter",
-    "RunProcessorResponse",
-    "RunWorkflowResponse",
-    "Signature",
     "SortByEnum",
     "SortDirEnum",
     "SplitterAdvancedOptions",
@@ -412,6 +410,7 @@ __all__ = [
     "Workflow",
     "WorkflowCreateResponse",
     "WorkflowRun",
+    "WorkflowRunCreateResponse",
     "WorkflowRunFileInput",
     "WorkflowRunFileInputOutputsItem",
     "WorkflowRunGetResponse",
@@ -426,7 +425,6 @@ __all__ = [
     "evaluation_set",
     "evaluation_set_item",
     "file",
-    "file_endpoints",
     "processor",
     "processor_run",
     "processor_version",

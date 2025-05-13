@@ -4,16 +4,17 @@ import typing
 
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from .provided_extraction_field_result_type import ProvidedExtractionFieldResultType
 
 
-class ProvidedFieldsArrayOutputValue(UniversalBaseModel):
+class ProvidedExtractionFieldResult(UniversalBaseModel):
     id: str = pydantic.Field()
     """
     The unique identifier for this field
     """
 
     value: typing.Optional[typing.Any] = None
-    type: typing.Optional[str] = pydantic.Field(default=None)
+    type: typing.Optional[ProvidedExtractionFieldResultType] = pydantic.Field(default=None)
     """
     The type of the extraction field result
     """

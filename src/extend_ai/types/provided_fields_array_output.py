@@ -2,6 +2,6 @@
 
 import typing
 
-from .provided_fields_array_output_value import ProvidedFieldsArrayOutputValue
+from .provided_extraction_field_result import ProvidedExtractionFieldResult
 
-ProvidedFieldsArrayOutput = typing.Dict[str, ProvidedFieldsArrayOutputValue]
+ProvidedFieldsArrayOutput = typing.Dict[str, ProvidedExtractionFieldResult]

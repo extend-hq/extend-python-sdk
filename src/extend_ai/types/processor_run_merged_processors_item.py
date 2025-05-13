@@ -11,14 +11,14 @@ from ..core.serialization import FieldMetadata
 class ProcessorRunMergedProcessorsItem(UniversalBaseModel):
     processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field()
     """
-    The ID of the merged processor. The ID will start with "dp_".
+    The ID of the merged processor.
     
     Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
     processor_version_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorVersionId")] = pydantic.Field()
     """
-    The ID of the specific processor version used. The ID will start with "dpv_".
+    The ID of the specific processor version used.
     """
 
     processor_name: typing_extensions.Annotated[str, FieldMetadata(alias="processorName")] = pydantic.Field()

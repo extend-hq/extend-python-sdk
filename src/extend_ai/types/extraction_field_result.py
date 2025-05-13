@@ -11,7 +11,6 @@ from ..core.serialization import FieldMetadata
 from .enum_option import EnumOption
 from .extraction_field_result_reference import ExtractionFieldResultReference
 from .extraction_field_result_type import ExtractionFieldResultType
-from .extraction_field_result_value import ExtractionFieldResultValue
 from .insight import Insight
 
 
@@ -26,11 +25,7 @@ class ExtractionFieldResult(UniversalBaseModel):
     The type of the extracted field
     """
 
-    value: ExtractionFieldResultValue = pydantic.Field()
-    """
-    The extracted value, type depends on the field type
-    """
-
+    value: typing.Optional[typing.Any] = None
     schema_: typing_extensions.Annotated[
         typing.Optional[typing.List["ExtractionField"]], FieldMetadata(alias="schema")
     ] = pydantic.Field(default=None)
