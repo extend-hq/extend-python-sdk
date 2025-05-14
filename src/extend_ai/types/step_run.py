@@ -3,13 +3,14 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .step_run_output import StepRunOutput
 from .step_run_status import StepRunStatus
 from .step_run_step import StepRunStep
 
 
-class StepRun(UniversalBaseModel):
+class StepRun(UncheckedBaseModel):
     object: str = pydantic.Field()
     """
     The type of response. In this case, it will always be `"workflow_step_run"`.

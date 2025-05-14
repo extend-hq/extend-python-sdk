@@ -4,13 +4,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ...core.pydantic_utilities import IS_PYDANTIC_V2
 from ...core.serialization import FieldMetadata
+from ...core.unchecked_base_model import UncheckedBaseModel
 from ...types.file import File
 from ...types.next_page_token import NextPageToken
 
 
-class FileListResponse(UniversalBaseModel):
+class FileListResponse(UncheckedBaseModel):
     success: bool
     files: typing.List[File]
     next_page_token: typing_extensions.Annotated[

@@ -4,15 +4,16 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .parse_config_advanced_options import ParseConfigAdvancedOptions
 from .parse_config_block_options import ParseConfigBlockOptions
 from .parse_config_chunking_strategy import ParseConfigChunkingStrategy
 from .parse_config_target import ParseConfigTarget
 
 
-class ParseConfig(UniversalBaseModel):
+class ParseConfig(UncheckedBaseModel):
     """
     Configuration options for the parsing process.
     """

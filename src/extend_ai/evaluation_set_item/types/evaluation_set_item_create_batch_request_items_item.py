@@ -4,12 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ...core.pydantic_utilities import IS_PYDANTIC_V2
 from ...core.serialization import FieldMetadata
+from ...core.unchecked_base_model import UncheckedBaseModel
 from ...types.provided_processor_output import ProvidedProcessorOutput
 
 
-class EvaluationSetItemCreateBatchRequestItemsItem(UniversalBaseModel):
+class EvaluationSetItemCreateBatchRequestItemsItem(UncheckedBaseModel):
     file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field()
     """
     Extend's internal ID for the file. It will always start with "file_".

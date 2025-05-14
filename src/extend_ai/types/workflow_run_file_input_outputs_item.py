@@ -4,12 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .provided_processor_output import ProvidedProcessorOutput
 
 
-class WorkflowRunFileInputOutputsItem(UniversalBaseModel):
+class WorkflowRunFileInputOutputsItem(UncheckedBaseModel):
     processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field()
     """
     The ID of the processor that the output is associated with.

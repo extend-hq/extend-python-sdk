@@ -6,8 +6,9 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ...core.serialization import FieldMetadata
+from ...core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
 from ...types.classification import Classification
 from ...types.classification_advanced_options import ClassificationAdvancedOptions
 from ...types.classification_config_base_processor import ClassificationConfigBaseProcessor
@@ -17,7 +18,7 @@ from ...types.json_object import JsonObject
 from ...types.splitter_advanced_options import SplitterAdvancedOptions
 
 
-class ProcessorUpdateRequestConfig_Classify(UniversalBaseModel):
+class ProcessorUpdateRequestConfig_Classify(UncheckedBaseModel):
     """
     The new configuration for the processor. The type of configuration must match the processor type:
     * For classification processors, use `ClassificationConfig`
@@ -48,7 +49,7 @@ class ProcessorUpdateRequestConfig_Classify(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-class ProcessorUpdateRequestConfig_Extract(UniversalBaseModel):
+class ProcessorUpdateRequestConfig_Extract(UncheckedBaseModel):
     """
     The new configuration for the processor. The type of configuration must match the processor type:
     * For classification processors, use `ClassificationConfig`
@@ -81,7 +82,7 @@ class ProcessorUpdateRequestConfig_Extract(UniversalBaseModel):
 from ...types.extraction_field import ExtractionField  # noqa: E402, F401, I001
 
 
-class ProcessorUpdateRequestConfig_Splitter(UniversalBaseModel):
+class ProcessorUpdateRequestConfig_Splitter(UncheckedBaseModel):
     """
     The new configuration for the processor. The type of configuration must match the processor type:
     * For classification processors, use `ClassificationConfig`
@@ -112,7 +113,12 @@ class ProcessorUpdateRequestConfig_Splitter(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-ProcessorUpdateRequestConfig = typing.Union[
-    ProcessorUpdateRequestConfig_Classify, ProcessorUpdateRequestConfig_Extract, ProcessorUpdateRequestConfig_Splitter
+ProcessorUpdateRequestConfig = typing_extensions.Annotated[
+    typing.Union[
+        ProcessorUpdateRequestConfig_Classify,
+        ProcessorUpdateRequestConfig_Extract,
+        ProcessorUpdateRequestConfig_Splitter,
+    ],
+    UnionMetadata(discriminant="type"),
 ]
 update_forward_refs(ProcessorUpdateRequestConfig_Extract)

@@ -6,8 +6,9 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ...core.serialization import FieldMetadata
+from ...core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
 from ...types.classification import Classification
 from ...types.classification_advanced_options import ClassificationAdvancedOptions
 from ...types.classification_config_base_processor import ClassificationConfigBaseProcessor
@@ -17,7 +18,7 @@ from ...types.json_object import JsonObject
 from ...types.splitter_advanced_options import SplitterAdvancedOptions
 
 
-class ProcessorRunCreateRequestConfig_Classify(UniversalBaseModel):
+class ProcessorRunCreateRequestConfig_Classify(UncheckedBaseModel):
     """
     The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
     """
@@ -45,7 +46,7 @@ class ProcessorRunCreateRequestConfig_Classify(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-class ProcessorRunCreateRequestConfig_Extract(UniversalBaseModel):
+class ProcessorRunCreateRequestConfig_Extract(UncheckedBaseModel):
     """
     The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
     """
@@ -75,7 +76,7 @@ class ProcessorRunCreateRequestConfig_Extract(UniversalBaseModel):
 from ...types.extraction_field import ExtractionField  # noqa: E402, F401, I001
 
 
-class ProcessorRunCreateRequestConfig_Splitter(UniversalBaseModel):
+class ProcessorRunCreateRequestConfig_Splitter(UncheckedBaseModel):
     """
     The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
     """
@@ -103,9 +104,12 @@ class ProcessorRunCreateRequestConfig_Splitter(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-ProcessorRunCreateRequestConfig = typing.Union[
-    ProcessorRunCreateRequestConfig_Classify,
-    ProcessorRunCreateRequestConfig_Extract,
-    ProcessorRunCreateRequestConfig_Splitter,
+ProcessorRunCreateRequestConfig = typing_extensions.Annotated[
+    typing.Union[
+        ProcessorRunCreateRequestConfig_Classify,
+        ProcessorRunCreateRequestConfig_Extract,
+        ProcessorRunCreateRequestConfig_Splitter,
+    ],
+    UnionMetadata(discriminant="type"),
 ]
 update_forward_refs(ProcessorRunCreateRequestConfig_Extract)

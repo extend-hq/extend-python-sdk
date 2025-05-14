@@ -4,13 +4,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .webhook_event_workflow_event_type import WebhookEventWorkflowEventType
 from .workflow import Workflow
 
 
-class WebhookEventWorkflow(UniversalBaseModel):
+class WebhookEventWorkflow(UncheckedBaseModel):
     """
     Webhook event for workflow related events
     """

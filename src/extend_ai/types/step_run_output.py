@@ -3,11 +3,12 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .step_run_output_rules_item import StepRunOutputRulesItem
 
 
-class StepRunOutput(UniversalBaseModel):
+class StepRunOutput(UncheckedBaseModel):
     """
     The output of the WorkflowStepRun. The shape of the output depends on the type of the WorkflowStep in the `step` field:
     * For `"EXTERNAL_DATA_VALIDATION"` steps - The output will be the same object that was returned by the external endpoint configured for this step

@@ -7,9 +7,9 @@ from ..core.api_error import ApiError
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.jsonable_encoder import jsonable_encoder
-from ..core.pydantic_utilities import parse_obj_as
 from ..core.request_options import RequestOptions
 from ..core.serialization import convert_and_respect_annotation_metadata
+from ..core.unchecked_base_model import construct_type
 from ..errors.bad_request_error import BadRequestError
 from ..errors.not_found_error import NotFoundError
 from ..errors.unauthorized_error import UnauthorizedError
@@ -79,7 +79,7 @@ class RawWorkflowRunOutputClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     WorkflowRunOutputUpdateResponse,
-                    parse_obj_as(
+                    construct_type(
                         type_=WorkflowRunOutputUpdateResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -90,7 +90,7 @@ class RawWorkflowRunOutputClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Optional[typing.Any],
-                        parse_obj_as(
+                        construct_type(
                             type_=typing.Optional[typing.Any],  # type: ignore
                             object_=_response.json(),
                         ),
@@ -101,7 +101,7 @@ class RawWorkflowRunOutputClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         Error,
-                        parse_obj_as(
+                        construct_type(
                             type_=Error,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -112,7 +112,7 @@ class RawWorkflowRunOutputClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         Error,
-                        parse_obj_as(
+                        construct_type(
                             type_=Error,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -182,7 +182,7 @@ class AsyncRawWorkflowRunOutputClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     WorkflowRunOutputUpdateResponse,
-                    parse_obj_as(
+                    construct_type(
                         type_=WorkflowRunOutputUpdateResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -193,7 +193,7 @@ class AsyncRawWorkflowRunOutputClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Optional[typing.Any],
-                        parse_obj_as(
+                        construct_type(
                             type_=typing.Optional[typing.Any],  # type: ignore
                             object_=_response.json(),
                         ),
@@ -204,7 +204,7 @@ class AsyncRawWorkflowRunOutputClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         Error,
-                        parse_obj_as(
+                        construct_type(
                             type_=Error,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -215,7 +215,7 @@ class AsyncRawWorkflowRunOutputClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         Error,
-                        parse_obj_as(
+                        construct_type(
                             type_=Error,  # type: ignore
                             object_=_response.json(),
                         ),

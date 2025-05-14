@@ -6,13 +6,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .webhook_event_event_type import WebhookEventEventType
 from .webhook_event_payload import WebhookEventPayload
 
 
-class WebhookEvent(UniversalBaseModel):
+class WebhookEvent(UncheckedBaseModel):
     event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field()
     """
     Unique identifier for the event

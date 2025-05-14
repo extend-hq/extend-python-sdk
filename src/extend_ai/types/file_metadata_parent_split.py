@@ -4,11 +4,12 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 
 
-class FileMetadataParentSplit(UniversalBaseModel):
+class FileMetadataParentSplit(UncheckedBaseModel):
     """
     The split metadata details. Only included if this file is a derivative of another file, for instance if it was created via a Splitter in a workflow.
     """

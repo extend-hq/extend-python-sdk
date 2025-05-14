@@ -7,13 +7,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .processor_type import ProcessorType
 from .processor_version_config import ProcessorVersionConfig
 
 
-class ProcessorVersion(UniversalBaseModel):
+class ProcessorVersion(UncheckedBaseModel):
     object: str = pydantic.Field()
     """
     The type of the object. In this case, it will always be `"document_processor_version"`.

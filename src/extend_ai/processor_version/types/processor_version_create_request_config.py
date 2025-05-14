@@ -6,8 +6,9 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ...core.serialization import FieldMetadata
+from ...core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
 from ...types.classification import Classification
 from ...types.classification_advanced_options import ClassificationAdvancedOptions
 from ...types.classification_config_base_processor import ClassificationConfigBaseProcessor
@@ -17,7 +18,7 @@ from ...types.json_object import JsonObject
 from ...types.splitter_advanced_options import SplitterAdvancedOptions
 
 
-class ProcessorVersionCreateRequestConfig_Classify(UniversalBaseModel):
+class ProcessorVersionCreateRequestConfig_Classify(UncheckedBaseModel):
     """
     The configuration for this version of the processor. The type of configuration must match the processor type.
     """
@@ -45,7 +46,7 @@ class ProcessorVersionCreateRequestConfig_Classify(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-class ProcessorVersionCreateRequestConfig_Extract(UniversalBaseModel):
+class ProcessorVersionCreateRequestConfig_Extract(UncheckedBaseModel):
     """
     The configuration for this version of the processor. The type of configuration must match the processor type.
     """
@@ -75,7 +76,7 @@ class ProcessorVersionCreateRequestConfig_Extract(UniversalBaseModel):
 from ...types.extraction_field import ExtractionField  # noqa: E402, F401, I001
 
 
-class ProcessorVersionCreateRequestConfig_Splitter(UniversalBaseModel):
+class ProcessorVersionCreateRequestConfig_Splitter(UncheckedBaseModel):
     """
     The configuration for this version of the processor. The type of configuration must match the processor type.
     """
@@ -103,9 +104,12 @@ class ProcessorVersionCreateRequestConfig_Splitter(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-ProcessorVersionCreateRequestConfig = typing.Union[
-    ProcessorVersionCreateRequestConfig_Classify,
-    ProcessorVersionCreateRequestConfig_Extract,
-    ProcessorVersionCreateRequestConfig_Splitter,
+ProcessorVersionCreateRequestConfig = typing_extensions.Annotated[
+    typing.Union[
+        ProcessorVersionCreateRequestConfig_Classify,
+        ProcessorVersionCreateRequestConfig_Extract,
+        ProcessorVersionCreateRequestConfig_Splitter,
+    ],
+    UnionMetadata(discriminant="type"),
 ]
 update_forward_refs(ProcessorVersionCreateRequestConfig_Extract)

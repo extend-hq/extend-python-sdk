@@ -4,12 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .provided_processor_output import ProvidedProcessorOutput
 
 
-class EvaluationSetItem(UniversalBaseModel):
+class EvaluationSetItem(UncheckedBaseModel):
     """
     The EvaluationSetItem object represents an item in an evaluation set in Extend. Items are the individual files and expected outputs that are used to evaluate the performance of a given processor in Extend.
     """

@@ -5,11 +5,12 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 
 
-class EvaluationSet(UniversalBaseModel):
+class EvaluationSet(UncheckedBaseModel):
     """
     The EvaluationSet object represents an evaluation set in Extend. Evaluation sets are collections of files and expected outputs that are used to evaluate the performance of a given processor in Extend.
     """

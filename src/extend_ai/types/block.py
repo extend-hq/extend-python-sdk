@@ -4,8 +4,9 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .block_bounding_box import BlockBoundingBox
 from .block_details import BlockDetails
 from .block_metadata import BlockMetadata
@@ -13,7 +14,7 @@ from .block_polygon_item import BlockPolygonItem
 from .block_type import BlockType
 
 
-class Block(UniversalBaseModel):
+class Block(UncheckedBaseModel):
     object: str = pydantic.Field()
     """
     The type of object. In this case, it will always be `"block"`.

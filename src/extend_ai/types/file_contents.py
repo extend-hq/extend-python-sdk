@@ -4,13 +4,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .file_contents_pages_item import FileContentsPagesItem
 from .file_contents_sheets_item import FileContentsSheetsItem
 
 
-class FileContents(UniversalBaseModel):
+class FileContents(UncheckedBaseModel):
     raw_text: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="rawText")] = pydantic.Field(
         default=None
     )

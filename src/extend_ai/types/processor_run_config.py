@@ -6,8 +6,9 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
 from .classification import Classification
 from .classification_advanced_options import ClassificationAdvancedOptions
 from .classification_config_base_processor import ClassificationConfigBaseProcessor
@@ -17,7 +18,7 @@ from .json_object import JsonObject
 from .splitter_advanced_options import SplitterAdvancedOptions
 
 
-class ProcessorRunConfig_Classify(UniversalBaseModel):
+class ProcessorRunConfig_Classify(UncheckedBaseModel):
     """
     The configuration used for this processor run. The type of configuration will match the processor type.
     """
@@ -45,7 +46,7 @@ class ProcessorRunConfig_Classify(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-class ProcessorRunConfig_Extract(UniversalBaseModel):
+class ProcessorRunConfig_Extract(UncheckedBaseModel):
     """
     The configuration used for this processor run. The type of configuration will match the processor type.
     """
@@ -75,7 +76,7 @@ class ProcessorRunConfig_Extract(UniversalBaseModel):
 from .extraction_field import ExtractionField  # noqa: E402, F401, I001
 
 
-class ProcessorRunConfig_Splitter(UniversalBaseModel):
+class ProcessorRunConfig_Splitter(UncheckedBaseModel):
     """
     The configuration used for this processor run. The type of configuration will match the processor type.
     """
@@ -103,5 +104,8 @@ class ProcessorRunConfig_Splitter(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-ProcessorRunConfig = typing.Union[ProcessorRunConfig_Classify, ProcessorRunConfig_Extract, ProcessorRunConfig_Splitter]
+ProcessorRunConfig = typing_extensions.Annotated[
+    typing.Union[ProcessorRunConfig_Classify, ProcessorRunConfig_Extract, ProcessorRunConfig_Splitter],
+    UnionMetadata(discriminant="type"),
+]
 update_forward_refs(ProcessorRunConfig_Extract)

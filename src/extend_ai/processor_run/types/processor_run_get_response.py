@@ -6,12 +6,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ...core.serialization import FieldMetadata
+from ...core.unchecked_base_model import UncheckedBaseModel
 from ...types.processor_run import ProcessorRun
 
 
-class ProcessorRunGetResponse(UniversalBaseModel):
+class ProcessorRunGetResponse(UncheckedBaseModel):
     success: bool
     processor_run: typing_extensions.Annotated[ProcessorRun, FieldMetadata(alias="processorRun")]
 

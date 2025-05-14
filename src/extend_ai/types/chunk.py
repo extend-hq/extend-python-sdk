@@ -3,13 +3,14 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .block import Block
 from .chunk_metadata import ChunkMetadata
 from .chunk_type import ChunkType
 
 
-class Chunk(UniversalBaseModel):
+class Chunk(UncheckedBaseModel):
     object: str = pydantic.Field()
     """
     The type of object. In this case, it will always be `"chunk"`.

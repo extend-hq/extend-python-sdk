@@ -3,10 +3,11 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.unchecked_base_model import UncheckedBaseModel
 
 
-class ExtractionFieldResultReferenceBoundingBoxesItem(UniversalBaseModel):
+class ExtractionFieldResultReferenceBoundingBoxesItem(UncheckedBaseModel):
     top: float = pydantic.Field()
     """
     The top coordinate of the bounding box

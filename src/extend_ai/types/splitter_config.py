@@ -4,13 +4,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .classification import Classification
 from .splitter_advanced_options import SplitterAdvancedOptions
 
 
-class SplitterConfig(UniversalBaseModel):
+class SplitterConfig(UncheckedBaseModel):
     base_processor: typing_extensions.Annotated[
         typing.Optional[typing.Literal["splitting_performance"]], FieldMetadata(alias="baseProcessor")
     ] = pydantic.Field(default=None)

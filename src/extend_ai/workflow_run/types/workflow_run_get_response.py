@@ -6,12 +6,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ...core.serialization import FieldMetadata
+from ...core.unchecked_base_model import UncheckedBaseModel
 from ...types.workflow_run import WorkflowRun
 
 
-class WorkflowRunGetResponse(UniversalBaseModel):
+class WorkflowRunGetResponse(UncheckedBaseModel):
     success: bool
     workflow_run: typing_extensions.Annotated[WorkflowRun, FieldMetadata(alias="workflowRun")]
 

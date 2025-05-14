@@ -4,12 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .workflow_run_file_input_outputs_item import WorkflowRunFileInputOutputsItem
 
 
-class WorkflowRunFileInput(UniversalBaseModel):
+class WorkflowRunFileInput(UncheckedBaseModel):
     """
     A file object that can be specified using either a URL or an existing file ID for workflow runs.
     """

@@ -6,8 +6,9 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
 from .classification import Classification
 from .classification_advanced_options import ClassificationAdvancedOptions
 from .classification_config_base_processor import ClassificationConfigBaseProcessor
@@ -17,7 +18,7 @@ from .json_object import JsonObject
 from .splitter_advanced_options import SplitterAdvancedOptions
 
 
-class ProcessorVersionConfig_Classify(UniversalBaseModel):
+class ProcessorVersionConfig_Classify(UncheckedBaseModel):
     """
     The configuration settings for this version of the document processor. The structure of this object will vary depending on the processor type.
 
@@ -47,7 +48,7 @@ class ProcessorVersionConfig_Classify(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-class ProcessorVersionConfig_Extract(UniversalBaseModel):
+class ProcessorVersionConfig_Extract(UncheckedBaseModel):
     """
     The configuration settings for this version of the document processor. The structure of this object will vary depending on the processor type.
 
@@ -79,7 +80,7 @@ class ProcessorVersionConfig_Extract(UniversalBaseModel):
 from .extraction_field import ExtractionField  # noqa: E402, F401, I001
 
 
-class ProcessorVersionConfig_Splitter(UniversalBaseModel):
+class ProcessorVersionConfig_Splitter(UncheckedBaseModel):
     """
     The configuration settings for this version of the document processor. The structure of this object will vary depending on the processor type.
 
@@ -109,7 +110,8 @@ class ProcessorVersionConfig_Splitter(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-ProcessorVersionConfig = typing.Union[
-    ProcessorVersionConfig_Classify, ProcessorVersionConfig_Extract, ProcessorVersionConfig_Splitter
+ProcessorVersionConfig = typing_extensions.Annotated[
+    typing.Union[ProcessorVersionConfig_Classify, ProcessorVersionConfig_Extract, ProcessorVersionConfig_Splitter],
+    UnionMetadata(discriminant="type"),
 ]
 update_forward_refs(ProcessorVersionConfig_Extract)

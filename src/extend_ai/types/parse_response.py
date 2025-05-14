@@ -4,15 +4,16 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .chunk import Chunk
 from .parse_config import ParseConfig
 from .parse_response_metrics import ParseResponseMetrics
 from .parse_response_status import ParseResponseStatus
 
 
-class ParseResponse(UniversalBaseModel):
+class ParseResponse(UncheckedBaseModel):
     object: typing.Literal["parser_run"] = pydantic.Field(default="parser_run")
     """
     The type of object. Will always be `"parser_run"`.

@@ -4,12 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .extraction_field_result_reference_bounding_boxes_item import ExtractionFieldResultReferenceBoundingBoxesItem
 
 
-class ExtractionFieldResultReference(UniversalBaseModel):
+class ExtractionFieldResultReference(UncheckedBaseModel):
     id: str = pydantic.Field()
     """
     The unique identifier for this field

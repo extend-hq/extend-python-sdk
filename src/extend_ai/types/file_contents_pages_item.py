@@ -4,11 +4,12 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 
 
-class FileContentsPagesItem(UniversalBaseModel):
+class FileContentsPagesItem(UncheckedBaseModel):
     page_number: typing_extensions.Annotated[int, FieldMetadata(alias="pageNumber")] = pydantic.Field()
     """
     The page number of this page in the document.
