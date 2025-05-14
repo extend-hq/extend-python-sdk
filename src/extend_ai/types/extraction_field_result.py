@@ -27,6 +27,11 @@ class ExtractionFieldResult(UncheckedBaseModel):
     """
 
     value: typing.Optional[typing.Any] = None
+    confidence: typing.Optional[float] = pydantic.Field(default=None)
+    """
+    A value between 0 and 1 indicating confidence in the extraction
+    """
+
     schema_: typing_extensions.Annotated[
         typing.Optional[typing.List["ExtractionField"]], FieldMetadata(alias="schema")
     ] = pydantic.Field(default=None)
