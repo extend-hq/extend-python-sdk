@@ -4,12 +4,12 @@ The Extend Python library provides convenient access to the Extend API from Pyth
 
 ## Documentation
 
-API reference documentation is available [here](https://docs.extend.ai/2025-04-21/developers/authentication).
+API reference documentation is available [here](https://docs.extend.ai/2025-04-21/developers).
 
 ## Installation
 
 ```sh
-pip install extend_ai
+pip install extend-ai
 ```
 
 ## Reference
