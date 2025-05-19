@@ -46,13 +46,6 @@ class ExtractionAdvancedOptions(UncheckedBaseModel):
     Whether to enable citations in the output.
     """
 
-    auto_review_assistant_enabled: typing_extensions.Annotated[
-        typing.Optional[bool], FieldMetadata(alias="autoReviewAssistantEnabled")
-    ] = pydantic.Field(default=None)
-    """
-    Whether to enable the auto-review assistant.
-    """
-
     advanced_figure_parsing_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="advancedFigureParsingEnabled")
     ] = pydantic.Field(default=None)

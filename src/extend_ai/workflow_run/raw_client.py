@@ -39,6 +39,7 @@ class RawWorkflowRunClient:
         *,
         status: typing.Optional[WorkflowStatus] = None,
         workflow_id: typing.Optional[str] = None,
+        batch_id: typing.Optional[str] = None,
         file_name_contains: typing.Optional[str] = None,
         sort_by: typing.Optional[SortByEnum] = None,
         sort_dir: typing.Optional[SortDirEnum] = None,
@@ -66,6 +67,11 @@ class RawWorkflowRunClient:
             Filters workflow runs by the workflow ID. If not provided, runs for all workflows are returned.
 
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
+
+        batch_id : typing.Optional[str]
+            Filters workflow runs by the batch ID. This is useful for fetching all runs for a given batch created via the [Batch Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
+
+            Example: `"batch_7Ws31-F5"`
 
         file_name_contains : typing.Optional[str]
             Filters workflow runs by the name of the file. Only returns workflow runs where the file name contains this string.
@@ -98,6 +104,7 @@ class RawWorkflowRunClient:
             params={
                 "status": status,
                 "workflowId": workflow_id,
+                "batchId": batch_id,
                 "fileNameContains": file_name_contains,
                 "sortBy": sort_by,
                 "sortDir": sort_dir,
@@ -426,6 +433,7 @@ class AsyncRawWorkflowRunClient:
         *,
         status: typing.Optional[WorkflowStatus] = None,
         workflow_id: typing.Optional[str] = None,
+        batch_id: typing.Optional[str] = None,
         file_name_contains: typing.Optional[str] = None,
         sort_by: typing.Optional[SortByEnum] = None,
         sort_dir: typing.Optional[SortDirEnum] = None,
@@ -453,6 +461,11 @@ class AsyncRawWorkflowRunClient:
             Filters workflow runs by the workflow ID. If not provided, runs for all workflows are returned.
 
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
+
+        batch_id : typing.Optional[str]
+            Filters workflow runs by the batch ID. This is useful for fetching all runs for a given batch created via the [Batch Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
+
+            Example: `"batch_7Ws31-F5"`
 
         file_name_contains : typing.Optional[str]
             Filters workflow runs by the name of the file. Only returns workflow runs where the file name contains this string.
@@ -485,6 +498,7 @@ class AsyncRawWorkflowRunClient:
             params={
                 "status": status,
                 "workflowId": workflow_id,
+                "batchId": batch_id,
                 "fileNameContains": file_name_contains,
                 "sortBy": sort_by,
                 "sortDir": sort_dir,

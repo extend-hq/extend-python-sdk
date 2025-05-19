@@ -155,6 +155,18 @@ Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 <dl>
 <dd>
 
+**batch_id:** `typing.Optional[str]` 
+
+Filters workflow runs by the batch ID. This is useful for fetching all runs for a given batch created via the [Batch Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
+
+Example: `"batch_7Ws31-F5"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **file_name_contains:** `typing.Optional[str]` 
 
 Filters workflow runs by the name of the file. Only returns workflow runs where the file name contains this string.
