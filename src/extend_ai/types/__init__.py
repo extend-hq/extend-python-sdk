@@ -127,6 +127,7 @@ from .sort_dir_enum import SortDirEnum
 from .splitter_advanced_options import SplitterAdvancedOptions
 from .splitter_advanced_options_split_method import SplitterAdvancedOptionsSplitMethod
 from .splitter_config import SplitterConfig
+from .splitter_config_base_processor import SplitterConfigBaseProcessor
 from .splitter_metrics import SplitterMetrics
 from .splitter_output import SplitterOutput
 from .splitter_output_splits_item import SplitterOutputSplitsItem
@@ -280,6 +281,7 @@ __all__ = [
     "SplitterAdvancedOptions",
     "SplitterAdvancedOptionsSplitMethod",
     "SplitterConfig",
+    "SplitterConfigBaseProcessor",
     "SplitterMetrics",
     "SplitterOutput",
     "SplitterOutputSplitsItem",

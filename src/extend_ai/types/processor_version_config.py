@@ -16,6 +16,7 @@ from .extraction_advanced_options import ExtractionAdvancedOptions
 from .extraction_config_base_processor import ExtractionConfigBaseProcessor
 from .json_object import JsonObject
 from .splitter_advanced_options import SplitterAdvancedOptions
+from .splitter_config_base_processor import SplitterConfigBaseProcessor
 
 
 class ProcessorVersionConfig_Classify(UncheckedBaseModel):
@@ -89,7 +90,7 @@ class ProcessorVersionConfig_Splitter(UncheckedBaseModel):
 
     type: typing.Literal["SPLITTER"] = "SPLITTER"
     base_processor: typing_extensions.Annotated[
-        typing.Optional[typing.Literal["splitting_performance"]], FieldMetadata(alias="baseProcessor")
+        typing.Optional[SplitterConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
     ] = None
     base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = None
     split_classifications: typing_extensions.Annotated[
