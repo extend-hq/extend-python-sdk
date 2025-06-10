@@ -2,4 +2,4 @@
 
 import typing
 
-ProcessorRunStatus = typing.Union[typing.Literal["PROCESSING", "PROCESSED", "FAILED"], typing.Any]
+ProcessorRunStatus = typing.Union[typing.Literal["PROCESSING", "PROCESSED", "FAILED", "CANCELLED"], typing.Any]

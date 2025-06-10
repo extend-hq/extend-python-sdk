@@ -4,8 +4,14 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
+from ..types.max_page_size import MaxPageSize
+from ..types.next_page_token import NextPageToken
+from ..types.sort_by_enum import SortByEnum
+from ..types.sort_dir_enum import SortDirEnum
 from .raw_client import AsyncRawEvaluationSetClient, RawEvaluationSetClient
 from .types.evaluation_set_create_response import EvaluationSetCreateResponse
+from .types.evaluation_set_get_response import EvaluationSetGetResponse
+from .types.evaluation_set_list_response import EvaluationSetListResponse
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -25,6 +31,62 @@ class EvaluationSetClient:
         RawEvaluationSetClient
         """
         return self._raw_client
+
+    def list(
+        self,
+        *,
+        processor_id: typing.Optional[str] = None,
+        sort_by: typing.Optional[SortByEnum] = None,
+        sort_dir: typing.Optional[SortDirEnum] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> EvaluationSetListResponse:
+        """
+        List evaluation sets in your account. You can use the `processorId` parameter to filter evaluation sets by processor.
+
+        This endpoint returns a paginated response. You can use the `nextPageToken` to fetch subsequent results.
+
+        Parameters
+        ----------
+        processor_id : typing.Optional[str]
+            The ID of the processor to filter evaluation sets by.
+
+            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        sort_by : typing.Optional[SortByEnum]
+            Sorts the evaluation sets by the given field.
+
+        sort_dir : typing.Optional[SortDirEnum]
+            Sorts the evaluation sets in ascending or descending order. Ascending order means the earliest evaluation set is returned first.
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        EvaluationSetListResponse
+            Successfully retrieved evaluation sets
+
+        Examples
+        --------
+        from extend_ai import Extend
+        client = Extend(token="YOUR_TOKEN", )
+        client.evaluation_set.list(processor_id='processor_id_here', next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
+        """
+        _response = self._raw_client.list(
+            processor_id=processor_id,
+            sort_by=sort_by,
+            sort_dir=sort_dir,
+            next_page_token=next_page_token,
+            max_page_size=max_page_size,
+            request_options=request_options,
+        )
+        return _response.data
 
     def create(
         self, *, name: str, description: str, processor_id: str, request_options: typing.Optional[RequestOptions] = None
@@ -70,6 +132,34 @@ class EvaluationSetClient:
         )
         return _response.data
 
+    def get(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> EvaluationSetGetResponse:
+        """
+        Retrieve a specific evaluation set by ID. This returns an evaluation set object, but does not include the items in the evaluation set. You can use the [List Evaluation Set Items](https://docs.extend.ai/2025-04-21/developers/api-reference/evaluation-set-endpoints/list-evaluation-set-items) endpoint to get the items in an evaluation set.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the evaluation set to retrieve.
+
+            Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        EvaluationSetGetResponse
+            Successfully retrieved evaluation set
+
+        Examples
+        --------
+        from extend_ai import Extend
+        client = Extend(token="YOUR_TOKEN", )
+        client.evaluation_set.get(id='evaluation_set_id_here', )
+        """
+        _response = self._raw_client.get(id, request_options=request_options)
+        return _response.data
+
 
 class AsyncEvaluationSetClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -85,6 +175,65 @@ class AsyncEvaluationSetClient:
         AsyncRawEvaluationSetClient
         """
         return self._raw_client
+
+    async def list(
+        self,
+        *,
+        processor_id: typing.Optional[str] = None,
+        sort_by: typing.Optional[SortByEnum] = None,
+        sort_dir: typing.Optional[SortDirEnum] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> EvaluationSetListResponse:
+        """
+        List evaluation sets in your account. You can use the `processorId` parameter to filter evaluation sets by processor.
+
+        This endpoint returns a paginated response. You can use the `nextPageToken` to fetch subsequent results.
+
+        Parameters
+        ----------
+        processor_id : typing.Optional[str]
+            The ID of the processor to filter evaluation sets by.
+
+            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        sort_by : typing.Optional[SortByEnum]
+            Sorts the evaluation sets by the given field.
+
+        sort_dir : typing.Optional[SortDirEnum]
+            Sorts the evaluation sets in ascending or descending order. Ascending order means the earliest evaluation set is returned first.
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        EvaluationSetListResponse
+            Successfully retrieved evaluation sets
+
+        Examples
+        --------
+        from extend_ai import AsyncExtend
+        import asyncio
+        client = AsyncExtend(token="YOUR_TOKEN", )
+        async def main() -> None:
+            await client.evaluation_set.list(processor_id='processor_id_here', next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.list(
+            processor_id=processor_id,
+            sort_by=sort_by,
+            sort_dir=sort_dir,
+            next_page_token=next_page_token,
+            max_page_size=max_page_size,
+            request_options=request_options,
+        )
+        return _response.data
 
     async def create(
         self, *, name: str, description: str, processor_id: str, request_options: typing.Optional[RequestOptions] = None
@@ -131,4 +280,37 @@ class AsyncEvaluationSetClient:
         _response = await self._raw_client.create(
             name=name, description=description, processor_id=processor_id, request_options=request_options
         )
+        return _response.data
+
+    async def get(
+        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> EvaluationSetGetResponse:
+        """
+        Retrieve a specific evaluation set by ID. This returns an evaluation set object, but does not include the items in the evaluation set. You can use the [List Evaluation Set Items](https://docs.extend.ai/2025-04-21/developers/api-reference/evaluation-set-endpoints/list-evaluation-set-items) endpoint to get the items in an evaluation set.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the evaluation set to retrieve.
+
+            Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        EvaluationSetGetResponse
+            Successfully retrieved evaluation set
+
+        Examples
+        --------
+        from extend_ai import AsyncExtend
+        import asyncio
+        client = AsyncExtend(token="YOUR_TOKEN", )
+        async def main() -> None:
+            await client.evaluation_set.get(id='evaluation_set_id_here', )
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get(id, request_options=request_options)
         return _response.data

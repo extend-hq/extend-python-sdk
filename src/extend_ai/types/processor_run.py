@@ -57,6 +57,7 @@ class ProcessorRun(UncheckedBaseModel):
     * `"PROCESSING"` - The processor is currently running
     * `"PROCESSED"` - The processor has completed successfully
     * `"FAILED"` - The processor encountered an error
+    * `"CANCELLED"` - The processor run was cancelled
     """
 
     output: ProcessorOutput = pydantic.Field()

@@ -17,6 +17,7 @@ from ..types.error import Error
 from ..types.json_object import JsonObject
 from ..types.processor_id import ProcessorId
 from ..types.processor_run_file_input import ProcessorRunFileInput
+from .types.processor_run_cancel_response import ProcessorRunCancelResponse
 from .types.processor_run_create_request_config import ProcessorRunCreateRequestConfig
 from .types.processor_run_create_response import ProcessorRunCreateResponse
 from .types.processor_run_get_response import ProcessorRunGetResponse
@@ -232,6 +233,82 @@ class RawProcessorRunClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
+    def cancel(
+        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[ProcessorRunCancelResponse]:
+        """
+        Cancel a running processor run by its ID. This endpoint allows you to stop a processor run that is currently in progress.
+
+        Note: Only processor runs with a status of `"PROCESSING"` can be cancelled. Processor runs that have already completed, failed, or been cancelled cannot be cancelled again.
+
+        Parameters
+        ----------
+        id : str
+            The unique identifier for the processor run to cancel.
+
+            Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ProcessorRunCancelResponse]
+            Successfully cancelled processor run
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"processor_runs/{jsonable_encoder(id)}/cancel",
+            method="POST",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ProcessorRunCancelResponse,
+                    construct_type(
+                        type_=ProcessorRunCancelResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        construct_type(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        construct_type(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
 
 class AsyncRawProcessorRunClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -398,6 +475,82 @@ class AsyncRawProcessorRunClient:
                     ProcessorRunGetResponse,
                     construct_type(
                         type_=ProcessorRunGetResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        construct_type(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        construct_type(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def cancel(
+        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[ProcessorRunCancelResponse]:
+        """
+        Cancel a running processor run by its ID. This endpoint allows you to stop a processor run that is currently in progress.
+
+        Note: Only processor runs with a status of `"PROCESSING"` can be cancelled. Processor runs that have already completed, failed, or been cancelled cannot be cancelled again.
+
+        Parameters
+        ----------
+        id : str
+            The unique identifier for the processor run to cancel.
+
+            Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ProcessorRunCancelResponse]
+            Successfully cancelled processor run
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"processor_runs/{jsonable_encoder(id)}/cancel",
+            method="POST",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ProcessorRunCancelResponse,
+                    construct_type(
+                        type_=ProcessorRunCancelResponse,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
