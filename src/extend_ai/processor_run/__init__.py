@@ -3,6 +3,7 @@
 # isort: skip_file
 
 from .types import (
+    ProcessorRunCancelResponse,
     ProcessorRunCreateRequestConfig,
     ProcessorRunCreateRequestConfig_Classify,
     ProcessorRunCreateRequestConfig_Extract,
@@ -12,6 +13,7 @@ from .types import (
 )
 
 __all__ = [
+    "ProcessorRunCancelResponse",
     "ProcessorRunCreateRequestConfig",
     "ProcessorRunCreateRequestConfig_Classify",
     "ProcessorRunCreateRequestConfig_Extract",

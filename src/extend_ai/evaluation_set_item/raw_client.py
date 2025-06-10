@@ -14,10 +14,15 @@ from ..errors.bad_request_error import BadRequestError
 from ..errors.not_found_error import NotFoundError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..types.error import Error
+from ..types.max_page_size import MaxPageSize
+from ..types.next_page_token import NextPageToken
 from ..types.provided_processor_output import ProvidedProcessorOutput
+from ..types.sort_by_enum import SortByEnum
+from ..types.sort_dir_enum import SortDirEnum
 from .types.evaluation_set_item_create_batch_request_items_item import EvaluationSetItemCreateBatchRequestItemsItem
 from .types.evaluation_set_item_create_batch_response import EvaluationSetItemCreateBatchResponse
 from .types.evaluation_set_item_create_response import EvaluationSetItemCreateResponse
+from .types.evaluation_set_item_list_response import EvaluationSetItemListResponse
 from .types.evaluation_set_item_update_response import EvaluationSetItemUpdateResponse
 
 # this is used as the default value for optional parameters
@@ -27,6 +32,105 @@ OMIT = typing.cast(typing.Any, ...)
 class RawEvaluationSetItemClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
+
+    def list(
+        self,
+        id: str,
+        *,
+        sort_by: typing.Optional[SortByEnum] = None,
+        sort_dir: typing.Optional[SortDirEnum] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[EvaluationSetItemListResponse]:
+        """
+        List all items in a specific evaluation set. Evaluation set items are the individual files and expected outputs that are used to evaluate the performance of a given processor in Extend.
+
+        This endpoint returns a paginated response. You can use the `nextPageToken` to fetch subsequent results.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the evaluation set to retrieve items for.
+
+            Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
+
+        sort_by : typing.Optional[SortByEnum]
+            Sorts the evaluation set items by the given field.
+
+        sort_dir : typing.Optional[SortDirEnum]
+            Sorts the evaluation set items in ascending or descending order. Ascending order means the earliest evaluation set is returned first.
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[EvaluationSetItemListResponse]
+            Successfully retrieved evaluation set items
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"evaluation_sets/{jsonable_encoder(id)}/items",
+            method="GET",
+            params={
+                "sortBy": sort_by,
+                "sortDir": sort_dir,
+                "nextPageToken": next_page_token,
+                "maxPageSize": max_page_size,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    EvaluationSetItemListResponse,
+                    construct_type(
+                        type_=EvaluationSetItemListResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        construct_type(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        construct_type(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     def create(
         self,
@@ -306,6 +410,105 @@ class RawEvaluationSetItemClient:
 class AsyncRawEvaluationSetItemClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
+
+    async def list(
+        self,
+        id: str,
+        *,
+        sort_by: typing.Optional[SortByEnum] = None,
+        sort_dir: typing.Optional[SortDirEnum] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[EvaluationSetItemListResponse]:
+        """
+        List all items in a specific evaluation set. Evaluation set items are the individual files and expected outputs that are used to evaluate the performance of a given processor in Extend.
+
+        This endpoint returns a paginated response. You can use the `nextPageToken` to fetch subsequent results.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the evaluation set to retrieve items for.
+
+            Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
+
+        sort_by : typing.Optional[SortByEnum]
+            Sorts the evaluation set items by the given field.
+
+        sort_dir : typing.Optional[SortDirEnum]
+            Sorts the evaluation set items in ascending or descending order. Ascending order means the earliest evaluation set is returned first.
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[EvaluationSetItemListResponse]
+            Successfully retrieved evaluation set items
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"evaluation_sets/{jsonable_encoder(id)}/items",
+            method="GET",
+            params={
+                "sortBy": sort_by,
+                "sortDir": sort_dir,
+                "nextPageToken": next_page_token,
+                "maxPageSize": max_page_size,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    EvaluationSetItemListResponse,
+                    construct_type(
+                        type_=EvaluationSetItemListResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        construct_type(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        construct_type(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     async def create(
         self,

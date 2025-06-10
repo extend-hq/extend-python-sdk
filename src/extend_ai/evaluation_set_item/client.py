@@ -4,11 +4,16 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
+from ..types.max_page_size import MaxPageSize
+from ..types.next_page_token import NextPageToken
 from ..types.provided_processor_output import ProvidedProcessorOutput
+from ..types.sort_by_enum import SortByEnum
+from ..types.sort_dir_enum import SortDirEnum
 from .raw_client import AsyncRawEvaluationSetItemClient, RawEvaluationSetItemClient
 from .types.evaluation_set_item_create_batch_request_items_item import EvaluationSetItemCreateBatchRequestItemsItem
 from .types.evaluation_set_item_create_batch_response import EvaluationSetItemCreateBatchResponse
 from .types.evaluation_set_item_create_response import EvaluationSetItemCreateResponse
+from .types.evaluation_set_item_list_response import EvaluationSetItemListResponse
 from .types.evaluation_set_item_update_response import EvaluationSetItemUpdateResponse
 
 # this is used as the default value for optional parameters
@@ -29,6 +34,62 @@ class EvaluationSetItemClient:
         RawEvaluationSetItemClient
         """
         return self._raw_client
+
+    def list(
+        self,
+        id: str,
+        *,
+        sort_by: typing.Optional[SortByEnum] = None,
+        sort_dir: typing.Optional[SortDirEnum] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> EvaluationSetItemListResponse:
+        """
+        List all items in a specific evaluation set. Evaluation set items are the individual files and expected outputs that are used to evaluate the performance of a given processor in Extend.
+
+        This endpoint returns a paginated response. You can use the `nextPageToken` to fetch subsequent results.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the evaluation set to retrieve items for.
+
+            Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
+
+        sort_by : typing.Optional[SortByEnum]
+            Sorts the evaluation set items by the given field.
+
+        sort_dir : typing.Optional[SortDirEnum]
+            Sorts the evaluation set items in ascending or descending order. Ascending order means the earliest evaluation set is returned first.
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        EvaluationSetItemListResponse
+            Successfully retrieved evaluation set items
+
+        Examples
+        --------
+        from extend_ai import Extend
+        client = Extend(token="YOUR_TOKEN", )
+        client.evaluation_set_item.list(id='evaluation_set_id_here', next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
+        """
+        _response = self._raw_client.list(
+            id,
+            sort_by=sort_by,
+            sort_dir=sort_dir,
+            next_page_token=next_page_token,
+            max_page_size=max_page_size,
+            request_options=request_options,
+        )
+        return _response.data
 
     def create(
         self,
@@ -191,6 +252,65 @@ class AsyncEvaluationSetItemClient:
         AsyncRawEvaluationSetItemClient
         """
         return self._raw_client
+
+    async def list(
+        self,
+        id: str,
+        *,
+        sort_by: typing.Optional[SortByEnum] = None,
+        sort_dir: typing.Optional[SortDirEnum] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> EvaluationSetItemListResponse:
+        """
+        List all items in a specific evaluation set. Evaluation set items are the individual files and expected outputs that are used to evaluate the performance of a given processor in Extend.
+
+        This endpoint returns a paginated response. You can use the `nextPageToken` to fetch subsequent results.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the evaluation set to retrieve items for.
+
+            Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
+
+        sort_by : typing.Optional[SortByEnum]
+            Sorts the evaluation set items by the given field.
+
+        sort_dir : typing.Optional[SortDirEnum]
+            Sorts the evaluation set items in ascending or descending order. Ascending order means the earliest evaluation set is returned first.
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        EvaluationSetItemListResponse
+            Successfully retrieved evaluation set items
+
+        Examples
+        --------
+        from extend_ai import AsyncExtend
+        import asyncio
+        client = AsyncExtend(token="YOUR_TOKEN", )
+        async def main() -> None:
+            await client.evaluation_set_item.list(id='evaluation_set_id_here', next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.list(
+            id,
+            sort_by=sort_by,
+            sort_dir=sort_dir,
+            next_page_token=next_page_token,
+            max_page_size=max_page_size,
+            request_options=request_options,
+        )
+        return _response.data
 
     async def create(
         self,

@@ -8,6 +8,7 @@ from ..types.json_object import JsonObject
 from ..types.processor_id import ProcessorId
 from ..types.processor_run_file_input import ProcessorRunFileInput
 from .raw_client import AsyncRawProcessorRunClient, RawProcessorRunClient
+from .types.processor_run_cancel_response import ProcessorRunCancelResponse
 from .types.processor_run_create_request_config import ProcessorRunCreateRequestConfig
 from .types.processor_run_create_response import ProcessorRunCreateResponse
 from .types.processor_run_get_response import ProcessorRunGetResponse
@@ -136,6 +137,36 @@ class ProcessorRunClient:
         _response = self._raw_client.get(id, request_options=request_options)
         return _response.data
 
+    def cancel(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> ProcessorRunCancelResponse:
+        """
+        Cancel a running processor run by its ID. This endpoint allows you to stop a processor run that is currently in progress.
+
+        Note: Only processor runs with a status of `"PROCESSING"` can be cancelled. Processor runs that have already completed, failed, or been cancelled cannot be cancelled again.
+
+        Parameters
+        ----------
+        id : str
+            The unique identifier for the processor run to cancel.
+
+            Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ProcessorRunCancelResponse
+            Successfully cancelled processor run
+
+        Examples
+        --------
+        from extend_ai import Extend
+        client = Extend(token="YOUR_TOKEN", )
+        client.processor_run.cancel(id='processor_run_id_here', )
+        """
+        _response = self._raw_client.cancel(id, request_options=request_options)
+        return _response.data
+
 
 class AsyncProcessorRunClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -261,4 +292,39 @@ class AsyncProcessorRunClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.get(id, request_options=request_options)
+        return _response.data
+
+    async def cancel(
+        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> ProcessorRunCancelResponse:
+        """
+        Cancel a running processor run by its ID. This endpoint allows you to stop a processor run that is currently in progress.
+
+        Note: Only processor runs with a status of `"PROCESSING"` can be cancelled. Processor runs that have already completed, failed, or been cancelled cannot be cancelled again.
+
+        Parameters
+        ----------
+        id : str
+            The unique identifier for the processor run to cancel.
+
+            Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ProcessorRunCancelResponse
+            Successfully cancelled processor run
+
+        Examples
+        --------
+        from extend_ai import AsyncExtend
+        import asyncio
+        client = AsyncExtend(token="YOUR_TOKEN", )
+        async def main() -> None:
+            await client.processor_run.cancel(id='processor_run_id_here', )
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.cancel(id, request_options=request_options)
         return _response.data

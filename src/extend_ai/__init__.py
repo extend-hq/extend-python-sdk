@@ -124,6 +124,7 @@ from .types import (
     SplitterAdvancedOptions,
     SplitterAdvancedOptionsSplitMethod,
     SplitterConfig,
+    SplitterConfigBaseProcessor,
     SplitterMetrics,
     SplitterOutput,
     SplitterOutputSplitsItem,
@@ -173,11 +174,12 @@ from .batch_processor_run import BatchProcessorRunGetResponse
 from .batch_workflow_run import BatchWorkflowRunCreateRequestInputsItem, BatchWorkflowRunCreateResponse
 from .client import AsyncExtend, Extend
 from .environment import ExtendEnvironment
-from .evaluation_set import EvaluationSetCreateResponse
+from .evaluation_set import EvaluationSetCreateResponse, EvaluationSetGetResponse, EvaluationSetListResponse
 from .evaluation_set_item import (
     EvaluationSetItemCreateBatchRequestItemsItem,
     EvaluationSetItemCreateBatchResponse,
     EvaluationSetItemCreateResponse,
+    EvaluationSetItemListResponse,
     EvaluationSetItemUpdateResponse,
 )
 from .file import FileGetResponse, FileListResponse, FileUploadResponse
@@ -194,6 +196,7 @@ from .processor import (
     ProcessorUpdateResponse,
 )
 from .processor_run import (
+    ProcessorRunCancelResponse,
     ProcessorRunCreateRequestConfig,
     ProcessorRunCreateRequestConfig_Classify,
     ProcessorRunCreateRequestConfig_Extract,
@@ -262,11 +265,14 @@ __all__ = [
     "Error",
     "EvaluationSet",
     "EvaluationSetCreateResponse",
+    "EvaluationSetGetResponse",
     "EvaluationSetItem",
     "EvaluationSetItemCreateBatchRequestItemsItem",
     "EvaluationSetItemCreateBatchResponse",
     "EvaluationSetItemCreateResponse",
+    "EvaluationSetItemListResponse",
     "EvaluationSetItemUpdateResponse",
+    "EvaluationSetListResponse",
     "Extend",
     "ExtendEnvironment",
     "ExtractChunkingOptions",
@@ -336,6 +342,7 @@ __all__ = [
     "ProcessorId",
     "ProcessorOutput",
     "ProcessorRun",
+    "ProcessorRunCancelResponse",
     "ProcessorRunConfig",
     "ProcessorRunConfig_Classify",
     "ProcessorRunConfig_Extract",
@@ -383,6 +390,7 @@ __all__ = [
     "SplitterAdvancedOptions",
     "SplitterAdvancedOptionsSplitMethod",
     "SplitterConfig",
+    "SplitterConfigBaseProcessor",
     "SplitterMetrics",
     "SplitterOutput",
     "SplitterOutputSplitsItem",
