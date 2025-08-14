@@ -59,6 +59,102 @@ client.parse(file=ParseRequestFile(), )
 <dl>
 <dd>
 
+**response_type:** `typing.Optional[ParseRequestResponseType]` 
+
+Controls the format of the response chunks. Defaults to `json` if not specified.
+* `json` - Returns parsed outputs in the response body
+* `url` - Return a presigned URL to the parsed content in the response body
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**config:** `typing.Optional[ParseConfig]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.<a href="src/extend_ai/client.py">parse_async</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Parse files **asynchronously** to get cleaned, chunked target content (e.g. markdown).
+
+The Parse Async endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
+
+Parse files asynchronously and get a parser run ID that can be used to check status and retrieve results with the [Get Parser Run](https://docs.extend.ai/2025-04-21/developers/api-reference/parse-endpoints/get-parser-run) endpoint.
+
+This is useful for:
+* Large files that may take longer to process
+* Avoiding timeout issues with synchronous parsing.
+
+For more details, see the [Parse File guide](https://docs.extend.ai/2025-04-21/developers/guides/parse).
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+from extend_ai import ParseAsyncRequestFile
+client = Extend(token="YOUR_TOKEN", )
+client.parse_async(file=ParseAsyncRequestFile(), )
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**file:** `ParseAsyncRequestFile` — A file object containing either a URL or a fileId.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **config:** `typing.Optional[ParseConfig]` 
     
 </dd>
@@ -280,7 +376,7 @@ Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 <dl>
 <dd>
 
-**files:** `typing.Optional[typing.Sequence[WorkflowRunFileInput]]` — An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
+**files:** `typing.Optional[typing.Sequence[WorkflowRunFileInput]]` — An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
     
 </dd>
 </dl>
@@ -496,6 +592,77 @@ You can include any arbitrary `key : value` pairs in this object.
 </dl>
 </details>
 
+<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">delete</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a workflow run and all associated data from Extend. This operation is permanent and cannot be undone.
+
+This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+client = Extend(token="YOUR_TOKEN", )
+client.workflow_run.delete(workflow_run_id='workflow_run_id_here', )
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workflow_run_id:** `str` 
+
+The ID of the workflow run to delete.
+
+Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## BatchWorkflowRun
 <details><summary><code>client.batch_workflow_run.<a href="src/extend_ai/batch_workflow_run/client.py">create</a>(...)</code></summary>
 <dl>
@@ -514,6 +681,8 @@ This endpoint allows you to efficiently initiate large batches of workflow runs 
 Unlike the single [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint which returns the details of the created workflow runs immediately, this batch endpoint returns a `batchId`.
 
 Our recommended usage pattern is to integrate with [Webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) for consuming results, using the `metadata` and `batchId` to match up results to the original inputs in your downstream systems. However, you can integrate in a polling mechanism by using a combination of the [List Workflow Runs](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/list-workflow-runs) endpoint to fetch all runs via a batch, and then [Get Workflow Run](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/get-workflow-run) to fetch the full outputs each run.
+
+**Priority:** All workflow runs created through this batch endpoint are automatically assigned a priority of 90.
 
 **Processing and Monitoring:**
 Upon successful submission, the endpoint returns a `batchId`. The individual workflow runs are then queued for processing.
@@ -608,14 +777,13 @@ Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
 Run processors (extraction, classification, splitting, etc.) on a given document.
 
-In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
-* file parsing/pre-processing will automatically be reused across multiple processors, which will give you simplicity and cost savings given that many use cases will require multiple processors to be run on the same document.
-* workflows provide dedicated human in the loop document review, when needed.
-* workflows allow you to model and manage your pipeline with a single endpoint and corresponding UI for modeling and monitoring.
+**Synchronous vs Asynchronous Processing:**
+- **Asynchronous (default)**: Returns immediately with `PROCESSING` status. Use webhooks or polling to get results.
+- **Synchronous**: Set `sync: true` to wait for completion and get final results in the response (5-minute timeout).
 
-However, there are a number of legitimate use cases and systems where it might be easier to model the pipeline via code and run processors directly. This endpoint is provided for this purpose.
-
-Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+**For asynchronous processing:**
+- You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+- Or you can [poll the get endpoint](https://docs.extend.ai/2025-04-21/developers/api-reference/processor-endpoints/get-processor-run) for updates on the status of the processor run.
 </dd>
 </dl>
 </dd>
@@ -678,6 +846,18 @@ An optional version of the processor to use. When not supplied, the most recent 
 <dd>
 
 **raw_text:** `typing.Optional[str]` — A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sync:** `typing.Optional[bool]` 
+
+Whether to run the processor synchronously. When `true`, the request will wait for the processor run to complete and return the final results. When `false` (default), the request returns immediately with a `PROCESSING` status, and you can poll for completion or use webhooks. For production use cases, we recommending leaving sync off and building around an async integration for more resiliency, unless your use case is predictably fast (e.g. sub < 30 seconds) run time or otherwise have integration constraints that require a synchronous API.
+
+**Timeout**: Synchronous requests have a 5-minute timeout. If the processor run takes longer, it will continue processing asynchronously and you can retrieve the results via the GET endpoint.
     
 </dd>
 </dl>
@@ -771,6 +951,77 @@ client.processor_run.get(id='processor_run_id_here', )
 **id:** `str` 
 
 The unique identifier for this processor run.
+
+Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.processor_run.<a href="src/extend_ai/processor_run/client.py">delete</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a processor run and all associated data from Extend. This operation is permanent and cannot be undone.
+
+This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+client = Extend(token="YOUR_TOKEN", )
+client.processor_run.delete(id='processor_run_id_here', )
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the processor run to delete.
 
 Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
     
@@ -1296,6 +1547,163 @@ Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 </dl>
 </details>
 
+## ParserRun
+<details><summary><code>client.parser_run.<a href="src/extend_ai/parser_run/client.py">get</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the status and results of a parser run.
+
+Use this endpoint to get results for a parser run that has already completed, or to check on the status of an asynchronous parser run initiated via the [Parse File Asynchronously](https://docs.extend.ai/2025-04-21/developers/api-reference/parse-endpoints/parse-file-async) endpoint.
+
+If parsing is still in progress, you'll receive a response with just the status. Once complete, you'll receive the full parsed content in the response.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+client = Extend(token="YOUR_TOKEN", )
+client.parser_run.get(id='parser_run_id_here', )
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The unique identifier for the parser run.
+
+Example: `"parser_run_xK9mLPqRtN3vS8wF5hB2cQ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**response_type:** `typing.Optional[ParserRunGetRequestResponseType]` 
+
+Controls the format of the response chunks. Defaults to `json` if not specified.
+* `json` - Returns chunks with inline content
+* `url` - Returns chunks with presigned URLs to content instead of inline data
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.parser_run.<a href="src/extend_ai/parser_run/client.py">delete</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a parser run and all associated data from Extend. This operation is permanent and cannot be undone.
+
+This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+client = Extend(token="YOUR_TOKEN", )
+client.parser_run.delete(id='parser_run_id_here', )
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the parser run to delete.
+
+Example: `"parser_run_xK9mLPqRtN3vS8wF5hB2cQ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## File
 <details><summary><code>client.file.<a href="src/extend_ai/file/client.py">list</a>(...)</code></summary>
 <dl>
@@ -1472,6 +1880,77 @@ Only available for files with a type of PDF, IMG, or .doc/.docx files that were 
 If set to true, the html content of the file will be included in the response. This is useful for indexing html content into RAG pipelines.
 
 Only available for files with a type of DOCX.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.file.<a href="src/extend_ai/file/client.py">delete</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a file and all associated data from Extend. This operation is permanent and cannot be undone.
+
+This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+client = Extend(token="YOUR_TOKEN", )
+client.file.delete(id='file_id_here', )
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the file to delete.
+
+Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
     
 </dd>
 </dl>

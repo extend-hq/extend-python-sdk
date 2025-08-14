@@ -2,6 +2,6 @@
 
 # isort: skip_file
 
-from .types import FileGetResponse, FileListResponse, FileUploadResponse
+from .types import FileDeleteResponse, FileGetResponse, FileListResponse, FileUploadResponse
 
-__all__ = ["FileGetResponse", "FileListResponse", "FileUploadResponse"]
+__all__ = ["FileDeleteResponse", "FileGetResponse", "FileListResponse", "FileUploadResponse"]

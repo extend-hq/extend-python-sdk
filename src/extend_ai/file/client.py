@@ -9,6 +9,7 @@ from ..types.max_page_size import MaxPageSize
 from ..types.next_page_token import NextPageToken
 from ..types.sort_dir_enum import SortDirEnum
 from .raw_client import AsyncRawFileClient, RawFileClient
+from .types.file_delete_response import FileDeleteResponse
 from .types.file_get_response import FileGetResponse
 from .types.file_list_response import FileListResponse
 from .types.file_upload_response import FileUploadResponse
@@ -130,6 +131,36 @@ class FileClient:
         _response = self._raw_client.get(
             id, raw_text=raw_text, markdown=markdown, html=html, request_options=request_options
         )
+        return _response.data
+
+    def delete(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> FileDeleteResponse:
+        """
+        Delete a file and all associated data from Extend. This operation is permanent and cannot be undone.
+
+        This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the file to delete.
+
+            Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        FileDeleteResponse
+            Successfully deleted file
+
+        Examples
+        --------
+        from extend_ai import Extend
+        client = Extend(token="YOUR_TOKEN", )
+        client.file.delete(id='file_id_here', )
+        """
+        _response = self._raw_client.delete(id, request_options=request_options)
         return _response.data
 
     def upload(self, *, file: core.File, request_options: typing.Optional[RequestOptions] = None) -> FileUploadResponse:
@@ -286,6 +317,39 @@ class AsyncFileClient:
         _response = await self._raw_client.get(
             id, raw_text=raw_text, markdown=markdown, html=html, request_options=request_options
         )
+        return _response.data
+
+    async def delete(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> FileDeleteResponse:
+        """
+        Delete a file and all associated data from Extend. This operation is permanent and cannot be undone.
+
+        This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the file to delete.
+
+            Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        FileDeleteResponse
+            Successfully deleted file
+
+        Examples
+        --------
+        from extend_ai import AsyncExtend
+        import asyncio
+        client = AsyncExtend(token="YOUR_TOKEN", )
+        async def main() -> None:
+            await client.file.delete(id='file_id_here', )
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete(id, request_options=request_options)
         return _response.data
 
     async def upload(

@@ -13,6 +13,7 @@ from ..types.workflow_run_file_input import WorkflowRunFileInput
 from ..types.workflow_status import WorkflowStatus
 from .raw_client import AsyncRawWorkflowRunClient, RawWorkflowRunClient
 from .types.workflow_run_create_response import WorkflowRunCreateResponse
+from .types.workflow_run_delete_response import WorkflowRunDeleteResponse
 from .types.workflow_run_get_response import WorkflowRunGetResponse
 from .types.workflow_run_list_response import WorkflowRunListResponse
 from .types.workflow_run_update_response import WorkflowRunUpdateResponse
@@ -141,7 +142,7 @@ class WorkflowRunClient:
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
         files : typing.Optional[typing.Sequence[WorkflowRunFileInput]]
-            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
+            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
 
         raw_texts : typing.Optional[typing.Sequence[str]]
             An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.
@@ -257,6 +258,38 @@ class WorkflowRunClient:
         _response = self._raw_client.update(
             workflow_run_id, name=name, metadata=metadata, request_options=request_options
         )
+        return _response.data
+
+    def delete(
+        self, workflow_run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> WorkflowRunDeleteResponse:
+        """
+        Delete a workflow run and all associated data from Extend. This operation is permanent and cannot be undone.
+
+        This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
+
+        Parameters
+        ----------
+        workflow_run_id : str
+            The ID of the workflow run to delete.
+
+            Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        WorkflowRunDeleteResponse
+            Successfully deleted workflow run
+
+        Examples
+        --------
+        from extend_ai import Extend
+        client = Extend(token="YOUR_TOKEN", )
+        client.workflow_run.delete(workflow_run_id='workflow_run_id_here', )
+        """
+        _response = self._raw_client.delete(workflow_run_id, request_options=request_options)
         return _response.data
 
 
@@ -383,7 +416,7 @@ class AsyncWorkflowRunClient:
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
         files : typing.Optional[typing.Sequence[WorkflowRunFileInput]]
-            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
+            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
 
         raw_texts : typing.Optional[typing.Sequence[str]]
             An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.
@@ -508,4 +541,39 @@ class AsyncWorkflowRunClient:
         _response = await self._raw_client.update(
             workflow_run_id, name=name, metadata=metadata, request_options=request_options
         )
+        return _response.data
+
+    async def delete(
+        self, workflow_run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> WorkflowRunDeleteResponse:
+        """
+        Delete a workflow run and all associated data from Extend. This operation is permanent and cannot be undone.
+
+        This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
+
+        Parameters
+        ----------
+        workflow_run_id : str
+            The ID of the workflow run to delete.
+
+            Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        WorkflowRunDeleteResponse
+            Successfully deleted workflow run
+
+        Examples
+        --------
+        from extend_ai import AsyncExtend
+        import asyncio
+        client = AsyncExtend(token="YOUR_TOKEN", )
+        async def main() -> None:
+            await client.workflow_run.delete(workflow_run_id='workflow_run_id_here', )
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete(workflow_run_id, request_options=request_options)
         return _response.data

@@ -15,6 +15,7 @@ from .classification_config_base_processor import ClassificationConfigBaseProces
 from .extraction_advanced_options import ExtractionAdvancedOptions
 from .extraction_config_base_processor import ExtractionConfigBaseProcessor
 from .json_object import JsonObject
+from .parse_config import ParseConfig
 from .splitter_advanced_options import SplitterAdvancedOptions
 from .splitter_config_base_processor import SplitterConfigBaseProcessor
 
@@ -38,6 +39,7 @@ class ProcessorVersionConfig_Classify(UncheckedBaseModel):
     advanced_options: typing_extensions.Annotated[
         typing.Optional[ClassificationAdvancedOptions], FieldMetadata(alias="advancedOptions")
     ] = None
+    parser: typing.Optional[ParseConfig] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -67,6 +69,7 @@ class ProcessorVersionConfig_Extract(UncheckedBaseModel):
     advanced_options: typing_extensions.Annotated[
         typing.Optional[ExtractionAdvancedOptions], FieldMetadata(alias="advancedOptions")
     ] = None
+    parser: typing.Optional[ParseConfig] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -100,6 +103,7 @@ class ProcessorVersionConfig_Splitter(UncheckedBaseModel):
     advanced_options: typing_extensions.Annotated[
         typing.Optional[SplitterAdvancedOptions], FieldMetadata(alias="advancedOptions")
     ] = None
+    parser: typing.Optional[ParseConfig] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

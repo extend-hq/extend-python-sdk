@@ -10,6 +10,7 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 from .classification import Classification
 from .classification_advanced_options import ClassificationAdvancedOptions
 from .classification_config_base_processor import ClassificationConfigBaseProcessor
+from .parse_config import ParseConfig
 
 
 class ClassificationConfig(UncheckedBaseModel):
@@ -44,6 +45,11 @@ class ClassificationConfig(UncheckedBaseModel):
     ] = pydantic.Field(default=None)
     """
     Advanced configuration options.
+    """
+
+    parser: typing.Optional[ParseConfig] = pydantic.Field(default=None)
+    """
+    Configuration options for the parsing process.
     """
 
     if IS_PYDANTIC_V2:

@@ -11,6 +11,7 @@ from .raw_client import AsyncRawProcessorRunClient, RawProcessorRunClient
 from .types.processor_run_cancel_response import ProcessorRunCancelResponse
 from .types.processor_run_create_request_config import ProcessorRunCreateRequestConfig
 from .types.processor_run_create_response import ProcessorRunCreateResponse
+from .types.processor_run_delete_response import ProcessorRunDeleteResponse
 from .types.processor_run_get_response import ProcessorRunGetResponse
 
 # this is used as the default value for optional parameters
@@ -39,6 +40,7 @@ class ProcessorRunClient:
         version: typing.Optional[str] = OMIT,
         file: typing.Optional[ProcessorRunFileInput] = OMIT,
         raw_text: typing.Optional[str] = OMIT,
+        sync: typing.Optional[bool] = OMIT,
         priority: typing.Optional[int] = OMIT,
         metadata: typing.Optional[JsonObject] = OMIT,
         config: typing.Optional[ProcessorRunCreateRequestConfig] = OMIT,
@@ -47,14 +49,13 @@ class ProcessorRunClient:
         """
         Run processors (extraction, classification, splitting, etc.) on a given document.
 
-        In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
-        * file parsing/pre-processing will automatically be reused across multiple processors, which will give you simplicity and cost savings given that many use cases will require multiple processors to be run on the same document.
-        * workflows provide dedicated human in the loop document review, when needed.
-        * workflows allow you to model and manage your pipeline with a single endpoint and corresponding UI for modeling and monitoring.
+        **Synchronous vs Asynchronous Processing:**
+        - **Asynchronous (default)**: Returns immediately with `PROCESSING` status. Use webhooks or polling to get results.
+        - **Synchronous**: Set `sync: true` to wait for completion and get final results in the response (5-minute timeout).
 
-        However, there are a number of legitimate use cases and systems where it might be easier to model the pipeline via code and run processors directly. This endpoint is provided for this purpose.
-
-        Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+        **For asynchronous processing:**
+        - You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+        - Or you can [poll the get endpoint](https://docs.extend.ai/2025-04-21/developers/api-reference/processor-endpoints/get-processor-run) for updates on the status of the processor run.
 
         Parameters
         ----------
@@ -71,6 +72,11 @@ class ProcessorRunClient:
 
         raw_text : typing.Optional[str]
             A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
+
+        sync : typing.Optional[bool]
+            Whether to run the processor synchronously. When `true`, the request will wait for the processor run to complete and return the final results. When `false` (default), the request returns immediately with a `PROCESSING` status, and you can poll for completion or use webhooks. For production use cases, we recommending leaving sync off and building around an async integration for more resiliency, unless your use case is predictably fast (e.g. sub < 30 seconds) run time or otherwise have integration constraints that require a synchronous API.
+
+            **Timeout**: Synchronous requests have a 5-minute timeout. If the processor run takes longer, it will continue processing asynchronously and you can retrieve the results via the GET endpoint.
 
         priority : typing.Optional[int]
             An optional value used to determine the relative order of ProcessorRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
@@ -100,6 +106,7 @@ class ProcessorRunClient:
             version=version,
             file=file,
             raw_text=raw_text,
+            sync=sync,
             priority=priority,
             metadata=metadata,
             config=config,
@@ -135,6 +142,36 @@ class ProcessorRunClient:
         client.processor_run.get(id='processor_run_id_here', )
         """
         _response = self._raw_client.get(id, request_options=request_options)
+        return _response.data
+
+    def delete(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> ProcessorRunDeleteResponse:
+        """
+        Delete a processor run and all associated data from Extend. This operation is permanent and cannot be undone.
+
+        This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the processor run to delete.
+
+            Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ProcessorRunDeleteResponse
+            Successfully deleted processor run
+
+        Examples
+        --------
+        from extend_ai import Extend
+        client = Extend(token="YOUR_TOKEN", )
+        client.processor_run.delete(id='processor_run_id_here', )
+        """
+        _response = self._raw_client.delete(id, request_options=request_options)
         return _response.data
 
     def cancel(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> ProcessorRunCancelResponse:
@@ -190,6 +227,7 @@ class AsyncProcessorRunClient:
         version: typing.Optional[str] = OMIT,
         file: typing.Optional[ProcessorRunFileInput] = OMIT,
         raw_text: typing.Optional[str] = OMIT,
+        sync: typing.Optional[bool] = OMIT,
         priority: typing.Optional[int] = OMIT,
         metadata: typing.Optional[JsonObject] = OMIT,
         config: typing.Optional[ProcessorRunCreateRequestConfig] = OMIT,
@@ -198,14 +236,13 @@ class AsyncProcessorRunClient:
         """
         Run processors (extraction, classification, splitting, etc.) on a given document.
 
-        In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
-        * file parsing/pre-processing will automatically be reused across multiple processors, which will give you simplicity and cost savings given that many use cases will require multiple processors to be run on the same document.
-        * workflows provide dedicated human in the loop document review, when needed.
-        * workflows allow you to model and manage your pipeline with a single endpoint and corresponding UI for modeling and monitoring.
+        **Synchronous vs Asynchronous Processing:**
+        - **Asynchronous (default)**: Returns immediately with `PROCESSING` status. Use webhooks or polling to get results.
+        - **Synchronous**: Set `sync: true` to wait for completion and get final results in the response (5-minute timeout).
 
-        However, there are a number of legitimate use cases and systems where it might be easier to model the pipeline via code and run processors directly. This endpoint is provided for this purpose.
-
-        Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+        **For asynchronous processing:**
+        - You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+        - Or you can [poll the get endpoint](https://docs.extend.ai/2025-04-21/developers/api-reference/processor-endpoints/get-processor-run) for updates on the status of the processor run.
 
         Parameters
         ----------
@@ -222,6 +259,11 @@ class AsyncProcessorRunClient:
 
         raw_text : typing.Optional[str]
             A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
+
+        sync : typing.Optional[bool]
+            Whether to run the processor synchronously. When `true`, the request will wait for the processor run to complete and return the final results. When `false` (default), the request returns immediately with a `PROCESSING` status, and you can poll for completion or use webhooks. For production use cases, we recommending leaving sync off and building around an async integration for more resiliency, unless your use case is predictably fast (e.g. sub < 30 seconds) run time or otherwise have integration constraints that require a synchronous API.
+
+            **Timeout**: Synchronous requests have a 5-minute timeout. If the processor run takes longer, it will continue processing asynchronously and you can retrieve the results via the GET endpoint.
 
         priority : typing.Optional[int]
             An optional value used to determine the relative order of ProcessorRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
@@ -254,6 +296,7 @@ class AsyncProcessorRunClient:
             version=version,
             file=file,
             raw_text=raw_text,
+            sync=sync,
             priority=priority,
             metadata=metadata,
             config=config,
@@ -292,6 +335,41 @@ class AsyncProcessorRunClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.get(id, request_options=request_options)
+        return _response.data
+
+    async def delete(
+        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> ProcessorRunDeleteResponse:
+        """
+        Delete a processor run and all associated data from Extend. This operation is permanent and cannot be undone.
+
+        This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the processor run to delete.
+
+            Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ProcessorRunDeleteResponse
+            Successfully deleted processor run
+
+        Examples
+        --------
+        from extend_ai import AsyncExtend
+        import asyncio
+        client = AsyncExtend(token="YOUR_TOKEN", )
+        async def main() -> None:
+            await client.processor_run.delete(id='processor_run_id_here', )
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete(id, request_options=request_options)
         return _response.data
 
     async def cancel(

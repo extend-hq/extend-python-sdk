@@ -9,6 +9,7 @@ from .types import (
     ProcessorRunCreateRequestConfig_Extract,
     ProcessorRunCreateRequestConfig_Splitter,
     ProcessorRunCreateResponse,
+    ProcessorRunDeleteResponse,
     ProcessorRunGetResponse,
 )
 
@@ -19,5 +20,6 @@ __all__ = [
     "ProcessorRunCreateRequestConfig_Extract",
     "ProcessorRunCreateRequestConfig_Splitter",
     "ProcessorRunCreateResponse",
+    "ProcessorRunDeleteResponse",
     "ProcessorRunGetResponse",
 ]

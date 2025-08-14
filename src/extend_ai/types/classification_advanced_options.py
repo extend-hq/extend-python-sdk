@@ -8,6 +8,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .classification_advanced_options_context import ClassificationAdvancedOptionsContext
+from .classification_advanced_options_page_ranges_item import ClassificationAdvancedOptionsPageRangesItem
 
 
 class ClassificationAdvancedOptions(UncheckedBaseModel):
@@ -28,6 +29,13 @@ class ClassificationAdvancedOptions(UncheckedBaseModel):
     )
     """
     Limit processing to a specific number of pages from the beginning of the document.
+    """
+
+    page_ranges: typing_extensions.Annotated[
+        typing.Optional[typing.List[ClassificationAdvancedOptionsPageRangesItem]], FieldMetadata(alias="pageRanges")
+    ] = pydantic.Field(default=None)
+    """
+    Limit processing to the specified page ranges.
     """
 
     if IS_PYDANTIC_V2:

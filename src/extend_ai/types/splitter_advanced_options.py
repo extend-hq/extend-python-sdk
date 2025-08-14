@@ -7,6 +7,7 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .splitter_advanced_options_page_ranges_item import SplitterAdvancedOptionsPageRangesItem
 from .splitter_advanced_options_split_method import SplitterAdvancedOptionsSplitMethod
 
 
@@ -37,6 +38,13 @@ class SplitterAdvancedOptions(UncheckedBaseModel):
     )
     """
     Limit processing to a specific number of pages from the beginning of the document.
+    """
+
+    page_ranges: typing_extensions.Annotated[
+        typing.Optional[typing.List[SplitterAdvancedOptionsPageRangesItem]], FieldMetadata(alias="pageRanges")
+    ] = pydantic.Field(default=None)
+    """
+    Limit processing to the specified page ranges.
     """
 
     if IS_PYDANTIC_V2:

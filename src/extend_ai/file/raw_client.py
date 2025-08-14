@@ -11,12 +11,15 @@ from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
 from ..core.unchecked_base_model import construct_type
 from ..errors.bad_request_error import BadRequestError
+from ..errors.internal_server_error import InternalServerError
 from ..errors.not_found_error import NotFoundError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..types.error import Error
+from ..types.extend_error import ExtendError
 from ..types.max_page_size import MaxPageSize
 from ..types.next_page_token import NextPageToken
 from ..types.sort_dir_enum import SortDirEnum
+from .types.file_delete_response import FileDeleteResponse
 from .types.file_get_response import FileGetResponse
 from .types.file_list_response import FileListResponse
 from .types.file_upload_response import FileUploadResponse
@@ -186,9 +189,74 @@ class RawFileClient:
                 raise NotFoundError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def delete(
+        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[FileDeleteResponse]:
+        """
+        Delete a file and all associated data from Extend. This operation is permanent and cannot be undone.
+
+        This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the file to delete.
+
+            Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[FileDeleteResponse]
+            Successfully deleted file
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"files/{jsonable_encoder(id)}",
+            method="DELETE",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    FileDeleteResponse,
+                    construct_type(
+                        type_=FileDeleteResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ExtendError,
+                        construct_type(
+                            type_=ExtendError,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -435,9 +503,74 @@ class AsyncRawFileClient:
                 raise NotFoundError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def delete(
+        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[FileDeleteResponse]:
+        """
+        Delete a file and all associated data from Extend. This operation is permanent and cannot be undone.
+
+        This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the file to delete.
+
+            Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[FileDeleteResponse]
+            Successfully deleted file
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"files/{jsonable_encoder(id)}",
+            method="DELETE",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    FileDeleteResponse,
+                    construct_type(
+                        type_=FileDeleteResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ExtendError,
+                        construct_type(
+                            type_=ExtendError,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

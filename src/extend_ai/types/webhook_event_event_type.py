@@ -19,6 +19,8 @@ WebhookEventEventType = typing.Union[
         "processor.deleted",
         "processor.draft.updated",
         "processor.version.published",
+        "parser_run.processed",
+        "parser_run.failed",
     ],
     typing.Any,
 ]
