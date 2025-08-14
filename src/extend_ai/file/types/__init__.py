@@ -2,8 +2,9 @@
 
 # isort: skip_file
 
+from .file_delete_response import FileDeleteResponse
 from .file_get_response import FileGetResponse
 from .file_list_response import FileListResponse
 from .file_upload_response import FileUploadResponse
 
-__all__ = ["FileGetResponse", "FileListResponse", "FileUploadResponse"]
+__all__ = ["FileDeleteResponse", "FileGetResponse", "FileListResponse", "FileUploadResponse"]

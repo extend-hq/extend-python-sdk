@@ -8,6 +8,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .classification import Classification
+from .parse_config import ParseConfig
 from .splitter_advanced_options import SplitterAdvancedOptions
 from .splitter_config_base_processor import SplitterConfigBaseProcessor
 
@@ -46,6 +47,11 @@ class SplitterConfig(UncheckedBaseModel):
     ] = pydantic.Field(default=None)
     """
     Advanced configuration options.
+    """
+
+    parser: typing.Optional[ParseConfig] = pydantic.Field(default=None)
+    """
+    Configuration options for the parsing process.
     """
 
     if IS_PYDANTIC_V2:

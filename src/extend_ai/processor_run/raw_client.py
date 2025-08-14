@@ -11,15 +11,20 @@ from ..core.request_options import RequestOptions
 from ..core.serialization import convert_and_respect_annotation_metadata
 from ..core.unchecked_base_model import construct_type
 from ..errors.bad_request_error import BadRequestError
+from ..errors.internal_server_error import InternalServerError
 from ..errors.not_found_error import NotFoundError
+from ..errors.too_many_requests_error import TooManyRequestsError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..types.error import Error
+from ..types.extend_error import ExtendError
 from ..types.json_object import JsonObject
 from ..types.processor_id import ProcessorId
 from ..types.processor_run_file_input import ProcessorRunFileInput
+from ..types.too_many_requests_error_body import TooManyRequestsErrorBody
 from .types.processor_run_cancel_response import ProcessorRunCancelResponse
 from .types.processor_run_create_request_config import ProcessorRunCreateRequestConfig
 from .types.processor_run_create_response import ProcessorRunCreateResponse
+from .types.processor_run_delete_response import ProcessorRunDeleteResponse
 from .types.processor_run_get_response import ProcessorRunGetResponse
 
 # this is used as the default value for optional parameters
@@ -37,6 +42,7 @@ class RawProcessorRunClient:
         version: typing.Optional[str] = OMIT,
         file: typing.Optional[ProcessorRunFileInput] = OMIT,
         raw_text: typing.Optional[str] = OMIT,
+        sync: typing.Optional[bool] = OMIT,
         priority: typing.Optional[int] = OMIT,
         metadata: typing.Optional[JsonObject] = OMIT,
         config: typing.Optional[ProcessorRunCreateRequestConfig] = OMIT,
@@ -45,14 +51,13 @@ class RawProcessorRunClient:
         """
         Run processors (extraction, classification, splitting, etc.) on a given document.
 
-        In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
-        * file parsing/pre-processing will automatically be reused across multiple processors, which will give you simplicity and cost savings given that many use cases will require multiple processors to be run on the same document.
-        * workflows provide dedicated human in the loop document review, when needed.
-        * workflows allow you to model and manage your pipeline with a single endpoint and corresponding UI for modeling and monitoring.
+        **Synchronous vs Asynchronous Processing:**
+        - **Asynchronous (default)**: Returns immediately with `PROCESSING` status. Use webhooks or polling to get results.
+        - **Synchronous**: Set `sync: true` to wait for completion and get final results in the response (5-minute timeout).
 
-        However, there are a number of legitimate use cases and systems where it might be easier to model the pipeline via code and run processors directly. This endpoint is provided for this purpose.
-
-        Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+        **For asynchronous processing:**
+        - You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+        - Or you can [poll the get endpoint](https://docs.extend.ai/2025-04-21/developers/api-reference/processor-endpoints/get-processor-run) for updates on the status of the processor run.
 
         Parameters
         ----------
@@ -69,6 +74,11 @@ class RawProcessorRunClient:
 
         raw_text : typing.Optional[str]
             A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
+
+        sync : typing.Optional[bool]
+            Whether to run the processor synchronously. When `true`, the request will wait for the processor run to complete and return the final results. When `false` (default), the request returns immediately with a `PROCESSING` status, and you can poll for completion or use webhooks. For production use cases, we recommending leaving sync off and building around an async integration for more resiliency, unless your use case is predictably fast (e.g. sub < 30 seconds) run time or otherwise have integration constraints that require a synchronous API.
+
+            **Timeout**: Synchronous requests have a 5-minute timeout. If the processor run takes longer, it will continue processing asynchronously and you can retrieve the results via the GET endpoint.
 
         priority : typing.Optional[int]
             An optional value used to determine the relative order of ProcessorRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
@@ -97,6 +107,7 @@ class RawProcessorRunClient:
                     object_=file, annotation=ProcessorRunFileInput, direction="write"
                 ),
                 "rawText": raw_text,
+                "sync": sync,
                 "priority": priority,
                 "metadata": metadata,
                 "config": convert_and_respect_annotation_metadata(
@@ -145,9 +156,20 @@ class RawProcessorRunClient:
                 raise NotFoundError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        TooManyRequestsErrorBody,
+                        construct_type(
+                            type_=TooManyRequestsErrorBody,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -221,9 +243,74 @@ class RawProcessorRunClient:
                 raise NotFoundError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def delete(
+        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[ProcessorRunDeleteResponse]:
+        """
+        Delete a processor run and all associated data from Extend. This operation is permanent and cannot be undone.
+
+        This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the processor run to delete.
+
+            Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ProcessorRunDeleteResponse]
+            Successfully deleted processor run
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"processor_runs/{jsonable_encoder(id)}",
+            method="DELETE",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ProcessorRunDeleteResponse,
+                    construct_type(
+                        type_=ProcessorRunDeleteResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ExtendError,
+                        construct_type(
+                            type_=ExtendError,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -297,9 +384,9 @@ class RawProcessorRunClient:
                 raise NotFoundError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -321,6 +408,7 @@ class AsyncRawProcessorRunClient:
         version: typing.Optional[str] = OMIT,
         file: typing.Optional[ProcessorRunFileInput] = OMIT,
         raw_text: typing.Optional[str] = OMIT,
+        sync: typing.Optional[bool] = OMIT,
         priority: typing.Optional[int] = OMIT,
         metadata: typing.Optional[JsonObject] = OMIT,
         config: typing.Optional[ProcessorRunCreateRequestConfig] = OMIT,
@@ -329,14 +417,13 @@ class AsyncRawProcessorRunClient:
         """
         Run processors (extraction, classification, splitting, etc.) on a given document.
 
-        In general, the recommended way to integrate with Extend in production is via workflows, using the [Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow) endpoint. This is due to several factors:
-        * file parsing/pre-processing will automatically be reused across multiple processors, which will give you simplicity and cost savings given that many use cases will require multiple processors to be run on the same document.
-        * workflows provide dedicated human in the loop document review, when needed.
-        * workflows allow you to model and manage your pipeline with a single endpoint and corresponding UI for modeling and monitoring.
+        **Synchronous vs Asynchronous Processing:**
+        - **Asynchronous (default)**: Returns immediately with `PROCESSING` status. Use webhooks or polling to get results.
+        - **Synchronous**: Set `sync: true` to wait for completion and get final results in the response (5-minute timeout).
 
-        However, there are a number of legitimate use cases and systems where it might be easier to model the pipeline via code and run processors directly. This endpoint is provided for this purpose.
-
-        Similar to workflow runs, processor runs are asynchronous and will return a status of `PROCESSING` until the run is complete. You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+        **For asynchronous processing:**
+        - You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+        - Or you can [poll the get endpoint](https://docs.extend.ai/2025-04-21/developers/api-reference/processor-endpoints/get-processor-run) for updates on the status of the processor run.
 
         Parameters
         ----------
@@ -353,6 +440,11 @@ class AsyncRawProcessorRunClient:
 
         raw_text : typing.Optional[str]
             A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
+
+        sync : typing.Optional[bool]
+            Whether to run the processor synchronously. When `true`, the request will wait for the processor run to complete and return the final results. When `false` (default), the request returns immediately with a `PROCESSING` status, and you can poll for completion or use webhooks. For production use cases, we recommending leaving sync off and building around an async integration for more resiliency, unless your use case is predictably fast (e.g. sub < 30 seconds) run time or otherwise have integration constraints that require a synchronous API.
+
+            **Timeout**: Synchronous requests have a 5-minute timeout. If the processor run takes longer, it will continue processing asynchronously and you can retrieve the results via the GET endpoint.
 
         priority : typing.Optional[int]
             An optional value used to determine the relative order of ProcessorRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
@@ -381,6 +473,7 @@ class AsyncRawProcessorRunClient:
                     object_=file, annotation=ProcessorRunFileInput, direction="write"
                 ),
                 "rawText": raw_text,
+                "sync": sync,
                 "priority": priority,
                 "metadata": metadata,
                 "config": convert_and_respect_annotation_metadata(
@@ -429,9 +522,20 @@ class AsyncRawProcessorRunClient:
                 raise NotFoundError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        TooManyRequestsErrorBody,
+                        construct_type(
+                            type_=TooManyRequestsErrorBody,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -505,9 +609,74 @@ class AsyncRawProcessorRunClient:
                 raise NotFoundError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def delete(
+        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[ProcessorRunDeleteResponse]:
+        """
+        Delete a processor run and all associated data from Extend. This operation is permanent and cannot be undone.
+
+        This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the processor run to delete.
+
+            Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ProcessorRunDeleteResponse]
+            Successfully deleted processor run
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"processor_runs/{jsonable_encoder(id)}",
+            method="DELETE",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ProcessorRunDeleteResponse,
+                    construct_type(
+                        type_=ProcessorRunDeleteResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ExtendError,
+                        construct_type(
+                            type_=ExtendError,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -581,9 +750,9 @@ class AsyncRawProcessorRunClient:
                 raise NotFoundError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

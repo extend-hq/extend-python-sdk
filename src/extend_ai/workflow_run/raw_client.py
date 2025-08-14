@@ -11,9 +11,11 @@ from ..core.request_options import RequestOptions
 from ..core.serialization import convert_and_respect_annotation_metadata
 from ..core.unchecked_base_model import construct_type
 from ..errors.bad_request_error import BadRequestError
+from ..errors.internal_server_error import InternalServerError
 from ..errors.not_found_error import NotFoundError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..types.error import Error
+from ..types.extend_error import ExtendError
 from ..types.json_object import JsonObject
 from ..types.max_page_size import MaxPageSize
 from ..types.next_page_token import NextPageToken
@@ -22,6 +24,7 @@ from ..types.sort_dir_enum import SortDirEnum
 from ..types.workflow_run_file_input import WorkflowRunFileInput
 from ..types.workflow_status import WorkflowStatus
 from .types.workflow_run_create_response import WorkflowRunCreateResponse
+from .types.workflow_run_delete_response import WorkflowRunDeleteResponse
 from .types.workflow_run_get_response import WorkflowRunGetResponse
 from .types.workflow_run_list_response import WorkflowRunListResponse
 from .types.workflow_run_update_response import WorkflowRunUpdateResponse
@@ -172,7 +175,7 @@ class RawWorkflowRunClient:
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
         files : typing.Optional[typing.Sequence[WorkflowRunFileInput]]
-            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
+            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
 
         raw_texts : typing.Optional[typing.Sequence[str]]
             An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.
@@ -316,9 +319,9 @@ class RawWorkflowRunClient:
                 raise NotFoundError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -411,9 +414,74 @@ class RawWorkflowRunClient:
                 raise NotFoundError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def delete(
+        self, workflow_run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[WorkflowRunDeleteResponse]:
+        """
+        Delete a workflow run and all associated data from Extend. This operation is permanent and cannot be undone.
+
+        This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
+
+        Parameters
+        ----------
+        workflow_run_id : str
+            The ID of the workflow run to delete.
+
+            Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[WorkflowRunDeleteResponse]
+            Successfully deleted workflow run
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"workflow_runs/{jsonable_encoder(workflow_run_id)}",
+            method="DELETE",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    WorkflowRunDeleteResponse,
+                    construct_type(
+                        type_=WorkflowRunDeleteResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ExtendError,
+                        construct_type(
+                            type_=ExtendError,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -566,7 +634,7 @@ class AsyncRawWorkflowRunClient:
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
         files : typing.Optional[typing.Sequence[WorkflowRunFileInput]]
-            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
+            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
 
         raw_texts : typing.Optional[typing.Sequence[str]]
             An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.
@@ -710,9 +778,9 @@ class AsyncRawWorkflowRunClient:
                 raise NotFoundError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -805,9 +873,74 @@ class AsyncRawWorkflowRunClient:
                 raise NotFoundError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def delete(
+        self, workflow_run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[WorkflowRunDeleteResponse]:
+        """
+        Delete a workflow run and all associated data from Extend. This operation is permanent and cannot be undone.
+
+        This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
+
+        Parameters
+        ----------
+        workflow_run_id : str
+            The ID of the workflow run to delete.
+
+            Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[WorkflowRunDeleteResponse]
+            Successfully deleted workflow run
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"workflow_runs/{jsonable_encoder(workflow_run_id)}",
+            method="DELETE",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    WorkflowRunDeleteResponse,
+                    construct_type(
+                        type_=WorkflowRunDeleteResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ExtendError,
+                        construct_type(
+                            type_=ExtendError,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

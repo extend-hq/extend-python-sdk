@@ -12,6 +12,7 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 from .extraction_advanced_options import ExtractionAdvancedOptions
 from .extraction_config_base_processor import ExtractionConfigBaseProcessor
 from .json_object import JsonObject
+from .parse_config import ParseConfig
 
 
 class ExtractionConfig(UncheckedBaseModel):
@@ -57,6 +58,11 @@ class ExtractionConfig(UncheckedBaseModel):
     ] = pydantic.Field(default=None)
     """
     Advanced configuration options.
+    """
+
+    parser: typing.Optional[ParseConfig] = pydantic.Field(default=None)
+    """
+    Configuration options for the parsing process.
     """
 
     if IS_PYDANTIC_V2:

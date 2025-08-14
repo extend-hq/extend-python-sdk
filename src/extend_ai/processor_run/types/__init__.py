@@ -10,6 +10,7 @@ from .processor_run_create_request_config import (
     ProcessorRunCreateRequestConfig_Splitter,
 )
 from .processor_run_create_response import ProcessorRunCreateResponse
+from .processor_run_delete_response import ProcessorRunDeleteResponse
 from .processor_run_get_response import ProcessorRunGetResponse
 
 __all__ = [
@@ -19,5 +20,6 @@ __all__ = [
     "ProcessorRunCreateRequestConfig_Extract",
     "ProcessorRunCreateRequestConfig_Splitter",
     "ProcessorRunCreateResponse",
+    "ProcessorRunDeleteResponse",
     "ProcessorRunGetResponse",
 ]

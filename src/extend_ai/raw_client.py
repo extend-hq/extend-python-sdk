@@ -13,9 +13,12 @@ from .errors.bad_request_error import BadRequestError
 from .errors.unauthorized_error import UnauthorizedError
 from .errors.unprocessable_entity_error import UnprocessableEntityError
 from .types.error import Error
+from .types.parse_async_request_file import ParseAsyncRequestFile
 from .types.parse_config import ParseConfig
 from .types.parse_request_file import ParseRequestFile
-from .types.parse_response import ParseResponse
+from .types.parse_request_response_type import ParseRequestResponseType
+from .types.parser_run import ParserRun
+from .types.parser_run_status import ParserRunStatus
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -29,9 +32,10 @@ class RawExtend:
         self,
         *,
         file: ParseRequestFile,
+        response_type: typing.Optional[ParseRequestResponseType] = None,
         config: typing.Optional[ParseConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[ParseResponse]:
+    ) -> HttpResponse[ParserRun]:
         """
         Parse files to get cleaned, chunked target content (e.g. markdown).
 
@@ -46,6 +50,11 @@ class RawExtend:
         file : ParseRequestFile
             A file object containing either a URL or a fileId.
 
+        response_type : typing.Optional[ParseRequestResponseType]
+            Controls the format of the response chunks. Defaults to `json` if not specified.
+            * `json` - Returns parsed outputs in the response body
+            * `url` - Return a presigned URL to the parsed content in the response body
+
         config : typing.Optional[ParseConfig]
 
         request_options : typing.Optional[RequestOptions]
@@ -53,12 +62,15 @@ class RawExtend:
 
         Returns
         -------
-        HttpResponse[ParseResponse]
+        HttpResponse[ParserRun]
             Successfully parsed file
         """
         _response = self._client_wrapper.httpx_client.request(
             "parse",
             method="POST",
+            params={
+                "responseType": response_type,
+            },
             json={
                 "file": convert_and_respect_annotation_metadata(
                     object_=file, annotation=ParseRequestFile, direction="write"
@@ -76,9 +88,9 @@ class RawExtend:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    ParseResponse,
+                    ParserRun,
                     construct_type(
-                        type_=ParseResponse,  # type: ignore
+                        type_=ParserRun,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -121,6 +133,95 @@ class RawExtend:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
+    def parse_async(
+        self,
+        *,
+        file: ParseAsyncRequestFile,
+        config: typing.Optional[ParseConfig] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[ParserRunStatus]:
+        """
+        Parse files **asynchronously** to get cleaned, chunked target content (e.g. markdown).
+
+        The Parse Async endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
+
+        Parse files asynchronously and get a parser run ID that can be used to check status and retrieve results with the [Get Parser Run](https://docs.extend.ai/2025-04-21/developers/api-reference/parse-endpoints/get-parser-run) endpoint.
+
+        This is useful for:
+        * Large files that may take longer to process
+        * Avoiding timeout issues with synchronous parsing.
+
+        For more details, see the [Parse File guide](https://docs.extend.ai/2025-04-21/developers/guides/parse).
+
+        Parameters
+        ----------
+        file : ParseAsyncRequestFile
+            A file object containing either a URL or a fileId.
+
+        config : typing.Optional[ParseConfig]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ParserRunStatus]
+            Successfully initiated parser run
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "parse/async",
+            method="POST",
+            json={
+                "file": convert_and_respect_annotation_metadata(
+                    object_=file, annotation=ParseAsyncRequestFile, direction="write"
+                ),
+                "config": convert_and_respect_annotation_metadata(
+                    object_=config, annotation=ParseConfig, direction="write"
+                ),
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ParserRunStatus,
+                    construct_type(
+                        type_=ParserRunStatus,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        construct_type(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
 
 class AsyncRawExtend:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -130,9 +231,10 @@ class AsyncRawExtend:
         self,
         *,
         file: ParseRequestFile,
+        response_type: typing.Optional[ParseRequestResponseType] = None,
         config: typing.Optional[ParseConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[ParseResponse]:
+    ) -> AsyncHttpResponse[ParserRun]:
         """
         Parse files to get cleaned, chunked target content (e.g. markdown).
 
@@ -147,6 +249,11 @@ class AsyncRawExtend:
         file : ParseRequestFile
             A file object containing either a URL or a fileId.
 
+        response_type : typing.Optional[ParseRequestResponseType]
+            Controls the format of the response chunks. Defaults to `json` if not specified.
+            * `json` - Returns parsed outputs in the response body
+            * `url` - Return a presigned URL to the parsed content in the response body
+
         config : typing.Optional[ParseConfig]
 
         request_options : typing.Optional[RequestOptions]
@@ -154,12 +261,15 @@ class AsyncRawExtend:
 
         Returns
         -------
-        AsyncHttpResponse[ParseResponse]
+        AsyncHttpResponse[ParserRun]
             Successfully parsed file
         """
         _response = await self._client_wrapper.httpx_client.request(
             "parse",
             method="POST",
+            params={
+                "responseType": response_type,
+            },
             json={
                 "file": convert_and_respect_annotation_metadata(
                     object_=file, annotation=ParseRequestFile, direction="write"
@@ -177,9 +287,9 @@ class AsyncRawExtend:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    ParseResponse,
+                    ParserRun,
                     construct_type(
-                        type_=ParseResponse,  # type: ignore
+                        type_=ParserRun,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -208,6 +318,95 @@ class AsyncRawExtend:
                 )
             if _response.status_code == 422:
                 raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        construct_type(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def parse_async(
+        self,
+        *,
+        file: ParseAsyncRequestFile,
+        config: typing.Optional[ParseConfig] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[ParserRunStatus]:
+        """
+        Parse files **asynchronously** to get cleaned, chunked target content (e.g. markdown).
+
+        The Parse Async endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
+
+        Parse files asynchronously and get a parser run ID that can be used to check status and retrieve results with the [Get Parser Run](https://docs.extend.ai/2025-04-21/developers/api-reference/parse-endpoints/get-parser-run) endpoint.
+
+        This is useful for:
+        * Large files that may take longer to process
+        * Avoiding timeout issues with synchronous parsing.
+
+        For more details, see the [Parse File guide](https://docs.extend.ai/2025-04-21/developers/guides/parse).
+
+        Parameters
+        ----------
+        file : ParseAsyncRequestFile
+            A file object containing either a URL or a fileId.
+
+        config : typing.Optional[ParseConfig]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ParserRunStatus]
+            Successfully initiated parser run
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "parse/async",
+            method="POST",
+            json={
+                "file": convert_and_respect_annotation_metadata(
+                    object_=file, annotation=ParseAsyncRequestFile, direction="write"
+                ),
+                "config": convert_and_respect_annotation_metadata(
+                    object_=config, annotation=ParseConfig, direction="write"
+                ),
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ParserRunStatus,
+                    construct_type(
+                        type_=ParserRunStatus,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         Error,

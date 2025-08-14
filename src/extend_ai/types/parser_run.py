@@ -9,14 +9,13 @@ from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .chunk import Chunk
 from .parse_config import ParseConfig
-from .parse_response_metrics import ParseResponseMetrics
-from .parse_response_status import ParseResponseStatus
+from .parser_run_metrics import ParserRunMetrics
+from .parser_run_status_enum import ParserRunStatusEnum
 
 
-class ParseResponse(UncheckedBaseModel):
-    object: typing.Literal["parser_run"] = pydantic.Field(default="parser_run")
+class ParserRun(UncheckedBaseModel):
     """
-    The type of object. Will always be `"parser_run"`.
+    Full parser run object with complete parsing results
     """
 
     id: str = pydantic.Field()
@@ -28,7 +27,7 @@ class ParseResponse(UncheckedBaseModel):
 
     file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field()
     """
-    The identifier of the file that was parsed. This can be used as a parameter to other Extend endpoints, such as processor runs. This allows downstream processing to reuse a cache of the parsed file content to reduce your usage costs.
+    The identifier of the file that was parsed. This can be used as a parameter to other Extend endpoints, such as processor runs.
     """
 
     chunks: typing.List[Chunk] = pydantic.Field()
@@ -36,7 +35,7 @@ class ParseResponse(UncheckedBaseModel):
     An array of chunks that were parsed from the file.
     """
 
-    status: ParseResponseStatus = pydantic.Field()
+    status: ParserRunStatusEnum = pydantic.Field()
     """
     The status of the parser run:
     * `"PROCESSED"` - The file was successfully processed
@@ -50,7 +49,7 @@ class ParseResponse(UncheckedBaseModel):
     The reason for failure if status is "FAILED".
     """
 
-    metrics: ParseResponseMetrics = pydantic.Field()
+    metrics: ParserRunMetrics = pydantic.Field()
     """
     Metrics about the parsing process.
     """

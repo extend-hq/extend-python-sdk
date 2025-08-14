@@ -3,25 +3,19 @@
 import typing
 
 import pydantic
-import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
-from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 
 
-class ParseResponseMetrics(UncheckedBaseModel):
+class ExtractionAdvancedOptionsPageRangesItem(UncheckedBaseModel):
+    start: typing.Optional[int] = pydantic.Field(default=None)
     """
-    Metrics about the parsing process.
-    """
-
-    processing_time_ms: typing_extensions.Annotated[float, FieldMetadata(alias="processingTimeMs")] = pydantic.Field()
-    """
-    The time taken to process the document in milliseconds.
+    The start page of the range.
     """
 
-    page_count: typing_extensions.Annotated[float, FieldMetadata(alias="pageCount")] = pydantic.Field()
+    end: typing.Optional[int] = pydantic.Field(default=None)
     """
-    The number of pages in the document.
+    The end page of the range.
     """
 
     if IS_PYDANTIC_V2:

@@ -3,12 +3,14 @@
 # isort: skip_file
 
 from .workflow_run_create_response import WorkflowRunCreateResponse
+from .workflow_run_delete_response import WorkflowRunDeleteResponse
 from .workflow_run_get_response import WorkflowRunGetResponse
 from .workflow_run_list_response import WorkflowRunListResponse
 from .workflow_run_update_response import WorkflowRunUpdateResponse
 
 __all__ = [
     "WorkflowRunCreateResponse",
+    "WorkflowRunDeleteResponse",
     "WorkflowRunGetResponse",
     "WorkflowRunListResponse",
     "WorkflowRunUpdateResponse",

@@ -2,10 +2,17 @@
 
 # isort: skip_file
 
-from .types import WorkflowRunCreateResponse, WorkflowRunGetResponse, WorkflowRunListResponse, WorkflowRunUpdateResponse
+from .types import (
+    WorkflowRunCreateResponse,
+    WorkflowRunDeleteResponse,
+    WorkflowRunGetResponse,
+    WorkflowRunListResponse,
+    WorkflowRunUpdateResponse,
+)
 
 __all__ = [
     "WorkflowRunCreateResponse",
+    "WorkflowRunDeleteResponse",
     "WorkflowRunGetResponse",
     "WorkflowRunListResponse",
     "WorkflowRunUpdateResponse",

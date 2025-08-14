@@ -11,13 +11,17 @@ from .environment import ExtendEnvironment
 from .evaluation_set.client import AsyncEvaluationSetClient, EvaluationSetClient
 from .evaluation_set_item.client import AsyncEvaluationSetItemClient, EvaluationSetItemClient
 from .file.client import AsyncFileClient, FileClient
+from .parser_run.client import AsyncParserRunClient, ParserRunClient
 from .processor.client import AsyncProcessorClient, ProcessorClient
 from .processor_run.client import AsyncProcessorRunClient, ProcessorRunClient
 from .processor_version.client import AsyncProcessorVersionClient, ProcessorVersionClient
 from .raw_client import AsyncRawExtend, RawExtend
+from .types.parse_async_request_file import ParseAsyncRequestFile
 from .types.parse_config import ParseConfig
 from .types.parse_request_file import ParseRequestFile
-from .types.parse_response import ParseResponse
+from .types.parse_request_response_type import ParseRequestResponseType
+from .types.parser_run import ParserRun
+from .types.parser_run_status import ParserRunStatus
 from .workflow.client import AsyncWorkflowClient, WorkflowClient
 from .workflow_run.client import AsyncWorkflowRunClient, WorkflowRunClient
 from .workflow_run_output.client import AsyncWorkflowRunOutputClient, WorkflowRunOutputClient
@@ -90,6 +94,7 @@ class Extend:
         self.processor_run = ProcessorRunClient(client_wrapper=self._client_wrapper)
         self.processor = ProcessorClient(client_wrapper=self._client_wrapper)
         self.processor_version = ProcessorVersionClient(client_wrapper=self._client_wrapper)
+        self.parser_run = ParserRunClient(client_wrapper=self._client_wrapper)
         self.file = FileClient(client_wrapper=self._client_wrapper)
         self.evaluation_set = EvaluationSetClient(client_wrapper=self._client_wrapper)
         self.evaluation_set_item = EvaluationSetItemClient(client_wrapper=self._client_wrapper)
@@ -112,9 +117,10 @@ class Extend:
         self,
         *,
         file: ParseRequestFile,
+        response_type: typing.Optional[ParseRequestResponseType] = None,
         config: typing.Optional[ParseConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> ParseResponse:
+    ) -> ParserRun:
         """
         Parse files to get cleaned, chunked target content (e.g. markdown).
 
@@ -129,6 +135,11 @@ class Extend:
         file : ParseRequestFile
             A file object containing either a URL or a fileId.
 
+        response_type : typing.Optional[ParseRequestResponseType]
+            Controls the format of the response chunks. Defaults to `json` if not specified.
+            * `json` - Returns parsed outputs in the response body
+            * `url` - Return a presigned URL to the parsed content in the response body
+
         config : typing.Optional[ParseConfig]
 
         request_options : typing.Optional[RequestOptions]
@@ -136,7 +147,7 @@ class Extend:
 
         Returns
         -------
-        ParseResponse
+        ParserRun
             Successfully parsed file
 
         Examples
@@ -146,7 +157,54 @@ class Extend:
         client = Extend(token="YOUR_TOKEN", )
         client.parse(file=ParseRequestFile(), )
         """
-        _response = self._raw_client.parse(file=file, config=config, request_options=request_options)
+        _response = self._raw_client.parse(
+            file=file, response_type=response_type, config=config, request_options=request_options
+        )
+        return _response.data
+
+    def parse_async(
+        self,
+        *,
+        file: ParseAsyncRequestFile,
+        config: typing.Optional[ParseConfig] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ParserRunStatus:
+        """
+        Parse files **asynchronously** to get cleaned, chunked target content (e.g. markdown).
+
+        The Parse Async endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
+
+        Parse files asynchronously and get a parser run ID that can be used to check status and retrieve results with the [Get Parser Run](https://docs.extend.ai/2025-04-21/developers/api-reference/parse-endpoints/get-parser-run) endpoint.
+
+        This is useful for:
+        * Large files that may take longer to process
+        * Avoiding timeout issues with synchronous parsing.
+
+        For more details, see the [Parse File guide](https://docs.extend.ai/2025-04-21/developers/guides/parse).
+
+        Parameters
+        ----------
+        file : ParseAsyncRequestFile
+            A file object containing either a URL or a fileId.
+
+        config : typing.Optional[ParseConfig]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ParserRunStatus
+            Successfully initiated parser run
+
+        Examples
+        --------
+        from extend_ai import Extend
+        from extend_ai import ParseAsyncRequestFile
+        client = Extend(token="YOUR_TOKEN", )
+        client.parse_async(file=ParseAsyncRequestFile(), )
+        """
+        _response = self._raw_client.parse_async(file=file, config=config, request_options=request_options)
         return _response.data
 
 
@@ -214,6 +272,7 @@ class AsyncExtend:
         self.processor_run = AsyncProcessorRunClient(client_wrapper=self._client_wrapper)
         self.processor = AsyncProcessorClient(client_wrapper=self._client_wrapper)
         self.processor_version = AsyncProcessorVersionClient(client_wrapper=self._client_wrapper)
+        self.parser_run = AsyncParserRunClient(client_wrapper=self._client_wrapper)
         self.file = AsyncFileClient(client_wrapper=self._client_wrapper)
         self.evaluation_set = AsyncEvaluationSetClient(client_wrapper=self._client_wrapper)
         self.evaluation_set_item = AsyncEvaluationSetItemClient(client_wrapper=self._client_wrapper)
@@ -236,9 +295,10 @@ class AsyncExtend:
         self,
         *,
         file: ParseRequestFile,
+        response_type: typing.Optional[ParseRequestResponseType] = None,
         config: typing.Optional[ParseConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> ParseResponse:
+    ) -> ParserRun:
         """
         Parse files to get cleaned, chunked target content (e.g. markdown).
 
@@ -253,6 +313,11 @@ class AsyncExtend:
         file : ParseRequestFile
             A file object containing either a URL or a fileId.
 
+        response_type : typing.Optional[ParseRequestResponseType]
+            Controls the format of the response chunks. Defaults to `json` if not specified.
+            * `json` - Returns parsed outputs in the response body
+            * `url` - Return a presigned URL to the parsed content in the response body
+
         config : typing.Optional[ParseConfig]
 
         request_options : typing.Optional[RequestOptions]
@@ -260,7 +325,7 @@ class AsyncExtend:
 
         Returns
         -------
-        ParseResponse
+        ParserRun
             Successfully parsed file
 
         Examples
@@ -273,7 +338,57 @@ class AsyncExtend:
             await client.parse(file=ParseRequestFile(), )
         asyncio.run(main())
         """
-        _response = await self._raw_client.parse(file=file, config=config, request_options=request_options)
+        _response = await self._raw_client.parse(
+            file=file, response_type=response_type, config=config, request_options=request_options
+        )
+        return _response.data
+
+    async def parse_async(
+        self,
+        *,
+        file: ParseAsyncRequestFile,
+        config: typing.Optional[ParseConfig] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ParserRunStatus:
+        """
+        Parse files **asynchronously** to get cleaned, chunked target content (e.g. markdown).
+
+        The Parse Async endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
+
+        Parse files asynchronously and get a parser run ID that can be used to check status and retrieve results with the [Get Parser Run](https://docs.extend.ai/2025-04-21/developers/api-reference/parse-endpoints/get-parser-run) endpoint.
+
+        This is useful for:
+        * Large files that may take longer to process
+        * Avoiding timeout issues with synchronous parsing.
+
+        For more details, see the [Parse File guide](https://docs.extend.ai/2025-04-21/developers/guides/parse).
+
+        Parameters
+        ----------
+        file : ParseAsyncRequestFile
+            A file object containing either a URL or a fileId.
+
+        config : typing.Optional[ParseConfig]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ParserRunStatus
+            Successfully initiated parser run
+
+        Examples
+        --------
+        from extend_ai import AsyncExtend
+        from extend_ai import ParseAsyncRequestFile
+        import asyncio
+        client = AsyncExtend(token="YOUR_TOKEN", )
+        async def main() -> None:
+            await client.parse_async(file=ParseAsyncRequestFile(), )
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.parse_async(file=file, config=config, request_options=request_options)
         return _response.data
 
 

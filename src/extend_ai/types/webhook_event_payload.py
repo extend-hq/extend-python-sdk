@@ -2,10 +2,11 @@
 
 import typing
 
+from .parser_run_status import ParserRunStatus
 from .processor import Processor
 from .processor_run import ProcessorRun
 from .processor_version import ProcessorVersion
 from .workflow import Workflow
 from .workflow_run import WorkflowRun
 
-WebhookEventPayload = typing.Union[WorkflowRun, ProcessorRun, Workflow, Processor, ProcessorVersion]
+WebhookEventPayload = typing.Union[WorkflowRun, ProcessorRun, Workflow, Processor, ProcessorVersion, ParserRunStatus]
