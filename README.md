@@ -1,6 +1,9 @@
-# Extend Python Library
+# Extendconfig Python Library
 
-The Extend Python library provides convenient access to the Extend API from Python.
+[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2Fextend-hq%2Fextend-python-sdk)
+[![pypi](https://img.shields.io/pypi/v/extend_ai)](https://pypi.python.org/pypi/extend_ai)
+
+The Extendconfig Python library provides convenient access to the Extendconfig API from Python.
 
 ## Documentation
 
@@ -9,12 +12,12 @@ API reference documentation is available [here](https://docs.extend.ai/2025-04-2
 ## Installation
 
 ```sh
-pip install extend-ai
+pip install extend_ai
 ```
 
 ## Reference
 
-A full reference for this library is available [here](./reference.md).
+A full reference for this library is available [here](https://github.com/extend-hq/extend-python-sdk/blob/HEAD/./reference.md).
 
 ## Usage
 
@@ -22,8 +25,9 @@ Instantiate and use the client with the following:
 
 ```python
 from extend_ai import Extend
-client = Extend(token="YOUR_TOKEN")
-client.workflow_run.create(workflow_id='workflow_id_here')
+from extend_ai import ParseRequestFile
+client = Extend(token="YOUR_TOKEN", )
+client.parse(file=ParseRequestFile(), )
 ```
 
 ## Async Client
@@ -32,10 +36,11 @@ The SDK also exports an `async` client so that you can make non-blocking calls t
 
 ```python
 from extend_ai import AsyncExtend
+from extend_ai import ParseRequestFile
 import asyncio
-client = AsyncExtend(token="YOUR_TOKEN")
+client = AsyncExtend(token="YOUR_TOKEN", )
 async def main() -> None:
-    await client.workflow_run.create(workflow_id='workflow_id_here')
+    await client.parse(file=ParseRequestFile(), )
 asyncio.run(main())
 ```
 
@@ -47,7 +52,7 @@ will be thrown.
 ```python
 from extend_ai.core.api_error import ApiError
 try:
-    client.workflow_run.create(...)
+    client.parse(...)
 except ApiError as e:
     print(e.status_code)
     print(e.body)
@@ -62,8 +67,8 @@ The `.with_raw_response` property returns a "raw" client that can be used to acc
 
 ```python
 from extend_ai import Extend
-client = Extend(...)
-response = client.with_raw_response.workflow_run.create(...)
+client = Extend(..., )
+response = client.with_raw_response.parse(...)
 print(response.headers)  # access the response headers
 print(response.data)  # access the underlying object
 ```
@@ -83,22 +88,22 @@ A request is deemed retryable when any of the following HTTP status codes is ret
 Use the `max_retries` request option to configure this behavior.
 
 ```python
-client.workflow_run.create(..., request_options={
+client.parse(..., request_options={
     "max_retries": 1
 })
 ```
 
 ### Timeouts
 
-The SDK defaults to a 300 second timeout. You can configure this with a timeout option at the client or request level.
+The SDK defaults to a 60 second timeout. You can configure this with a timeout option at the client or request level.
 
 ```python
 
 from extend_ai import Extend
-client = Extend(..., timeout=20.0)
+client = Extend(..., timeout=20.0, )
 
 # Override timeout for a specific method
-client.workflow_run.create(..., request_options={
+client.parse(..., request_options={
     "timeout_in_seconds": 1
 })
 ```
@@ -111,8 +116,7 @@ and transports.
 ```python
 from extend_ai import Extend
 import httpx
-client = Extend(..., httpx_client=httpx.Client(proxies="http://my.test.proxy.example.com", transport=httpx.HTTPTransport(local_address="0.0.0.0")))
-```
+client = Extend(..., httpx_client=httpx.Client(proxies="http://my.test.proxy.example.com", transport=httpx.HTTPTransport(local_address="0.0.0.0"), ))```
 
 ## Contributing
 
