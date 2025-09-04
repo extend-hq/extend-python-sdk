@@ -62,7 +62,7 @@ class ProcessorVersion(UncheckedBaseModel):
     """
     The configuration settings for this version of the document processor. The structure of this object will vary depending on the processor type.
     
-    See the [Processor Configs guide](https://docs.extend.ai/2025-04-21/developers/guides/processor-configs) for more details on the configuration settings for each processor type.
+    See the configuration section in the "Guides" tab, for yout specific processor type, for more details on the configuration settings.
     """
 
     created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field()

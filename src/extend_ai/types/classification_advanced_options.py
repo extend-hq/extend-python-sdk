@@ -8,7 +8,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .classification_advanced_options_context import ClassificationAdvancedOptionsContext
-from .classification_advanced_options_page_ranges_item import ClassificationAdvancedOptionsPageRangesItem
+from .page_ranges import PageRanges
 
 
 class ClassificationAdvancedOptions(UncheckedBaseModel):
@@ -28,15 +28,10 @@ class ClassificationAdvancedOptions(UncheckedBaseModel):
         pydantic.Field(default=None)
     )
     """
-    Limit processing to a specific number of pages from the beginning of the document.
+    Limit processing to a specific number of pages from the beginning of the document. See [Page Ranges](/product/page-ranges).
     """
 
-    page_ranges: typing_extensions.Annotated[
-        typing.Optional[typing.List[ClassificationAdvancedOptionsPageRangesItem]], FieldMetadata(alias="pageRanges")
-    ] = pydantic.Field(default=None)
-    """
-    Limit processing to the specified page ranges.
-    """
+    page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

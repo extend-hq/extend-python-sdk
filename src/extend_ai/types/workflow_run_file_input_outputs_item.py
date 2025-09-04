@@ -19,7 +19,7 @@ class WorkflowRunFileInputOutputsItem(UncheckedBaseModel):
 
     output: ProvidedProcessorOutput = pydantic.Field()
     """
-    The output that is being overridden. The structure will depend on the processor type. More details can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/output-types).
+    The output that is being overridden. The structure will depend on the processor type. More details can be found on the "output type" page for the corresponding processor, in the guides section.
     """
 
     if IS_PYDANTIC_V2:

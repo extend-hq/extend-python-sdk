@@ -8,7 +8,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .extract_chunking_options import ExtractChunkingOptions
-from .extraction_advanced_options_page_ranges_item import ExtractionAdvancedOptionsPageRangesItem
+from .page_ranges import PageRanges
 
 
 class ExtractionAdvancedOptions(UncheckedBaseModel):
@@ -61,15 +61,10 @@ class ExtractionAdvancedOptions(UncheckedBaseModel):
         pydantic.Field(default=None)
     )
     """
-    Optional fixed limit on the number of pages to process.
+    Optional fixed limit on the number of pages to process. See [Page Ranges](/product/page-ranges).
     """
 
-    page_ranges: typing_extensions.Annotated[
-        typing.Optional[typing.List[ExtractionAdvancedOptionsPageRangesItem]], FieldMetadata(alias="pageRanges")
-    ] = pydantic.Field(default=None)
-    """
-    Limit processing to the specified page ranges.
-    """
+    page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

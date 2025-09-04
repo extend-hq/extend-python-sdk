@@ -72,7 +72,7 @@ class WorkflowRunClient:
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
         batch_id : typing.Optional[str]
-            Filters workflow runs by the batch ID. This is useful for fetching all runs for a given batch created via the [Batch Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
+            Filters workflow runs by the batch ID. This is useful for fetching all runs for a given batch created via the [Batch Run Workflow](/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
 
             Example: `"batch_7Ws31-F5"`
 
@@ -99,7 +99,7 @@ class WorkflowRunClient:
         WorkflowRunListResponse
             You will get a list of summaries for each workflow run. These are shortened versions of the full WorkflowRun object.
 
-            To get the full object, use the [Get WorkflowRun](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/get-workflow-run) endpoint.
+            To get the full object, use the [Get WorkflowRun](/developers/api-reference/workflow-endpoints/get-workflow-run) endpoint.
 
         Examples
         --------
@@ -142,7 +142,7 @@ class WorkflowRunClient:
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
         files : typing.Optional[typing.Sequence[WorkflowRunFileInput]]
-            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
+            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](/product/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
 
         raw_texts : typing.Optional[typing.Sequence[str]]
             An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.
@@ -343,7 +343,7 @@ class AsyncWorkflowRunClient:
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
         batch_id : typing.Optional[str]
-            Filters workflow runs by the batch ID. This is useful for fetching all runs for a given batch created via the [Batch Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
+            Filters workflow runs by the batch ID. This is useful for fetching all runs for a given batch created via the [Batch Run Workflow](/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
 
             Example: `"batch_7Ws31-F5"`
 
@@ -370,7 +370,7 @@ class AsyncWorkflowRunClient:
         WorkflowRunListResponse
             You will get a list of summaries for each workflow run. These are shortened versions of the full WorkflowRun object.
 
-            To get the full object, use the [Get WorkflowRun](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/get-workflow-run) endpoint.
+            To get the full object, use the [Get WorkflowRun](/developers/api-reference/workflow-endpoints/get-workflow-run) endpoint.
 
         Examples
         --------
@@ -416,7 +416,7 @@ class AsyncWorkflowRunClient:
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
         files : typing.Optional[typing.Sequence[WorkflowRunFileInput]]
-            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
+            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](/product/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
 
         raw_texts : typing.Optional[typing.Sequence[str]]
             An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.

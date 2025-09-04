@@ -171,7 +171,7 @@ class FileClient:
 
         If an uploaded file is detected as a Word or PowerPoint document, it will be automatically converted to a PDF.
 
-        Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
+        Supported file types can be found [here](/product/supported-file-types).
 
         This endpoint requires multipart form encoding. Most HTTP clients will handle this encoding automatically (see the examples).
 
@@ -362,7 +362,7 @@ class AsyncFileClient:
 
         If an uploaded file is detected as a Word or PowerPoint document, it will be automatically converted to a PDF.
 
-        Supported file types can be found [here](https://docs.extend.ai/2025-04-21/developers/guides/supported-file-types).
+        Supported file types can be found [here](/product/supported-file-types).
 
         This endpoint requires multipart form encoding. Most HTTP clients will handle this encoding automatically (see the examples).
 

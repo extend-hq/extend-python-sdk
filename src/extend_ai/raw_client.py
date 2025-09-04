@@ -41,9 +41,7 @@ class RawExtend:
 
         The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
 
-        Unlike processor and workflow runs, parsing is a synchronous endpoint and returns the parsed content in the response. Expected latency depends primarily on file size. This makes it suitable for workflows where you need immediate access to document content without waiting for asynchronous processing.
-
-        For more details, see the [Parse File guide](https://docs.extend.ai/2025-04-21/developers/guides/parse).
+        For more details, see the [Parse File guide](/product/parsing/parse).
 
         Parameters
         ----------
@@ -151,7 +149,7 @@ class RawExtend:
         * Large files that may take longer to process
         * Avoiding timeout issues with synchronous parsing.
 
-        For more details, see the [Parse File guide](https://docs.extend.ai/2025-04-21/developers/guides/parse).
+        For more details, see the [Parse File guide](/product/parsing/parse).
 
         Parameters
         ----------
@@ -240,9 +238,7 @@ class AsyncRawExtend:
 
         The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
 
-        Unlike processor and workflow runs, parsing is a synchronous endpoint and returns the parsed content in the response. Expected latency depends primarily on file size. This makes it suitable for workflows where you need immediate access to document content without waiting for asynchronous processing.
-
-        For more details, see the [Parse File guide](https://docs.extend.ai/2025-04-21/developers/guides/parse).
+        For more details, see the [Parse File guide](/product/parsing/parse).
 
         Parameters
         ----------
@@ -350,7 +346,7 @@ class AsyncRawExtend:
         * Large files that may take longer to process
         * Avoiding timeout issues with synchronous parsing.
 
-        For more details, see the [Parse File guide](https://docs.extend.ai/2025-04-21/developers/guides/parse).
+        For more details, see the [Parse File guide](/product/parsing/parse).
 
         Parameters
         ----------
