@@ -29,6 +29,13 @@ class ParseConfigBlockOptionsTables(UncheckedBaseModel):
     * `html`: Convert table to HTML format
     """
 
+    table_header_continuation_enabled: typing_extensions.Annotated[
+        typing.Optional[bool], FieldMetadata(alias="tableHeaderContinuationEnabled")
+    ] = pydantic.Field(default=None)
+    """
+    Whether to automatically copy table headers to headerless tables on subsequent pages when they have matching column counts. Useful for multi-page tables.
+    """
+
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
     else:

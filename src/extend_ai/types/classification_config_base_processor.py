@@ -3,5 +3,5 @@
 import typing
 
 ClassificationConfigBaseProcessor = typing.Union[
-    typing.Literal["classifier_performance", "classifier_light"], typing.Any
+    typing.Literal["classification_performance", "classification_light"], typing.Any
 ]

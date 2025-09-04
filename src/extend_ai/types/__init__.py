@@ -27,7 +27,6 @@ from .citation import Citation
 from .classification import Classification
 from .classification_advanced_options import ClassificationAdvancedOptions
 from .classification_advanced_options_context import ClassificationAdvancedOptionsContext
-from .classification_advanced_options_page_ranges_item import ClassificationAdvancedOptionsPageRangesItem
 from .classification_config import ClassificationConfig
 from .classification_config_base_processor import ClassificationConfigBaseProcessor
 from .classifier_output import ClassifierOutput
@@ -45,7 +44,6 @@ from .extract_chunking_options_chunking_strategy import ExtractChunkingOptionsCh
 from .extract_metrics import ExtractMetrics
 from .extract_metrics_field_metrics import ExtractMetricsFieldMetrics
 from .extraction_advanced_options import ExtractionAdvancedOptions
-from .extraction_advanced_options_page_ranges_item import ExtractionAdvancedOptionsPageRangesItem
 from .extraction_config import ExtractionConfig
 from .extraction_config_base_processor import ExtractionConfigBaseProcessor
 from .extraction_field import ExtractionField
@@ -77,6 +75,8 @@ from .max_page_size import MaxPageSize
 from .next_page_token import NextPageToken
 from .output_metadata import OutputMetadata
 from .output_metadata_value import OutputMetadataValue
+from .page_ranges import PageRanges
+from .page_ranges_item import PageRangesItem
 from .parse_async_request_file import ParseAsyncRequestFile
 from .parse_config import ParseConfig
 from .parse_config_advanced_options import ParseConfigAdvancedOptions
@@ -86,6 +86,7 @@ from .parse_config_block_options_tables import ParseConfigBlockOptionsTables
 from .parse_config_block_options_tables_target_format import ParseConfigBlockOptionsTablesTargetFormat
 from .parse_config_block_options_text import ParseConfigBlockOptionsText
 from .parse_config_chunking_strategy import ParseConfigChunkingStrategy
+from .parse_config_chunking_strategy_options import ParseConfigChunkingStrategyOptions
 from .parse_config_chunking_strategy_type import ParseConfigChunkingStrategyType
 from .parse_config_target import ParseConfigTarget
 from .parse_error import ParseError
@@ -132,7 +133,6 @@ from .provided_splitter_output_splits_item import ProvidedSplitterOutputSplitsIt
 from .sort_by_enum import SortByEnum
 from .sort_dir_enum import SortDirEnum
 from .splitter_advanced_options import SplitterAdvancedOptions
-from .splitter_advanced_options_page_ranges_item import SplitterAdvancedOptionsPageRangesItem
 from .splitter_advanced_options_split_method import SplitterAdvancedOptionsSplitMethod
 from .splitter_config import SplitterConfig
 from .splitter_config_base_processor import SplitterConfigBaseProcessor
@@ -194,7 +194,6 @@ __all__ = [
     "Classification",
     "ClassificationAdvancedOptions",
     "ClassificationAdvancedOptionsContext",
-    "ClassificationAdvancedOptionsPageRangesItem",
     "ClassificationConfig",
     "ClassificationConfigBaseProcessor",
     "ClassifierOutput",
@@ -212,7 +211,6 @@ __all__ = [
     "ExtractMetrics",
     "ExtractMetricsFieldMetrics",
     "ExtractionAdvancedOptions",
-    "ExtractionAdvancedOptionsPageRangesItem",
     "ExtractionConfig",
     "ExtractionConfigBaseProcessor",
     "ExtractionField",
@@ -244,6 +242,8 @@ __all__ = [
     "NextPageToken",
     "OutputMetadata",
     "OutputMetadataValue",
+    "PageRanges",
+    "PageRangesItem",
     "ParseAsyncRequestFile",
     "ParseConfig",
     "ParseConfigAdvancedOptions",
@@ -253,6 +253,7 @@ __all__ = [
     "ParseConfigBlockOptionsTablesTargetFormat",
     "ParseConfigBlockOptionsText",
     "ParseConfigChunkingStrategy",
+    "ParseConfigChunkingStrategyOptions",
     "ParseConfigChunkingStrategyType",
     "ParseConfigTarget",
     "ParseError",
@@ -295,7 +296,6 @@ __all__ = [
     "SortByEnum",
     "SortDirEnum",
     "SplitterAdvancedOptions",
-    "SplitterAdvancedOptionsPageRangesItem",
     "SplitterAdvancedOptionsSplitMethod",
     "SplitterConfig",
     "SplitterConfigBaseProcessor",

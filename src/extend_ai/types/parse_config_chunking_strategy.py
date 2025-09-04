@@ -3,10 +3,9 @@
 import typing
 
 import pydantic
-import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
-from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .parse_config_chunking_strategy_options import ParseConfigChunkingStrategyOptions
 from .parse_config_chunking_strategy_type import ParseConfigChunkingStrategyType
 
 
@@ -24,18 +23,9 @@ class ParseConfigChunkingStrategy(UncheckedBaseModel):
     * `section`: Split by logical sections. Not supported for target=spatial.
     """
 
-    min_characters: typing_extensions.Annotated[typing.Optional[int], FieldMetadata(alias="minCharacters")] = (
-        pydantic.Field(default=None)
-    )
+    options: typing.Optional[ParseConfigChunkingStrategyOptions] = pydantic.Field(default=None)
     """
-    Specify a minimum number of characters per chunk.
-    """
-
-    max_characters: typing_extensions.Annotated[typing.Optional[int], FieldMetadata(alias="maxCharacters")] = (
-        pydantic.Field(default=None)
-    )
-    """
-    Specify a maximum number of characters per chunk.
+    Additional options for the chunking strategy.
     """
 
     if IS_PYDANTIC_V2:

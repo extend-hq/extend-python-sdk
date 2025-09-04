@@ -7,18 +7,26 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .page_ranges import PageRanges
 
 
-class ParseConfigAdvancedOptions(UncheckedBaseModel):
-    page_rotation_enabled: typing_extensions.Annotated[
-        typing.Optional[bool], FieldMetadata(alias="pageRotationEnabled")
-    ] = pydantic.Field(default=None)
+class ParseConfigChunkingStrategyOptions(UncheckedBaseModel):
     """
-    Whether to automatically detect and correct page rotation.
+    Additional options for the chunking strategy.
     """
 
-    page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = None
+    min_characters: typing_extensions.Annotated[typing.Optional[int], FieldMetadata(alias="minCharacters")] = (
+        pydantic.Field(default=None)
+    )
+    """
+    Specify a minimum number of characters per chunk.
+    """
+
+    max_characters: typing_extensions.Annotated[typing.Optional[int], FieldMetadata(alias="maxCharacters")] = (
+        pydantic.Field(default=None)
+    )
+    """
+    Specify a maximum number of characters per chunk.
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

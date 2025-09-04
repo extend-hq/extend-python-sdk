@@ -7,7 +7,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.unchecked_base_model import UncheckedBaseModel
 
 
-class ExtractionAdvancedOptionsPageRangesItem(UncheckedBaseModel):
+class PageRangesItem(UncheckedBaseModel):
     start: typing.Optional[int] = pydantic.Field(default=None)
     """
     The start page of the range.
