@@ -10,9 +10,13 @@ from .core.request_options import RequestOptions
 from .core.serialization import convert_and_respect_annotation_metadata
 from .core.unchecked_base_model import construct_type
 from .errors.bad_request_error import BadRequestError
+from .errors.internal_server_error import InternalServerError
+from .errors.not_found_error import NotFoundError
+from .errors.payment_required_error import PaymentRequiredError
 from .errors.unauthorized_error import UnauthorizedError
 from .errors.unprocessable_entity_error import UnprocessableEntityError
 from .types.error import Error
+from .types.extend_error import ExtendError
 from .types.parse_async_request_file import ParseAsyncRequestFile
 from .types.parse_config import ParseConfig
 from .types.parse_request_file import ParseRequestFile
@@ -115,13 +119,46 @@ class RawExtend:
                         ),
                     ),
                 )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 422:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        ExtendError,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=ExtendError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ExtendError,
+                        construct_type(
+                            type_=ExtendError,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -312,13 +349,46 @@ class AsyncRawExtend:
                         ),
                     ),
                 )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 422:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        ExtendError,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=ExtendError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ExtendError,
+                        construct_type(
+                            type_=ExtendError,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

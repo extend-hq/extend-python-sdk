@@ -20,10 +20,19 @@ class ParseConfig(UncheckedBaseModel):
 
     target: typing.Optional[ParseConfigTarget] = pydantic.Field(default=None)
     """
-    The target format for the parsed content. Supported values:
+    The target format for the parsed content.
     
-    * `markdown`: Convert document to Markdown format
-    * `spatial`: Preserve spatial information in the output
+    Supported values:
+    
+    * `markdown`: True markdown with logical reading order (headings, lists, tables, checkboxes). Best default for LLMs/RAG and enables section-based chunking.
+    * `spatial`: Layout/position-preserving text that uses markdown elements for block types but is not strictly markdown due to whitespace/tabs used to maintain placement. Only page-based chunking is supported.
+    
+    Guidance:
+    
+    * Prefer `markdown` for most documents, multi-column reading order, and retrieval use cases
+    * Prefer `spatial` for messy/scanned/handwritten or skewed documents, when you need near 1:1 layout fidelity, or for BOL-like logistics docs
+    
+    See “Markdown vs Spatial” in the Parse guide for details: /2025-04-21/developers/guides/parse#markdown-vs-spatial
     """
 
     chunking_strategy: typing_extensions.Annotated[
