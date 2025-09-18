@@ -18,6 +18,13 @@ class ParseConfigAdvancedOptions(UncheckedBaseModel):
     Whether to automatically detect and correct page rotation.
     """
 
+    agentic_ocr_enabled: typing_extensions.Annotated[
+        typing.Optional[bool], FieldMetadata(alias="agenticOcrEnabled")
+    ] = pydantic.Field(default=None)
+    """
+    Whether to enable agentic OCR corrections using VLM-based review and correction of OCR errors for messy handwriting and poorly scanned text.
+    """
+
     page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = None
 
     if IS_PYDANTIC_V2:
