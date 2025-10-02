@@ -12,6 +12,7 @@ from ..types.sort_dir_enum import SortDirEnum
 from ..types.workflow_run_file_input import WorkflowRunFileInput
 from ..types.workflow_status import WorkflowStatus
 from .raw_client import AsyncRawWorkflowRunClient, RawWorkflowRunClient
+from .types.workflow_run_cancel_response import WorkflowRunCancelResponse
 from .types.workflow_run_create_response import WorkflowRunCreateResponse
 from .types.workflow_run_delete_response import WorkflowRunDeleteResponse
 from .types.workflow_run_get_response import WorkflowRunGetResponse
@@ -65,6 +66,8 @@ class WorkflowRunClient:
              * `"REJECTED"` - The workflow run was rejected during manual review
              * `"PROCESSED"` - The workflow run completed successfully
              * `"FAILED"` - The workflow run encountered an error
+             * `"CANCELLED"` - The workflow run was cancelled
+             * `"CANCELLING"` - The workflow run is being cancelled
 
         workflow_id : typing.Optional[str]
             Filters workflow runs by the workflow ID. If not provided, runs for all workflows are returned.
@@ -105,7 +108,7 @@ class WorkflowRunClient:
         --------
         from extend_ai import Extend
         client = Extend(token="YOUR_TOKEN", )
-        client.workflow_run.list(next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
+        client.workflow_run.list(status="PENDING", workflow_id='workflowId', batch_id='batchId', file_name_contains='fileNameContains', sort_by="updatedAt", sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
         """
         _response = self._raw_client.list(
             status=status,
@@ -142,7 +145,7 @@ class WorkflowRunClient:
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
         files : typing.Optional[typing.Sequence[WorkflowRunFileInput]]
-            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](/product/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
+            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](/product/general/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
 
         raw_texts : typing.Optional[typing.Sequence[str]]
             An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.
@@ -292,6 +295,38 @@ class WorkflowRunClient:
         _response = self._raw_client.delete(workflow_run_id, request_options=request_options)
         return _response.data
 
+    def cancel(
+        self, workflow_run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> WorkflowRunCancelResponse:
+        """
+        Cancel a running workflow run by its ID. This endpoint allows you to stop a workflow run that is currently in progress.
+
+        Note: Only workflow runs with a status of `PROCESSING` or `PENDING` can be cancelled. Workflow runs that are completed, failed, in review, rejected, or already cancelled cannot be cancelled.
+
+        Parameters
+        ----------
+        workflow_run_id : str
+            The ID of the workflow run to cancel.
+
+            Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        WorkflowRunCancelResponse
+            Successfully cancelled workflow run
+
+        Examples
+        --------
+        from extend_ai import Extend
+        client = Extend(token="YOUR_TOKEN", )
+        client.workflow_run.cancel(workflow_run_id='workflow_run_id_here', )
+        """
+        _response = self._raw_client.cancel(workflow_run_id, request_options=request_options)
+        return _response.data
+
 
 class AsyncWorkflowRunClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -336,6 +371,8 @@ class AsyncWorkflowRunClient:
              * `"REJECTED"` - The workflow run was rejected during manual review
              * `"PROCESSED"` - The workflow run completed successfully
              * `"FAILED"` - The workflow run encountered an error
+             * `"CANCELLED"` - The workflow run was cancelled
+             * `"CANCELLING"` - The workflow run is being cancelled
 
         workflow_id : typing.Optional[str]
             Filters workflow runs by the workflow ID. If not provided, runs for all workflows are returned.
@@ -378,7 +415,7 @@ class AsyncWorkflowRunClient:
         import asyncio
         client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
-            await client.workflow_run.list(next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
+            await client.workflow_run.list(status="PENDING", workflow_id='workflowId', batch_id='batchId', file_name_contains='fileNameContains', sort_by="updatedAt", sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
         asyncio.run(main())
         """
         _response = await self._raw_client.list(
@@ -416,7 +453,7 @@ class AsyncWorkflowRunClient:
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
         files : typing.Optional[typing.Sequence[WorkflowRunFileInput]]
-            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](/product/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
+            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](/product/general/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
 
         raw_texts : typing.Optional[typing.Sequence[str]]
             An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.
@@ -576,4 +613,39 @@ class AsyncWorkflowRunClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.delete(workflow_run_id, request_options=request_options)
+        return _response.data
+
+    async def cancel(
+        self, workflow_run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> WorkflowRunCancelResponse:
+        """
+        Cancel a running workflow run by its ID. This endpoint allows you to stop a workflow run that is currently in progress.
+
+        Note: Only workflow runs with a status of `PROCESSING` or `PENDING` can be cancelled. Workflow runs that are completed, failed, in review, rejected, or already cancelled cannot be cancelled.
+
+        Parameters
+        ----------
+        workflow_run_id : str
+            The ID of the workflow run to cancel.
+
+            Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        WorkflowRunCancelResponse
+            Successfully cancelled workflow run
+
+        Examples
+        --------
+        from extend_ai import AsyncExtend
+        import asyncio
+        client = AsyncExtend(token="YOUR_TOKEN", )
+        async def main() -> None:
+            await client.workflow_run.cancel(workflow_run_id='workflow_run_id_here', )
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.cancel(workflow_run_id, request_options=request_options)
         return _response.data

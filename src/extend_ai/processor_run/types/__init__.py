@@ -12,6 +12,8 @@ from .processor_run_create_request_config import (
 from .processor_run_create_response import ProcessorRunCreateResponse
 from .processor_run_delete_response import ProcessorRunDeleteResponse
 from .processor_run_get_response import ProcessorRunGetResponse
+from .processor_run_list_request_source import ProcessorRunListRequestSource
+from .processor_run_list_response import ProcessorRunListResponse
 
 __all__ = [
     "ProcessorRunCancelResponse",
@@ -22,4 +24,6 @@ __all__ = [
     "ProcessorRunCreateResponse",
     "ProcessorRunDeleteResponse",
     "ProcessorRunGetResponse",
+    "ProcessorRunListRequestSource",
+    "ProcessorRunListResponse",
 ]

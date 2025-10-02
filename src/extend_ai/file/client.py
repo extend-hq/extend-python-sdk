@@ -71,7 +71,7 @@ class FileClient:
         --------
         from extend_ai import Extend
         client = Extend(token="YOUR_TOKEN", )
-        client.file.list(next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
+        client.file.list(name_contains='nameContains', sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
         """
         _response = self._raw_client.list(
             name_contains=name_contains,
@@ -126,7 +126,7 @@ class FileClient:
         --------
         from extend_ai import Extend
         client = Extend(token="YOUR_TOKEN", )
-        client.file.get(id='file_id_here', )
+        client.file.get(id='file_id_here', raw_text=True, markdown=True, html=True, )
         """
         _response = self._raw_client.get(
             id, raw_text=raw_text, markdown=markdown, html=html, request_options=request_options
@@ -171,7 +171,7 @@ class FileClient:
 
         If an uploaded file is detected as a Word or PowerPoint document, it will be automatically converted to a PDF.
 
-        Supported file types can be found [here](/product/supported-file-types).
+        Supported file types can be found [here](/product/general/supported-file-types).
 
         This endpoint requires multipart form encoding. Most HTTP clients will handle this encoding automatically (see the examples).
 
@@ -253,7 +253,7 @@ class AsyncFileClient:
         import asyncio
         client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
-            await client.file.list(next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
+            await client.file.list(name_contains='nameContains', sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
         asyncio.run(main())
         """
         _response = await self._raw_client.list(
@@ -311,7 +311,7 @@ class AsyncFileClient:
         import asyncio
         client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
-            await client.file.get(id='file_id_here', )
+            await client.file.get(id='file_id_here', raw_text=True, markdown=True, html=True, )
         asyncio.run(main())
         """
         _response = await self._raw_client.get(
@@ -362,7 +362,7 @@ class AsyncFileClient:
 
         If an uploaded file is detected as a Word or PowerPoint document, it will be automatically converted to a PDF.
 
-        Supported file types can be found [here](/product/supported-file-types).
+        Supported file types can be found [here](/product/general/supported-file-types).
 
         This endpoint requires multipart form encoding. Most HTTP clients will handle this encoding automatically (see the examples).
 

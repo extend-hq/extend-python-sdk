@@ -79,7 +79,7 @@ class EvaluationSetItemClient:
         --------
         from extend_ai import Extend
         client = Extend(token="YOUR_TOKEN", )
-        client.evaluation_set_item.list(id='evaluation_set_id_here', next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
+        client.evaluation_set_item.list(id='evaluation_set_id_here', sort_by="updatedAt", sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
         """
         _response = self._raw_client.list(
             id,
@@ -299,7 +299,7 @@ class AsyncEvaluationSetItemClient:
         import asyncio
         client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
-            await client.evaluation_set_item.list(id='evaluation_set_id_here', next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
+            await client.evaluation_set_item.list(id='evaluation_set_id_here', sort_by="updatedAt", sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
         asyncio.run(main())
         """
         _response = await self._raw_client.list(

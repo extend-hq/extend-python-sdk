@@ -18,14 +18,22 @@ from ..errors.unauthorized_error import UnauthorizedError
 from ..types.error import Error
 from ..types.extend_error import ExtendError
 from ..types.json_object import JsonObject
+from ..types.max_page_size import MaxPageSize
+from ..types.next_page_token import NextPageToken
 from ..types.processor_id import ProcessorId
 from ..types.processor_run_file_input import ProcessorRunFileInput
+from ..types.processor_status import ProcessorStatus
+from ..types.processor_type import ProcessorType
+from ..types.sort_by_enum import SortByEnum
+from ..types.sort_dir_enum import SortDirEnum
 from ..types.too_many_requests_error_body import TooManyRequestsErrorBody
 from .types.processor_run_cancel_response import ProcessorRunCancelResponse
 from .types.processor_run_create_request_config import ProcessorRunCreateRequestConfig
 from .types.processor_run_create_response import ProcessorRunCreateResponse
 from .types.processor_run_delete_response import ProcessorRunDeleteResponse
 from .types.processor_run_get_response import ProcessorRunGetResponse
+from .types.processor_run_list_request_source import ProcessorRunListRequestSource
+from .types.processor_run_list_response import ProcessorRunListResponse
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -34,6 +42,143 @@ OMIT = typing.cast(typing.Any, ...)
 class RawProcessorRunClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
+
+    def list(
+        self,
+        *,
+        status: typing.Optional[ProcessorStatus] = None,
+        processor_id: typing.Optional[str] = None,
+        processor_type: typing.Optional[ProcessorType] = None,
+        source_id: typing.Optional[str] = None,
+        source: typing.Optional[ProcessorRunListRequestSource] = None,
+        file_name_contains: typing.Optional[str] = None,
+        sort_by: typing.Optional[SortByEnum] = None,
+        sort_dir: typing.Optional[SortDirEnum] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[ProcessorRunListResponse]:
+        """
+        List runs of a Processor. A ProcessorRun represents a single execution of a processor against a file.
+
+        Parameters
+        ----------
+        status : typing.Optional[ProcessorStatus]
+            Filters processor runs by their status. If not provided, no filter is applied.
+
+             The status of a processor run:
+             * `"PENDING"` - The processor run has not started yet
+             * `"PROCESSING"` - The processor run is in progress
+             * `"PROCESSED"` - The processor run completed successfully
+             * `"FAILED"` - The processor run encountered an error
+             * `"CANCELLED"` - The processor run was cancelled
+
+        processor_id : typing.Optional[str]
+            Filters processor runs by the processor ID. If not provided, runs for all processors are returned.
+
+            Example: `"dp_BMdfq_yWM3sT-ZzvCnA3f"`
+
+        processor_type : typing.Optional[ProcessorType]
+            Filters processor runs by the processor type. If not provided, runs for all processor types are returned.
+
+            Example: `"EXTRACT"`
+
+        source_id : typing.Optional[str]
+            Filters processor runs by the source ID. The source ID corresponds to the entity that created the processor run.
+
+            Example: `"workflow_run_123"`
+
+        source : typing.Optional[ProcessorRunListRequestSource]
+            Filters processor runs by the source that created them. If not provided, runs from all sources are returned.
+
+            The source of the processor run:
+            * `"ADMIN"` - Created by admin
+            * `"BATCH_PROCESSOR_RUN"` - Created from a batch processor run
+            * `"PLAYGROUND"` - Created from playground
+            * `"WORKFLOW_CONFIGURATION"` - Created from workflow configuration
+            * `"WORKFLOW_RUN"` - Created from a workflow run
+            * `"STUDIO"` - Created from Studio
+            * `"API"` - Created via API
+
+
+        file_name_contains : typing.Optional[str]
+            Filters processor runs by the name of the file. Only returns processor runs where the file name contains this string.
+
+            Example: `"invoice"`
+
+        sort_by : typing.Optional[SortByEnum]
+            Sorts the processor runs by the given field.
+
+        sort_dir : typing.Optional[SortDirEnum]
+            Sorts the processor runs in ascending or descending order. Ascending order means the earliest processor run is returned first.
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ProcessorRunListResponse]
+            You will get a list of summaries for each processor run. These are shortened versions of the full ProcessorRun object.
+
+            To get the full object, use the [Get ProcessorRun](/developers/api-reference/processor-endpoints/get-processor-run) endpoint.
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "processor_runs",
+            method="GET",
+            params={
+                "status": status,
+                "processorId": processor_id,
+                "processorType": processor_type,
+                "sourceId": source_id,
+                "source": source,
+                "fileNameContains": file_name_contains,
+                "sortBy": sort_by,
+                "sortDir": sort_dir,
+                "nextPageToken": next_page_token,
+                "maxPageSize": max_page_size,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ProcessorRunListResponse,
+                    construct_type(
+                        type_=ProcessorRunListResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        construct_type(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     def create(
         self,
@@ -70,7 +215,7 @@ class RawProcessorRunClient:
             - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
 
         file : typing.Optional[ProcessorRunFileInput]
-            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/supported-file-types).
+            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/general/supported-file-types).
 
         raw_text : typing.Optional[str]
             A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
@@ -401,6 +546,143 @@ class AsyncRawProcessorRunClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
+    async def list(
+        self,
+        *,
+        status: typing.Optional[ProcessorStatus] = None,
+        processor_id: typing.Optional[str] = None,
+        processor_type: typing.Optional[ProcessorType] = None,
+        source_id: typing.Optional[str] = None,
+        source: typing.Optional[ProcessorRunListRequestSource] = None,
+        file_name_contains: typing.Optional[str] = None,
+        sort_by: typing.Optional[SortByEnum] = None,
+        sort_dir: typing.Optional[SortDirEnum] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[ProcessorRunListResponse]:
+        """
+        List runs of a Processor. A ProcessorRun represents a single execution of a processor against a file.
+
+        Parameters
+        ----------
+        status : typing.Optional[ProcessorStatus]
+            Filters processor runs by their status. If not provided, no filter is applied.
+
+             The status of a processor run:
+             * `"PENDING"` - The processor run has not started yet
+             * `"PROCESSING"` - The processor run is in progress
+             * `"PROCESSED"` - The processor run completed successfully
+             * `"FAILED"` - The processor run encountered an error
+             * `"CANCELLED"` - The processor run was cancelled
+
+        processor_id : typing.Optional[str]
+            Filters processor runs by the processor ID. If not provided, runs for all processors are returned.
+
+            Example: `"dp_BMdfq_yWM3sT-ZzvCnA3f"`
+
+        processor_type : typing.Optional[ProcessorType]
+            Filters processor runs by the processor type. If not provided, runs for all processor types are returned.
+
+            Example: `"EXTRACT"`
+
+        source_id : typing.Optional[str]
+            Filters processor runs by the source ID. The source ID corresponds to the entity that created the processor run.
+
+            Example: `"workflow_run_123"`
+
+        source : typing.Optional[ProcessorRunListRequestSource]
+            Filters processor runs by the source that created them. If not provided, runs from all sources are returned.
+
+            The source of the processor run:
+            * `"ADMIN"` - Created by admin
+            * `"BATCH_PROCESSOR_RUN"` - Created from a batch processor run
+            * `"PLAYGROUND"` - Created from playground
+            * `"WORKFLOW_CONFIGURATION"` - Created from workflow configuration
+            * `"WORKFLOW_RUN"` - Created from a workflow run
+            * `"STUDIO"` - Created from Studio
+            * `"API"` - Created via API
+
+
+        file_name_contains : typing.Optional[str]
+            Filters processor runs by the name of the file. Only returns processor runs where the file name contains this string.
+
+            Example: `"invoice"`
+
+        sort_by : typing.Optional[SortByEnum]
+            Sorts the processor runs by the given field.
+
+        sort_dir : typing.Optional[SortDirEnum]
+            Sorts the processor runs in ascending or descending order. Ascending order means the earliest processor run is returned first.
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ProcessorRunListResponse]
+            You will get a list of summaries for each processor run. These are shortened versions of the full ProcessorRun object.
+
+            To get the full object, use the [Get ProcessorRun](/developers/api-reference/processor-endpoints/get-processor-run) endpoint.
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "processor_runs",
+            method="GET",
+            params={
+                "status": status,
+                "processorId": processor_id,
+                "processorType": processor_type,
+                "sourceId": source_id,
+                "source": source,
+                "fileNameContains": file_name_contains,
+                "sortBy": sort_by,
+                "sortDir": sort_dir,
+                "nextPageToken": next_page_token,
+                "maxPageSize": max_page_size,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ProcessorRunListResponse,
+                    construct_type(
+                        type_=ProcessorRunListResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        construct_type(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
     async def create(
         self,
         *,
@@ -436,7 +718,7 @@ class AsyncRawProcessorRunClient:
             - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
 
         file : typing.Optional[ProcessorRunFileInput]
-            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/supported-file-types).
+            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/general/supported-file-types).
 
         raw_text : typing.Optional[str]
             A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.

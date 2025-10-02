@@ -27,7 +27,7 @@ Instantiate and use the client with the following:
 from extend_ai import Extend
 from extend_ai import ParseRequestFile
 client = Extend(token="YOUR_TOKEN", )
-client.parse(file=ParseRequestFile(), )
+client.parse(response_type="json", file=ParseRequestFile(), )
 ```
 
 ## Async Client
@@ -40,7 +40,7 @@ from extend_ai import ParseRequestFile
 import asyncio
 client = AsyncExtend(token="YOUR_TOKEN", )
 async def main() -> None:
-    await client.parse(file=ParseRequestFile(), )
+    await client.parse(response_type="json", file=ParseRequestFile(), )
 asyncio.run(main())
 ```
 

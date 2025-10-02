@@ -3,5 +3,8 @@
 import typing
 
 WorkflowStatus = typing.Union[
-    typing.Literal["PENDING", "PROCESSING", "NEEDS_REVIEW", "REJECTED", "PROCESSED", "FAILED"], typing.Any
+    typing.Literal[
+        "PENDING", "PROCESSING", "NEEDS_REVIEW", "REJECTED", "PROCESSED", "FAILED", "CANCELLED", "CANCELLING"
+    ],
+    typing.Any,
 ]

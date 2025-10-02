@@ -63,7 +63,7 @@ class ParserRunClient:
         --------
         from extend_ai import Extend
         client = Extend(token="YOUR_TOKEN", )
-        client.parser_run.get(id='parser_run_id_here', )
+        client.parser_run.get(id='parser_run_id_here', response_type="json", )
         """
         _response = self._raw_client.get(id, response_type=response_type, request_options=request_options)
         return _response.data
@@ -154,7 +154,7 @@ class AsyncParserRunClient:
         import asyncio
         client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
-            await client.parser_run.get(id='parser_run_id_here', )
+            await client.parser_run.get(id='parser_run_id_here', response_type="json", )
         asyncio.run(main())
         """
         _response = await self._raw_client.get(id, response_type=response_type, request_options=request_options)

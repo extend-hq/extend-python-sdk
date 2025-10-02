@@ -110,8 +110,10 @@ from .types import (
     ProcessorRunConfig_Splitter,
     ProcessorRunFileInput,
     ProcessorRunMergedProcessorsItem,
-    ProcessorRunStatus,
+    ProcessorRunSummary,
+    ProcessorRunSummaryType,
     ProcessorRunType,
+    ProcessorStatus,
     ProcessorType,
     ProcessorVersion,
     ProcessorVersionConfig,
@@ -230,6 +232,8 @@ from .processor_run import (
     ProcessorRunCreateResponse,
     ProcessorRunDeleteResponse,
     ProcessorRunGetResponse,
+    ProcessorRunListRequestSource,
+    ProcessorRunListResponse,
 )
 from .processor_version import (
     ProcessorVersionCreateRequestConfig,
@@ -244,6 +248,8 @@ from .processor_version import (
 from .version import __version__
 from .workflow import WorkflowCreateResponse
 from .workflow_run import (
+    WorkflowRunCancelResponse,
+    WorkflowRunCancelResponseWorkflowRun,
     WorkflowRunCreateResponse,
     WorkflowRunDeleteResponse,
     WorkflowRunGetResponse,
@@ -400,9 +406,13 @@ __all__ = [
     "ProcessorRunDeleteResponse",
     "ProcessorRunFileInput",
     "ProcessorRunGetResponse",
+    "ProcessorRunListRequestSource",
+    "ProcessorRunListResponse",
     "ProcessorRunMergedProcessorsItem",
-    "ProcessorRunStatus",
+    "ProcessorRunSummary",
+    "ProcessorRunSummaryType",
     "ProcessorRunType",
+    "ProcessorStatus",
     "ProcessorType",
     "ProcessorUpdateRequestConfig",
     "ProcessorUpdateRequestConfig_Classify",
@@ -468,6 +478,8 @@ __all__ = [
     "Workflow",
     "WorkflowCreateResponse",
     "WorkflowRun",
+    "WorkflowRunCancelResponse",
+    "WorkflowRunCancelResponseWorkflowRun",
     "WorkflowRunCreateResponse",
     "WorkflowRunDeleteResponse",
     "WorkflowRunFileInput",

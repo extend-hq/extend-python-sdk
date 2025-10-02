@@ -5,14 +5,22 @@ import typing
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
 from ..types.json_object import JsonObject
+from ..types.max_page_size import MaxPageSize
+from ..types.next_page_token import NextPageToken
 from ..types.processor_id import ProcessorId
 from ..types.processor_run_file_input import ProcessorRunFileInput
+from ..types.processor_status import ProcessorStatus
+from ..types.processor_type import ProcessorType
+from ..types.sort_by_enum import SortByEnum
+from ..types.sort_dir_enum import SortDirEnum
 from .raw_client import AsyncRawProcessorRunClient, RawProcessorRunClient
 from .types.processor_run_cancel_response import ProcessorRunCancelResponse
 from .types.processor_run_create_request_config import ProcessorRunCreateRequestConfig
 from .types.processor_run_create_response import ProcessorRunCreateResponse
 from .types.processor_run_delete_response import ProcessorRunDeleteResponse
 from .types.processor_run_get_response import ProcessorRunGetResponse
+from .types.processor_run_list_request_source import ProcessorRunListRequestSource
+from .types.processor_run_list_response import ProcessorRunListResponse
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -32,6 +40,110 @@ class ProcessorRunClient:
         RawProcessorRunClient
         """
         return self._raw_client
+
+    def list(
+        self,
+        *,
+        status: typing.Optional[ProcessorStatus] = None,
+        processor_id: typing.Optional[str] = None,
+        processor_type: typing.Optional[ProcessorType] = None,
+        source_id: typing.Optional[str] = None,
+        source: typing.Optional[ProcessorRunListRequestSource] = None,
+        file_name_contains: typing.Optional[str] = None,
+        sort_by: typing.Optional[SortByEnum] = None,
+        sort_dir: typing.Optional[SortDirEnum] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ProcessorRunListResponse:
+        """
+        List runs of a Processor. A ProcessorRun represents a single execution of a processor against a file.
+
+        Parameters
+        ----------
+        status : typing.Optional[ProcessorStatus]
+            Filters processor runs by their status. If not provided, no filter is applied.
+
+             The status of a processor run:
+             * `"PENDING"` - The processor run has not started yet
+             * `"PROCESSING"` - The processor run is in progress
+             * `"PROCESSED"` - The processor run completed successfully
+             * `"FAILED"` - The processor run encountered an error
+             * `"CANCELLED"` - The processor run was cancelled
+
+        processor_id : typing.Optional[str]
+            Filters processor runs by the processor ID. If not provided, runs for all processors are returned.
+
+            Example: `"dp_BMdfq_yWM3sT-ZzvCnA3f"`
+
+        processor_type : typing.Optional[ProcessorType]
+            Filters processor runs by the processor type. If not provided, runs for all processor types are returned.
+
+            Example: `"EXTRACT"`
+
+        source_id : typing.Optional[str]
+            Filters processor runs by the source ID. The source ID corresponds to the entity that created the processor run.
+
+            Example: `"workflow_run_123"`
+
+        source : typing.Optional[ProcessorRunListRequestSource]
+            Filters processor runs by the source that created them. If not provided, runs from all sources are returned.
+
+            The source of the processor run:
+            * `"ADMIN"` - Created by admin
+            * `"BATCH_PROCESSOR_RUN"` - Created from a batch processor run
+            * `"PLAYGROUND"` - Created from playground
+            * `"WORKFLOW_CONFIGURATION"` - Created from workflow configuration
+            * `"WORKFLOW_RUN"` - Created from a workflow run
+            * `"STUDIO"` - Created from Studio
+            * `"API"` - Created via API
+
+
+        file_name_contains : typing.Optional[str]
+            Filters processor runs by the name of the file. Only returns processor runs where the file name contains this string.
+
+            Example: `"invoice"`
+
+        sort_by : typing.Optional[SortByEnum]
+            Sorts the processor runs by the given field.
+
+        sort_dir : typing.Optional[SortDirEnum]
+            Sorts the processor runs in ascending or descending order. Ascending order means the earliest processor run is returned first.
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ProcessorRunListResponse
+            You will get a list of summaries for each processor run. These are shortened versions of the full ProcessorRun object.
+
+            To get the full object, use the [Get ProcessorRun](/developers/api-reference/processor-endpoints/get-processor-run) endpoint.
+
+        Examples
+        --------
+        from extend_ai import Extend
+        client = Extend(token="YOUR_TOKEN", )
+        client.processor_run.list(status="PENDING", processor_id='processorId', processor_type="EXTRACT", source_id='sourceId', source="ADMIN", file_name_contains='fileNameContains', sort_by="updatedAt", sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
+        """
+        _response = self._raw_client.list(
+            status=status,
+            processor_id=processor_id,
+            processor_type=processor_type,
+            source_id=source_id,
+            source=source,
+            file_name_contains=file_name_contains,
+            sort_by=sort_by,
+            sort_dir=sort_dir,
+            next_page_token=next_page_token,
+            max_page_size=max_page_size,
+            request_options=request_options,
+        )
+        return _response.data
 
     def create(
         self,
@@ -68,7 +180,7 @@ class ProcessorRunClient:
             - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
 
         file : typing.Optional[ProcessorRunFileInput]
-            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/supported-file-types).
+            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/general/supported-file-types).
 
         raw_text : typing.Optional[str]
             A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
@@ -220,6 +332,113 @@ class AsyncProcessorRunClient:
         """
         return self._raw_client
 
+    async def list(
+        self,
+        *,
+        status: typing.Optional[ProcessorStatus] = None,
+        processor_id: typing.Optional[str] = None,
+        processor_type: typing.Optional[ProcessorType] = None,
+        source_id: typing.Optional[str] = None,
+        source: typing.Optional[ProcessorRunListRequestSource] = None,
+        file_name_contains: typing.Optional[str] = None,
+        sort_by: typing.Optional[SortByEnum] = None,
+        sort_dir: typing.Optional[SortDirEnum] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ProcessorRunListResponse:
+        """
+        List runs of a Processor. A ProcessorRun represents a single execution of a processor against a file.
+
+        Parameters
+        ----------
+        status : typing.Optional[ProcessorStatus]
+            Filters processor runs by their status. If not provided, no filter is applied.
+
+             The status of a processor run:
+             * `"PENDING"` - The processor run has not started yet
+             * `"PROCESSING"` - The processor run is in progress
+             * `"PROCESSED"` - The processor run completed successfully
+             * `"FAILED"` - The processor run encountered an error
+             * `"CANCELLED"` - The processor run was cancelled
+
+        processor_id : typing.Optional[str]
+            Filters processor runs by the processor ID. If not provided, runs for all processors are returned.
+
+            Example: `"dp_BMdfq_yWM3sT-ZzvCnA3f"`
+
+        processor_type : typing.Optional[ProcessorType]
+            Filters processor runs by the processor type. If not provided, runs for all processor types are returned.
+
+            Example: `"EXTRACT"`
+
+        source_id : typing.Optional[str]
+            Filters processor runs by the source ID. The source ID corresponds to the entity that created the processor run.
+
+            Example: `"workflow_run_123"`
+
+        source : typing.Optional[ProcessorRunListRequestSource]
+            Filters processor runs by the source that created them. If not provided, runs from all sources are returned.
+
+            The source of the processor run:
+            * `"ADMIN"` - Created by admin
+            * `"BATCH_PROCESSOR_RUN"` - Created from a batch processor run
+            * `"PLAYGROUND"` - Created from playground
+            * `"WORKFLOW_CONFIGURATION"` - Created from workflow configuration
+            * `"WORKFLOW_RUN"` - Created from a workflow run
+            * `"STUDIO"` - Created from Studio
+            * `"API"` - Created via API
+
+
+        file_name_contains : typing.Optional[str]
+            Filters processor runs by the name of the file. Only returns processor runs where the file name contains this string.
+
+            Example: `"invoice"`
+
+        sort_by : typing.Optional[SortByEnum]
+            Sorts the processor runs by the given field.
+
+        sort_dir : typing.Optional[SortDirEnum]
+            Sorts the processor runs in ascending or descending order. Ascending order means the earliest processor run is returned first.
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ProcessorRunListResponse
+            You will get a list of summaries for each processor run. These are shortened versions of the full ProcessorRun object.
+
+            To get the full object, use the [Get ProcessorRun](/developers/api-reference/processor-endpoints/get-processor-run) endpoint.
+
+        Examples
+        --------
+        from extend_ai import AsyncExtend
+        import asyncio
+        client = AsyncExtend(token="YOUR_TOKEN", )
+        async def main() -> None:
+            await client.processor_run.list(status="PENDING", processor_id='processorId', processor_type="EXTRACT", source_id='sourceId', source="ADMIN", file_name_contains='fileNameContains', sort_by="updatedAt", sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.list(
+            status=status,
+            processor_id=processor_id,
+            processor_type=processor_type,
+            source_id=source_id,
+            source=source,
+            file_name_contains=file_name_contains,
+            sort_by=sort_by,
+            sort_dir=sort_dir,
+            next_page_token=next_page_token,
+            max_page_size=max_page_size,
+            request_options=request_options,
+        )
+        return _response.data
+
     async def create(
         self,
         *,
@@ -255,7 +474,7 @@ class AsyncProcessorRunClient:
             - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
 
         file : typing.Optional[ProcessorRunFileInput]
-            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/supported-file-types).
+            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/general/supported-file-types).
 
         raw_text : typing.Optional[str]
             A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.

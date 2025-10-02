@@ -2,4 +2,4 @@
 
 import typing
 
-StepRunStatus = typing.Union[typing.Literal["PENDING", "PROCESSING", "PROCESSED", "FAILED"], typing.Any]
+StepRunStatus = typing.Union[typing.Literal["PENDING", "PROCESSING", "PROCESSED", "FAILED", "CANCELLED"], typing.Any]

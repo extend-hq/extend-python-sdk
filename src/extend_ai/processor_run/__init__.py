@@ -11,6 +11,8 @@ from .types import (
     ProcessorRunCreateResponse,
     ProcessorRunDeleteResponse,
     ProcessorRunGetResponse,
+    ProcessorRunListRequestSource,
+    ProcessorRunListResponse,
 )
 
 __all__ = [
@@ -22,4 +24,6 @@ __all__ = [
     "ProcessorRunCreateResponse",
     "ProcessorRunDeleteResponse",
     "ProcessorRunGetResponse",
+    "ProcessorRunListRequestSource",
+    "ProcessorRunListResponse",
 ]
