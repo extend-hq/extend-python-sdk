@@ -23,6 +23,7 @@ from ..types.sort_by_enum import SortByEnum
 from ..types.sort_dir_enum import SortDirEnum
 from ..types.workflow_run_file_input import WorkflowRunFileInput
 from ..types.workflow_status import WorkflowStatus
+from .types.workflow_run_cancel_response import WorkflowRunCancelResponse
 from .types.workflow_run_create_response import WorkflowRunCreateResponse
 from .types.workflow_run_delete_response import WorkflowRunDeleteResponse
 from .types.workflow_run_get_response import WorkflowRunGetResponse
@@ -65,6 +66,8 @@ class RawWorkflowRunClient:
              * `"REJECTED"` - The workflow run was rejected during manual review
              * `"PROCESSED"` - The workflow run completed successfully
              * `"FAILED"` - The workflow run encountered an error
+             * `"CANCELLED"` - The workflow run was cancelled
+             * `"CANCELLING"` - The workflow run is being cancelled
 
         workflow_id : typing.Optional[str]
             Filters workflow runs by the workflow ID. If not provided, runs for all workflows are returned.
@@ -175,7 +178,7 @@ class RawWorkflowRunClient:
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
         files : typing.Optional[typing.Sequence[WorkflowRunFileInput]]
-            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](/product/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
+            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](/product/general/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
 
         raw_texts : typing.Optional[typing.Sequence[str]]
             An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.
@@ -491,6 +494,93 @@ class RawWorkflowRunClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
+    def cancel(
+        self, workflow_run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[WorkflowRunCancelResponse]:
+        """
+        Cancel a running workflow run by its ID. This endpoint allows you to stop a workflow run that is currently in progress.
+
+        Note: Only workflow runs with a status of `PROCESSING` or `PENDING` can be cancelled. Workflow runs that are completed, failed, in review, rejected, or already cancelled cannot be cancelled.
+
+        Parameters
+        ----------
+        workflow_run_id : str
+            The ID of the workflow run to cancel.
+
+            Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[WorkflowRunCancelResponse]
+            Successfully cancelled workflow run
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"workflow_runs/{jsonable_encoder(workflow_run_id)}/cancel",
+            method="POST",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    WorkflowRunCancelResponse,
+                    construct_type(
+                        type_=WorkflowRunCancelResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        construct_type(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ExtendError,
+                        construct_type(
+                            type_=ExtendError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
 
 class AsyncRawWorkflowRunClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -524,6 +614,8 @@ class AsyncRawWorkflowRunClient:
              * `"REJECTED"` - The workflow run was rejected during manual review
              * `"PROCESSED"` - The workflow run completed successfully
              * `"FAILED"` - The workflow run encountered an error
+             * `"CANCELLED"` - The workflow run was cancelled
+             * `"CANCELLING"` - The workflow run is being cancelled
 
         workflow_id : typing.Optional[str]
             Filters workflow runs by the workflow ID. If not provided, runs for all workflows are returned.
@@ -634,7 +726,7 @@ class AsyncRawWorkflowRunClient:
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
         files : typing.Optional[typing.Sequence[WorkflowRunFileInput]]
-            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](/product/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
+            An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](/product/general/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
 
         raw_texts : typing.Optional[typing.Sequence[str]]
             An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.
@@ -923,6 +1015,93 @@ class AsyncRawWorkflowRunClient:
                     ),
                 )
                 return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ExtendError,
+                        construct_type(
+                            type_=ExtendError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def cancel(
+        self, workflow_run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[WorkflowRunCancelResponse]:
+        """
+        Cancel a running workflow run by its ID. This endpoint allows you to stop a workflow run that is currently in progress.
+
+        Note: Only workflow runs with a status of `PROCESSING` or `PENDING` can be cancelled. Workflow runs that are completed, failed, in review, rejected, or already cancelled cannot be cancelled.
+
+        Parameters
+        ----------
+        workflow_run_id : str
+            The ID of the workflow run to cancel.
+
+            Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[WorkflowRunCancelResponse]
+            Successfully cancelled workflow run
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"workflow_runs/{jsonable_encoder(workflow_run_id)}/cancel",
+            method="POST",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    WorkflowRunCancelResponse,
+                    construct_type(
+                        type_=WorkflowRunCancelResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        construct_type(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 404:
                 raise NotFoundError(
                     headers=dict(_response.headers),

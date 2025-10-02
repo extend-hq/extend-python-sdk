@@ -3,6 +3,8 @@
 # isort: skip_file
 
 from .types import (
+    WorkflowRunCancelResponse,
+    WorkflowRunCancelResponseWorkflowRun,
     WorkflowRunCreateResponse,
     WorkflowRunDeleteResponse,
     WorkflowRunGetResponse,
@@ -11,6 +13,8 @@ from .types import (
 )
 
 __all__ = [
+    "WorkflowRunCancelResponse",
+    "WorkflowRunCancelResponseWorkflowRun",
     "WorkflowRunCreateResponse",
     "WorkflowRunDeleteResponse",
     "WorkflowRunGetResponse",

@@ -111,8 +111,10 @@ from .processor_run_config import (
 )
 from .processor_run_file_input import ProcessorRunFileInput
 from .processor_run_merged_processors_item import ProcessorRunMergedProcessorsItem
-from .processor_run_status import ProcessorRunStatus
+from .processor_run_summary import ProcessorRunSummary
+from .processor_run_summary_type import ProcessorRunSummaryType
 from .processor_run_type import ProcessorRunType
+from .processor_status import ProcessorStatus
 from .processor_type import ProcessorType
 from .processor_version import ProcessorVersion
 from .processor_version_config import (
@@ -276,8 +278,10 @@ __all__ = [
     "ProcessorRunConfig_Splitter",
     "ProcessorRunFileInput",
     "ProcessorRunMergedProcessorsItem",
-    "ProcessorRunStatus",
+    "ProcessorRunSummary",
+    "ProcessorRunSummaryType",
     "ProcessorRunType",
+    "ProcessorStatus",
     "ProcessorType",
     "ProcessorVersion",
     "ProcessorVersionConfig",

@@ -276,7 +276,7 @@ class RawFileClient:
 
         If an uploaded file is detected as a Word or PowerPoint document, it will be automatically converted to a PDF.
 
-        Supported file types can be found [here](/product/supported-file-types).
+        Supported file types can be found [here](/product/general/supported-file-types).
 
         This endpoint requires multipart form encoding. Most HTTP clients will handle this encoding automatically (see the examples).
 
@@ -590,7 +590,7 @@ class AsyncRawFileClient:
 
         If an uploaded file is detected as a Word or PowerPoint document, it will be automatically converted to a PDF.
 
-        Supported file types can be found [here](/product/supported-file-types).
+        Supported file types can be found [here](/product/general/supported-file-types).
 
         This endpoint requires multipart form encoding. Most HTTP clients will handle this encoding automatically (see the examples).
 

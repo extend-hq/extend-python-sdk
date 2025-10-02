@@ -15,8 +15,8 @@ from .json_object import JsonObject
 from .processor_output import ProcessorOutput
 from .processor_run_config import ProcessorRunConfig
 from .processor_run_merged_processors_item import ProcessorRunMergedProcessorsItem
-from .processor_run_status import ProcessorRunStatus
 from .processor_run_type import ProcessorRunType
+from .processor_status import ProcessorStatus
 
 
 class ProcessorRun(UncheckedBaseModel):
@@ -51,15 +51,7 @@ class ProcessorRun(UncheckedBaseModel):
     Example: `"Invoice Processor"`
     """
 
-    status: ProcessorRunStatus = pydantic.Field()
-    """
-    The current status of the processor run:
-    * `"PROCESSING"` - The processor is currently running
-    * `"PROCESSED"` - The processor has completed successfully
-    * `"FAILED"` - The processor encountered an error
-    * `"CANCELLED"` - The processor run was cancelled
-    """
-
+    status: ProcessorStatus
     output: ProcessorOutput = pydantic.Field()
     """
     The final output, either reviewed or initial.

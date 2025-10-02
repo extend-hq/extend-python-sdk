@@ -33,7 +33,7 @@ For more details, see the [Parse File guide](/product/parsing/parse).
 from extend_ai import Extend
 from extend_ai import ParseRequestFile
 client = Extend(token="YOUR_TOKEN", )
-client.parse(file=ParseRequestFile(), )
+client.parse(response_type="json", file=ParseRequestFile(), )
 
 ```
 </dd>
@@ -203,7 +203,7 @@ List runs of a Workflow. Workflows are sequences of steps that process files and
 ```python
 from extend_ai import Extend
 client = Extend(token="YOUR_TOKEN", )
-client.workflow_run.list(next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
+client.workflow_run.list(status="PENDING", workflow_id='workflowId', batch_id='batchId', file_name_contains='fileNameContains', sort_by="updatedAt", sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
 
 ```
 </dd>
@@ -230,6 +230,8 @@ Filters workflow runs by their status. If not provided, no filter is applied.
  * `"REJECTED"` - The workflow run was rejected during manual review
  * `"PROCESSED"` - The workflow run completed successfully
  * `"FAILED"` - The workflow run encountered an error
+ * `"CANCELLED"` - The workflow run was cancelled
+ * `"CANCELLING"` - The workflow run is being cancelled
     
 </dd>
 </dl>
@@ -374,7 +376,7 @@ Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 <dl>
 <dd>
 
-**files:** `typing.Optional[typing.Sequence[WorkflowRunFileInput]]` — An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](/product/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
+**files:** `typing.Optional[typing.Sequence[WorkflowRunFileInput]]` — An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](/product/general/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
     
 </dd>
 </dl>
@@ -661,6 +663,77 @@ Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 </dl>
 </details>
 
+<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">cancel</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Cancel a running workflow run by its ID. This endpoint allows you to stop a workflow run that is currently in progress.
+
+Note: Only workflow runs with a status of `PROCESSING` or `PENDING` can be cancelled. Workflow runs that are completed, failed, in review, rejected, or already cancelled cannot be cancelled.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+client = Extend(token="YOUR_TOKEN", )
+client.workflow_run.cancel(workflow_run_id='workflow_run_id_here', )
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workflow_run_id:** `str` 
+
+The ID of the workflow run to cancel.
+
+Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## BatchWorkflowRun
 <details><summary><code>client.batch_workflow_run.<a href="src/extend_ai/batch_workflow_run/client.py">create</a>(...)</code></summary>
 <dl>
@@ -761,6 +834,180 @@ Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 </details>
 
 ## ProcessorRun
+<details><summary><code>client.processor_run.<a href="src/extend_ai/processor_run/client.py">list</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List runs of a Processor. A ProcessorRun represents a single execution of a processor against a file.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+client = Extend(token="YOUR_TOKEN", )
+client.processor_run.list(status="PENDING", processor_id='processorId', processor_type="EXTRACT", source_id='sourceId', source="ADMIN", file_name_contains='fileNameContains', sort_by="updatedAt", sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**status:** `typing.Optional[ProcessorStatus]` 
+
+Filters processor runs by their status. If not provided, no filter is applied.
+
+ The status of a processor run:
+ * `"PENDING"` - The processor run has not started yet
+ * `"PROCESSING"` - The processor run is in progress
+ * `"PROCESSED"` - The processor run completed successfully
+ * `"FAILED"` - The processor run encountered an error
+ * `"CANCELLED"` - The processor run was cancelled
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**processor_id:** `typing.Optional[str]` 
+
+Filters processor runs by the processor ID. If not provided, runs for all processors are returned.
+
+Example: `"dp_BMdfq_yWM3sT-ZzvCnA3f"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**processor_type:** `typing.Optional[ProcessorType]` 
+
+Filters processor runs by the processor type. If not provided, runs for all processor types are returned.
+
+Example: `"EXTRACT"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**source_id:** `typing.Optional[str]` 
+
+Filters processor runs by the source ID. The source ID corresponds to the entity that created the processor run.
+
+Example: `"workflow_run_123"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**source:** `typing.Optional[ProcessorRunListRequestSource]` 
+
+Filters processor runs by the source that created them. If not provided, runs from all sources are returned.
+
+The source of the processor run:
+* `"ADMIN"` - Created by admin
+* `"BATCH_PROCESSOR_RUN"` - Created from a batch processor run
+* `"PLAYGROUND"` - Created from playground
+* `"WORKFLOW_CONFIGURATION"` - Created from workflow configuration
+* `"WORKFLOW_RUN"` - Created from a workflow run
+* `"STUDIO"` - Created from Studio
+* `"API"` - Created via API
+ 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**file_name_contains:** `typing.Optional[str]` 
+
+Filters processor runs by the name of the file. Only returns processor runs where the file name contains this string.
+
+Example: `"invoice"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort_by:** `typing.Optional[SortByEnum]` — Sorts the processor runs by the given field.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort_dir:** `typing.Optional[SortDirEnum]` — Sorts the processor runs in ascending or descending order. Ascending order means the earliest processor run is returned first.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**next_page_token:** `typing.Optional[NextPageToken]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**max_page_size:** `typing.Optional[MaxPageSize]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.processor_run.<a href="src/extend_ai/processor_run/client.py">create</a>(...)</code></summary>
 <dl>
 <dd>
@@ -835,7 +1082,7 @@ An optional version of the processor to use. When not supplied, the most recent 
 <dl>
 <dd>
 
-**file:** `typing.Optional[ProcessorRunFileInput]` — The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/supported-file-types).
+**file:** `typing.Optional[ProcessorRunFileInput]` — The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/general/supported-file-types).
     
 </dd>
 </dl>
@@ -1579,7 +1826,7 @@ If parsing is still in progress, you'll receive a response with just the status.
 ```python
 from extend_ai import Extend
 client = Extend(token="YOUR_TOKEN", )
-client.parser_run.get(id='parser_run_id_here', )
+client.parser_run.get(id='parser_run_id_here', response_type="json", )
 
 ```
 </dd>
@@ -1732,7 +1979,7 @@ List files in your account. Files represent documents that have been uploaded to
 ```python
 from extend_ai import Extend
 client = Extend(token="YOUR_TOKEN", )
-client.file.list(next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
+client.file.list(name_contains='nameContains', sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
 
 ```
 </dd>
@@ -1825,7 +2072,7 @@ Fetch a file by its ID to obtain additional details and the raw file content.
 ```python
 from extend_ai import Extend
 client = Extend(token="YOUR_TOKEN", )
-client.file.get(id='file_id_here', )
+client.file.get(id='file_id_here', raw_text=True, markdown=True, html=True, )
 
 ```
 </dd>
@@ -1986,7 +2233,7 @@ This endpoint accepts file contents and registers them as a File in Extend, whic
 
 If an uploaded file is detected as a Word or PowerPoint document, it will be automatically converted to a PDF.
 
-Supported file types can be found [here](/product/supported-file-types).
+Supported file types can be found [here](/product/general/supported-file-types).
 
 This endpoint requires multipart form encoding. Most HTTP clients will handle this encoding automatically (see the examples).
 </dd>
@@ -2074,7 +2321,7 @@ This endpoint returns a paginated response. You can use the `nextPageToken` to f
 ```python
 from extend_ai import Extend
 client = Extend(token="YOUR_TOKEN", )
-client.evaluation_set.list(processor_id='processor_id_here', next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
+client.evaluation_set.list(processor_id='processor_id_here', sort_by="updatedAt", sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
 
 ```
 </dd>
@@ -2342,7 +2589,7 @@ This endpoint returns a paginated response. You can use the `nextPageToken` to f
 ```python
 from extend_ai import Extend
 client = Extend(token="YOUR_TOKEN", )
-client.evaluation_set_item.list(id='evaluation_set_id_here', next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', )
+client.evaluation_set_item.list(id='evaluation_set_id_here', sort_by="updatedAt", sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
 
 ```
 </dd>

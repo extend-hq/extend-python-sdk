@@ -46,7 +46,7 @@ class Extend:
 
 
 
-    token : typing.Union[str, typing.Callable[[], str]]
+    token : typing.Optional[typing.Union[str, typing.Callable[[], str]]]
     timeout : typing.Optional[float]
         The timeout to be used, in seconds, for requests. By default the timeout is 300 seconds, unless a custom httpx client is used, in which case this default is not enforced.
 
@@ -68,7 +68,7 @@ class Extend:
         *,
         base_url: typing.Optional[str] = None,
         environment: ExtendEnvironment = ExtendEnvironment.PRODUCTION,
-        token: typing.Union[str, typing.Callable[[], str]],
+        token: typing.Optional[typing.Union[str, typing.Callable[[], str]]] = None,
         timeout: typing.Optional[float] = None,
         follow_redirects: typing.Optional[bool] = True,
         httpx_client: typing.Optional[httpx.Client] = None,
@@ -153,7 +153,7 @@ class Extend:
         from extend_ai import Extend
         from extend_ai import ParseRequestFile
         client = Extend(token="YOUR_TOKEN", )
-        client.parse(file=ParseRequestFile(), )
+        client.parse(response_type="json", file=ParseRequestFile(), )
         """
         _response = self._raw_client.parse(
             file=file, response_type=response_type, config=config, request_options=request_options
@@ -222,7 +222,7 @@ class AsyncExtend:
 
 
 
-    token : typing.Union[str, typing.Callable[[], str]]
+    token : typing.Optional[typing.Union[str, typing.Callable[[], str]]]
     timeout : typing.Optional[float]
         The timeout to be used, in seconds, for requests. By default the timeout is 300 seconds, unless a custom httpx client is used, in which case this default is not enforced.
 
@@ -244,7 +244,7 @@ class AsyncExtend:
         *,
         base_url: typing.Optional[str] = None,
         environment: ExtendEnvironment = ExtendEnvironment.PRODUCTION,
-        token: typing.Union[str, typing.Callable[[], str]],
+        token: typing.Optional[typing.Union[str, typing.Callable[[], str]]] = None,
         timeout: typing.Optional[float] = None,
         follow_redirects: typing.Optional[bool] = True,
         httpx_client: typing.Optional[httpx.AsyncClient] = None,
@@ -331,7 +331,7 @@ class AsyncExtend:
         import asyncio
         client = AsyncExtend(token="YOUR_TOKEN", )
         async def main() -> None:
-            await client.parse(file=ParseRequestFile(), )
+            await client.parse(response_type="json", file=ParseRequestFile(), )
         asyncio.run(main())
         """
         _response = await self._raw_client.parse(
