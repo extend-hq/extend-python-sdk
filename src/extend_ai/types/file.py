@@ -9,6 +9,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .file_contents import FileContents
+from .file_credits import FileCredits
 from .file_metadata import FileMetadata
 from .file_type import FileType
 
@@ -67,6 +68,8 @@ class File(UncheckedBaseModel):
     
     Example: `"2024-03-21T16:45:00Z"`
     """
+
+    usage: typing.Optional[FileCredits] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
