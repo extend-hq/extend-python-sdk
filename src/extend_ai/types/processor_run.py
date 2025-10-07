@@ -9,6 +9,7 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .document_processor_run_credits import DocumentProcessorRunCredits
 from .extraction_output_edits import ExtractionOutputEdits
 from .file import File
 from .json_object import JsonObject
@@ -136,6 +137,8 @@ class ProcessorRun(UncheckedBaseModel):
     """
     The URL to view the processor run.
     """
+
+    usage: typing.Optional[DocumentProcessorRunCredits] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

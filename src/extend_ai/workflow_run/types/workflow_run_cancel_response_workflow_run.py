@@ -15,6 +15,7 @@ from ...types.json_object import JsonObject
 from ...types.processor_run import ProcessorRun
 from ...types.step_run import StepRun
 from ...types.workflow import Workflow
+from ...types.workflow_run_credits import WorkflowRunCredits
 
 
 class WorkflowRunCancelResponseWorkflowRun(UncheckedBaseModel):
@@ -140,6 +141,7 @@ class WorkflowRunCancelResponseWorkflowRun(UncheckedBaseModel):
     """
 
     workflow: Workflow
+    usage: typing.Optional[WorkflowRunCredits] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

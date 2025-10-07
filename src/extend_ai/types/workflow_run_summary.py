@@ -8,6 +8,7 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .workflow_run_credits import WorkflowRunCredits
 from .workflow_status import WorkflowStatus
 
 
@@ -117,6 +118,8 @@ class WorkflowRunSummary(UncheckedBaseModel):
     
     Example: `"2024-03-21T16:45:00Z"`
     """
+
+    usage: typing.Optional[WorkflowRunCredits] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

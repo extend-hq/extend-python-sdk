@@ -31,6 +31,7 @@ from .classification_config import ClassificationConfig
 from .classification_config_base_processor import ClassificationConfigBaseProcessor
 from .classifier_output import ClassifierOutput
 from .classify_metrics import ClassifyMetrics
+from .document_processor_run_credits import DocumentProcessorRunCredits
 from .empty_block_details import EmptyBlockDetails
 from .enum import Enum
 from .enum_option import EnumOption
@@ -61,6 +62,7 @@ from .file import File
 from .file_contents import FileContents
 from .file_contents_pages_item import FileContentsPagesItem
 from .file_contents_sheets_item import FileContentsSheetsItem
+from .file_credits import FileCredits
 from .file_metadata import FileMetadata
 from .file_metadata_parent_split import FileMetadataParentSplit
 from .file_type import FileType
@@ -94,6 +96,7 @@ from .parse_error_code import ParseErrorCode
 from .parse_request_file import ParseRequestFile
 from .parse_request_response_type import ParseRequestResponseType
 from .parser_run import ParserRun
+from .parser_run_credits import ParserRunCredits
 from .parser_run_metrics import ParserRunMetrics
 from .parser_run_status import ParserRunStatus
 from .parser_run_status_enum import ParserRunStatusEnum
@@ -165,6 +168,7 @@ from .webhook_event_workflow_run import WebhookEventWorkflowRun
 from .webhook_event_workflow_run_event_type import WebhookEventWorkflowRunEventType
 from .workflow import Workflow
 from .workflow_run import WorkflowRun
+from .workflow_run_credits import WorkflowRunCredits
 from .workflow_run_file_input import WorkflowRunFileInput
 from .workflow_run_file_input_outputs_item import WorkflowRunFileInputOutputsItem
 from .workflow_run_summary import WorkflowRunSummary
@@ -200,6 +204,7 @@ __all__ = [
     "ClassificationConfigBaseProcessor",
     "ClassifierOutput",
     "ClassifyMetrics",
+    "DocumentProcessorRunCredits",
     "EmptyBlockDetails",
     "Enum",
     "EnumOption",
@@ -230,6 +235,7 @@ __all__ = [
     "FileContents",
     "FileContentsPagesItem",
     "FileContentsSheetsItem",
+    "FileCredits",
     "FileMetadata",
     "FileMetadataParentSplit",
     "FileType",
@@ -263,6 +269,7 @@ __all__ = [
     "ParseRequestFile",
     "ParseRequestResponseType",
     "ParserRun",
+    "ParserRunCredits",
     "ParserRunMetrics",
     "ParserRunStatus",
     "ParserRunStatusEnum",
@@ -330,6 +337,7 @@ __all__ = [
     "WebhookEventWorkflowRunEventType",
     "Workflow",
     "WorkflowRun",
+    "WorkflowRunCredits",
     "WorkflowRunFileInput",
     "WorkflowRunFileInputOutputsItem",
     "WorkflowRunSummary",

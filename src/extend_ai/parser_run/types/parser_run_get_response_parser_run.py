@@ -11,6 +11,7 @@ from ...core.serialization import FieldMetadata
 from ...core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
 from ...types.chunk import Chunk
 from ...types.parse_config import ParseConfig
+from ...types.parser_run_credits import ParserRunCredits
 from ...types.parser_run_metrics import ParserRunMetrics
 from ...types.parser_run_status_enum import ParserRunStatusEnum
 from ...types.parser_run_status_status import ParserRunStatusStatus
@@ -41,6 +42,7 @@ class ParserRunGetResponseParserRun_ParserRun(UncheckedBaseModel):
     failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = None
     metrics: ParserRunMetrics
     config: ParseConfig
+    usage: typing.Optional[ParserRunCredits] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

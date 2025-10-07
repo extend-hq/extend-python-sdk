@@ -9,6 +9,7 @@ from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .chunk import Chunk
 from .parse_config import ParseConfig
+from .parser_run_credits import ParserRunCredits
 from .parser_run_metrics import ParserRunMetrics
 from .parser_run_status_enum import ParserRunStatusEnum
 
@@ -58,6 +59,8 @@ class ParserRun(UncheckedBaseModel):
     """
     The configuration used for the parsing process, including any default values that were applied.
     """
+
+    usage: typing.Optional[ParserRunCredits] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
