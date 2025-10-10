@@ -100,7 +100,6 @@ class RawProcessorRunClient:
             * `"STUDIO"` - Created from Studio
             * `"API"` - Created via API
 
-
         file_name_contains : typing.Optional[str]
             Filters processor runs by the name of the file. Only returns processor runs where the file name contains this string.
 
@@ -602,7 +601,6 @@ class AsyncRawProcessorRunClient:
             * `"WORKFLOW_RUN"` - Created from a workflow run
             * `"STUDIO"` - Created from Studio
             * `"API"` - Created via API
-
 
         file_name_contains : typing.Optional[str]
             Filters processor runs by the name of the file. Only returns processor runs where the file name contains this string.

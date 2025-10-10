@@ -944,7 +944,6 @@ The source of the processor run:
 * `"WORKFLOW_RUN"` - Created from a workflow run
 * `"STUDIO"` - Created from Studio
 * `"API"` - Created via API
- 
     
 </dd>
 </dl>
