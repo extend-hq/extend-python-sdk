@@ -8,6 +8,7 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .document_processor_run_credits import DocumentProcessorRunCredits
 from .processor_run_summary_type import ProcessorRunSummaryType
 from .processor_status import ProcessorStatus
 
@@ -63,6 +64,8 @@ class ProcessorRunSummary(UncheckedBaseModel):
     
     Example: `"2024-03-21T16:45:00Z"`
     """
+
+    usage: typing.Optional[DocumentProcessorRunCredits] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
