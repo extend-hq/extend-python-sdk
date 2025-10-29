@@ -11,9 +11,11 @@ from ..core.request_options import RequestOptions
 from ..core.serialization import convert_and_respect_annotation_metadata
 from ..core.unchecked_base_model import construct_type
 from ..errors.bad_request_error import BadRequestError
+from ..errors.internal_server_error import InternalServerError
 from ..errors.not_found_error import NotFoundError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..types.error import Error
+from ..types.extend_error import ExtendError
 from ..types.max_page_size import MaxPageSize
 from ..types.next_page_token import NextPageToken
 from ..types.provided_processor_output import ProvidedProcessorOutput
@@ -22,6 +24,7 @@ from ..types.sort_dir_enum import SortDirEnum
 from .types.evaluation_set_item_create_batch_request_items_item import EvaluationSetItemCreateBatchRequestItemsItem
 from .types.evaluation_set_item_create_batch_response import EvaluationSetItemCreateBatchResponse
 from .types.evaluation_set_item_create_response import EvaluationSetItemCreateResponse
+from .types.evaluation_set_item_delete_response import EvaluationSetItemDeleteResponse
 from .types.evaluation_set_item_list_response import EvaluationSetItemListResponse
 from .types.evaluation_set_item_update_response import EvaluationSetItemUpdateResponse
 
@@ -313,6 +316,71 @@ class RawEvaluationSetItemClient:
                         typing.Optional[typing.Any],
                         construct_type(
                             type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def delete(
+        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> HttpResponse[EvaluationSetItemDeleteResponse]:
+        """
+        Delete an evaluation set item from an evaluation set. This operation is permanent and cannot be undone.
+
+        This endpoint can be used to remove individual items from an evaluation set when they are no longer needed or if they were added in error.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the evaluation set item to delete.
+
+            Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[EvaluationSetItemDeleteResponse]
+            Successfully deleted evaluation set item
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            f"evaluation_set_items/{jsonable_encoder(id)}",
+            method="DELETE",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    EvaluationSetItemDeleteResponse,
+                    construct_type(
+                        type_=EvaluationSetItemDeleteResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ExtendError,
+                        construct_type(
+                            type_=ExtendError,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -691,6 +759,71 @@ class AsyncRawEvaluationSetItemClient:
                         typing.Optional[typing.Any],
                         construct_type(
                             type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def delete(
+        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[EvaluationSetItemDeleteResponse]:
+        """
+        Delete an evaluation set item from an evaluation set. This operation is permanent and cannot be undone.
+
+        This endpoint can be used to remove individual items from an evaluation set when they are no longer needed or if they were added in error.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the evaluation set item to delete.
+
+            Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[EvaluationSetItemDeleteResponse]
+            Successfully deleted evaluation set item
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"evaluation_set_items/{jsonable_encoder(id)}",
+            method="DELETE",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    EvaluationSetItemDeleteResponse,
+                    construct_type(
+                        type_=EvaluationSetItemDeleteResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ExtendError,
+                        construct_type(
+                            type_=ExtendError,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

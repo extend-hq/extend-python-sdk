@@ -13,6 +13,7 @@ from .raw_client import AsyncRawEvaluationSetItemClient, RawEvaluationSetItemCli
 from .types.evaluation_set_item_create_batch_request_items_item import EvaluationSetItemCreateBatchRequestItemsItem
 from .types.evaluation_set_item_create_batch_response import EvaluationSetItemCreateBatchResponse
 from .types.evaluation_set_item_create_response import EvaluationSetItemCreateResponse
+from .types.evaluation_set_item_delete_response import EvaluationSetItemDeleteResponse
 from .types.evaluation_set_item_list_response import EvaluationSetItemListResponse
 from .types.evaluation_set_item_update_response import EvaluationSetItemUpdateResponse
 
@@ -191,6 +192,38 @@ class EvaluationSetItemClient:
         }, ), )
         """
         _response = self._raw_client.update(id, expected_output=expected_output, request_options=request_options)
+        return _response.data
+
+    def delete(
+        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> EvaluationSetItemDeleteResponse:
+        """
+        Delete an evaluation set item from an evaluation set. This operation is permanent and cannot be undone.
+
+        This endpoint can be used to remove individual items from an evaluation set when they are no longer needed or if they were added in error.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the evaluation set item to delete.
+
+            Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        EvaluationSetItemDeleteResponse
+            Successfully deleted evaluation set item
+
+        Examples
+        --------
+        from extend_ai import Extend
+        client = Extend(token="YOUR_TOKEN", )
+        client.evaluation_set_item.delete(id='evaluation_set_item_id_here', )
+        """
+        _response = self._raw_client.delete(id, request_options=request_options)
         return _response.data
 
     def create_batch(
@@ -418,6 +451,41 @@ class AsyncEvaluationSetItemClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.update(id, expected_output=expected_output, request_options=request_options)
+        return _response.data
+
+    async def delete(
+        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> EvaluationSetItemDeleteResponse:
+        """
+        Delete an evaluation set item from an evaluation set. This operation is permanent and cannot be undone.
+
+        This endpoint can be used to remove individual items from an evaluation set when they are no longer needed or if they were added in error.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the evaluation set item to delete.
+
+            Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        EvaluationSetItemDeleteResponse
+            Successfully deleted evaluation set item
+
+        Examples
+        --------
+        from extend_ai import AsyncExtend
+        import asyncio
+        client = AsyncExtend(token="YOUR_TOKEN", )
+        async def main() -> None:
+            await client.evaluation_set_item.delete(id='evaluation_set_item_id_here', )
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.delete(id, request_options=request_options)
         return _response.data
 
     async def create_batch(

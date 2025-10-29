@@ -6,6 +6,7 @@ from .types import (
     EvaluationSetItemCreateBatchRequestItemsItem,
     EvaluationSetItemCreateBatchResponse,
     EvaluationSetItemCreateResponse,
+    EvaluationSetItemDeleteResponse,
     EvaluationSetItemListResponse,
     EvaluationSetItemUpdateResponse,
 )
@@ -14,6 +15,7 @@ __all__ = [
     "EvaluationSetItemCreateBatchRequestItemsItem",
     "EvaluationSetItemCreateBatchResponse",
     "EvaluationSetItemCreateResponse",
+    "EvaluationSetItemDeleteResponse",
     "EvaluationSetItemListResponse",
     "EvaluationSetItemUpdateResponse",
 ]

@@ -3,6 +3,7 @@
 # isort: skip_file
 
 from .api_version_enum import ApiVersionEnum
+from .array_strategy import ArrayStrategy
 from .bad_request_error_body import BadRequestErrorBody
 from .bad_request_error_body_code import BadRequestErrorBodyCode
 from .base_metrics import BaseMetrics
@@ -29,8 +30,10 @@ from .classification_advanced_options import ClassificationAdvancedOptions
 from .classification_advanced_options_context import ClassificationAdvancedOptionsContext
 from .classification_config import ClassificationConfig
 from .classification_config_base_processor import ClassificationConfigBaseProcessor
+from .classification_field_metrics import ClassificationFieldMetrics
 from .classifier_output import ClassifierOutput
 from .classify_metrics import ClassifyMetrics
+from .classify_optimizer_options import ClassifyOptimizerOptions
 from .document_processor_run_credits import DocumentProcessorRunCredits
 from .empty_block_details import EmptyBlockDetails
 from .enum import Enum
@@ -38,16 +41,22 @@ from .enum_option import EnumOption
 from .error import Error
 from .evaluation_set import EvaluationSet
 from .evaluation_set_item import EvaluationSetItem
+from .excel_sheet_range import ExcelSheetRange
 from .extend_error import ExtendError
 from .extract_chunking_options import ExtractChunkingOptions
 from .extract_chunking_options_chunk_selection_strategy import ExtractChunkingOptionsChunkSelectionStrategy
 from .extract_chunking_options_chunking_strategy import ExtractChunkingOptionsChunkingStrategy
 from .extract_metrics import ExtractMetrics
 from .extract_metrics_field_metrics import ExtractMetricsFieldMetrics
+from .extract_optimizer_options import ExtractOptimizerOptions
 from .extraction_advanced_options import ExtractionAdvancedOptions
+from .extraction_advanced_options_excel_sheet_selection_strategy import (
+    ExtractionAdvancedOptionsExcelSheetSelectionStrategy,
+)
 from .extraction_config import ExtractionConfig
 from .extraction_config_base_processor import ExtractionConfigBaseProcessor
 from .extraction_field import ExtractionField
+from .extraction_field_metrics import ExtractionFieldMetrics
 from .extraction_field_result import ExtractionFieldResult
 from .extraction_field_result_reference import ExtractionFieldResultReference
 from .extraction_field_result_reference_bounding_boxes_item import ExtractionFieldResultReferenceBoundingBoxesItem
@@ -75,6 +84,17 @@ from .json_output_metadata_value_citations_item_polygon_item import JsonOutputMe
 from .json_output_metadata_value_insights_item import JsonOutputMetadataValueInsightsItem
 from .max_page_size import MaxPageSize
 from .next_page_token import NextPageToken
+from .optimizer_batch_processor_run_result import OptimizerBatchProcessorRunResult
+from .optimizer_batch_processor_run_result_processor_config import (
+    OptimizerBatchProcessorRunResultProcessorConfig,
+    OptimizerBatchProcessorRunResultProcessorConfig_Classify,
+    OptimizerBatchProcessorRunResultProcessorConfig_Extract,
+)
+from .optimizer_run import OptimizerRun
+from .optimizer_run_agent_type import OptimizerRunAgentType
+from .optimizer_run_metrics import OptimizerRunMetrics
+from .optimizer_run_metrics_fields_item import OptimizerRunMetricsFieldsItem
+from .optimizer_run_status import OptimizerRunStatus
 from .output_metadata import OutputMetadata
 from .output_metadata_value import OutputMetadataValue
 from .page_ranges import PageRanges
@@ -176,6 +196,7 @@ from .workflow_status import WorkflowStatus
 
 __all__ = [
     "ApiVersionEnum",
+    "ArrayStrategy",
     "BadRequestErrorBody",
     "BadRequestErrorBodyCode",
     "BaseMetrics",
@@ -202,8 +223,10 @@ __all__ = [
     "ClassificationAdvancedOptionsContext",
     "ClassificationConfig",
     "ClassificationConfigBaseProcessor",
+    "ClassificationFieldMetrics",
     "ClassifierOutput",
     "ClassifyMetrics",
+    "ClassifyOptimizerOptions",
     "DocumentProcessorRunCredits",
     "EmptyBlockDetails",
     "Enum",
@@ -211,16 +234,20 @@ __all__ = [
     "Error",
     "EvaluationSet",
     "EvaluationSetItem",
+    "ExcelSheetRange",
     "ExtendError",
     "ExtractChunkingOptions",
     "ExtractChunkingOptionsChunkSelectionStrategy",
     "ExtractChunkingOptionsChunkingStrategy",
     "ExtractMetrics",
     "ExtractMetricsFieldMetrics",
+    "ExtractOptimizerOptions",
     "ExtractionAdvancedOptions",
+    "ExtractionAdvancedOptionsExcelSheetSelectionStrategy",
     "ExtractionConfig",
     "ExtractionConfigBaseProcessor",
     "ExtractionField",
+    "ExtractionFieldMetrics",
     "ExtractionFieldResult",
     "ExtractionFieldResultReference",
     "ExtractionFieldResultReferenceBoundingBoxesItem",
@@ -248,6 +275,15 @@ __all__ = [
     "JsonOutputMetadataValueInsightsItem",
     "MaxPageSize",
     "NextPageToken",
+    "OptimizerBatchProcessorRunResult",
+    "OptimizerBatchProcessorRunResultProcessorConfig",
+    "OptimizerBatchProcessorRunResultProcessorConfig_Classify",
+    "OptimizerBatchProcessorRunResultProcessorConfig_Extract",
+    "OptimizerRun",
+    "OptimizerRunAgentType",
+    "OptimizerRunMetrics",
+    "OptimizerRunMetricsFieldsItem",
+    "OptimizerRunStatus",
     "OutputMetadata",
     "OutputMetadataValue",
     "PageRanges",

@@ -7,7 +7,12 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .array_strategy import ArrayStrategy
+from .excel_sheet_range import ExcelSheetRange
 from .extract_chunking_options import ExtractChunkingOptions
+from .extraction_advanced_options_excel_sheet_selection_strategy import (
+    ExtractionAdvancedOptionsExcelSheetSelectionStrategy,
+)
 from .page_ranges import PageRanges
 
 
@@ -16,14 +21,14 @@ class ExtractionAdvancedOptions(UncheckedBaseModel):
         pydantic.Field(default=None)
     )
     """
-    The kind of document being processed.
+    DEPRECATED - use extractionRules for all system prompts.
     """
 
     key_definitions: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="keyDefinitions")] = (
         pydantic.Field(default=None)
     )
     """
-    Custom key definitions for extraction.
+    DEPRECATED - use extractionRules for all system prompts.
     """
 
     model_reasoning_insights_enabled: typing_extensions.Annotated[
@@ -54,14 +59,36 @@ class ExtractionAdvancedOptions(UncheckedBaseModel):
     Whether to enable advanced figure parsing.
     """
 
+    array_strategy: typing_extensions.Annotated[
+        typing.Optional[ArrayStrategy], FieldMetadata(alias="arrayStrategy")
+    ] = pydantic.Field(default=None)
+    """
+    Strategy for handling large arrays in documents.
+    """
+
     chunking_options: typing_extensions.Annotated[
         typing.Optional[ExtractChunkingOptions], FieldMetadata(alias="chunkingOptions")
     ] = None
+    excel_sheet_ranges: typing_extensions.Annotated[
+        typing.Optional[typing.List[ExcelSheetRange]], FieldMetadata(alias="excelSheetRanges")
+    ] = pydantic.Field(default=None)
+    """
+    Ranges of sheet indices to extract from Excel documents.
+    """
+
+    excel_sheet_selection_strategy: typing_extensions.Annotated[
+        typing.Optional[ExtractionAdvancedOptionsExcelSheetSelectionStrategy],
+        FieldMetadata(alias="excelSheetSelectionStrategy"),
+    ] = pydantic.Field(default=None)
+    """
+    Strategy for selecting sheets from Excel documents.
+    """
+
     fixed_page_limit: typing_extensions.Annotated[typing.Optional[int], FieldMetadata(alias="fixedPageLimit")] = (
         pydantic.Field(default=None)
     )
     """
-    Optional fixed limit on the number of pages to process. See [Page Ranges](/product/page-ranges).
+    DEPRECATED - See [Page Ranges](/product/page-ranges).
     """
 
     page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = None
