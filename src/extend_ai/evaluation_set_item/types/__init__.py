@@ -5,6 +5,7 @@
 from .evaluation_set_item_create_batch_request_items_item import EvaluationSetItemCreateBatchRequestItemsItem
 from .evaluation_set_item_create_batch_response import EvaluationSetItemCreateBatchResponse
 from .evaluation_set_item_create_response import EvaluationSetItemCreateResponse
+from .evaluation_set_item_delete_response import EvaluationSetItemDeleteResponse
 from .evaluation_set_item_list_response import EvaluationSetItemListResponse
 from .evaluation_set_item_update_response import EvaluationSetItemUpdateResponse
 
@@ -12,6 +13,7 @@ __all__ = [
     "EvaluationSetItemCreateBatchRequestItemsItem",
     "EvaluationSetItemCreateBatchResponse",
     "EvaluationSetItemCreateResponse",
+    "EvaluationSetItemDeleteResponse",
     "EvaluationSetItemListResponse",
     "EvaluationSetItemUpdateResponse",
 ]
