@@ -1359,6 +1359,103 @@ Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
 </details>
 
 ## Processor
+<details><summary><code>client.processor.<a href="src/extend_ai/processor/client.py">list</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all processors in your organization
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+client = Extend(token="YOUR_TOKEN", )
+client.processor.list(type="EXTRACT", next_page_token='nextPageToken', max_page_size=1, sort_by="createdAt", sort_dir="asc", )
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**type:** `typing.Optional[ProcessorType]` — Filter processors by type
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**next_page_token:** `typing.Optional[str]` — Token for retrieving the next page of results
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**max_page_size:** `typing.Optional[int]` — Maximum number of processors to return per page
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort_by:** `typing.Optional[ProcessorListRequestSortBy]` — Field to sort by
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort_dir:** `typing.Optional[ProcessorListRequestSortDir]` — Sort direction
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.processor.<a href="src/extend_ai/processor/client.py">create</a>(...)</code></summary>
 <dl>
 <dd>

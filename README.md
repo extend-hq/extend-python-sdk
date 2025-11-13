@@ -5,6 +5,21 @@
 
 The Extendconfig Python library provides convenient access to the Extendconfig APIs from Python.
 
+## Table of Contents
+
+- [Documentation](#documentation)
+- [Installation](#installation)
+- [Reference](#reference)
+- [Usage](#usage)
+- [Async Client](#async-client)
+- [Exception Handling](#exception-handling)
+- [Advanced](#advanced)
+  - [Access Raw Response Data](#access-raw-response-data)
+  - [Retries](#retries)
+  - [Timeouts](#timeouts)
+  - [Custom Client](#custom-client)
+- [Contributing](#contributing)
+
 ## Documentation
 
 API reference documentation is available [here](https://docs.extend.ai/2025-04-21/developers).

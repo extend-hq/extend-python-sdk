@@ -15,7 +15,6 @@ from ..errors.internal_server_error import InternalServerError
 from ..errors.not_found_error import NotFoundError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..types.error import Error
-from ..types.extend_error import ExtendError
 from ..types.json_object import JsonObject
 from ..types.max_page_size import MaxPageSize
 from ..types.next_page_token import NextPageToken
@@ -482,9 +481,9 @@ class RawWorkflowRunClient:
                 raise InternalServerError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        ExtendError,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=ExtendError,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -569,9 +568,9 @@ class RawWorkflowRunClient:
                 raise InternalServerError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        ExtendError,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=ExtendError,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1030,9 +1029,9 @@ class AsyncRawWorkflowRunClient:
                 raise InternalServerError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        ExtendError,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=ExtendError,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1117,9 +1116,9 @@ class AsyncRawWorkflowRunClient:
                 raise InternalServerError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        ExtendError,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=ExtendError,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

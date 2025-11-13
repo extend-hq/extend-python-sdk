@@ -50,6 +50,7 @@ from .extract_metrics import ExtractMetrics
 from .extract_metrics_field_metrics import ExtractMetricsFieldMetrics
 from .extract_optimizer_options import ExtractOptimizerOptions
 from .extraction_advanced_options import ExtractionAdvancedOptions
+from .extraction_advanced_options_array_citation_strategy import ExtractionAdvancedOptionsArrayCitationStrategy
 from .extraction_advanced_options_excel_sheet_selection_strategy import (
     ExtractionAdvancedOptionsExcelSheetSelectionStrategy,
 )
@@ -82,6 +83,9 @@ from .json_output_metadata_value import JsonOutputMetadataValue
 from .json_output_metadata_value_citations_item import JsonOutputMetadataValueCitationsItem
 from .json_output_metadata_value_citations_item_polygon_item import JsonOutputMetadataValueCitationsItemPolygonItem
 from .json_output_metadata_value_insights_item import JsonOutputMetadataValueInsightsItem
+from .list_processors_processor import ListProcessorsProcessor
+from .list_processors_processor_version import ListProcessorsProcessorVersion
+from .list_processors_response import ListProcessorsResponse
 from .max_page_size import MaxPageSize
 from .next_page_token import NextPageToken
 from .optimizer_batch_processor_run_result import OptimizerBatchProcessorRunResult
@@ -243,6 +247,7 @@ __all__ = [
     "ExtractMetricsFieldMetrics",
     "ExtractOptimizerOptions",
     "ExtractionAdvancedOptions",
+    "ExtractionAdvancedOptionsArrayCitationStrategy",
     "ExtractionAdvancedOptionsExcelSheetSelectionStrategy",
     "ExtractionConfig",
     "ExtractionConfigBaseProcessor",
@@ -273,6 +278,9 @@ __all__ = [
     "JsonOutputMetadataValueCitationsItem",
     "JsonOutputMetadataValueCitationsItemPolygonItem",
     "JsonOutputMetadataValueInsightsItem",
+    "ListProcessorsProcessor",
+    "ListProcessorsProcessorVersion",
+    "ListProcessorsResponse",
     "MaxPageSize",
     "NextPageToken",
     "OptimizerBatchProcessorRunResult",

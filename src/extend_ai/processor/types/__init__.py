@@ -9,6 +9,8 @@ from .processor_create_request_config import (
     ProcessorCreateRequestConfig_Splitter,
 )
 from .processor_create_response import ProcessorCreateResponse
+from .processor_list_request_sort_by import ProcessorListRequestSortBy
+from .processor_list_request_sort_dir import ProcessorListRequestSortDir
 from .processor_update_request_config import (
     ProcessorUpdateRequestConfig,
     ProcessorUpdateRequestConfig_Classify,
@@ -23,6 +25,8 @@ __all__ = [
     "ProcessorCreateRequestConfig_Extract",
     "ProcessorCreateRequestConfig_Splitter",
     "ProcessorCreateResponse",
+    "ProcessorListRequestSortBy",
+    "ProcessorListRequestSortDir",
     "ProcessorUpdateRequestConfig",
     "ProcessorUpdateRequestConfig_Classify",
     "ProcessorUpdateRequestConfig_Extract",
