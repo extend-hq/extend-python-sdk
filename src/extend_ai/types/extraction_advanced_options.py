@@ -10,6 +10,7 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 from .array_strategy import ArrayStrategy
 from .excel_sheet_range import ExcelSheetRange
 from .extract_chunking_options import ExtractChunkingOptions
+from .extraction_advanced_options_array_citation_strategy import ExtractionAdvancedOptionsArrayCitationStrategy
 from .extraction_advanced_options_excel_sheet_selection_strategy import (
     ExtractionAdvancedOptionsExcelSheetSelectionStrategy,
 )
@@ -50,6 +51,13 @@ class ExtractionAdvancedOptions(UncheckedBaseModel):
     )
     """
     Whether to enable citations in the output.
+    """
+
+    array_citation_strategy: typing_extensions.Annotated[
+        typing.Optional[ExtractionAdvancedOptionsArrayCitationStrategy], FieldMetadata(alias="arrayCitationStrategy")
+    ] = pydantic.Field(default=None)
+    """
+    Granularity for array citations. This requires citationsEnabled=true and a base processor version that supports property-level array citations (extraction_performance ≥ 4.4.0).
     """
 
     advanced_figure_parsing_enabled: typing_extensions.Annotated[

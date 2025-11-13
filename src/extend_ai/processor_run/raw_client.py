@@ -16,7 +16,6 @@ from ..errors.not_found_error import NotFoundError
 from ..errors.too_many_requests_error import TooManyRequestsError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..types.error import Error
-from ..types.extend_error import ExtendError
 from ..types.json_object import JsonObject
 from ..types.max_page_size import MaxPageSize
 from ..types.next_page_token import NextPageToken
@@ -26,7 +25,6 @@ from ..types.processor_status import ProcessorStatus
 from ..types.processor_type import ProcessorType
 from ..types.sort_by_enum import SortByEnum
 from ..types.sort_dir_enum import SortDirEnum
-from ..types.too_many_requests_error_body import TooManyRequestsErrorBody
 from .types.processor_run_cancel_response import ProcessorRunCancelResponse
 from .types.processor_run_create_request_config import ProcessorRunCreateRequestConfig
 from .types.processor_run_create_response import ProcessorRunCreateResponse
@@ -311,9 +309,9 @@ class RawProcessorRunClient:
                 raise TooManyRequestsError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        TooManyRequestsErrorBody,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=TooManyRequestsErrorBody,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -452,9 +450,9 @@ class RawProcessorRunClient:
                 raise InternalServerError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        ExtendError,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=ExtendError,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -813,9 +811,9 @@ class AsyncRawProcessorRunClient:
                 raise TooManyRequestsError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        TooManyRequestsErrorBody,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=TooManyRequestsErrorBody,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -954,9 +952,9 @@ class AsyncRawProcessorRunClient:
                 raise InternalServerError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        ExtendError,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=ExtendError,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

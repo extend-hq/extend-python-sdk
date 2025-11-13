@@ -156,9 +156,9 @@ class RawExtend:
                 raise InternalServerError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        ExtendError,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=ExtendError,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -386,9 +386,9 @@ class AsyncRawExtend:
                 raise InternalServerError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        ExtendError,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=ExtendError,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

@@ -14,7 +14,6 @@ from ..errors.internal_server_error import InternalServerError
 from ..errors.not_found_error import NotFoundError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..types.error import Error
-from ..types.extend_error import ExtendError
 from .types.parser_run_delete_response import ParserRunDeleteResponse
 from .types.parser_run_get_request_response_type import ParserRunGetRequestResponseType
 from .types.parser_run_get_response import ParserRunGetResponse
@@ -167,9 +166,9 @@ class RawParserRunClient:
                 raise InternalServerError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        ExtendError,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=ExtendError,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -327,9 +326,9 @@ class AsyncRawParserRunClient:
                 raise InternalServerError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        ExtendError,
+                        typing.Optional[typing.Any],
                         construct_type(
-                            type_=ExtendError,  # type: ignore
+                            type_=typing.Optional[typing.Any],  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

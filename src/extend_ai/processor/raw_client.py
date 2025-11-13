@@ -11,12 +11,17 @@ from ..core.request_options import RequestOptions
 from ..core.serialization import convert_and_respect_annotation_metadata
 from ..core.unchecked_base_model import construct_type
 from ..errors.bad_request_error import BadRequestError
+from ..errors.internal_server_error import InternalServerError
 from ..errors.not_found_error import NotFoundError
+from ..errors.too_many_requests_error import TooManyRequestsError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..types.error import Error
+from ..types.list_processors_response import ListProcessorsResponse
 from ..types.processor_type import ProcessorType
 from .types.processor_create_request_config import ProcessorCreateRequestConfig
 from .types.processor_create_response import ProcessorCreateResponse
+from .types.processor_list_request_sort_by import ProcessorListRequestSortBy
+from .types.processor_list_request_sort_dir import ProcessorListRequestSortDir
 from .types.processor_update_request_config import ProcessorUpdateRequestConfig
 from .types.processor_update_response import ProcessorUpdateResponse
 
@@ -27,6 +32,115 @@ OMIT = typing.cast(typing.Any, ...)
 class RawProcessorClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
+
+    def list(
+        self,
+        *,
+        type: typing.Optional[ProcessorType] = None,
+        next_page_token: typing.Optional[str] = None,
+        max_page_size: typing.Optional[int] = None,
+        sort_by: typing.Optional[ProcessorListRequestSortBy] = None,
+        sort_dir: typing.Optional[ProcessorListRequestSortDir] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[ListProcessorsResponse]:
+        """
+        List all processors in your organization
+
+        Parameters
+        ----------
+        type : typing.Optional[ProcessorType]
+            Filter processors by type
+
+        next_page_token : typing.Optional[str]
+            Token for retrieving the next page of results
+
+        max_page_size : typing.Optional[int]
+            Maximum number of processors to return per page
+
+        sort_by : typing.Optional[ProcessorListRequestSortBy]
+            Field to sort by
+
+        sort_dir : typing.Optional[ProcessorListRequestSortDir]
+            Sort direction
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ListProcessorsResponse]
+            Successfully retrieved processors
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "processors",
+            method="GET",
+            params={
+                "type": type,
+                "nextPageToken": next_page_token,
+                "maxPageSize": max_page_size,
+                "sortBy": sort_by,
+                "sortDir": sort_dir,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ListProcessorsResponse,
+                    construct_type(
+                        type_=ListProcessorsResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        construct_type(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     def create(
         self,
@@ -230,6 +344,115 @@ class RawProcessorClient:
 class AsyncRawProcessorClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
+
+    async def list(
+        self,
+        *,
+        type: typing.Optional[ProcessorType] = None,
+        next_page_token: typing.Optional[str] = None,
+        max_page_size: typing.Optional[int] = None,
+        sort_by: typing.Optional[ProcessorListRequestSortBy] = None,
+        sort_dir: typing.Optional[ProcessorListRequestSortDir] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[ListProcessorsResponse]:
+        """
+        List all processors in your organization
+
+        Parameters
+        ----------
+        type : typing.Optional[ProcessorType]
+            Filter processors by type
+
+        next_page_token : typing.Optional[str]
+            Token for retrieving the next page of results
+
+        max_page_size : typing.Optional[int]
+            Maximum number of processors to return per page
+
+        sort_by : typing.Optional[ProcessorListRequestSortBy]
+            Field to sort by
+
+        sort_dir : typing.Optional[ProcessorListRequestSortDir]
+            Sort direction
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ListProcessorsResponse]
+            Successfully retrieved processors
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "processors",
+            method="GET",
+            params={
+                "type": type,
+                "nextPageToken": next_page_token,
+                "maxPageSize": max_page_size,
+                "sortBy": sort_by,
+                "sortDir": sort_dir,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ListProcessorsResponse,
+                    construct_type(
+                        type_=ListProcessorsResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        construct_type(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Optional[typing.Any],
+                        construct_type(
+                            type_=typing.Optional[typing.Any],  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     async def create(
         self,

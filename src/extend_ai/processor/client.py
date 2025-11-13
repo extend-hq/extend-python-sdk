@@ -4,10 +4,13 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
+from ..types.list_processors_response import ListProcessorsResponse
 from ..types.processor_type import ProcessorType
 from .raw_client import AsyncRawProcessorClient, RawProcessorClient
 from .types.processor_create_request_config import ProcessorCreateRequestConfig
 from .types.processor_create_response import ProcessorCreateResponse
+from .types.processor_list_request_sort_by import ProcessorListRequestSortBy
+from .types.processor_list_request_sort_dir import ProcessorListRequestSortDir
 from .types.processor_update_request_config import ProcessorUpdateRequestConfig
 from .types.processor_update_response import ProcessorUpdateResponse
 
@@ -29,6 +32,60 @@ class ProcessorClient:
         RawProcessorClient
         """
         return self._raw_client
+
+    def list(
+        self,
+        *,
+        type: typing.Optional[ProcessorType] = None,
+        next_page_token: typing.Optional[str] = None,
+        max_page_size: typing.Optional[int] = None,
+        sort_by: typing.Optional[ProcessorListRequestSortBy] = None,
+        sort_dir: typing.Optional[ProcessorListRequestSortDir] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ListProcessorsResponse:
+        """
+        List all processors in your organization
+
+        Parameters
+        ----------
+        type : typing.Optional[ProcessorType]
+            Filter processors by type
+
+        next_page_token : typing.Optional[str]
+            Token for retrieving the next page of results
+
+        max_page_size : typing.Optional[int]
+            Maximum number of processors to return per page
+
+        sort_by : typing.Optional[ProcessorListRequestSortBy]
+            Field to sort by
+
+        sort_dir : typing.Optional[ProcessorListRequestSortDir]
+            Sort direction
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ListProcessorsResponse
+            Successfully retrieved processors
+
+        Examples
+        --------
+        from extend_ai import Extend
+        client = Extend(token="YOUR_TOKEN", )
+        client.processor.list(type="EXTRACT", next_page_token='nextPageToken', max_page_size=1, sort_by="createdAt", sort_dir="asc", )
+        """
+        _response = self._raw_client.list(
+            type=type,
+            next_page_token=next_page_token,
+            max_page_size=max_page_size,
+            sort_by=sort_by,
+            sort_dir=sort_dir,
+            request_options=request_options,
+        )
+        return _response.data
 
     def create(
         self,
@@ -135,6 +192,63 @@ class AsyncProcessorClient:
         AsyncRawProcessorClient
         """
         return self._raw_client
+
+    async def list(
+        self,
+        *,
+        type: typing.Optional[ProcessorType] = None,
+        next_page_token: typing.Optional[str] = None,
+        max_page_size: typing.Optional[int] = None,
+        sort_by: typing.Optional[ProcessorListRequestSortBy] = None,
+        sort_dir: typing.Optional[ProcessorListRequestSortDir] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ListProcessorsResponse:
+        """
+        List all processors in your organization
+
+        Parameters
+        ----------
+        type : typing.Optional[ProcessorType]
+            Filter processors by type
+
+        next_page_token : typing.Optional[str]
+            Token for retrieving the next page of results
+
+        max_page_size : typing.Optional[int]
+            Maximum number of processors to return per page
+
+        sort_by : typing.Optional[ProcessorListRequestSortBy]
+            Field to sort by
+
+        sort_dir : typing.Optional[ProcessorListRequestSortDir]
+            Sort direction
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ListProcessorsResponse
+            Successfully retrieved processors
+
+        Examples
+        --------
+        from extend_ai import AsyncExtend
+        import asyncio
+        client = AsyncExtend(token="YOUR_TOKEN", )
+        async def main() -> None:
+            await client.processor.list(type="EXTRACT", next_page_token='nextPageToken', max_page_size=1, sort_by="createdAt", sort_dir="asc", )
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.list(
+            type=type,
+            next_page_token=next_page_token,
+            max_page_size=max_page_size,
+            sort_by=sort_by,
+            sort_dir=sort_dir,
+            request_options=request_options,
+        )
+        return _response.data
 
     async def create(
         self,
