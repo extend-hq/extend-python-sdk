@@ -123,6 +123,115 @@ class UncheckedBaseModel(UniversalBaseModel):
             m._init_private_attributes()  # type: ignore # Pydantic v1
         return m
 
+    def dict(
+        self,
+        *,
+        by_alias: bool = False,
+        exclude_none: bool = False,
+        **kwargs: typing.Any,
+    ) -> typing.Dict[str, typing.Any]:
+        """
+        Override dict to properly handle FieldMetadata aliases.
+        When by_alias=True, converts field names to their camelCase aliases.
+        """
+        if IS_PYDANTIC_V2:
+            result = super().model_dump(
+                by_alias=False,  # Get base dict first
+                exclude_none=exclude_none,
+                **kwargs
+            )
+        else:
+            result = super().dict(
+                by_alias=False,  # Get base dict first
+                exclude_none=exclude_none,
+                **kwargs
+            )
+        
+        # Apply custom FieldMetadata alias transformations if requested
+        if by_alias:
+            result = self._apply_field_aliases(result)
+        
+        return result
+
+    def model_dump(
+        self,
+        *,
+        by_alias: bool = False,
+        exclude_none: bool = False,
+        **kwargs: typing.Any,
+    ) -> typing.Dict[str, typing.Any]:
+        """
+        Pydantic v2 alias for dict() that properly handles FieldMetadata aliases.
+        """
+        return self.dict(by_alias=by_alias, exclude_none=exclude_none, **kwargs)
+
+    def model_dump_json(
+        self,
+        *,
+        by_alias: bool = False,
+        exclude_none: bool = False,
+        **kwargs: typing.Any,
+    ) -> str:
+        """
+        Override model_dump_json to properly handle FieldMetadata aliases and datetime serialization.
+        When by_alias=True, converts field names to their camelCase aliases.
+        """
+        import json
+        
+        # Get dict with proper aliases
+        data = self.dict(by_alias=by_alias, exclude_none=exclude_none)
+        
+        # Serialize to JSON with datetime handling
+        return json.dumps(data, default=_json_serializer)
+
+    def _apply_field_aliases(self, data: typing.Dict[str, typing.Any]) -> typing.Dict[str, typing.Any]:
+        """
+        Recursively apply FieldMetadata aliases to convert snake_case to camelCase.
+        """
+        from .serialization import get_field_to_alias_mapping
+        
+        field_to_alias = get_field_to_alias_mapping(self.__class__)
+        result = {}
+        
+        for key, value in data.items():
+            # Use alias if available, otherwise use original key
+            new_key = field_to_alias.get(key, key)
+            
+            # Recursively handle nested models
+            if isinstance(value, dict):
+                # Check if this is a nested model
+                fields = _get_model_fields(self.__class__)
+                if key in fields:
+                    field = fields[key]
+                    if IS_PYDANTIC_V2:
+                        field_type = field.annotation  # type: ignore
+                    else:
+                        field_type = typing.cast(typing.Type, field.outer_type_)  # type: ignore
+                    
+                    # If it's a BaseModel, recursively apply aliases
+                    if inspect.isclass(field_type) and issubclass(field_type, pydantic.BaseModel):
+                        # Create a temporary instance to apply aliases
+                        try:
+                            temp_instance = field_type.construct(**value)
+                            if hasattr(temp_instance, '_apply_field_aliases'):
+                                value = temp_instance._apply_field_aliases(value)
+                        except Exception:
+                            pass
+                
+                result[new_key] = value
+            elif isinstance(value, list):
+                # Handle lists of models
+                result[new_key] = [
+                    item._apply_field_aliases(item.dict(by_alias=False)) 
+                    if isinstance(item, pydantic.BaseModel) and hasattr(item, '_apply_field_aliases')
+                    else item
+                    for item in value
+                ]
+            else:
+                result[new_key] = value
+        
+        return result
+
 
 def _convert_undiscriminated_union_type(union_type: typing.Type[typing.Any], object_: typing.Any) -> typing.Any:
     inner_types = get_args(union_type)
@@ -301,3 +410,16 @@ def _get_field_default(field: PydanticField) -> typing.Any:
             return None
         return value
     return value
+
+
+def _json_serializer(obj: typing.Any) -> typing.Any:
+    """
+    Custom JSON serializer for handling datetime objects and other non-standard types.
+    """
+    if isinstance(obj, (dt.datetime, dt.date)):
+        return obj.isoformat()
+    if isinstance(obj, uuid.UUID):
+        return str(obj)
+    if isinstance(obj, pydantic.BaseModel):
+        return obj.dict(by_alias=True)
+    raise TypeError(f"Type {type(obj)} not serializable")
