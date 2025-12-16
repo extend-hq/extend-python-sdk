@@ -19,6 +19,11 @@ class ParserRun(UncheckedBaseModel):
     Full parser run object with complete parsing results
     """
 
+    object: typing.Literal["parser_run"] = pydantic.Field(default="parser_run")
+    """
+    The type of object. Will always be `"parser_run"`.
+    """
+
     id: str = pydantic.Field()
     """
     A unique identifier for the parser run. Will always start with `"parser_run_"`

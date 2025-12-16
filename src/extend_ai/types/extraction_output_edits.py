@@ -16,10 +16,18 @@ class ExtractionOutputEdits(UncheckedBaseModel):
 
     original_value: typing_extensions.Annotated[
         typing.Optional[typing.Optional[typing.Any]], FieldMetadata(alias="originalValue")
-    ] = None
+    ] = pydantic.Field(default=None)
+    """
+    The original value before editing.
+    """
+
     edited_value: typing_extensions.Annotated[
         typing.Optional[typing.Optional[typing.Any]], FieldMetadata(alias="editedValue")
-    ] = None
+    ] = pydantic.Field(default=None)
+    """
+    The value after editing.
+    """
+
     notes: typing.Optional[str] = pydantic.Field(default=None)
     """
     Any notes added during editing.

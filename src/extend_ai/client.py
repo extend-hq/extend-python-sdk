@@ -7,6 +7,7 @@ from .batch_processor_run.client import AsyncBatchProcessorRunClient, BatchProce
 from .batch_workflow_run.client import AsyncBatchWorkflowRunClient, BatchWorkflowRunClient
 from .core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from .core.request_options import RequestOptions
+from .edit.client import AsyncEditClient, EditClient
 from .environment import ExtendEnvironment
 from .evaluation_set.client import AsyncEvaluationSetClient, EvaluationSetClient
 from .evaluation_set_item.client import AsyncEvaluationSetItemClient, EvaluationSetItemClient
@@ -95,6 +96,7 @@ class Extend:
         self.processor = ProcessorClient(client_wrapper=self._client_wrapper)
         self.processor_version = ProcessorVersionClient(client_wrapper=self._client_wrapper)
         self.parser_run = ParserRunClient(client_wrapper=self._client_wrapper)
+        self.edit = EditClient(client_wrapper=self._client_wrapper)
         self.file = FileClient(client_wrapper=self._client_wrapper)
         self.evaluation_set = EvaluationSetClient(client_wrapper=self._client_wrapper)
         self.evaluation_set_item = EvaluationSetItemClient(client_wrapper=self._client_wrapper)
@@ -271,6 +273,7 @@ class AsyncExtend:
         self.processor = AsyncProcessorClient(client_wrapper=self._client_wrapper)
         self.processor_version = AsyncProcessorVersionClient(client_wrapper=self._client_wrapper)
         self.parser_run = AsyncParserRunClient(client_wrapper=self._client_wrapper)
+        self.edit = AsyncEditClient(client_wrapper=self._client_wrapper)
         self.file = AsyncFileClient(client_wrapper=self._client_wrapper)
         self.evaluation_set = AsyncEvaluationSetClient(client_wrapper=self._client_wrapper)
         self.evaluation_set_item = AsyncEvaluationSetItemClient(client_wrapper=self._client_wrapper)

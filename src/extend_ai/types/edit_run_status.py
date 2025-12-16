@@ -7,29 +7,29 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .parser_run_status_status import ParserRunStatusStatus
+from .edit_run_status_status import EditRunStatusStatus
 
 
-class ParserRunStatus(UncheckedBaseModel):
+class EditRunStatus(UncheckedBaseModel):
     """
-    Minimal parser run status object without parser results.
+    Minimal edit run status object without edit results.
     """
 
-    object: typing.Literal["parser_run_status"] = pydantic.Field(default="parser_run_status")
+    object: typing.Literal["edit_run_status"] = pydantic.Field(default="edit_run_status")
     """
-    The type of object. Will always be `"parser_run_status"`.
+    The type of object. Will always be `"edit_run_status"`.
     """
 
     id: str = pydantic.Field()
     """
-    A unique identifier for the parser run. Will always start with `"parser_run_"`
+    A unique identifier for the edit run. Will always start with `"edit_run_"`
     
-    Example: `"parser_run_xK9mLPqRtN3vS8wF5hB2cQ"`
+    Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
     """
 
-    status: ParserRunStatusStatus = pydantic.Field()
+    status: EditRunStatusStatus = pydantic.Field()
     """
-    The status of the parser run.
+    The status of the edit run.
     """
 
     failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (

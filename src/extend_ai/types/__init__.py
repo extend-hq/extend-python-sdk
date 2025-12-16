@@ -4,6 +4,7 @@
 
 from .api_version_enum import ApiVersionEnum
 from .array_strategy import ArrayStrategy
+from .array_strategy_type import ArrayStrategyType
 from .bad_request_error_body import BadRequestErrorBody
 from .bad_request_error_body_code import BadRequestErrorBodyCode
 from .base_metrics import BaseMetrics
@@ -35,6 +36,22 @@ from .classifier_output import ClassifierOutput
 from .classify_metrics import ClassifyMetrics
 from .classify_optimizer_options import ClassifyOptimizerOptions
 from .document_processor_run_credits import DocumentProcessorRunCredits
+from .edit_bounding_box import EditBoundingBox
+from .edit_error import EditError
+from .edit_error_code import EditErrorCode
+from .edit_json_schema import EditJsonSchema
+from .edit_json_schema_extend_edit_field_type import EditJsonSchemaExtendEditFieldType
+from .edit_object_json_schema import EditObjectJsonSchema
+from .edit_root_json_schema import EditRootJsonSchema
+from .edit_run import EditRun
+from .edit_run_config import EditRunConfig
+from .edit_run_config_advanced_options import EditRunConfigAdvancedOptions
+from .edit_run_edited_file import EditRunEditedFile
+from .edit_run_metrics import EditRunMetrics
+from .edit_run_status import EditRunStatus
+from .edit_run_status_status import EditRunStatusStatus
+from .edit_run_usage import EditRunUsage
+from .edit_text_options import EditTextOptions
 from .empty_block_details import EmptyBlockDetails
 from .enum import Enum
 from .enum_option import EnumOption
@@ -201,6 +218,7 @@ from .workflow_status import WorkflowStatus
 __all__ = [
     "ApiVersionEnum",
     "ArrayStrategy",
+    "ArrayStrategyType",
     "BadRequestErrorBody",
     "BadRequestErrorBodyCode",
     "BaseMetrics",
@@ -232,6 +250,22 @@ __all__ = [
     "ClassifyMetrics",
     "ClassifyOptimizerOptions",
     "DocumentProcessorRunCredits",
+    "EditBoundingBox",
+    "EditError",
+    "EditErrorCode",
+    "EditJsonSchema",
+    "EditJsonSchemaExtendEditFieldType",
+    "EditObjectJsonSchema",
+    "EditRootJsonSchema",
+    "EditRun",
+    "EditRunConfig",
+    "EditRunConfigAdvancedOptions",
+    "EditRunEditedFile",
+    "EditRunMetrics",
+    "EditRunStatus",
+    "EditRunStatusStatus",
+    "EditRunUsage",
+    "EditTextOptions",
     "EmptyBlockDetails",
     "Enum",
     "EnumOption",

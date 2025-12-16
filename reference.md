@@ -414,7 +414,11 @@ Examples:
 <dl>
 <dd>
 
-**metadata:** `typing.Optional[JsonObject]` — A optional metadata object that can be assigned to a specific WorkflowRun to help identify it. It will be returned in the response and webhooks. You can place any arbitrary `key : value` pairs in this object.
+**metadata:** `typing.Optional[JsonObject]` 
+
+An optional metadata object that can be assigned to a specific WorkflowRun to help identify it. It will be returned in the response and webhooks. You can place any arbitrary `key : value` pairs in this object.
+
+To categorize workflow runs for billing and usage tracking, include `extend:usage_tags` with an array of string values (e.g., `{"extend:usage_tags": ["production", "team-eng", "customer-123"]}`). Tags must contain only alphanumeric characters, hyphens, and underscores; any special characters will be automatically removed.
     
 </dd>
 </dl>
@@ -573,6 +577,8 @@ Example: `"workflow_run_8k9m-xyzAB_Pqrst-Nvw4"`
 A metadata object that can be assigned to a specific WorkflowRun. If metadata already exists on this WorkflowRun, the newly incoming metadata will be merged with the existing metadata, with the incoming metadata taking field precedence.
 
 You can include any arbitrary `key : value` pairs in this object.
+
+To categorize workflow runs for billing and usage tracking, include `extend:usage_tags` with an array of string values (e.g., `{"extend:usage_tags": ["production", "team-eng", "customer-123"]}`). Tags must contain only alphanumeric characters, hyphens, and underscores; any special characters will be automatically removed.
     
 </dd>
 </dl>
@@ -1117,7 +1123,11 @@ Whether to run the processor synchronously. When `true`, the request will wait f
 <dl>
 <dd>
 
-**metadata:** `typing.Optional[JsonObject]` — An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
+**metadata:** `typing.Optional[JsonObject]` 
+
+An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
+
+To categorize processor runs for billing and usage tracking, include `extend:usage_tags` with an array of string values (e.g., `{"extend:usage_tags": ["production", "team-eng", "customer-123"]}`). Tags must contain only alphanumeric characters, hyphens, and underscores; any special characters will be automatically removed.
     
 </dd>
 </dl>
@@ -2026,6 +2036,307 @@ client.parser_run.delete(id='parser_run_id_here', )
 The ID of the parser run to delete.
 
 Example: `"parser_run_xK9mLPqRtN3vS8wF5hB2cQ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Edit
+<details><summary><code>client.edit.<a href="src/extend_ai/edit/client.py">create</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Edit and manipulate PDF documents by detecting and filling form fields.
+This is a synchronous endpoint that will wait for the edit operation to complete (up to 5 minutes) before returning results. For longer operations, use the [Edit File Async](/developers/api-reference/edit-endpoints/edit-file-async) endpoint.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+from extend_ai.edit import EditCreateRequestFile
+client = Extend(token="YOUR_TOKEN", )
+client.edit.create(file=EditCreateRequestFile(), )
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**file:** `EditCreateRequestFile` — A file object containing either a URL or a fileId.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**config:** `typing.Optional[EditCreateRequestConfig]` — Configuration for the edit operation. Field values should be specified using `extend_edit:value` on each field in the schema.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.edit.<a href="src/extend_ai/edit/client.py">create_async</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Edit and manipulate PDF documents **asynchronously** by filling forms, adding/modifying text fields, and applying structured changes.
+
+The Edit Async endpoint allows you to convert and edit documents asynchronously and get an edit run ID that can be used to check status and retrieve results with the [Get Edit Run](/developers/api-reference/edit-endpoints/get-edit-run) endpoint.
+
+This is useful for:
+* Large files that may take longer to process
+* Avoiding timeout issues with synchronous editing
+* Processing multiple files in parallel
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+from extend_ai.edit import EditCreateAsyncRequestFile
+client = Extend(token="YOUR_TOKEN", )
+client.edit.create_async(file=EditCreateAsyncRequestFile(), )
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**file:** `EditCreateAsyncRequestFile` — A file object containing either a URL or a fileId.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**config:** `typing.Optional[EditCreateAsyncRequestConfig]` — Configuration for the edit operation. Field values should be specified using `extend_edit:value` on each field in the schema.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.edit.<a href="src/extend_ai/edit/client.py">get</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the status and results of an edit run.
+
+Use this endpoint to get results for an edit run that has already completed, or to check on the status of an asynchronous edit run initiated via the [Edit File Asynchronously](/developers/api-reference/edit-endpoints/edit-file-async) endpoint.
+
+If editing is still in progress, you'll receive a response with just the status. Once complete, you'll receive the full edited file information in the response.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+client = Extend(token="YOUR_TOKEN", )
+client.edit.get(id='edit_run_id_here', )
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The unique identifier for the edit run.
+
+Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.edit.<a href="src/extend_ai/edit/client.py">delete</a>(...)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete an edit run and all associated data from Extend. This operation is permanent and cannot be undone.
+
+This endpoint can be used if you'd like to manage data retention on your own rather than relying on automated data retention policies, or to make one-off deletions for your downstream customers.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+client = Extend(token="YOUR_TOKEN", )
+client.edit.delete(id='edit_run_id_here', )
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the edit run to delete.
+
+Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
     
 </dd>
 </dl>

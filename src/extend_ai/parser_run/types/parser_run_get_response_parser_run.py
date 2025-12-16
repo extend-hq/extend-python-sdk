@@ -19,6 +19,7 @@ from ...types.parser_run_status_status import ParserRunStatusStatus
 
 class ParserRunGetResponseParserRun_ParserRunStatus(UncheckedBaseModel):
     object: typing.Literal["parser_run_status"] = "parser_run_status"
+    object: typing.Literal["parser_run_status"] = "parser_run_status"
     id: str
     status: ParserRunStatusStatus
     failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = None
@@ -34,6 +35,7 @@ class ParserRunGetResponseParserRun_ParserRunStatus(UncheckedBaseModel):
 
 
 class ParserRunGetResponseParserRun_ParserRun(UncheckedBaseModel):
+    object: typing.Literal["parser_run"] = "parser_run"
     object: typing.Literal["parser_run"] = "parser_run"
     id: str
     file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")]

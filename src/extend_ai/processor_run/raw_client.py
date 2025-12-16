@@ -228,6 +228,8 @@ class RawProcessorRunClient:
         metadata : typing.Optional[JsonObject]
             An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
 
+            To categorize processor runs for billing and usage tracking, include `extend:usage_tags` with an array of string values (e.g., `{"extend:usage_tags": ["production", "team-eng", "customer-123"]}`). Tags must contain only alphanumeric characters, hyphens, and underscores; any special characters will be automatically removed.
+
         config : typing.Optional[ProcessorRunCreateRequestConfig]
             The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
 
@@ -729,6 +731,8 @@ class AsyncRawProcessorRunClient:
 
         metadata : typing.Optional[JsonObject]
             An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
+
+            To categorize processor runs for billing and usage tracking, include `extend:usage_tags` with an array of string values (e.g., `{"extend:usage_tags": ["production", "team-eng", "customer-123"]}`). Tags must contain only alphanumeric characters, hyphens, and underscores; any special characters will be automatically removed.
 
         config : typing.Optional[ProcessorRunCreateRequestConfig]
             The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
