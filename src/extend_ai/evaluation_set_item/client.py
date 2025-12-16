@@ -79,8 +79,17 @@ class EvaluationSetItemClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.evaluation_set_item.list(id='evaluation_set_id_here', sort_by="updatedAt", sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.evaluation_set_item.list(
+            id="evaluation_set_id_here",
+            sort_by="updatedAt",
+            sort_dir="asc",
+            next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+            max_page_size=1,
+        )
         """
         _response = self._raw_client.list(
             id,
@@ -141,11 +150,18 @@ class EvaluationSetItemClient:
 
         Examples
         --------
-        from extend_ai import Extend
-        from extend_ai import ProvidedJsonOutput
-        client = Extend(token="YOUR_TOKEN", )
-        client.evaluation_set_item.create(evaluation_set_id='evaluation_set_id_here', file_id='file_id_here', expected_output=ProvidedJsonOutput(value={'key': 'value'
-        }, ), )
+        from extend_ai import Extend, ProvidedJsonOutput
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.evaluation_set_item.create(
+            evaluation_set_id="evaluation_set_id_here",
+            file_id="file_id_here",
+            expected_output=ProvidedJsonOutput(
+                value={"key": "value"},
+            ),
+        )
         """
         _response = self._raw_client.create(
             evaluation_set_id=evaluation_set_id,
@@ -185,11 +201,17 @@ class EvaluationSetItemClient:
 
         Examples
         --------
-        from extend_ai import Extend
-        from extend_ai import ProvidedJsonOutput
-        client = Extend(token="YOUR_TOKEN", )
-        client.evaluation_set_item.update(id='evaluation_set_item_id_here', expected_output=ProvidedJsonOutput(value={'key': 'value'
-        }, ), )
+        from extend_ai import Extend, ProvidedJsonOutput
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.evaluation_set_item.update(
+            id="evaluation_set_item_id_here",
+            expected_output=ProvidedJsonOutput(
+                value={"key": "value"},
+            ),
+        )
         """
         _response = self._raw_client.update(id, expected_output=expected_output, request_options=request_options)
         return _response.data
@@ -220,8 +242,13 @@ class EvaluationSetItemClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.evaluation_set_item.delete(id='evaluation_set_item_id_here', )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.evaluation_set_item.delete(
+            id="evaluation_set_item_id_here",
+        )
         """
         _response = self._raw_client.delete(id, request_options=request_options)
         return _response.data
@@ -258,12 +285,25 @@ class EvaluationSetItemClient:
 
         Examples
         --------
-        from extend_ai import Extend
-        from extend_ai.evaluation_set_item import EvaluationSetItemCreateBatchRequestItemsItem
-        from extend_ai import ProvidedJsonOutput
-        client = Extend(token="YOUR_TOKEN", )
-        client.evaluation_set_item.create_batch(evaluation_set_id='evaluation_set_id_here', items=[EvaluationSetItemCreateBatchRequestItemsItem(file_id='file_id_here', expected_output=ProvidedJsonOutput(value={'key': 'value'
-        }, ), )], )
+        from extend_ai import Extend, ProvidedJsonOutput
+        from extend_ai.evaluation_set_item import (
+            EvaluationSetItemCreateBatchRequestItemsItem,
+        )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.evaluation_set_item.create_batch(
+            evaluation_set_id="evaluation_set_id_here",
+            items=[
+                EvaluationSetItemCreateBatchRequestItemsItem(
+                    file_id="file_id_here",
+                    expected_output=ProvidedJsonOutput(
+                        value={"key": "value"},
+                    ),
+                )
+            ],
+        )
         """
         _response = self._raw_client.create_batch(
             evaluation_set_id=evaluation_set_id, items=items, request_options=request_options
@@ -328,11 +368,25 @@ class AsyncEvaluationSetItemClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.evaluation_set_item.list(id='evaluation_set_id_here', sort_by="updatedAt", sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
+            await client.evaluation_set_item.list(
+                id="evaluation_set_id_here",
+                sort_by="updatedAt",
+                sort_dir="asc",
+                next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+                max_page_size=1,
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.list(
@@ -394,13 +448,25 @@ class AsyncEvaluationSetItemClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
-        from extend_ai import ProvidedJsonOutput
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend, ProvidedJsonOutput
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.evaluation_set_item.create(evaluation_set_id='evaluation_set_id_here', file_id='file_id_here', expected_output=ProvidedJsonOutput(value={'key': 'value'
-            }, ), )
+            await client.evaluation_set_item.create(
+                evaluation_set_id="evaluation_set_id_here",
+                file_id="file_id_here",
+                expected_output=ProvidedJsonOutput(
+                    value={"key": "value"},
+                ),
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.create(
@@ -441,13 +507,24 @@ class AsyncEvaluationSetItemClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
-        from extend_ai import ProvidedJsonOutput
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend, ProvidedJsonOutput
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.evaluation_set_item.update(id='evaluation_set_item_id_here', expected_output=ProvidedJsonOutput(value={'key': 'value'
-            }, ), )
+            await client.evaluation_set_item.update(
+                id="evaluation_set_item_id_here",
+                expected_output=ProvidedJsonOutput(
+                    value={"key": "value"},
+                ),
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.update(id, expected_output=expected_output, request_options=request_options)
@@ -478,11 +555,21 @@ class AsyncEvaluationSetItemClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.evaluation_set_item.delete(id='evaluation_set_item_id_here', )
+            await client.evaluation_set_item.delete(
+                id="evaluation_set_item_id_here",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.delete(id, request_options=request_options)
@@ -520,14 +607,32 @@ class AsyncEvaluationSetItemClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
-        from extend_ai.evaluation_set_item import EvaluationSetItemCreateBatchRequestItemsItem
-        from extend_ai import ProvidedJsonOutput
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend, ProvidedJsonOutput
+        from extend_ai.evaluation_set_item import (
+            EvaluationSetItemCreateBatchRequestItemsItem,
+        )
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.evaluation_set_item.create_batch(evaluation_set_id='evaluation_set_id_here', items=[EvaluationSetItemCreateBatchRequestItemsItem(file_id='file_id_here', expected_output=ProvidedJsonOutput(value={'key': 'value'
-            }, ), )], )
+            await client.evaluation_set_item.create_batch(
+                evaluation_set_id="evaluation_set_id_here",
+                items=[
+                    EvaluationSetItemCreateBatchRequestItemsItem(
+                        file_id="file_id_here",
+                        expected_output=ProvidedJsonOutput(
+                            value={"key": "value"},
+                        ),
+                    )
+                ],
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.create_batch(

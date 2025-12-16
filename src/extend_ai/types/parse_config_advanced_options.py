@@ -26,6 +26,12 @@ class ParseConfigAdvancedOptions(UncheckedBaseModel):
     """
 
     page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = None
+    vertical_grouping_threshold: typing_extensions.Annotated[
+        typing.Optional[float], FieldMetadata(alias="verticalGroupingThreshold")
+    ] = pydantic.Field(default=None)
+    """
+    Multiplier for the Y-axis threshold used to determine if text blocks should be placed on the same line or not (0.1-5.0, default 1.0). Higher values group elements that are further apart vertically. Only applies when the spatial target is set.
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

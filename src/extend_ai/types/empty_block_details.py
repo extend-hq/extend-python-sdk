@@ -2,4 +2,4 @@
 
 import typing
 
-EmptyBlockDetails = typing.Dict[str, typing.Optional[typing.Any]]
+EmptyBlockDetails = typing.Dict[str, typing.Any]

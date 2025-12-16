@@ -46,9 +46,6 @@ class OptimizerBatchProcessorRunResultProcessorConfig_Extract(UncheckedBaseModel
             extra = pydantic.Extra.allow
 
 
-from .extraction_field import ExtractionField  # noqa: E402, F401, I001
-
-
 class OptimizerBatchProcessorRunResultProcessorConfig_Classify(UncheckedBaseModel):
     """
     Processor configuration used for this run
@@ -85,4 +82,6 @@ OptimizerBatchProcessorRunResultProcessorConfig = typing_extensions.Annotated[
     ],
     UnionMetadata(discriminant="type"),
 ]
-update_forward_refs(OptimizerBatchProcessorRunResultProcessorConfig_Extract)
+from .extraction_field import ExtractionField  # noqa: E402, I001
+
+update_forward_refs(OptimizerBatchProcessorRunResultProcessorConfig_Extract, ExtractionField=ExtractionField)

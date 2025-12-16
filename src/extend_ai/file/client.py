@@ -70,8 +70,16 @@ class FileClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.file.list(name_contains='nameContains', sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.file.list(
+            name_contains="nameContains",
+            sort_dir="asc",
+            next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+            max_page_size=1,
+        )
         """
         _response = self._raw_client.list(
             name_contains=name_contains,
@@ -125,8 +133,16 @@ class FileClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.file.get(id='file_id_here', raw_text=True, markdown=True, html=True, )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.file.get(
+            id="file_id_here",
+            raw_text=True,
+            markdown=True,
+            html=True,
+        )
         """
         _response = self._raw_client.get(
             id, raw_text=raw_text, markdown=markdown, html=html, request_options=request_options
@@ -157,8 +173,13 @@ class FileClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.file.delete(id='file_id_here', )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.file.delete(
+            id="file_id_here",
+        )
         """
         _response = self._raw_client.delete(id, request_options=request_options)
         return _response.data
@@ -191,7 +212,10 @@ class FileClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
         client.file.upload()
         """
         _response = self._raw_client.upload(file=file, request_options=request_options)
@@ -249,11 +273,24 @@ class AsyncFileClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.file.list(name_contains='nameContains', sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
+            await client.file.list(
+                name_contains="nameContains",
+                sort_dir="asc",
+                next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+                max_page_size=1,
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.list(
@@ -307,11 +344,24 @@ class AsyncFileClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.file.get(id='file_id_here', raw_text=True, markdown=True, html=True, )
+            await client.file.get(
+                id="file_id_here",
+                raw_text=True,
+                markdown=True,
+                html=True,
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.get(
@@ -342,11 +392,21 @@ class AsyncFileClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.file.delete(id='file_id_here', )
+            await client.file.delete(
+                id="file_id_here",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.delete(id, request_options=request_options)
@@ -381,11 +441,19 @@ class AsyncFileClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
             await client.file.upload()
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.upload(file=file, request_options=request_options)

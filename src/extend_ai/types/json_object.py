@@ -2,4 +2,4 @@
 
 import typing
 
-JsonObject = typing.Dict[str, typing.Optional[typing.Any]]
+JsonObject = typing.Dict[str, typing.Any]

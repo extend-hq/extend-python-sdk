@@ -28,7 +28,7 @@ class ExtractMetrics(BaseMetrics):
     """
 
     array_cardinality_metrics: typing_extensions.Annotated[
-        typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]], FieldMetadata(alias="arrayCardinalityMetrics")
+        typing.Optional[typing.Dict[str, typing.Any]], FieldMetadata(alias="arrayCardinalityMetrics")
     ] = pydantic.Field(default=None)
     """
     Maps the root array field name to a number indicating how many times the array field has the correct number of rows extracted.

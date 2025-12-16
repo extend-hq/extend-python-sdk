@@ -2,22 +2,62 @@
 
 # isort: skip_file
 
-from .processor_create_request_config import (
-    ProcessorCreateRequestConfig,
-    ProcessorCreateRequestConfig_Classify,
-    ProcessorCreateRequestConfig_Extract,
-    ProcessorCreateRequestConfig_Splitter,
-)
-from .processor_create_response import ProcessorCreateResponse
-from .processor_list_request_sort_by import ProcessorListRequestSortBy
-from .processor_list_request_sort_dir import ProcessorListRequestSortDir
-from .processor_update_request_config import (
-    ProcessorUpdateRequestConfig,
-    ProcessorUpdateRequestConfig_Classify,
-    ProcessorUpdateRequestConfig_Extract,
-    ProcessorUpdateRequestConfig_Splitter,
-)
-from .processor_update_response import ProcessorUpdateResponse
+import typing
+from importlib import import_module
+
+if typing.TYPE_CHECKING:
+    from .processor_create_request_config import (
+        ProcessorCreateRequestConfig,
+        ProcessorCreateRequestConfig_Classify,
+        ProcessorCreateRequestConfig_Extract,
+        ProcessorCreateRequestConfig_Splitter,
+    )
+    from .processor_create_response import ProcessorCreateResponse
+    from .processor_list_request_sort_by import ProcessorListRequestSortBy
+    from .processor_list_request_sort_dir import ProcessorListRequestSortDir
+    from .processor_update_request_config import (
+        ProcessorUpdateRequestConfig,
+        ProcessorUpdateRequestConfig_Classify,
+        ProcessorUpdateRequestConfig_Extract,
+        ProcessorUpdateRequestConfig_Splitter,
+    )
+    from .processor_update_response import ProcessorUpdateResponse
+_dynamic_imports: typing.Dict[str, str] = {
+    "ProcessorCreateRequestConfig": ".processor_create_request_config",
+    "ProcessorCreateRequestConfig_Classify": ".processor_create_request_config",
+    "ProcessorCreateRequestConfig_Extract": ".processor_create_request_config",
+    "ProcessorCreateRequestConfig_Splitter": ".processor_create_request_config",
+    "ProcessorCreateResponse": ".processor_create_response",
+    "ProcessorListRequestSortBy": ".processor_list_request_sort_by",
+    "ProcessorListRequestSortDir": ".processor_list_request_sort_dir",
+    "ProcessorUpdateRequestConfig": ".processor_update_request_config",
+    "ProcessorUpdateRequestConfig_Classify": ".processor_update_request_config",
+    "ProcessorUpdateRequestConfig_Extract": ".processor_update_request_config",
+    "ProcessorUpdateRequestConfig_Splitter": ".processor_update_request_config",
+    "ProcessorUpdateResponse": ".processor_update_response",
+}
+
+
+def __getattr__(attr_name: str) -> typing.Any:
+    module_name = _dynamic_imports.get(attr_name)
+    if module_name is None:
+        raise AttributeError(f"No {attr_name} found in _dynamic_imports for module name -> {__name__}")
+    try:
+        module = import_module(module_name, __package__)
+        if module_name == f".{attr_name}":
+            return module
+        else:
+            return getattr(module, attr_name)
+    except ImportError as e:
+        raise ImportError(f"Failed to import {attr_name} from {module_name}: {e}") from e
+    except AttributeError as e:
+        raise AttributeError(f"Failed to get {attr_name} from {module_name}: {e}") from e
+
+
+def __dir__():
+    lazy_attrs = list(_dynamic_imports.keys())
+    return sorted(lazy_attrs)
+
 
 __all__ = [
     "ProcessorCreateRequestConfig",

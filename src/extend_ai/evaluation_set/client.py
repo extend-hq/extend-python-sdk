@@ -75,8 +75,17 @@ class EvaluationSetClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.evaluation_set.list(processor_id='processor_id_here', sort_by="updatedAt", sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.evaluation_set.list(
+            processor_id="processor_id_here",
+            sort_by="updatedAt",
+            sort_dir="asc",
+            next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+            max_page_size=1,
+        )
         """
         _response = self._raw_client.list(
             processor_id=processor_id,
@@ -124,8 +133,15 @@ class EvaluationSetClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.evaluation_set.create(name='My Evaluation Set', description='My Evaluation Set Description', processor_id='processor_id_here', )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.evaluation_set.create(
+            name="My Evaluation Set",
+            description="My Evaluation Set Description",
+            processor_id="processor_id_here",
+        )
         """
         _response = self._raw_client.create(
             name=name, description=description, processor_id=processor_id, request_options=request_options
@@ -154,8 +170,13 @@ class EvaluationSetClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.evaluation_set.get(id='evaluation_set_id_here', )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.evaluation_set.get(
+            id="evaluation_set_id_here",
+        )
         """
         _response = self._raw_client.get(id, request_options=request_options)
         return _response.data
@@ -218,11 +239,25 @@ class AsyncEvaluationSetClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.evaluation_set.list(processor_id='processor_id_here', sort_by="updatedAt", sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
+            await client.evaluation_set.list(
+                processor_id="processor_id_here",
+                sort_by="updatedAt",
+                sort_dir="asc",
+                next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+                max_page_size=1,
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.list(
@@ -270,11 +305,23 @@ class AsyncEvaluationSetClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.evaluation_set.create(name='My Evaluation Set', description='My Evaluation Set Description', processor_id='processor_id_here', )
+            await client.evaluation_set.create(
+                name="My Evaluation Set",
+                description="My Evaluation Set Description",
+                processor_id="processor_id_here",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.create(
@@ -305,11 +352,21 @@ class AsyncEvaluationSetClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.evaluation_set.get(id='evaluation_set_id_here', )
+            await client.evaluation_set.get(
+                id="evaluation_set_id_here",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.get(id, request_options=request_options)

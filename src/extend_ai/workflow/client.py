@@ -48,8 +48,13 @@ class WorkflowClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.workflow.create(name='Invoice Processing', )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.workflow.create(
+            name="Invoice Processing",
+        )
         """
         _response = self._raw_client.create(name=name, request_options=request_options)
         return _response.data
@@ -93,11 +98,21 @@ class AsyncWorkflowClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.workflow.create(name='Invoice Processing', )
+            await client.workflow.create(
+                name="Invoice Processing",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.create(name=name, request_options=request_options)

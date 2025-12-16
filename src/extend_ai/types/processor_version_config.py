@@ -81,9 +81,6 @@ class ProcessorVersionConfig_Extract(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-from .extraction_field import ExtractionField  # noqa: E402, F401, I001
-
-
 class ProcessorVersionConfig_Splitter(UncheckedBaseModel):
     """
     The configuration settings for this version of the document processor. The structure of this object will vary depending on the processor type.
@@ -119,4 +116,6 @@ ProcessorVersionConfig = typing_extensions.Annotated[
     typing.Union[ProcessorVersionConfig_Classify, ProcessorVersionConfig_Extract, ProcessorVersionConfig_Splitter],
     UnionMetadata(discriminant="type"),
 ]
-update_forward_refs(ProcessorVersionConfig_Extract)
+from .extraction_field import ExtractionField  # noqa: E402, I001
+
+update_forward_refs(ProcessorVersionConfig_Extract, ExtractionField=ExtractionField)

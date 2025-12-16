@@ -74,8 +74,17 @@ class ProcessorClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.processor.list(type="EXTRACT", next_page_token='nextPageToken', max_page_size=1, sort_by="createdAt", sort_dir="asc", )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.processor.list(
+            type="EXTRACT",
+            next_page_token="nextPageToken",
+            max_page_size=1,
+            sort_by="createdAt",
+            sort_dir="asc",
+        )
         """
         _response = self._raw_client.list(
             type=type,
@@ -125,8 +134,14 @@ class ProcessorClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.processor.create(name='My Processor Name', type="EXTRACT", )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.processor.create(
+            name="My Processor Name",
+            type="EXTRACT",
+        )
         """
         _response = self._raw_client.create(
             name=name, type=type, clone_processor_id=clone_processor_id, config=config, request_options=request_options
@@ -171,8 +186,13 @@ class ProcessorClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.processor.update(id='processor_id_here', )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.processor.update(
+            id="processor_id_here",
+        )
         """
         _response = self._raw_client.update(id, name=name, config=config, request_options=request_options)
         return _response.data
@@ -233,11 +253,25 @@ class AsyncProcessorClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.processor.list(type="EXTRACT", next_page_token='nextPageToken', max_page_size=1, sort_by="createdAt", sort_dir="asc", )
+            await client.processor.list(
+                type="EXTRACT",
+                next_page_token="nextPageToken",
+                max_page_size=1,
+                sort_by="createdAt",
+                sort_dir="asc",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.list(
@@ -287,11 +321,22 @@ class AsyncProcessorClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.processor.create(name='My Processor Name', type="EXTRACT", )
+            await client.processor.create(
+                name="My Processor Name",
+                type="EXTRACT",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.create(
@@ -336,11 +381,21 @@ class AsyncProcessorClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.processor.update(id='processor_id_here', )
+            await client.processor.update(
+                id="processor_id_here",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.update(id, name=name, config=config, request_options=request_options)

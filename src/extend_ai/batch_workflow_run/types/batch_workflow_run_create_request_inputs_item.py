@@ -29,7 +29,7 @@ class BatchWorkflowRunCreateRequestInputsItem(UncheckedBaseModel):
     An optional object containing arbitrary key-value pairs to associate with this specific workflow run. This metadata will be included in webhook payloads and responses when fetching the workflow run details.
     """
 
-    secrets: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = pydantic.Field(default=None)
+    secrets: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
     """
     An optional object containing secrets to be used by processors within the workflow for this specific run. Secrets provided here override any globally configured secrets for the workflow.
     """

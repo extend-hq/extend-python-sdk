@@ -36,7 +36,7 @@ class ExtractMetricsFieldMetrics(UncheckedBaseModel):
     """
 
     field_metrics: typing_extensions.Annotated[
-        typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]], FieldMetadata(alias="fieldMetrics")
+        typing.Optional[typing.Dict[str, typing.Any]], FieldMetadata(alias="fieldMetrics")
     ] = pydantic.Field(default=None)
     """
     For nested object fields, this contains metrics for the child fields. Has the same structure as the parent fieldMetrics.

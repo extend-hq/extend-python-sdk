@@ -14,7 +14,7 @@ class ProvidedExtractionFieldResult(UncheckedBaseModel):
     The unique identifier for this field
     """
 
-    value: typing.Optional[typing.Any] = None
+    value: typing.Any
     type: typing.Optional[ProvidedExtractionFieldResultType] = pydantic.Field(default=None)
     """
     The type of the extraction field result

@@ -2,16 +2,52 @@
 
 # isort: skip_file
 
-from .processor_version_create_request_config import (
-    ProcessorVersionCreateRequestConfig,
-    ProcessorVersionCreateRequestConfig_Classify,
-    ProcessorVersionCreateRequestConfig_Extract,
-    ProcessorVersionCreateRequestConfig_Splitter,
-)
-from .processor_version_create_request_release_type import ProcessorVersionCreateRequestReleaseType
-from .processor_version_create_response import ProcessorVersionCreateResponse
-from .processor_version_get_response import ProcessorVersionGetResponse
-from .processor_version_list_response import ProcessorVersionListResponse
+import typing
+from importlib import import_module
+
+if typing.TYPE_CHECKING:
+    from .processor_version_create_request_config import (
+        ProcessorVersionCreateRequestConfig,
+        ProcessorVersionCreateRequestConfig_Classify,
+        ProcessorVersionCreateRequestConfig_Extract,
+        ProcessorVersionCreateRequestConfig_Splitter,
+    )
+    from .processor_version_create_request_release_type import ProcessorVersionCreateRequestReleaseType
+    from .processor_version_create_response import ProcessorVersionCreateResponse
+    from .processor_version_get_response import ProcessorVersionGetResponse
+    from .processor_version_list_response import ProcessorVersionListResponse
+_dynamic_imports: typing.Dict[str, str] = {
+    "ProcessorVersionCreateRequestConfig": ".processor_version_create_request_config",
+    "ProcessorVersionCreateRequestConfig_Classify": ".processor_version_create_request_config",
+    "ProcessorVersionCreateRequestConfig_Extract": ".processor_version_create_request_config",
+    "ProcessorVersionCreateRequestConfig_Splitter": ".processor_version_create_request_config",
+    "ProcessorVersionCreateRequestReleaseType": ".processor_version_create_request_release_type",
+    "ProcessorVersionCreateResponse": ".processor_version_create_response",
+    "ProcessorVersionGetResponse": ".processor_version_get_response",
+    "ProcessorVersionListResponse": ".processor_version_list_response",
+}
+
+
+def __getattr__(attr_name: str) -> typing.Any:
+    module_name = _dynamic_imports.get(attr_name)
+    if module_name is None:
+        raise AttributeError(f"No {attr_name} found in _dynamic_imports for module name -> {__name__}")
+    try:
+        module = import_module(module_name, __package__)
+        if module_name == f".{attr_name}":
+            return module
+        else:
+            return getattr(module, attr_name)
+    except ImportError as e:
+        raise ImportError(f"Failed to import {attr_name} from {module_name}: {e}") from e
+    except AttributeError as e:
+        raise AttributeError(f"Failed to get {attr_name} from {module_name}: {e}") from e
+
+
+def __dir__():
+    lazy_attrs = list(_dynamic_imports.keys())
+    return sorted(lazy_attrs)
+
 
 __all__ = [
     "ProcessorVersionCreateRequestConfig",

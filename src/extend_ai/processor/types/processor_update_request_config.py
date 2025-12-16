@@ -83,9 +83,6 @@ class ProcessorUpdateRequestConfig_Extract(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-from ...types.extraction_field import ExtractionField  # noqa: E402, F401, I001
-
-
 class ProcessorUpdateRequestConfig_Splitter(UncheckedBaseModel):
     """
     The new configuration for the processor. The type of configuration must match the processor type:
@@ -126,4 +123,6 @@ ProcessorUpdateRequestConfig = typing_extensions.Annotated[
     ],
     UnionMetadata(discriminant="type"),
 ]
-update_forward_refs(ProcessorUpdateRequestConfig_Extract)
+from ...types.extraction_field import ExtractionField  # noqa: E402, I001
+
+update_forward_refs(ProcessorUpdateRequestConfig_Extract, ExtractionField=ExtractionField)

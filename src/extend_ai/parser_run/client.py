@@ -62,8 +62,14 @@ class ParserRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.parser_run.get(id='parser_run_id_here', response_type="json", )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.parser_run.get(
+            id="parser_run_id_here",
+            response_type="json",
+        )
         """
         _response = self._raw_client.get(id, response_type=response_type, request_options=request_options)
         return _response.data
@@ -92,8 +98,13 @@ class ParserRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.parser_run.delete(id='parser_run_id_here', )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.parser_run.delete(
+            id="parser_run_id_here",
+        )
         """
         _response = self._raw_client.delete(id, request_options=request_options)
         return _response.data
@@ -150,11 +161,22 @@ class AsyncParserRunClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.parser_run.get(id='parser_run_id_here', response_type="json", )
+            await client.parser_run.get(
+                id="parser_run_id_here",
+                response_type="json",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.get(id, response_type=response_type, request_options=request_options)
@@ -185,11 +207,21 @@ class AsyncParserRunClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.parser_run.delete(id='parser_run_id_here', )
+            await client.parser_run.delete(
+                id="parser_run_id_here",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.delete(id, request_options=request_options)
