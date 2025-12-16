@@ -77,9 +77,6 @@ class ProcessorRunConfig_Extract(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-from .extraction_field import ExtractionField  # noqa: E402, F401, I001
-
-
 class ProcessorRunConfig_Splitter(UncheckedBaseModel):
     """
     The configuration used for this processor run. The type of configuration will match the processor type.
@@ -113,4 +110,6 @@ ProcessorRunConfig = typing_extensions.Annotated[
     typing.Union[ProcessorRunConfig_Classify, ProcessorRunConfig_Extract, ProcessorRunConfig_Splitter],
     UnionMetadata(discriminant="type"),
 ]
-update_forward_refs(ProcessorRunConfig_Extract)
+from .extraction_field import ExtractionField  # noqa: E402, I001
+
+update_forward_refs(ProcessorRunConfig_Extract, ExtractionField=ExtractionField)

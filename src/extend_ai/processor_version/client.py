@@ -59,8 +59,14 @@ class ProcessorVersionClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.processor_version.get(processor_id='processor_id_here', processor_version_id='processor_version_id_here', )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.processor_version.get(
+            processor_id="processor_id_here",
+            processor_version_id="processor_version_id_here",
+        )
         """
         _response = self._raw_client.get(processor_id, processor_version_id, request_options=request_options)
         return _response.data
@@ -90,8 +96,13 @@ class ProcessorVersionClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.processor_version.list(id='processor_id_here', )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.processor_version.list(
+            id="processor_id_here",
+        )
         """
         _response = self._raw_client.list(id, request_options=request_options)
         return _response.data
@@ -137,8 +148,14 @@ class ProcessorVersionClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.processor_version.create(id='processor_id_here', release_type="major", )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.processor_version.create(
+            id="processor_id_here",
+            release_type="major",
+        )
         """
         _response = self._raw_client.create(
             id, release_type=release_type, description=description, config=config, request_options=request_options
@@ -189,11 +206,22 @@ class AsyncProcessorVersionClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.processor_version.get(processor_id='processor_id_here', processor_version_id='processor_version_id_here', )
+            await client.processor_version.get(
+                processor_id="processor_id_here",
+                processor_version_id="processor_version_id_here",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.get(processor_id, processor_version_id, request_options=request_options)
@@ -225,11 +253,21 @@ class AsyncProcessorVersionClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.processor_version.list(id='processor_id_here', )
+            await client.processor_version.list(
+                id="processor_id_here",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.list(id, request_options=request_options)
@@ -275,11 +313,22 @@ class AsyncProcessorVersionClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.processor_version.create(id='processor_id_here', release_type="major", )
+            await client.processor_version.create(
+                id="processor_id_here",
+                release_type="major",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.create(

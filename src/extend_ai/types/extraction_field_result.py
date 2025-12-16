@@ -26,7 +26,7 @@ class ExtractionFieldResult(UncheckedBaseModel):
     The type of the extracted field
     """
 
-    value: typing.Optional[typing.Any] = None
+    value: typing.Any
     confidence: typing.Optional[float] = pydantic.Field(default=None)
     """
     A value between 0 and 1 indicating confidence in the extraction
@@ -64,6 +64,6 @@ class ExtractionFieldResult(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-from .extraction_field import ExtractionField  # noqa: E402, F401, I001
+from .extraction_field import ExtractionField  # noqa: E402, I001
 
-update_forward_refs(ExtractionFieldResult)
+update_forward_refs(ExtractionFieldResult, ExtractionField=ExtractionField)

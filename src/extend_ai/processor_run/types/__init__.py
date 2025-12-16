@@ -2,18 +2,56 @@
 
 # isort: skip_file
 
-from .processor_run_cancel_response import ProcessorRunCancelResponse
-from .processor_run_create_request_config import (
-    ProcessorRunCreateRequestConfig,
-    ProcessorRunCreateRequestConfig_Classify,
-    ProcessorRunCreateRequestConfig_Extract,
-    ProcessorRunCreateRequestConfig_Splitter,
-)
-from .processor_run_create_response import ProcessorRunCreateResponse
-from .processor_run_delete_response import ProcessorRunDeleteResponse
-from .processor_run_get_response import ProcessorRunGetResponse
-from .processor_run_list_request_source import ProcessorRunListRequestSource
-from .processor_run_list_response import ProcessorRunListResponse
+import typing
+from importlib import import_module
+
+if typing.TYPE_CHECKING:
+    from .processor_run_cancel_response import ProcessorRunCancelResponse
+    from .processor_run_create_request_config import (
+        ProcessorRunCreateRequestConfig,
+        ProcessorRunCreateRequestConfig_Classify,
+        ProcessorRunCreateRequestConfig_Extract,
+        ProcessorRunCreateRequestConfig_Splitter,
+    )
+    from .processor_run_create_response import ProcessorRunCreateResponse
+    from .processor_run_delete_response import ProcessorRunDeleteResponse
+    from .processor_run_get_response import ProcessorRunGetResponse
+    from .processor_run_list_request_source import ProcessorRunListRequestSource
+    from .processor_run_list_response import ProcessorRunListResponse
+_dynamic_imports: typing.Dict[str, str] = {
+    "ProcessorRunCancelResponse": ".processor_run_cancel_response",
+    "ProcessorRunCreateRequestConfig": ".processor_run_create_request_config",
+    "ProcessorRunCreateRequestConfig_Classify": ".processor_run_create_request_config",
+    "ProcessorRunCreateRequestConfig_Extract": ".processor_run_create_request_config",
+    "ProcessorRunCreateRequestConfig_Splitter": ".processor_run_create_request_config",
+    "ProcessorRunCreateResponse": ".processor_run_create_response",
+    "ProcessorRunDeleteResponse": ".processor_run_delete_response",
+    "ProcessorRunGetResponse": ".processor_run_get_response",
+    "ProcessorRunListRequestSource": ".processor_run_list_request_source",
+    "ProcessorRunListResponse": ".processor_run_list_response",
+}
+
+
+def __getattr__(attr_name: str) -> typing.Any:
+    module_name = _dynamic_imports.get(attr_name)
+    if module_name is None:
+        raise AttributeError(f"No {attr_name} found in _dynamic_imports for module name -> {__name__}")
+    try:
+        module = import_module(module_name, __package__)
+        if module_name == f".{attr_name}":
+            return module
+        else:
+            return getattr(module, attr_name)
+    except ImportError as e:
+        raise ImportError(f"Failed to import {attr_name} from {module_name}: {e}") from e
+    except AttributeError as e:
+        raise AttributeError(f"Failed to get {attr_name} from {module_name}: {e}") from e
+
+
+def __dir__():
+    lazy_attrs = list(_dynamic_imports.keys())
+    return sorted(lazy_attrs)
+
 
 __all__ = [
     "ProcessorRunCancelResponse",

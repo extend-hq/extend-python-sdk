@@ -107,8 +107,20 @@ class WorkflowRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.workflow_run.list(status="PENDING", workflow_id='workflowId', batch_id='batchId', file_name_contains='fileNameContains', sort_by="updatedAt", sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.workflow_run.list(
+            status="PENDING",
+            workflow_id="workflowId",
+            batch_id="batchId",
+            file_name_contains="fileNameContains",
+            sort_by="updatedAt",
+            sort_dir="asc",
+            next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+            max_page_size=1,
+        )
         """
         _response = self._raw_client.list(
             status=status,
@@ -161,7 +173,9 @@ class WorkflowRunClient:
             An optional value used to determine the relative order of WorkflowRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
 
         metadata : typing.Optional[JsonObject]
-            A optional metadata object that can be assigned to a specific WorkflowRun to help identify it. It will be returned in the response and webhooks. You can place any arbitrary `key : value` pairs in this object.
+            An optional metadata object that can be assigned to a specific WorkflowRun to help identify it. It will be returned in the response and webhooks. You can place any arbitrary `key : value` pairs in this object.
+
+            To categorize workflow runs for billing and usage tracking, include `extend:usage_tags` with an array of string values (e.g., `{"extend:usage_tags": ["production", "team-eng", "customer-123"]}`). Tags must contain only alphanumeric characters, hyphens, and underscores; any special characters will be automatically removed.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -174,8 +188,13 @@ class WorkflowRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.workflow_run.create(workflow_id='workflow_id_here', )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.workflow_run.create(
+            workflow_id="workflow_id_here",
+        )
         """
         _response = self._raw_client.create(
             workflow_id=workflow_id,
@@ -212,8 +231,13 @@ class WorkflowRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.workflow_run.get(workflow_run_id='workflow_run_id_here', )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.workflow_run.get(
+            workflow_run_id="workflow_run_id_here",
+        )
         """
         _response = self._raw_client.get(workflow_run_id, request_options=request_options)
         return _response.data
@@ -244,6 +268,8 @@ class WorkflowRunClient:
 
             You can include any arbitrary `key : value` pairs in this object.
 
+            To categorize workflow runs for billing and usage tracking, include `extend:usage_tags` with an array of string values (e.g., `{"extend:usage_tags": ["production", "team-eng", "customer-123"]}`). Tags must contain only alphanumeric characters, hyphens, and underscores; any special characters will be automatically removed.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -255,8 +281,13 @@ class WorkflowRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.workflow_run.update(workflow_run_id='workflow_run_id_here', )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.workflow_run.update(
+            workflow_run_id="workflow_run_id_here",
+        )
         """
         _response = self._raw_client.update(
             workflow_run_id, name=name, metadata=metadata, request_options=request_options
@@ -289,8 +320,13 @@ class WorkflowRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.workflow_run.delete(workflow_run_id='workflow_run_id_here', )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.workflow_run.delete(
+            workflow_run_id="workflow_run_id_here",
+        )
         """
         _response = self._raw_client.delete(workflow_run_id, request_options=request_options)
         return _response.data
@@ -321,8 +357,13 @@ class WorkflowRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.workflow_run.cancel(workflow_run_id='workflow_run_id_here', )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.workflow_run.cancel(
+            workflow_run_id="workflow_run_id_here",
+        )
         """
         _response = self._raw_client.cancel(workflow_run_id, request_options=request_options)
         return _response.data
@@ -411,11 +452,28 @@ class AsyncWorkflowRunClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.workflow_run.list(status="PENDING", workflow_id='workflowId', batch_id='batchId', file_name_contains='fileNameContains', sort_by="updatedAt", sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
+            await client.workflow_run.list(
+                status="PENDING",
+                workflow_id="workflowId",
+                batch_id="batchId",
+                file_name_contains="fileNameContains",
+                sort_by="updatedAt",
+                sort_dir="asc",
+                next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+                max_page_size=1,
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.list(
@@ -469,7 +527,9 @@ class AsyncWorkflowRunClient:
             An optional value used to determine the relative order of WorkflowRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
 
         metadata : typing.Optional[JsonObject]
-            A optional metadata object that can be assigned to a specific WorkflowRun to help identify it. It will be returned in the response and webhooks. You can place any arbitrary `key : value` pairs in this object.
+            An optional metadata object that can be assigned to a specific WorkflowRun to help identify it. It will be returned in the response and webhooks. You can place any arbitrary `key : value` pairs in this object.
+
+            To categorize workflow runs for billing and usage tracking, include `extend:usage_tags` with an array of string values (e.g., `{"extend:usage_tags": ["production", "team-eng", "customer-123"]}`). Tags must contain only alphanumeric characters, hyphens, and underscores; any special characters will be automatically removed.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -481,11 +541,21 @@ class AsyncWorkflowRunClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.workflow_run.create(workflow_id='workflow_id_here', )
+            await client.workflow_run.create(
+                workflow_id="workflow_id_here",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.create(
@@ -522,11 +592,21 @@ class AsyncWorkflowRunClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.workflow_run.get(workflow_run_id='workflow_run_id_here', )
+            await client.workflow_run.get(
+                workflow_run_id="workflow_run_id_here",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.get(workflow_run_id, request_options=request_options)
@@ -558,6 +638,8 @@ class AsyncWorkflowRunClient:
 
             You can include any arbitrary `key : value` pairs in this object.
 
+            To categorize workflow runs for billing and usage tracking, include `extend:usage_tags` with an array of string values (e.g., `{"extend:usage_tags": ["production", "team-eng", "customer-123"]}`). Tags must contain only alphanumeric characters, hyphens, and underscores; any special characters will be automatically removed.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -568,11 +650,21 @@ class AsyncWorkflowRunClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.workflow_run.update(workflow_run_id='workflow_run_id_here', )
+            await client.workflow_run.update(
+                workflow_run_id="workflow_run_id_here",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.update(
@@ -605,11 +697,21 @@ class AsyncWorkflowRunClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.workflow_run.delete(workflow_run_id='workflow_run_id_here', )
+            await client.workflow_run.delete(
+                workflow_run_id="workflow_run_id_here",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.delete(workflow_run_id, request_options=request_options)
@@ -640,11 +742,21 @@ class AsyncWorkflowRunClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.workflow_run.cancel(workflow_run_id='workflow_run_id_here', )
+            await client.workflow_run.cancel(
+                workflow_run_id="workflow_run_id_here",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.cancel(workflow_run_id, request_options=request_options)

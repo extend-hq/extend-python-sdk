@@ -39,23 +39,38 @@ A full reference for this library is available [here](https://github.com/extend-
 Instantiate and use the client with the following:
 
 ```python
-from extend_ai import Extend
-from extend_ai import ParseRequestFile
-client = Extend(token="YOUR_TOKEN", )
-client.parse(response_type="json", file=ParseRequestFile(), )
+from extend_ai import Extend, ParseRequestFile
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.parse(
+    response_type="json",
+    file=ParseRequestFile(),
+)
 ```
 
 ## Async Client
 
-The SDK also exports an `async` client so that you can make non-blocking calls to our API.
+The SDK also exports an `async` client so that you can make non-blocking calls to our API. Note that if you are constructing an Async httpx client class to pass into this client, use `httpx.AsyncClient()` instead of `httpx.Client()` (e.g. for the `httpx_client` parameter of this client).
 
 ```python
-from extend_ai import AsyncExtend
-from extend_ai import ParseRequestFile
 import asyncio
-client = AsyncExtend(token="YOUR_TOKEN", )
+
+from extend_ai import AsyncExtend, ParseRequestFile
+
+client = AsyncExtend(
+    token="YOUR_TOKEN",
+)
+
+
 async def main() -> None:
-    await client.parse(response_type="json", file=ParseRequestFile(), )
+    await client.parse(
+        response_type="json",
+        file=ParseRequestFile(),
+    )
+
+
 asyncio.run(main())
 ```
 
@@ -66,6 +81,7 @@ will be thrown.
 
 ```python
 from extend_ai.core.api_error import ApiError
+
 try:
     client.parse(...)
 except ApiError as e:
@@ -82,7 +98,10 @@ The `.with_raw_response` property returns a "raw" client that can be used to acc
 
 ```python
 from extend_ai import Extend
-client = Extend(..., )
+
+client = Extend(
+    ...,
+)
 response = client.with_raw_response.parse(...)
 print(response.headers)  # access the response headers
 print(response.data)  # access the underlying object
@@ -115,7 +134,12 @@ The SDK defaults to a 60 second timeout. You can configure this with a timeout o
 ```python
 
 from extend_ai import Extend
-client = Extend(..., timeout=20.0, )
+
+client = Extend(
+    ...,
+    timeout=20.0,
+)
+
 
 # Override timeout for a specific method
 client.parse(..., request_options={
@@ -129,9 +153,17 @@ You can override the `httpx` client to customize it for your use-case. Some comm
 and transports.
 
 ```python
-from extend_ai import Extend
 import httpx
-client = Extend(..., httpx_client=httpx.Client(proxies="http://my.test.proxy.example.com", transport=httpx.HTTPTransport(local_address="0.0.0.0"), ))```
+from extend_ai import Extend
+
+client = Extend(
+    ...,
+    httpx_client=httpx.Client(
+        proxy="http://my.test.proxy.example.com",
+        transport=httpx.HTTPTransport(local_address="0.0.0.0"),
+    ),
+)
+```
 
 ## Contributing
 

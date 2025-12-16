@@ -1,0 +1,13 @@
+{
+  "cliVersion": "2.6.2",
+  "generatorName": "fernapi/fern-python-sdk",
+  "generatorVersion": "4.46.1",
+  "generatorConfig": {
+    "client_class_name": "Extend",
+    "package_name": "extend_ai",
+    "timeout_in_seconds": 300,
+    "pydantic_config": {
+      "skip_validation": true
+    }
+  }
+}

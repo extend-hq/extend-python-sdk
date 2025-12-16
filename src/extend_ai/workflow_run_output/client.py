@@ -65,11 +65,18 @@ class WorkflowRunOutputClient:
 
         Examples
         --------
-        from extend_ai import Extend
-        from extend_ai import ProvidedJsonOutput
-        client = Extend(token="YOUR_TOKEN", )
-        client.workflow_run_output.update(workflow_run_id='workflow_run_id_here', output_id='output_id_here', reviewed_output=ProvidedJsonOutput(value={'key': 'value'
-        }, ), )
+        from extend_ai import Extend, ProvidedJsonOutput
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.workflow_run_output.update(
+            workflow_run_id="workflow_run_id_here",
+            output_id="output_id_here",
+            reviewed_output=ProvidedJsonOutput(
+                value={"key": "value"},
+            ),
+        )
         """
         _response = self._raw_client.update(
             workflow_run_id, output_id, reviewed_output=reviewed_output, request_options=request_options
@@ -130,13 +137,25 @@ class AsyncWorkflowRunOutputClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
-        from extend_ai import ProvidedJsonOutput
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend, ProvidedJsonOutput
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.workflow_run_output.update(workflow_run_id='workflow_run_id_here', output_id='output_id_here', reviewed_output=ProvidedJsonOutput(value={'key': 'value'
-            }, ), )
+            await client.workflow_run_output.update(
+                workflow_run_id="workflow_run_id_here",
+                output_id="output_id_here",
+                reviewed_output=ProvidedJsonOutput(
+                    value={"key": "value"},
+                ),
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.update(

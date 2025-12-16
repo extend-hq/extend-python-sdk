@@ -5,13 +5,24 @@ import typing
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .array_strategy_type import ArrayStrategyType
 
 
 class ArrayStrategy(UncheckedBaseModel):
-    type: typing.Literal["large_array_heuristics"] = pydantic.Field(default="large_array_heuristics")
+    type: ArrayStrategyType = pydantic.Field()
     """
-    The strategy type for handling arrays.
-    - `large_array_heuristics`: Optimized for documents with very large arrays. Uses specialized heuristics around chunking, tables, and merging to handle large arrays efficiently over large documents.
+    The strategy type for handling large array use cases. For most use cases this should be left null, or should be set to `large_array_heuristics`. If you're unsure of what your use case needs, reach out to the Extend team for help.
+    - `large_array_heuristics`: Optimized for documents with very large arrays, but where latency matters. 
+    
+      This strategy uses specialized heuristics around chunking, tables, and merging to handle large arrays efficiently over large documents.
+    
+    - `large_array_max_context`: Optimizes for accuracy over latency in documents with very large arrays. 
+    
+      This strategy will do multiple passes through the entire document to ensure there is no context loss across any chunks/pages, maximizing accuracy for complex array extraction, but adding material latency.
+    
+    - `large_array_overlap_context`: Balances accuracy and latency in documents with very large arrays. 
+    
+      This strategy will always maintain surrounding/overlapping page context for every chunk/page that is extracted, eliminating array failure modes from context loss across page boundaries.
     """
 
     if IS_PYDANTIC_V2:

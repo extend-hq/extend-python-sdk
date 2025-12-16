@@ -15,6 +15,11 @@ class ParserRunStatus(UncheckedBaseModel):
     Minimal parser run status object without parser results.
     """
 
+    object: typing.Literal["parser_run_status"] = pydantic.Field(default="parser_run_status")
+    """
+    The type of object. Will always be `"parser_run_status"`.
+    """
+
     id: str = pydantic.Field()
     """
     A unique identifier for the parser run. Will always start with `"parser_run_"`

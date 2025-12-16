@@ -61,6 +61,4 @@ class Processor(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-from .extraction_field import ExtractionField  # noqa: E402, F401, I001
-
 update_forward_refs(Processor)

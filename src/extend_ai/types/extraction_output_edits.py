@@ -14,12 +14,20 @@ class ExtractionOutputEdits(UncheckedBaseModel):
     A record of edits made to the processor output.
     """
 
-    original_value: typing_extensions.Annotated[
-        typing.Optional[typing.Optional[typing.Any]], FieldMetadata(alias="originalValue")
-    ] = None
-    edited_value: typing_extensions.Annotated[
-        typing.Optional[typing.Optional[typing.Any]], FieldMetadata(alias="editedValue")
-    ] = None
+    original_value: typing_extensions.Annotated[typing.Optional[typing.Any], FieldMetadata(alias="originalValue")] = (
+        pydantic.Field(default=None)
+    )
+    """
+    The original value before editing.
+    """
+
+    edited_value: typing_extensions.Annotated[typing.Optional[typing.Any], FieldMetadata(alias="editedValue")] = (
+        pydantic.Field(default=None)
+    )
+    """
+    The value after editing.
+    """
+
     notes: typing.Optional[str] = pydantic.Field(default=None)
     """
     Any notes added during editing.

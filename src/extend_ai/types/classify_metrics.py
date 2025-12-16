@@ -33,21 +33,20 @@ class ClassifyMetrics(BaseMetrics):
     The mean confidence score.
     """
 
-    distribution: typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]] = pydantic.Field(default=None)
+    distribution: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
     """
     Record mapping classification values to their counts.
     """
 
     accuracy_perc_by_classification: typing_extensions.Annotated[
-        typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]],
-        FieldMetadata(alias="accuracyPercByClassification"),
+        typing.Optional[typing.Dict[str, typing.Any]], FieldMetadata(alias="accuracyPercByClassification")
     ] = pydantic.Field(default=None)
     """
     Mapping from classification to accuracy percentage as calculated from the confusion matrix.
     """
 
     confusion_matrix: typing_extensions.Annotated[
-        typing.Optional[typing.Dict[str, typing.Optional[typing.Any]]], FieldMetadata(alias="confusionMatrix")
+        typing.Optional[typing.Dict[str, typing.Any]], FieldMetadata(alias="confusionMatrix")
     ] = pydantic.Field(default=None)
     """
     Mapping from actual class to predicted class to count. Only present when accuracy percentage is present.

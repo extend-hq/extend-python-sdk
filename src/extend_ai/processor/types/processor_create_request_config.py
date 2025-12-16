@@ -77,9 +77,6 @@ class ProcessorCreateRequestConfig_Extract(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-from ...types.extraction_field import ExtractionField  # noqa: E402, F401, I001
-
-
 class ProcessorCreateRequestConfig_Splitter(UncheckedBaseModel):
     """
     The configuration for the processor. The type of configuration must match the processor type. One of `cloneProcessorId` or `config` must be provided.
@@ -117,4 +114,6 @@ ProcessorCreateRequestConfig = typing_extensions.Annotated[
     ],
     UnionMetadata(discriminant="type"),
 ]
-update_forward_refs(ProcessorCreateRequestConfig_Extract)
+from ...types.extraction_field import ExtractionField  # noqa: E402, I001
+
+update_forward_refs(ProcessorCreateRequestConfig_Extract, ExtractionField=ExtractionField)

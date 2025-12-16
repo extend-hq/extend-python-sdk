@@ -12,7 +12,7 @@ class ProvidedJsonOutput(UncheckedBaseModel):
     The output from a JSON Schema processor
     """
 
-    value: typing.Dict[str, typing.Optional[typing.Any]]
+    value: typing.Dict[str, typing.Any]
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

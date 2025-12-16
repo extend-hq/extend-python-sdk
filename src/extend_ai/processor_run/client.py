@@ -126,8 +126,22 @@ class ProcessorRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.processor_run.list(status="PENDING", processor_id='processorId', processor_type="EXTRACT", source_id='sourceId', source="ADMIN", file_name_contains='fileNameContains', sort_by="updatedAt", sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.processor_run.list(
+            status="PENDING",
+            processor_id="processorId",
+            processor_type="EXTRACT",
+            source_id="sourceId",
+            source="ADMIN",
+            file_name_contains="fileNameContains",
+            sort_by="updatedAt",
+            sort_dir="asc",
+            next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+            max_page_size=1,
+        )
         """
         _response = self._raw_client.list(
             status=status,
@@ -195,6 +209,8 @@ class ProcessorRunClient:
         metadata : typing.Optional[JsonObject]
             An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
 
+            To categorize processor runs for billing and usage tracking, include `extend:usage_tags` with an array of string values (e.g., `{"extend:usage_tags": ["production", "team-eng", "customer-123"]}`). Tags must contain only alphanumeric characters, hyphens, and underscores; any special characters will be automatically removed.
+
         config : typing.Optional[ProcessorRunCreateRequestConfig]
             The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
 
@@ -209,8 +225,13 @@ class ProcessorRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.processor_run.create(processor_id='processor_id_here', )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.processor_run.create(
+            processor_id="processor_id_here",
+        )
         """
         _response = self._raw_client.create(
             processor_id=processor_id,
@@ -249,8 +270,13 @@ class ProcessorRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.processor_run.get(id='processor_run_id_here', )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.processor_run.get(
+            id="processor_run_id_here",
+        )
         """
         _response = self._raw_client.get(id, request_options=request_options)
         return _response.data
@@ -279,8 +305,13 @@ class ProcessorRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.processor_run.delete(id='processor_run_id_here', )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.processor_run.delete(
+            id="processor_run_id_here",
+        )
         """
         _response = self._raw_client.delete(id, request_options=request_options)
         return _response.data
@@ -309,8 +340,13 @@ class ProcessorRunClient:
         Examples
         --------
         from extend_ai import Extend
-        client = Extend(token="YOUR_TOKEN", )
-        client.processor_run.cancel(id='processor_run_id_here', )
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.processor_run.cancel(
+            id="processor_run_id_here",
+        )
         """
         _response = self._raw_client.cancel(id, request_options=request_options)
         return _response.data
@@ -415,11 +451,30 @@ class AsyncProcessorRunClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.processor_run.list(status="PENDING", processor_id='processorId', processor_type="EXTRACT", source_id='sourceId', source="ADMIN", file_name_contains='fileNameContains', sort_by="updatedAt", sort_dir="asc", next_page_token='xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=', max_page_size=1, )
+            await client.processor_run.list(
+                status="PENDING",
+                processor_id="processorId",
+                processor_type="EXTRACT",
+                source_id="sourceId",
+                source="ADMIN",
+                file_name_contains="fileNameContains",
+                sort_by="updatedAt",
+                sort_dir="asc",
+                next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+                max_page_size=1,
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.list(
@@ -488,6 +543,8 @@ class AsyncProcessorRunClient:
         metadata : typing.Optional[JsonObject]
             An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
 
+            To categorize processor runs for billing and usage tracking, include `extend:usage_tags` with an array of string values (e.g., `{"extend:usage_tags": ["production", "team-eng", "customer-123"]}`). Tags must contain only alphanumeric characters, hyphens, and underscores; any special characters will be automatically removed.
+
         config : typing.Optional[ProcessorRunCreateRequestConfig]
             The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
 
@@ -501,11 +558,21 @@ class AsyncProcessorRunClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.processor_run.create(processor_id='processor_id_here', )
+            await client.processor_run.create(
+                processor_id="processor_id_here",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.create(
@@ -544,11 +611,21 @@ class AsyncProcessorRunClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.processor_run.get(id='processor_run_id_here', )
+            await client.processor_run.get(
+                id="processor_run_id_here",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.get(id, request_options=request_options)
@@ -579,11 +656,21 @@ class AsyncProcessorRunClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.processor_run.delete(id='processor_run_id_here', )
+            await client.processor_run.delete(
+                id="processor_run_id_here",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.delete(id, request_options=request_options)
@@ -614,11 +701,21 @@ class AsyncProcessorRunClient:
 
         Examples
         --------
-        from extend_ai import AsyncExtend
         import asyncio
-        client = AsyncExtend(token="YOUR_TOKEN", )
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
         async def main() -> None:
-            await client.processor_run.cancel(id='processor_run_id_here', )
+            await client.processor_run.cancel(
+                id="processor_run_id_here",
+            )
+
+
         asyncio.run(main())
         """
         _response = await self._raw_client.cancel(id, request_options=request_options)
