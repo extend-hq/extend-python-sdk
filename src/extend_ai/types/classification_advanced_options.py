@@ -19,19 +19,21 @@ class ClassificationAdvancedOptions(UncheckedBaseModel):
 
     advanced_multimodal_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="advancedMultimodalEnabled")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="advancedMultimodalEnabled", default=None)
     """
     Enable advanced multimodal processing for better handling of visual elements during classification.
     """
 
     fixed_page_limit: typing_extensions.Annotated[typing.Optional[int], FieldMetadata(alias="fixedPageLimit")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="fixedPageLimit", default=None)
     )
     """
     Limit processing to a specific number of pages from the beginning of the document. See [Page Ranges](/product/page-ranges).
     """
 
-    page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = None
+    page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = (
+        pydantic.Field(alias="pageRanges", default=None)
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

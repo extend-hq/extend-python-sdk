@@ -28,7 +28,7 @@ class EditObjectJsonSchema(UncheckedBaseModel):
 
     extend_edit_field_type: typing_extensions.Annotated[
         typing.Optional[typing.Literal["signature"]], FieldMetadata(alias="extend_edit:field_type")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="extend_edit:field_type", default=None)
     """
     The PDF field type. For object schemas, must be "signature".
     """
@@ -45,7 +45,7 @@ class EditObjectJsonSchema(UncheckedBaseModel):
 
     additional_properties: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="additionalProperties")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="additionalProperties", default=None)
     """
     Whether additional properties are allowed
     """

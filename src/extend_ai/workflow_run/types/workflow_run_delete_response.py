@@ -11,7 +11,9 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 
 class WorkflowRunDeleteResponse(UncheckedBaseModel):
     success: bool
-    workflow_run_id: typing_extensions.Annotated[str, FieldMetadata(alias="workflowRunId")] = pydantic.Field()
+    workflow_run_id: typing_extensions.Annotated[str, FieldMetadata(alias="workflowRunId")] = pydantic.Field(
+        alias="workflowRunId"
+    )
     """
     The ID of the deleted workflow run
     """

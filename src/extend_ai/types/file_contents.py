@@ -13,7 +13,7 @@ from .file_contents_sheets_item import FileContentsSheetsItem
 
 class FileContents(UncheckedBaseModel):
     raw_text: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="rawText")] = pydantic.Field(
-        default=None
+        alias="rawText", default=None
     )
     """
     The raw text content of the file. This is included for all file types if the `rawText` query parameter is set to true in the endpoint request.

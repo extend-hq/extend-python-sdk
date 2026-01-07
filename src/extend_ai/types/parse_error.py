@@ -13,7 +13,9 @@ from .parse_error_code import ParseErrorCode
 class ParseError(UncheckedBaseModel):
     code: typing.Optional[ParseErrorCode] = None
     message: typing.Optional[str] = None
-    request_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="requestId")] = None
+    request_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="requestId")] = pydantic.Field(
+        alias="requestId", default=None
+    )
     retryable: typing.Optional[bool] = None
 
     if IS_PYDANTIC_V2:

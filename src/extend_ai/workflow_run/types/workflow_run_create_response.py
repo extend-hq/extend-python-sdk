@@ -15,7 +15,7 @@ from ...types.workflow_run import WorkflowRun
 class WorkflowRunCreateResponse(UncheckedBaseModel):
     success: bool
     workflow_runs: typing_extensions.Annotated[typing.List[WorkflowRun], FieldMetadata(alias="workflowRuns")] = (
-        pydantic.Field()
+        pydantic.Field(alias="workflowRuns")
     )
     """
     An array of WorkflowRun objects, with each WorkflowRun corresponding to a single File that was passed in.

@@ -11,7 +11,7 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 
 class ExtractOptimizerOptions(UncheckedBaseModel):
     agent_type: typing_extensions.Annotated[typing.Literal["EXTRACT_OPTIMIZER"], FieldMetadata(alias="agentType")] = (
-        pydantic.Field(default="EXTRACT_OPTIMIZER")
+        pydantic.Field(alias="agentType", default="EXTRACT_OPTIMIZER")
     )
     """
     Type of optimizer agent
@@ -19,13 +19,13 @@ class ExtractOptimizerOptions(UncheckedBaseModel):
 
     accuracy_threshold: typing_extensions.Annotated[
         typing.Optional[float], FieldMetadata(alias="accuracyThreshold")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="accuracyThreshold", default=None)
     """
     Target accuracy threshold (0-1)
     """
 
     max_batch_runs: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="maxBatchRuns")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="maxBatchRuns", default=None)
     )
     """
     Maximum number of batch iterations

@@ -75,6 +75,7 @@ if typing.TYPE_CHECKING:
     from .extraction_advanced_options_excel_sheet_selection_strategy import (
         ExtractionAdvancedOptionsExcelSheetSelectionStrategy,
     )
+    from .extraction_advanced_options_review_agent import ExtractionAdvancedOptionsReviewAgent
     from .extraction_config import ExtractionConfig
     from .extraction_config_base_processor import ExtractionConfigBaseProcessor
     from .extraction_field import ExtractionField
@@ -98,12 +99,12 @@ if typing.TYPE_CHECKING:
     from .file_metadata_parent_split import FileMetadataParentSplit
     from .file_type import FileType
     from .insight import Insight
+    from .insight_type import InsightType
     from .json_object import JsonObject
     from .json_output import JsonOutput
     from .json_output_metadata_value import JsonOutputMetadataValue
     from .json_output_metadata_value_citations_item import JsonOutputMetadataValueCitationsItem
     from .json_output_metadata_value_citations_item_polygon_item import JsonOutputMetadataValueCitationsItemPolygonItem
-    from .json_output_metadata_value_insights_item import JsonOutputMetadataValueInsightsItem
     from .list_processors_processor import ListProcessorsProcessor
     from .list_processors_processor_version import ListProcessorsProcessorVersion
     from .list_processors_response import ListProcessorsResponse
@@ -286,6 +287,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ExtractionAdvancedOptions": ".extraction_advanced_options",
     "ExtractionAdvancedOptionsArrayCitationStrategy": ".extraction_advanced_options_array_citation_strategy",
     "ExtractionAdvancedOptionsExcelSheetSelectionStrategy": ".extraction_advanced_options_excel_sheet_selection_strategy",
+    "ExtractionAdvancedOptionsReviewAgent": ".extraction_advanced_options_review_agent",
     "ExtractionConfig": ".extraction_config",
     "ExtractionConfigBaseProcessor": ".extraction_config_base_processor",
     "ExtractionField": ".extraction_field",
@@ -309,12 +311,12 @@ _dynamic_imports: typing.Dict[str, str] = {
     "FileMetadataParentSplit": ".file_metadata_parent_split",
     "FileType": ".file_type",
     "Insight": ".insight",
+    "InsightType": ".insight_type",
     "JsonObject": ".json_object",
     "JsonOutput": ".json_output",
     "JsonOutputMetadataValue": ".json_output_metadata_value",
     "JsonOutputMetadataValueCitationsItem": ".json_output_metadata_value_citations_item",
     "JsonOutputMetadataValueCitationsItemPolygonItem": ".json_output_metadata_value_citations_item_polygon_item",
-    "JsonOutputMetadataValueInsightsItem": ".json_output_metadata_value_insights_item",
     "ListProcessorsProcessor": ".list_processors_processor",
     "ListProcessorsProcessorVersion": ".list_processors_processor_version",
     "ListProcessorsResponse": ".list_processors_response",
@@ -515,6 +517,7 @@ __all__ = [
     "ExtractionAdvancedOptions",
     "ExtractionAdvancedOptionsArrayCitationStrategy",
     "ExtractionAdvancedOptionsExcelSheetSelectionStrategy",
+    "ExtractionAdvancedOptionsReviewAgent",
     "ExtractionConfig",
     "ExtractionConfigBaseProcessor",
     "ExtractionField",
@@ -538,12 +541,12 @@ __all__ = [
     "FileMetadataParentSplit",
     "FileType",
     "Insight",
+    "InsightType",
     "JsonObject",
     "JsonOutput",
     "JsonOutputMetadataValue",
     "JsonOutputMetadataValueCitationsItem",
     "JsonOutputMetadataValueCitationsItemPolygonItem",
-    "JsonOutputMetadataValueInsightsItem",
     "ListProcessorsProcessor",
     "ListProcessorsProcessorVersion",
     "ListProcessorsResponse",

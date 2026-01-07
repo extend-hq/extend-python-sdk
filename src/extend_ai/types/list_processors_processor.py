@@ -38,14 +38,18 @@ class ListProcessorsProcessor(UncheckedBaseModel):
     Array of all versions for this processor
     """
 
-    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field()
+    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
     """
     The time (in UTC) at which the processor was created. Will follow the RFC 3339 format.
     
     Example: `"2024-03-21T15:30:00Z"`
     """
 
-    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field()
+    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
     """
     The time (in UTC) at which the processor was last updated. Will follow the RFC 3339 format.
     

@@ -33,7 +33,7 @@ class EditRootJsonSchema(UncheckedBaseModel):
 
     additional_properties: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="additionalProperties")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="additionalProperties", default=None)
     """
     Whether additional properties are allowed
     """

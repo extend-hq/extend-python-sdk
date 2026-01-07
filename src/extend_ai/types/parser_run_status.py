@@ -33,7 +33,7 @@ class ParserRunStatus(UncheckedBaseModel):
     """
 
     failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="failureReason", default=None)
     )
     """
     The reason for failure if status is "FAILED".

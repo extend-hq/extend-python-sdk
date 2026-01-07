@@ -40,14 +40,14 @@ class File(UncheckedBaseModel):
     """
 
     presigned_url: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="presignedUrl")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="presignedUrl", default=None)
     )
     """
     A presigned URL to download the file. Expires after 15 minutes.
     """
 
     parent_file_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parentFileId")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="parentFileId", default=None)
     )
     """
     The ID of the parent file. Only included if this file is a derivative of another file, for instance if it was created via a Splitter in a workflow.
@@ -55,14 +55,18 @@ class File(UncheckedBaseModel):
 
     contents: typing.Optional[FileContents] = None
     metadata: FileMetadata
-    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field()
+    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
     """
     The time (in UTC) at which the file was created. Will follow the RFC 3339 format.
     
     Example: `"2024-03-21T15:30:00Z"`
     """
 
-    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field()
+    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
     """
     The time (in UTC) at which the file was last updated. Will follow the RFC 3339 format.
     

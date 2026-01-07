@@ -33,19 +33,25 @@ class ProcessorRun(UncheckedBaseModel):
     Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
-    processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field()
+    processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field(
+        alias="processorId"
+    )
     """
     The ID of the processor used for this run.
     
     Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
-    processor_version_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorVersionId")] = pydantic.Field()
+    processor_version_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorVersionId")] = pydantic.Field(
+        alias="processorVersionId"
+    )
     """
     The ID of the specific processor version used.
     """
 
-    processor_name: typing_extensions.Annotated[str, FieldMetadata(alias="processorName")] = pydantic.Field()
+    processor_name: typing_extensions.Annotated[str, FieldMetadata(alias="processorName")] = pydantic.Field(
+        alias="processorName"
+    )
     """
     The name of the processor.
     
@@ -61,14 +67,14 @@ class ProcessorRun(UncheckedBaseModel):
     """
 
     failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="failureReason", default=None)
     )
     """
     If the run failed, indicates the reason for failure.
     """
 
     failure_message: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureMessage")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="failureMessage", default=None)
     )
     """
     If the run failed, provides a detailed message about the failure.
@@ -105,14 +111,14 @@ class ProcessorRun(UncheckedBaseModel):
 
     initial_output: typing_extensions.Annotated[
         typing.Optional[ProcessorOutput], FieldMetadata(alias="initialOutput")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="initialOutput", default=None)
     """
     The initial output from the processor run. The type of output will match the processor type.
     """
 
     reviewed_output: typing_extensions.Annotated[
         typing.Optional[ProcessorOutput], FieldMetadata(alias="reviewedOutput")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="reviewedOutput", default=None)
     """
     The output after review, if any.
     """
@@ -128,7 +134,7 @@ class ProcessorRun(UncheckedBaseModel):
 
     merged_processors: typing_extensions.Annotated[
         typing.List[ProcessorRunMergedProcessorsItem], FieldMetadata(alias="mergedProcessors")
-    ] = pydantic.Field()
+    ] = pydantic.Field(alias="mergedProcessors")
     """
     An array of processors that were merged to create this output. Will be an empty array unless this output was the result of a MergeExtraction step in a workflow.
     """

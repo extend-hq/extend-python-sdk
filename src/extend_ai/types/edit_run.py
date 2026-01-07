@@ -33,13 +33,13 @@ class EditRun(UncheckedBaseModel):
     Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
     """
 
-    file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field()
+    file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field(alias="fileId")
     """
     The identifier of the input file that was edited.
     """
 
     edited_file: typing_extensions.Annotated[typing.Optional[EditRunEditedFile], FieldMetadata(alias="editedFile")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="editedFile", default=None)
     )
     """
     Information about the edited output file. Only present when status is "PROCESSED".
@@ -47,7 +47,7 @@ class EditRun(UncheckedBaseModel):
 
     status: EditRunStatus
     failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="failureReason", default=None)
     )
     """
     The reason for failure if status is "FAILED".

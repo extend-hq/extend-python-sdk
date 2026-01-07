@@ -21,7 +21,9 @@ class ParserRunGetResponseParserRun_ParserRunStatus(UncheckedBaseModel):
     object: typing.Literal["parser_run_status"] = "parser_run_status"
     id: str
     status: ParserRunStatusStatus
-    failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = None
+    failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
+        pydantic.Field(alias="failureReason", default=None)
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -36,10 +38,12 @@ class ParserRunGetResponseParserRun_ParserRunStatus(UncheckedBaseModel):
 class ParserRunGetResponseParserRun_ParserRun(UncheckedBaseModel):
     object: typing.Literal["parser_run"] = "parser_run"
     id: str
-    file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")]
+    file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field(alias="fileId")
     chunks: typing.List[Chunk]
     status: ParserRunStatusEnum
-    failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = None
+    failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
+        pydantic.Field(alias="failureReason", default=None)
+    )
     metrics: ParserRunMetrics
     config: ParseConfig
     usage: typing.Optional[ParserRunCredits] = None

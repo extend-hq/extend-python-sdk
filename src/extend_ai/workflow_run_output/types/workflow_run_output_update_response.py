@@ -14,7 +14,9 @@ from ...types.workflow_run import WorkflowRun
 
 class WorkflowRunOutputUpdateResponse(UncheckedBaseModel):
     success: bool
-    workflow_run: typing_extensions.Annotated[WorkflowRun, FieldMetadata(alias="workflowRun")]
+    workflow_run: typing_extensions.Annotated[WorkflowRun, FieldMetadata(alias="workflowRun")] = pydantic.Field(
+        alias="workflowRun"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

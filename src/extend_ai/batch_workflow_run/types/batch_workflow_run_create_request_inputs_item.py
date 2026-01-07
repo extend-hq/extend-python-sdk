@@ -18,7 +18,7 @@ class BatchWorkflowRunCreateRequestInputsItem(UncheckedBaseModel):
     """
 
     raw_text: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="rawText")] = pydantic.Field(
-        default=None
+        alias="rawText", default=None
     )
     """
     A string containing raw text data to be processed. This will be treated as a `.txt` file by the workflow. Use the `file` parameter for structured data or specific file types. Either `file` or `rawText` must be provided for each input.

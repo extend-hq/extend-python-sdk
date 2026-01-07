@@ -14,19 +14,20 @@ from .extraction_advanced_options_array_citation_strategy import ExtractionAdvan
 from .extraction_advanced_options_excel_sheet_selection_strategy import (
     ExtractionAdvancedOptionsExcelSheetSelectionStrategy,
 )
+from .extraction_advanced_options_review_agent import ExtractionAdvancedOptionsReviewAgent
 from .page_ranges import PageRanges
 
 
 class ExtractionAdvancedOptions(UncheckedBaseModel):
     document_kind: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="documentKind")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="documentKind", default=None)
     )
     """
     DEPRECATED - use extractionRules for all system prompts.
     """
 
     key_definitions: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="keyDefinitions")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="keyDefinitions", default=None)
     )
     """
     DEPRECATED - use extractionRules for all system prompts.
@@ -34,20 +35,20 @@ class ExtractionAdvancedOptions(UncheckedBaseModel):
 
     model_reasoning_insights_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="modelReasoningInsightsEnabled")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="modelReasoningInsightsEnabled", default=None)
     """
     Whether to enable model reasoning insights.
     """
 
     advanced_multimodal_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="advancedMultimodalEnabled")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="advancedMultimodalEnabled", default=None)
     """
     Whether to enable advanced multimodal features.
     """
 
     citations_enabled: typing_extensions.Annotated[typing.Optional[bool], FieldMetadata(alias="citationsEnabled")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="citationsEnabled", default=None)
     )
     """
     Whether to enable citations in the output.
@@ -55,31 +56,43 @@ class ExtractionAdvancedOptions(UncheckedBaseModel):
 
     array_citation_strategy: typing_extensions.Annotated[
         typing.Optional[ExtractionAdvancedOptionsArrayCitationStrategy], FieldMetadata(alias="arrayCitationStrategy")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="arrayCitationStrategy", default=None)
     """
     Granularity for array citations. This requires citationsEnabled=true and a base processor version that supports property-level array citations (extraction_performance ≥ 4.4.0).
     """
 
     advanced_figure_parsing_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="advancedFigureParsingEnabled")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="advancedFigureParsingEnabled", default=None)
     """
     Whether to enable advanced figure parsing.
     """
 
+    review_agent: typing_extensions.Annotated[
+        typing.Optional[ExtractionAdvancedOptionsReviewAgent], FieldMetadata(alias="reviewAgent")
+    ] = pydantic.Field(alias="reviewAgent", default=None)
+    """
+    Configuration for the review agent that analyzes extraction results.
+    When enabled, each field in the output metadata will include a `reviewAgentScore` (1-5)
+    and may include additional `insights` of type `issue` or `review_summary` to help identify
+    fields that may need manual review.
+    
+    To learn more, view the [Review Agent Documentation](https://docs.extend.ai/product/extraction/review-agent)
+    """
+
     array_strategy: typing_extensions.Annotated[
         typing.Optional[ArrayStrategy], FieldMetadata(alias="arrayStrategy")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="arrayStrategy", default=None)
     """
     Strategy for handling large arrays in documents.
     """
 
     chunking_options: typing_extensions.Annotated[
         typing.Optional[ExtractChunkingOptions], FieldMetadata(alias="chunkingOptions")
-    ] = None
+    ] = pydantic.Field(alias="chunkingOptions", default=None)
     excel_sheet_ranges: typing_extensions.Annotated[
         typing.Optional[typing.List[ExcelSheetRange]], FieldMetadata(alias="excelSheetRanges")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="excelSheetRanges", default=None)
     """
     Ranges of sheet indices to extract from Excel documents.
     """
@@ -87,19 +100,21 @@ class ExtractionAdvancedOptions(UncheckedBaseModel):
     excel_sheet_selection_strategy: typing_extensions.Annotated[
         typing.Optional[ExtractionAdvancedOptionsExcelSheetSelectionStrategy],
         FieldMetadata(alias="excelSheetSelectionStrategy"),
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="excelSheetSelectionStrategy", default=None)
     """
     Strategy for selecting sheets from Excel documents.
     """
 
     fixed_page_limit: typing_extensions.Annotated[typing.Optional[int], FieldMetadata(alias="fixedPageLimit")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="fixedPageLimit", default=None)
     )
     """
     DEPRECATED - See [Page Ranges](/product/page-ranges).
     """
 
-    page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = None
+    page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = (
+        pydantic.Field(alias="pageRanges", default=None)
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

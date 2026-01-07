@@ -15,14 +15,14 @@ class ParseConfigChunkingStrategyOptions(UncheckedBaseModel):
     """
 
     min_characters: typing_extensions.Annotated[typing.Optional[int], FieldMetadata(alias="minCharacters")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="minCharacters", default=None)
     )
     """
     Specify a minimum number of characters per chunk.
     """
 
     max_characters: typing_extensions.Annotated[typing.Optional[int], FieldMetadata(alias="maxCharacters")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="maxCharacters", default=None)
     )
     """
     Specify a maximum number of characters per chunk.

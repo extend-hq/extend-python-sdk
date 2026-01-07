@@ -7,13 +7,13 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .insight import Insight
 from .json_output_metadata_value_citations_item import JsonOutputMetadataValueCitationsItem
-from .json_output_metadata_value_insights_item import JsonOutputMetadataValueInsightsItem
 
 
 class JsonOutputMetadataValue(UncheckedBaseModel):
     ocr_confidence: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="ocrConfidence")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="ocrConfidence", default=None)
     )
     """
     Confidence score from OCR processing, if applicable
@@ -21,13 +21,28 @@ class JsonOutputMetadataValue(UncheckedBaseModel):
 
     logprobs_confidence: typing_extensions.Annotated[
         typing.Optional[float], FieldMetadata(alias="logprobsConfidence")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="logprobsConfidence", default=None)
     """
     Confidence score based on model logprobs
     """
 
+    review_agent_score: typing_extensions.Annotated[typing.Optional[int], FieldMetadata(alias="reviewAgentScore")] = (
+        pydantic.Field(alias="reviewAgentScore", default=None)
+    )
+    """
+    A 1-5 score indicating the review agent's confidence in the extracted value.
+    - 5: High confidence, no issues detected
+    - 4: Good confidence, minor observations
+    - 3: Moderate confidence, some uncertainty
+    - 2: Low confidence, likely issues
+    - 1: Very low confidence, significant problems detected
+    
+    These scores will be present when the `reviewAgent.enabled` flag is set to `true` in the processor config.
+    To learn more, view the [Review Agent Documentation](https://docs.extend.ai/product/extraction/review-agent)
+    """
+
     citations: typing.Optional[typing.List[JsonOutputMetadataValueCitationsItem]] = None
-    insights: typing.Optional[typing.List[JsonOutputMetadataValueInsightsItem]] = None
+    insights: typing.Optional[typing.List[Insight]] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

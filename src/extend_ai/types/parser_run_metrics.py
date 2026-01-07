@@ -14,12 +14,14 @@ class ParserRunMetrics(UncheckedBaseModel):
     Metrics about the parsing process.
     """
 
-    processing_time_ms: typing_extensions.Annotated[float, FieldMetadata(alias="processingTimeMs")] = pydantic.Field()
+    processing_time_ms: typing_extensions.Annotated[float, FieldMetadata(alias="processingTimeMs")] = pydantic.Field(
+        alias="processingTimeMs"
+    )
     """
     The time taken to process the document in milliseconds.
     """
 
-    page_count: typing_extensions.Annotated[float, FieldMetadata(alias="pageCount")] = pydantic.Field()
+    page_count: typing_extensions.Annotated[float, FieldMetadata(alias="pageCount")] = pydantic.Field(alias="pageCount")
     """
     The number of pages in the document.
     """

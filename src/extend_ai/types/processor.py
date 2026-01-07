@@ -35,21 +35,27 @@ class Processor(UncheckedBaseModel):
     """
 
     type: ProcessorType
-    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field()
+    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
     """
     The time (in UTC) at which the processor was created. Will follow the RFC 3339 format.
     
     Example: `"2024-03-21T15:30:00Z"`
     """
 
-    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field()
+    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
     """
     The time (in UTC) at which the processor was last updated. Will follow the RFC 3339 format.
     
     Example: `"2024-03-21T16:45:00Z"`
     """
 
-    draft_version: typing_extensions.Annotated[ProcessorVersion, FieldMetadata(alias="draftVersion")]
+    draft_version: typing_extensions.Annotated[ProcessorVersion, FieldMetadata(alias="draftVersion")] = pydantic.Field(
+        alias="draftVersion"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

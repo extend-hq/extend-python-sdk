@@ -16,27 +16,35 @@ from .optimizer_run_status import OptimizerRunStatus
 
 
 class OptimizerRun(UncheckedBaseModel):
-    agent_run_id: typing_extensions.Annotated[str, FieldMetadata(alias="agentRunId")] = pydantic.Field()
+    agent_run_id: typing_extensions.Annotated[str, FieldMetadata(alias="agentRunId")] = pydantic.Field(
+        alias="agentRunId"
+    )
     """
     Unique identifier for the optimizer run
     """
 
-    processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field()
+    processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field(
+        alias="processorId"
+    )
     """
     ID of the processor being optimized
     """
 
-    processor_version_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorVersionId")] = pydantic.Field()
+    processor_version_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorVersionId")] = pydantic.Field(
+        alias="processorVersionId"
+    )
     """
     ID of the processor version being optimized
     """
 
-    eval_set_id: typing_extensions.Annotated[str, FieldMetadata(alias="evalSetId")] = pydantic.Field()
+    eval_set_id: typing_extensions.Annotated[str, FieldMetadata(alias="evalSetId")] = pydantic.Field(alias="evalSetId")
     """
     ID of the evaluation set used
     """
 
-    agent_type: typing_extensions.Annotated[OptimizerRunAgentType, FieldMetadata(alias="agentType")] = pydantic.Field()
+    agent_type: typing_extensions.Annotated[OptimizerRunAgentType, FieldMetadata(alias="agentType")] = pydantic.Field(
+        alias="agentType"
+    )
     """
     Type of optimizer agent that ran
     """
@@ -46,19 +54,23 @@ class OptimizerRun(UncheckedBaseModel):
     Current status of the optimizer run
     """
 
-    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field()
+    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
     """
     ISO 8601 timestamp of when the run was created
     """
 
-    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field()
+    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
     """
     ISO 8601 timestamp of when the run was last updated
     """
 
     batch_processor_runs: typing_extensions.Annotated[
         typing.Optional[typing.List[OptimizerBatchProcessorRunResult]], FieldMetadata(alias="batchProcessorRuns")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="batchProcessorRuns", default=None)
     """
     Array of batch processor run results. Each run represents one iteration of the optimization process.
     The first result (with `isBaseline: true`) is the baseline configuration.

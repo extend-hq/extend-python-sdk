@@ -15,21 +15,21 @@ class BaseMetrics(UncheckedBaseModel):
     """
 
     num_files: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="numFiles")] = pydantic.Field(
-        default=None
+        alias="numFiles", default=None
     )
     """
     The total number of files that were processed.
     """
 
     num_pages: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="numPages")] = pydantic.Field(
-        default=None
+        alias="numPages", default=None
     )
     """
     The total number of pages that were processed.
     """
 
     mean_run_time_ms: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="meanRunTimeMs")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="meanRunTimeMs", default=None)
     )
     """
     The mean runtime in milliseconds per document.

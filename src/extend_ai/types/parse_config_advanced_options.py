@@ -13,22 +13,24 @@ from .page_ranges import PageRanges
 class ParseConfigAdvancedOptions(UncheckedBaseModel):
     page_rotation_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="pageRotationEnabled")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="pageRotationEnabled", default=None)
     """
     Whether to automatically detect and correct page rotation.
     """
 
     agentic_ocr_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="agenticOcrEnabled")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="agenticOcrEnabled", default=None)
     """
     Whether to enable agentic OCR corrections using VLM-based review and correction of OCR errors for messy handwriting and poorly scanned text.
     """
 
-    page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = None
+    page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = (
+        pydantic.Field(alias="pageRanges", default=None)
+    )
     vertical_grouping_threshold: typing_extensions.Annotated[
         typing.Optional[float], FieldMetadata(alias="verticalGroupingThreshold")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="verticalGroupingThreshold", default=None)
     """
     Multiplier for the Y-axis threshold used to determine if text blocks should be placed on the same line or not (0.1-5.0, default 1.0). Higher values group elements that are further apart vertically. Only applies when the spatial target is set.
     """

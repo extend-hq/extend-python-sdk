@@ -15,21 +15,21 @@ class EditCreateAsyncRequestFile(UncheckedBaseModel):
     """
 
     file_name: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="fileName")] = pydantic.Field(
-        default=None
+        alias="fileName", default=None
     )
     """
     The name of the file. If not set, the file name is taken from the url.
     """
 
     file_url: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="fileUrl")] = pydantic.Field(
-        default=None
+        alias="fileUrl", default=None
     )
     """
     A URL to download the file. For production use cases, we recommend using presigned URLs with a 5-15 minute expiration time. One of `fileUrl` or `fileId` must be provided.
     """
 
     file_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="fileId")] = pydantic.Field(
-        default=None
+        alias="fileId", default=None
     )
     """
     If you already have an Extend file id (for instance from running a workflow or a previous file upload) then you can use that file id when running the edit endpoint. The file id will start with "file_". One of `fileUrl` or `fileId` must be provided.

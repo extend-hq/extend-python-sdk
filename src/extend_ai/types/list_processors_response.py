@@ -27,7 +27,7 @@ class ListProcessorsResponse(UncheckedBaseModel):
     """
 
     next_page_token: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="nextPageToken")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="nextPageToken", default=None)
     )
     """
     Token for retrieving the next page of results. Will be null if there are no more results.

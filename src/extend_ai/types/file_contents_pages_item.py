@@ -10,15 +10,21 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 
 
 class FileContentsPagesItem(UncheckedBaseModel):
-    page_number: typing_extensions.Annotated[int, FieldMetadata(alias="pageNumber")] = pydantic.Field()
+    page_number: typing_extensions.Annotated[int, FieldMetadata(alias="pageNumber")] = pydantic.Field(
+        alias="pageNumber"
+    )
     """
     The page number of this page in the document.
     """
 
-    page_height: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageHeight")] = None
-    page_width: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageWidth")] = None
+    page_height: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageHeight")] = (
+        pydantic.Field(alias="pageHeight", default=None)
+    )
+    page_width: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageWidth")] = pydantic.Field(
+        alias="pageWidth", default=None
+    )
     raw_text: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="rawText")] = pydantic.Field(
-        default=None
+        alias="rawText", default=None
     )
     """
     The raw text content extracted from this page.

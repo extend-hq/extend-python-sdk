@@ -13,7 +13,7 @@ from .insight import Insight
 
 class OutputMetadataValue(UncheckedBaseModel):
     ocr_confidence: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="ocrConfidence")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="ocrConfidence", default=None)
     )
     """
     Confidence score from OCR processing, if applicable
@@ -21,9 +21,21 @@ class OutputMetadataValue(UncheckedBaseModel):
 
     logprobs_confidence: typing_extensions.Annotated[
         typing.Optional[float], FieldMetadata(alias="logprobsConfidence")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="logprobsConfidence", default=None)
     """
     Confidence score based on model logprobs
+    """
+
+    review_agent_score: typing_extensions.Annotated[typing.Optional[int], FieldMetadata(alias="reviewAgentScore")] = (
+        pydantic.Field(alias="reviewAgentScore", default=None)
+    )
+    """
+    A 1-5 score indicating the review agent's confidence in the extracted value.
+    - 5: High confidence, no issues detected
+    - 4: Good confidence, minor observations
+    - 3: Moderate confidence, some uncertainty
+    - 2: Low confidence, likely issues
+    - 1: Very low confidence, significant problems detected
     """
 
     citations: typing.Optional[typing.List[Citation]] = None

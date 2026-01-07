@@ -12,7 +12,9 @@ from .splitter_output_splits_item import SplitterOutputSplitsItem
 
 class SplitterOutput(UncheckedBaseModel):
     splits: typing.List[SplitterOutputSplitsItem]
-    is_external: typing_extensions.Annotated[typing.Optional[bool], FieldMetadata(alias="isExternal")] = None
+    is_external: typing_extensions.Annotated[typing.Optional[bool], FieldMetadata(alias="isExternal")] = pydantic.Field(
+        alias="isExternal", default=None
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

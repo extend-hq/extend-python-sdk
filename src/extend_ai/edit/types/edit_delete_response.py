@@ -11,7 +11,7 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 
 class EditDeleteResponse(UncheckedBaseModel):
     success: bool
-    edit_run_id: typing_extensions.Annotated[str, FieldMetadata(alias="editRunId")] = pydantic.Field()
+    edit_run_id: typing_extensions.Annotated[str, FieldMetadata(alias="editRunId")] = pydantic.Field(alias="editRunId")
     """
     The ID of the deleted edit run
     """

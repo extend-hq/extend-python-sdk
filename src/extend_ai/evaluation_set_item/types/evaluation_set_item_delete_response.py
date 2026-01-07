@@ -12,7 +12,7 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 class EvaluationSetItemDeleteResponse(UncheckedBaseModel):
     success: bool
     evaluation_set_item_id: typing_extensions.Annotated[str, FieldMetadata(alias="evaluationSetItemId")] = (
-        pydantic.Field()
+        pydantic.Field(alias="evaluationSetItemId")
     )
     """
     The ID of the deleted evaluation set item

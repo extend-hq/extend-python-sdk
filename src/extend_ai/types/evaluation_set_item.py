@@ -27,14 +27,16 @@ class EvaluationSetItem(UncheckedBaseModel):
     Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
     """
 
-    evaluation_set_id: typing_extensions.Annotated[str, FieldMetadata(alias="evaluationSetId")] = pydantic.Field()
+    evaluation_set_id: typing_extensions.Annotated[str, FieldMetadata(alias="evaluationSetId")] = pydantic.Field(
+        alias="evaluationSetId"
+    )
     """
     The ID of the evaluation set that this item belongs to.
     
     Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
     """
 
-    file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field()
+    file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field(alias="fileId")
     """
     Extend's internal ID for the file. It will always start with "file_".
     
@@ -42,7 +44,7 @@ class EvaluationSetItem(UncheckedBaseModel):
     """
 
     expected_output: typing_extensions.Annotated[ProvidedProcessorOutput, FieldMetadata(alias="expectedOutput")] = (
-        pydantic.Field()
+        pydantic.Field(alias="expectedOutput")
     )
     """
     The expected output that will be used to evaluate the processor's performance. This will confirm to the output type schema of the processor.

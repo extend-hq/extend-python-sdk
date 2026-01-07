@@ -20,35 +20,35 @@ class SplitterMetrics(BaseMetrics):
     """
 
     precision_perc: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="precisionPerc")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="precisionPerc", default=None)
     )
     """
     Number of predicted subdocuments that are in the expected set of subdocuments divided by total number of predicted subdocuments.
     """
 
     recall_perc: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="recallPerc")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="recallPerc", default=None)
     )
     """
     Number of expected subdocuments that are in the predicted set of subdocuments divided by total number of expected subdocuments.
     """
 
     num_expected_docs: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="numExpectedDocs")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="numExpectedDocs", default=None)
     )
     """
     The number of expected documents.
     """
 
     num_predicted_docs: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="numPredictedDocs")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="numPredictedDocs", default=None)
     )
     """
     The number of predicted documents.
     """
 
     num_correct_docs: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="numCorrectDocs")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="numCorrectDocs", default=None)
     )
     """
     The number of correctly predicted documents.

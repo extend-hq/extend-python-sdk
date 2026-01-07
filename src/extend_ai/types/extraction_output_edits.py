@@ -15,14 +15,14 @@ class ExtractionOutputEdits(UncheckedBaseModel):
     """
 
     original_value: typing_extensions.Annotated[typing.Optional[typing.Any], FieldMetadata(alias="originalValue")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="originalValue", default=None)
     )
     """
     The original value before editing.
     """
 
     edited_value: typing_extensions.Annotated[typing.Optional[typing.Any], FieldMetadata(alias="editedValue")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="editedValue", default=None)
     )
     """
     The value after editing.
@@ -39,7 +39,7 @@ class ExtractionOutputEdits(UncheckedBaseModel):
     """
 
     field_type: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="fieldType")] = pydantic.Field(
-        default=None
+        alias="fieldType", default=None
     )
     """
     The type of the edited field.

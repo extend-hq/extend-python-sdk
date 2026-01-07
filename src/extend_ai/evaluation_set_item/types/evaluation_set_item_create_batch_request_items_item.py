@@ -11,7 +11,7 @@ from ...types.provided_processor_output import ProvidedProcessorOutput
 
 
 class EvaluationSetItemCreateBatchRequestItemsItem(UncheckedBaseModel):
-    file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field()
+    file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field(alias="fileId")
     """
     Extend's internal ID for the file. It will always start with "file_".
     
@@ -19,7 +19,7 @@ class EvaluationSetItemCreateBatchRequestItemsItem(UncheckedBaseModel):
     """
 
     expected_output: typing_extensions.Annotated[ProvidedProcessorOutput, FieldMetadata(alias="expectedOutput")] = (
-        pydantic.Field()
+        pydantic.Field(alias="expectedOutput")
     )
     """
     The expected output of the processor when run against the file

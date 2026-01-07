@@ -10,19 +10,25 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 
 
 class ProcessorRunMergedProcessorsItem(UncheckedBaseModel):
-    processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field()
+    processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field(
+        alias="processorId"
+    )
     """
     The ID of the merged processor.
     
     Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
-    processor_version_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorVersionId")] = pydantic.Field()
+    processor_version_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorVersionId")] = pydantic.Field(
+        alias="processorVersionId"
+    )
     """
     The ID of the specific processor version used.
     """
 
-    processor_name: typing_extensions.Annotated[str, FieldMetadata(alias="processorName")] = pydantic.Field()
+    processor_name: typing_extensions.Annotated[str, FieldMetadata(alias="processorName")] = pydantic.Field(
+        alias="processorName"
+    )
     """
     The name of the merged processor.
     

@@ -13,10 +13,12 @@ from ...types.workflow_run_summary import WorkflowRunSummary
 
 class WorkflowRunListResponse(UncheckedBaseModel):
     success: bool
-    workflow_runs: typing_extensions.Annotated[typing.List[WorkflowRunSummary], FieldMetadata(alias="workflowRuns")]
+    workflow_runs: typing_extensions.Annotated[typing.List[WorkflowRunSummary], FieldMetadata(alias="workflowRuns")] = (
+        pydantic.Field(alias="workflowRuns")
+    )
     next_page_token: typing_extensions.Annotated[
         typing.Optional[NextPageToken], FieldMetadata(alias="nextPageToken")
-    ] = None
+    ] = pydantic.Field(alias="nextPageToken", default=None)
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

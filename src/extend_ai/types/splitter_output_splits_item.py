@@ -25,12 +25,12 @@ class SplitterOutputSplitsItem(UncheckedBaseModel):
     Identifier for the split document (e.g. invoice number)
     """
 
-    start_page: typing_extensions.Annotated[int, FieldMetadata(alias="startPage")] = pydantic.Field()
+    start_page: typing_extensions.Annotated[int, FieldMetadata(alias="startPage")] = pydantic.Field(alias="startPage")
     """
     The start page of the split document
     """
 
-    end_page: typing_extensions.Annotated[int, FieldMetadata(alias="endPage")] = pydantic.Field()
+    end_page: typing_extensions.Annotated[int, FieldMetadata(alias="endPage")] = pydantic.Field(alias="endPage")
     """
     The end page of the split document
     """
@@ -40,7 +40,9 @@ class SplitterOutputSplitsItem(UncheckedBaseModel):
     Optional name for the split
     """
 
-    classification_id: typing_extensions.Annotated[str, FieldMetadata(alias="classificationId")] = pydantic.Field()
+    classification_id: typing_extensions.Annotated[str, FieldMetadata(alias="classificationId")] = pydantic.Field(
+        alias="classificationId"
+    )
     """
     ID of the classification type (set in the processor config)
     """
@@ -50,7 +52,7 @@ class SplitterOutputSplitsItem(UncheckedBaseModel):
     Unique ID for this split
     """
 
-    file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field()
+    file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field(alias="fileId")
     """
     File ID associated with this split
     """
