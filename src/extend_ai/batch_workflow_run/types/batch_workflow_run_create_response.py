@@ -15,7 +15,7 @@ class BatchWorkflowRunCreateResponse(UncheckedBaseModel):
     Indicates whether the batch request was successfully accepted and queued. `true` signifies success.
     """
 
-    batch_id: typing_extensions.Annotated[str, FieldMetadata(alias="batchId")] = pydantic.Field()
+    batch_id: typing_extensions.Annotated[str, FieldMetadata(alias="batchId")] = pydantic.Field(alias="batchId")
     """
     A unique identifier for the submitted batch. This ID can be used to correlate the workflow runs created by this request. You can find this `batchId` associated with individual runs when listing workflow runs or in webhook payloads.
     """

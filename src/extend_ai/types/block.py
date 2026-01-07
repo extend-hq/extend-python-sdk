@@ -57,7 +57,9 @@ class Block(UncheckedBaseModel):
     An array of points defining the polygon that bounds the block.
     """
 
-    bounding_box: typing_extensions.Annotated[BlockBoundingBox, FieldMetadata(alias="boundingBox")] = pydantic.Field()
+    bounding_box: typing_extensions.Annotated[BlockBoundingBox, FieldMetadata(alias="boundingBox")] = pydantic.Field(
+        alias="boundingBox"
+    )
     """
     A simplified bounding box for the block.
     """

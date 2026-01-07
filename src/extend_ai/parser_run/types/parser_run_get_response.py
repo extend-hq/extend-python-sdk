@@ -17,7 +17,9 @@ class ParserRunGetResponse(UncheckedBaseModel):
     Warning message about missing API version header if applicable
     """
 
-    parser_run: typing_extensions.Annotated[ParserRunGetResponseParserRun, FieldMetadata(alias="parserRun")]
+    parser_run: typing_extensions.Annotated[ParserRunGetResponseParserRun, FieldMetadata(alias="parserRun")] = (
+        pydantic.Field(alias="parserRun")
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -41,21 +41,27 @@ class EvaluationSet(UncheckedBaseModel):
     Example: `"Q4 2023 vendor invoices for accuracy testing"`
     """
 
-    processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field()
+    processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field(
+        alias="processorId"
+    )
     """
     The ID of the processor associated with this evaluation set.
     
     Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
-    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field()
+    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
     """
     The time (in UTC) at which the evaluation set was created. Will follow the RFC 3339 format.
     
     Example: `"2024-03-21T15:30:00Z"`
     """
 
-    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field()
+    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
     """
     The time (in UTC) at which the evaluation set was last updated. Will follow the RFC 3339 format.
     

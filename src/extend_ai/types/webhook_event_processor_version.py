@@ -19,9 +19,9 @@ class WebhookEventProcessorVersion(UncheckedBaseModel):
 
     event_type: typing_extensions.Annotated[
         typing.Optional[typing.Literal["processor.version.published"]], FieldMetadata(alias="eventType")
-    ] = None
+    ] = pydantic.Field(alias="eventType", default=None)
     payload: typing.Optional[ProcessorVersion] = None
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field()
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     """
     Unique identifier for the event
     """

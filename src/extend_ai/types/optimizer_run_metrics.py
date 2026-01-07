@@ -11,7 +11,9 @@ from .optimizer_run_metrics_fields_item import OptimizerRunMetricsFieldsItem
 
 
 class OptimizerRunMetrics(UncheckedBaseModel):
-    overall_accuracy: typing_extensions.Annotated[float, FieldMetadata(alias="overallAccuracy")] = pydantic.Field()
+    overall_accuracy: typing_extensions.Annotated[float, FieldMetadata(alias="overallAccuracy")] = pydantic.Field(
+        alias="overallAccuracy"
+    )
     """
     Overall accuracy across all fields/classifications
     """

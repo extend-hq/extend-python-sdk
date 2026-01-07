@@ -20,7 +20,7 @@ class ExtendError(UncheckedBaseModel):
     Human-readable error message
     """
 
-    request_id: typing_extensions.Annotated[str, FieldMetadata(alias="requestId")] = pydantic.Field()
+    request_id: typing_extensions.Annotated[str, FieldMetadata(alias="requestId")] = pydantic.Field(alias="requestId")
     """
     Unique request identifier for support purposes
     """

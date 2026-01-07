@@ -22,21 +22,27 @@ class ProcessorRunSummary(UncheckedBaseModel):
     """
 
     status: ProcessorStatus
-    processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field()
+    processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field(
+        alias="processorId"
+    )
     """
     The ID of the processor that was run. Will always start with "dp_".
     
     Example: `"dp_BMdfq_yWM3sT-ZzvCnA3f"`
     """
 
-    processor_name: typing_extensions.Annotated[str, FieldMetadata(alias="processorName")] = pydantic.Field()
+    processor_name: typing_extensions.Annotated[str, FieldMetadata(alias="processorName")] = pydantic.Field(
+        alias="processorName"
+    )
     """
     The name of the processor that was run.
     
     Example: `"Invoice Extractor"`
     """
 
-    processor_version_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorVersionId")] = pydantic.Field()
+    processor_version_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorVersionId")] = pydantic.Field(
+        alias="processorVersionId"
+    )
     """
     The ID of the processor version that was run. Will always start with "dpv_".
     
@@ -51,14 +57,18 @@ class ProcessorRunSummary(UncheckedBaseModel):
     * `"CLASSIFY"` - Classification processor
     """
 
-    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field()
+    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
     """
     The time (in UTC) at which the processor run was created. Will follow the RFC 3339 format.
     
     Example: `"2024-03-21T15:29:55Z"`
     """
 
-    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field()
+    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
     """
     The time (in UTC) at which the processor run was last updated. Will follow the RFC 3339 format.
     

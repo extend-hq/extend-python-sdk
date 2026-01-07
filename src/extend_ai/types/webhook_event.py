@@ -14,12 +14,14 @@ from .webhook_event_payload import WebhookEventPayload
 
 
 class WebhookEvent(UncheckedBaseModel):
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field()
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     """
     Unique identifier for the event
     """
 
-    event_type: typing_extensions.Annotated[WebhookEventEventType, FieldMetadata(alias="eventType")] = pydantic.Field()
+    event_type: typing_extensions.Annotated[WebhookEventEventType, FieldMetadata(alias="eventType")] = pydantic.Field(
+        alias="eventType"
+    )
     """
     Type of the event that occurred
     """

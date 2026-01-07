@@ -12,7 +12,9 @@ from ...types.evaluation_set_item import EvaluationSetItem
 
 class EvaluationSetItemCreateResponse(UncheckedBaseModel):
     success: bool
-    evaluation_set_item: typing_extensions.Annotated[EvaluationSetItem, FieldMetadata(alias="evaluationSetItem")]
+    evaluation_set_item: typing_extensions.Annotated[EvaluationSetItem, FieldMetadata(alias="evaluationSetItem")] = (
+        pydantic.Field(alias="evaluationSetItem")
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

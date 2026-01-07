@@ -14,7 +14,9 @@ from ...types.processor_run import ProcessorRun
 
 class ProcessorRunCancelResponse(UncheckedBaseModel):
     success: bool
-    processor_run: typing_extensions.Annotated[ProcessorRun, FieldMetadata(alias="processorRun")]
+    processor_run: typing_extensions.Annotated[ProcessorRun, FieldMetadata(alias="processorRun")] = pydantic.Field(
+        alias="processorRun"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

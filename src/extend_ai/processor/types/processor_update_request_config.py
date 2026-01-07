@@ -31,15 +31,17 @@ class ProcessorUpdateRequestConfig_Classify(UncheckedBaseModel):
     type: typing.Literal["CLASSIFY"] = "CLASSIFY"
     base_processor: typing_extensions.Annotated[
         typing.Optional[ClassificationConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
-    ] = None
-    base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = None
+    ] = pydantic.Field(alias="baseProcessor", default=None)
+    base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
+        pydantic.Field(alias="baseVersion", default=None)
+    )
     classifications: typing.List[Classification]
     classification_rules: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="classificationRules")
-    ] = None
+    ] = pydantic.Field(alias="classificationRules", default=None)
     advanced_options: typing_extensions.Annotated[
         typing.Optional[ClassificationAdvancedOptions], FieldMetadata(alias="advancedOptions")
-    ] = None
+    ] = pydantic.Field(alias="advancedOptions", default=None)
     parser: typing.Optional[ParseConfig] = None
 
     if IS_PYDANTIC_V2:
@@ -63,14 +65,20 @@ class ProcessorUpdateRequestConfig_Extract(UncheckedBaseModel):
     type: typing.Literal["EXTRACT"] = "EXTRACT"
     base_processor: typing_extensions.Annotated[
         typing.Optional[ExtractionConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
-    ] = None
-    base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = None
-    extraction_rules: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="extractionRules")] = None
-    schema_: typing_extensions.Annotated[typing.Optional[JsonObject], FieldMetadata(alias="schema")] = None
+    ] = pydantic.Field(alias="baseProcessor", default=None)
+    base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
+        pydantic.Field(alias="baseVersion", default=None)
+    )
+    extraction_rules: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="extractionRules")] = (
+        pydantic.Field(alias="extractionRules", default=None)
+    )
+    schema_: typing_extensions.Annotated[typing.Optional[JsonObject], FieldMetadata(alias="schema")] = pydantic.Field(
+        alias="schema", default=None
+    )
     fields: typing.Optional[typing.List["ExtractionField"]] = None
     advanced_options: typing_extensions.Annotated[
         typing.Optional[ExtractionAdvancedOptions], FieldMetadata(alias="advancedOptions")
-    ] = None
+    ] = pydantic.Field(alias="advancedOptions", default=None)
     parser: typing.Optional[ParseConfig] = None
 
     if IS_PYDANTIC_V2:
@@ -94,15 +102,19 @@ class ProcessorUpdateRequestConfig_Splitter(UncheckedBaseModel):
     type: typing.Literal["SPLITTER"] = "SPLITTER"
     base_processor: typing_extensions.Annotated[
         typing.Optional[SplitterConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
-    ] = None
-    base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = None
+    ] = pydantic.Field(alias="baseProcessor", default=None)
+    base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
+        pydantic.Field(alias="baseVersion", default=None)
+    )
     split_classifications: typing_extensions.Annotated[
         typing.List[Classification], FieldMetadata(alias="splitClassifications")
-    ]
-    split_rules: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="splitRules")] = None
+    ] = pydantic.Field(alias="splitClassifications")
+    split_rules: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="splitRules")] = pydantic.Field(
+        alias="splitRules", default=None
+    )
     advanced_options: typing_extensions.Annotated[
         typing.Optional[SplitterAdvancedOptions], FieldMetadata(alias="advancedOptions")
-    ] = None
+    ] = pydantic.Field(alias="advancedOptions", default=None)
     parser: typing.Optional[ParseConfig] = None
 
     if IS_PYDANTIC_V2:

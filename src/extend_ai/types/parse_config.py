@@ -37,21 +37,21 @@ class ParseConfig(UncheckedBaseModel):
 
     chunking_strategy: typing_extensions.Annotated[
         typing.Optional[ParseConfigChunkingStrategy], FieldMetadata(alias="chunkingStrategy")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="chunkingStrategy", default=None)
     """
     Strategy for dividing the document into chunks.
     """
 
     block_options: typing_extensions.Annotated[
         typing.Optional[ParseConfigBlockOptions], FieldMetadata(alias="blockOptions")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="blockOptions", default=None)
     """
     Options for controlling how different block types are processed.
     """
 
     advanced_options: typing_extensions.Annotated[
         typing.Optional[ParseConfigAdvancedOptions], FieldMetadata(alias="advancedOptions")
-    ] = None
+    ] = pydantic.Field(alias="advancedOptions", default=None)
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

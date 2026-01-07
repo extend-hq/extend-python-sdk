@@ -11,7 +11,7 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 
 class FileDeleteResponse(UncheckedBaseModel):
     success: bool
-    file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field()
+    file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field(alias="fileId")
     """
     The ID of the deleted file
     """

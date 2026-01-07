@@ -15,7 +15,7 @@ class EditCreateAsyncRequestConfigAdvancedOptions(UncheckedBaseModel):
     """
 
     flatten_pdf: typing_extensions.Annotated[typing.Optional[bool], FieldMetadata(alias="flattenPdf")] = pydantic.Field(
-        default=None
+        alias="flattenPdf", default=None
     )
     """
     Whether to flatten PDF forms after editing.
@@ -23,7 +23,7 @@ class EditCreateAsyncRequestConfigAdvancedOptions(UncheckedBaseModel):
 
     table_parsing_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="tableParsingEnabled")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="tableParsingEnabled", default=None)
     """
     Whether to parse tables as arrays.
     """

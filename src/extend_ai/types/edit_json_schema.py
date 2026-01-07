@@ -43,7 +43,7 @@ class EditJsonSchema(UncheckedBaseModel):
 
     extend_edit_field_type: typing_extensions.Annotated[
         typing.Optional[EditJsonSchemaExtendEditFieldType], FieldMetadata(alias="extend_edit:field_type")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="extend_edit:field_type", default=None)
     """
     The PDF field type to edit. Allowed values depend on the schema type:
     * `["string", "null"]` → `text`, `signature`
@@ -57,34 +57,34 @@ class EditJsonSchema(UncheckedBaseModel):
 
     extend_edit_bbox: typing_extensions.Annotated[
         typing.Optional[EditBoundingBox], FieldMetadata(alias="extend_edit:bbox")
-    ] = None
+    ] = pydantic.Field(alias="extend_edit:bbox", default=None)
     extend_edit_page_index: typing_extensions.Annotated[
         typing.Optional[int], FieldMetadata(alias="extend_edit:page_index")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="extend_edit:page_index", default=None)
     """
     Zero-based page index where the field should be placed
     """
 
     extend_edit_text_edit_options: typing_extensions.Annotated[
         typing.Optional[EditTextOptions], FieldMetadata(alias="extend_edit:text_edit_options")
-    ] = None
+    ] = pydantic.Field(alias="extend_edit:text_edit_options", default=None)
     extend_edit_column_width: typing_extensions.Annotated[
         typing.Optional[float], FieldMetadata(alias="extend_edit:column_width")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="extend_edit:column_width", default=None)
     """
     Width of the column as a percentage (for table fields)
     """
 
     extend_edit_value: typing_extensions.Annotated[
         typing.Optional[typing.Any], FieldMetadata(alias="extend_edit:value")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="extend_edit:value", default=None)
     """
     The value to fill into this field. Can be any type. This will force the value at this field to be filled with this value. If a value is not provided, we will attempt to generate or infer one based on the instructions.
     """
 
     extend_edit_row_heights: typing_extensions.Annotated[
         typing.Optional[typing.List[float]], FieldMetadata(alias="extend_edit:row_heights")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="extend_edit:row_heights", default=None)
     """
     Array of row height percentages for array/table fields (e.g. [0.25, 0.50, 0.25])
     """
@@ -105,7 +105,7 @@ class EditJsonSchema(UncheckedBaseModel):
     """
 
     max_items: typing_extensions.Annotated[typing.Optional[int], FieldMetadata(alias="maxItems")] = pydantic.Field(
-        default=None
+        alias="maxItems", default=None
     )
     """
     Maximum number of rows for array/table fields
@@ -118,7 +118,7 @@ class EditJsonSchema(UncheckedBaseModel):
 
     additional_properties: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="additionalProperties")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="additionalProperties", default=None)
     """
     Whether additional properties are allowed (for object types)
     """

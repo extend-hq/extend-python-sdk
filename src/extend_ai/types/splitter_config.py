@@ -16,13 +16,13 @@ from .splitter_config_base_processor import SplitterConfigBaseProcessor
 class SplitterConfig(UncheckedBaseModel):
     base_processor: typing_extensions.Annotated[
         typing.Optional[SplitterConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="baseProcessor", default=None)
     """
     The base processor to use. For splitters, this can currently only be `"splitting_performance"` or `"splitting_light"`. See [Splitting Changelog](/changelog/splitting/splitting-performance) for more details.
     """
 
     base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="baseVersion", default=None)
     )
     """
     The version of the `"splitting_performance"` or `"splitting_light"` processor to use. If this is provided, the `baseProcessor` must also be provided. See [Splitting Changelog](/changelog/splitting/splitting-performance) for more details.
@@ -30,13 +30,13 @@ class SplitterConfig(UncheckedBaseModel):
 
     split_classifications: typing_extensions.Annotated[
         typing.List[Classification], FieldMetadata(alias="splitClassifications")
-    ] = pydantic.Field()
+    ] = pydantic.Field(alias="splitClassifications")
     """
     Array of classifications that define the possible types of document sections.
     """
 
     split_rules: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="splitRules")] = pydantic.Field(
-        default=None
+        alias="splitRules", default=None
     )
     """
     Custom rules to guide the document splitting process in natural language.
@@ -44,7 +44,7 @@ class SplitterConfig(UncheckedBaseModel):
 
     advanced_options: typing_extensions.Annotated[
         typing.Optional[SplitterAdvancedOptions], FieldMetadata(alias="advancedOptions")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="advancedOptions", default=None)
     """
     Advanced configuration options.
     """

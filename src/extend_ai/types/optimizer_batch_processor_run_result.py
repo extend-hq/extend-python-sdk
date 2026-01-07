@@ -15,20 +15,22 @@ from .optimizer_run_metrics import OptimizerRunMetrics
 
 class OptimizerBatchProcessorRunResult(UncheckedBaseModel):
     batch_processor_run_id: typing_extensions.Annotated[str, FieldMetadata(alias="batchProcessorRunId")] = (
-        pydantic.Field()
+        pydantic.Field(alias="batchProcessorRunId")
     )
     """
     Unique identifier for the batch processor run
     """
 
-    is_baseline: typing_extensions.Annotated[bool, FieldMetadata(alias="isBaseline")] = pydantic.Field()
+    is_baseline: typing_extensions.Annotated[bool, FieldMetadata(alias="isBaseline")] = pydantic.Field(
+        alias="isBaseline"
+    )
     """
     Whether this is the baseline (original) configuration
     """
 
     processor_config: typing_extensions.Annotated[
         OptimizerBatchProcessorRunResultProcessorConfig, FieldMetadata(alias="processorConfig")
-    ] = pydantic.Field()
+    ] = pydantic.Field(alias="processorConfig")
     """
     Processor configuration used for this run
     """

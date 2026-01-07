@@ -31,7 +31,7 @@ class ParserRun(UncheckedBaseModel):
     Example: `"parser_run_xK9mLPqRtN3vS8wF5hB2cQ"`
     """
 
-    file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field()
+    file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field(alias="fileId")
     """
     The identifier of the file that was parsed. This can be used as a parameter to other Extend endpoints, such as processor runs.
     """
@@ -49,7 +49,7 @@ class ParserRun(UncheckedBaseModel):
     """
 
     failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="failureReason", default=None)
     )
     """
     The reason for failure if status is "FAILED".

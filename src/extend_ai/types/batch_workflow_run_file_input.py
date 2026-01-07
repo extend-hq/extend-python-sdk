@@ -15,21 +15,21 @@ class BatchWorkflowRunFileInput(UncheckedBaseModel):
     """
 
     file_name: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="fileName")] = pydantic.Field(
-        default=None
+        alias="fileName", default=None
     )
     """
     The name to associate with the file. If not provided when using `fileUrl`, the name may be inferred from the URL. This param is only for your reference, and will be rendered in our dashboard, it is not used by the workflow.
     """
 
     file_url: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="fileUrl")] = pydantic.Field(
-        default=None
+        alias="fileUrl", default=None
     )
     """
     A URL where the file can be downloaded from. If you use presigned URLs, we suggest a slightly longer expiration time, ideally 30 minutes for a worst case scenario. One of a `fileUrl` or `fileId` must be provided.
     """
 
     file_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="fileId")] = pydantic.Field(
-        default=None
+        alias="fileId", default=None
     )
     """
     Extend's internal ID for the file. It will always start with `file_`. One of a `fileUrl` or `fileId` must be provided. You can view a file ID from the Extend UI, for instance from running a parser or from a previous file creation. If you provide a `fileId`, any parsed data will be reused.

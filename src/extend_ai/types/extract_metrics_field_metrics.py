@@ -15,21 +15,21 @@ class ExtractMetricsFieldMetrics(UncheckedBaseModel):
     """
 
     mean_confidence: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="meanConfidence")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="meanConfidence", default=None)
     )
     """
     The mean confidence score for this field across all documents.
     """
 
     recall_perc: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="recallPerc")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="recallPerc", default=None)
     )
     """
     The recall percentage for this field, representing how many of the expected values were correctly extracted.
     """
 
     precision_perc: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="precisionPerc")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="precisionPerc", default=None)
     )
     """
     The precision percentage for this field, representing how many of the extracted values were correct.
@@ -37,7 +37,7 @@ class ExtractMetricsFieldMetrics(UncheckedBaseModel):
 
     field_metrics: typing_extensions.Annotated[
         typing.Optional[typing.Dict[str, typing.Any]], FieldMetadata(alias="fieldMetrics")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="fieldMetrics", default=None)
     """
     For nested object fields, this contains metrics for the child fields. Has the same structure as the parent fieldMetrics.
     """

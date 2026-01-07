@@ -18,27 +18,27 @@ from .parse_config import ParseConfig
 class ExtractionConfig(UncheckedBaseModel):
     base_processor: typing_extensions.Annotated[
         typing.Optional[ExtractionConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="baseProcessor", default=None)
     """
     The base processor to use. For extractors, this must be either `"extraction_performance"` or `"extraction_light"`. See [Extraction Changelog](/changelog/extraction/extraction-performance) for more details.
     """
 
     base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="baseVersion", default=None)
     )
     """
     The version of the `"extraction_performance"` or `"extraction_light"` processor to use. If this is provided, the `baseProcessor` must also be provided. See [Extraction Changelog](/changelog/extraction/extraction-performance) for more details.
     """
 
     extraction_rules: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="extractionRules")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="extractionRules", default=None)
     )
     """
     Custom rules to guide the extraction process in natural language.
     """
 
     schema_: typing_extensions.Annotated[typing.Optional[JsonObject], FieldMetadata(alias="schema")] = pydantic.Field(
-        default=None
+        alias="schema", default=None
     )
     """
     JSON Schema definition of the data to extract. Either `fields` or `schema` must be provided.
@@ -55,7 +55,7 @@ class ExtractionConfig(UncheckedBaseModel):
 
     advanced_options: typing_extensions.Annotated[
         typing.Optional[ExtractionAdvancedOptions], FieldMetadata(alias="advancedOptions")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="advancedOptions", default=None)
     """
     Advanced configuration options.
     """

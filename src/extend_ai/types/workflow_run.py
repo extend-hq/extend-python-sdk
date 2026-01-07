@@ -53,7 +53,7 @@ class WorkflowRun(UncheckedBaseModel):
     """
 
     batch_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="batchId")] = pydantic.Field(
-        default=None
+        alias="batchId", default=None
     )
     """
     The batch ID of the WorkflowRun. If this WorkflowRun was created as part of a batch of files, all runs in that batch will have the same batch ID.
@@ -63,20 +63,22 @@ class WorkflowRun(UncheckedBaseModel):
 
     files: typing.List[File]
     failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="failureReason", default=None)
     )
     """
     The reason why the workflow run failed. Will only be included if the workflow run status is "FAILED".
     """
 
     failure_message: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureMessage")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="failureMessage", default=None)
     )
     """
     A more detailed message about the failure. Will only be included if the workflow run status is "FAILED".
     """
 
-    initial_run_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="initialRunAt")] = pydantic.Field()
+    initial_run_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="initialRunAt")] = pydantic.Field(
+        alias="initialRunAt"
+    )
     """
     The time (in UTC) at which the workflow run was created. Will follow the RFC 3339 format.
     
@@ -84,7 +86,7 @@ class WorkflowRun(UncheckedBaseModel):
     """
 
     reviewed_by: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="reviewedBy")] = pydantic.Field(
-        default=None
+        alias="reviewedBy", default=None
     )
     """
     The email address of the person who reviewed the workflow run. Will not be included if the workflow run has not been reviewed.
@@ -98,7 +100,7 @@ class WorkflowRun(UncheckedBaseModel):
     """
 
     rejection_note: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="rejectionNote")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="rejectionNote", default=None)
     )
     """
     A note that is added if a workflow run is rejected.
@@ -107,7 +109,7 @@ class WorkflowRun(UncheckedBaseModel):
     """
 
     reviewed_at: typing_extensions.Annotated[typing.Optional[dt.datetime], FieldMetadata(alias="reviewedAt")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="reviewedAt", default=None)
     )
     """
     The time (in UTC) at which the workflow run was reviewed. Will follow the RFC 3339 format. Will not be included if the workflow run has not been reviewed.
@@ -116,7 +118,7 @@ class WorkflowRun(UncheckedBaseModel):
     """
 
     start_time: typing_extensions.Annotated[typing.Optional[dt.datetime], FieldMetadata(alias="startTime")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="startTime", default=None)
     )
     """
     The time (in UTC) at which the workflow run started executing. This will always be after the `initialRunAt` time. Will follow the RFC 3339 format. Will not be included if the workflow run has not started executing.
@@ -125,7 +127,7 @@ class WorkflowRun(UncheckedBaseModel):
     """
 
     end_time: typing_extensions.Annotated[typing.Optional[dt.datetime], FieldMetadata(alias="endTime")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="endTime", default=None)
     )
     """
     The time (in UTC) that the workflow finished executing. Will follow the RFC 3339 format. Will not be included if the workflow run has not finished executing.
@@ -134,7 +136,9 @@ class WorkflowRun(UncheckedBaseModel):
     """
 
     outputs: typing.List[ProcessorRun]
-    step_runs: typing_extensions.Annotated[typing.List[StepRun], FieldMetadata(alias="stepRuns")] = pydantic.Field()
+    step_runs: typing_extensions.Annotated[typing.List[StepRun], FieldMetadata(alias="stepRuns")] = pydantic.Field(
+        alias="stepRuns"
+    )
     """
     An array of WorkflowStepRun objects. Each WorkflowStepRun represents a single run of a WorkflowStep and contains details about the step and the run's output.
     

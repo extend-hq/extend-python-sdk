@@ -16,13 +16,13 @@ from .parse_config import ParseConfig
 class ClassificationConfig(UncheckedBaseModel):
     base_processor: typing_extensions.Annotated[
         typing.Optional[ClassificationConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="baseProcessor", default=None)
     """
     The base processor to use. For classifiers, this must be either `"classification_performance"` or `"classification_light"`. See [Classification Changelog](/changelog/classification/classification-performance) for more details.
     """
 
     base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="baseVersion", default=None)
     )
     """
     The version of the `"classification_performance"` or `"classification_light"` processor to use. If this is provided, the `baseProcessor` must also be provided. See [Classification Changelog](/changelog/classification/classification-performance) for more details.
@@ -35,14 +35,14 @@ class ClassificationConfig(UncheckedBaseModel):
 
     classification_rules: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="classificationRules")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="classificationRules", default=None)
     """
     Custom rules to guide the classification process in natural language.
     """
 
     advanced_options: typing_extensions.Annotated[
         typing.Optional[ClassificationAdvancedOptions], FieldMetadata(alias="advancedOptions")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="advancedOptions", default=None)
     """
     Advanced configuration options.
     """

@@ -21,7 +21,9 @@ class EditGetResponseEditRun_EditRunStatus(UncheckedBaseModel):
     object: typing.Literal["edit_run_status"] = "edit_run_status"
     id: str
     status: EditRunStatusStatus
-    failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = None
+    failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
+        pydantic.Field(alias="failureReason", default=None)
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -36,12 +38,14 @@ class EditGetResponseEditRun_EditRunStatus(UncheckedBaseModel):
 class EditGetResponseEditRun_EditRun(UncheckedBaseModel):
     object: typing.Literal["edit_run"] = "edit_run"
     id: str
-    file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")]
+    file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field(alias="fileId")
     edited_file: typing_extensions.Annotated[typing.Optional[EditRunEditedFile], FieldMetadata(alias="editedFile")] = (
-        None
+        pydantic.Field(alias="editedFile", default=None)
     )
     status: EditRunStatus
-    failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = None
+    failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
+        pydantic.Field(alias="failureReason", default=None)
+    )
     config: EditRunConfig
     output: typing.Optional[typing.Dict[str, typing.Any]] = None
     metrics: EditRunMetrics

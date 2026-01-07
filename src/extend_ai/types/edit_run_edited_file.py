@@ -15,14 +15,14 @@ class EditRunEditedFile(UncheckedBaseModel):
     """
 
     file_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="fileId")] = pydantic.Field(
-        default=None
+        alias="fileId", default=None
     )
     """
     The identifier of the edited output file.
     """
 
     download_url: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="downloadUrl")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="downloadUrl", default=None)
     )
     """
     A presigned URL to download the edited file.

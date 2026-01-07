@@ -18,7 +18,9 @@ class EditCreateRequestConfig(UncheckedBaseModel):
     Configuration for the edit operation. Field values should be specified using `extend_edit:value` on each field in the schema.
     """
 
-    schema_: typing_extensions.Annotated[typing.Optional[EditRootJsonSchema], FieldMetadata(alias="schema")] = None
+    schema_: typing_extensions.Annotated[typing.Optional[EditRootJsonSchema], FieldMetadata(alias="schema")] = (
+        pydantic.Field(alias="schema", default=None)
+    )
     instructions: typing.Optional[str] = pydantic.Field(default=None)
     """
     Custom instructions for the edit operation.
@@ -26,7 +28,7 @@ class EditCreateRequestConfig(UncheckedBaseModel):
 
     advanced_options: typing_extensions.Annotated[
         typing.Optional[EditCreateRequestConfigAdvancedOptions], FieldMetadata(alias="advancedOptions")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="advancedOptions", default=None)
     """
     Advanced options for the edit operation.
     """

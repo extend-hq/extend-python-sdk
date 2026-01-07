@@ -29,12 +29,12 @@ class FileMetadataParentSplit(UncheckedBaseModel):
     The identifier of the split.
     """
 
-    start_page: typing_extensions.Annotated[int, FieldMetadata(alias="startPage")] = pydantic.Field()
+    start_page: typing_extensions.Annotated[int, FieldMetadata(alias="startPage")] = pydantic.Field(alias="startPage")
     """
     The start page of the split.
     """
 
-    end_page: typing_extensions.Annotated[int, FieldMetadata(alias="endPage")] = pydantic.Field()
+    end_page: typing_extensions.Annotated[int, FieldMetadata(alias="endPage")] = pydantic.Field(alias="endPage")
     """
     The end page of the split.
     """

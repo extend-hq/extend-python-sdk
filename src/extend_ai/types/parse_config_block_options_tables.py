@@ -22,7 +22,7 @@ class ParseConfigBlockOptionsTables(UncheckedBaseModel):
 
     target_format: typing_extensions.Annotated[
         typing.Optional[ParseConfigBlockOptionsTablesTargetFormat], FieldMetadata(alias="targetFormat")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="targetFormat", default=None)
     """
     The target format for the table blocks. Supported values:
     * `markdown`: Convert table to Markdown format
@@ -31,7 +31,7 @@ class ParseConfigBlockOptionsTables(UncheckedBaseModel):
 
     table_header_continuation_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="tableHeaderContinuationEnabled")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="tableHeaderContinuationEnabled", default=None)
     """
     Whether to automatically copy table headers to headerless tables on subsequent pages when they have matching column counts. Useful for multi-page tables.
     """

@@ -27,21 +27,27 @@ class BatchProcessorRun(UncheckedBaseModel):
     Example: `"batch_processor_run_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
-    processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field()
+    processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field(
+        alias="processorId"
+    )
     """
     The ID of the processor used for this run.
     
     Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
-    processor_version_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorVersionId")] = pydantic.Field()
+    processor_version_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorVersionId")] = pydantic.Field(
+        alias="processorVersionId"
+    )
     """
     The ID of the specific processor version used.
     
     Example: `"dpv_xK9mLPqRtN3vS8wF5hB2cQ"`
     """
 
-    processor_name: typing_extensions.Annotated[str, FieldMetadata(alias="processorName")] = pydantic.Field()
+    processor_name: typing_extensions.Annotated[str, FieldMetadata(alias="processorName")] = pydantic.Field(
+        alias="processorName"
+    )
     """
     The name of the processor.
     
@@ -67,14 +73,14 @@ class BatchProcessorRun(UncheckedBaseModel):
     """
 
     source_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="sourceId")] = pydantic.Field(
-        default=None
+        alias="sourceId", default=None
     )
     """
     The ID of the source of the batch processor run. See the `source` field for more details.
     Example: `"ev_1234"` for EVAL_SET source, `"dp_1234"` for STUDIO source
     """
 
-    run_count: typing_extensions.Annotated[int, FieldMetadata(alias="runCount")] = pydantic.Field()
+    run_count: typing_extensions.Annotated[int, FieldMetadata(alias="runCount")] = pydantic.Field(alias="runCount")
     """
     The number of runs that were made.
     """
@@ -84,14 +90,18 @@ class BatchProcessorRun(UncheckedBaseModel):
     The options for the batch processor run.
     """
 
-    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field()
+    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
     """
     The time (in UTC) at which the batch processor run was created. Will follow the RFC 3339 format.
     
     Example: `"2024-03-21T15:30:00Z"`
     """
 
-    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field()
+    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
     """
     The time (in UTC) at which the batch processor run was last updated. Will follow the RFC 3339 format.
     

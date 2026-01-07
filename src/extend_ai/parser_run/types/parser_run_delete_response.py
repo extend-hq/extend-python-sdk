@@ -11,7 +11,9 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 
 class ParserRunDeleteResponse(UncheckedBaseModel):
     success: bool
-    parser_run_id: typing_extensions.Annotated[str, FieldMetadata(alias="parserRunId")] = pydantic.Field()
+    parser_run_id: typing_extensions.Annotated[str, FieldMetadata(alias="parserRunId")] = pydantic.Field(
+        alias="parserRunId"
+    )
     """
     The ID of the deleted parser run
     """

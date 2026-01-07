@@ -19,7 +19,9 @@ class EditGetResponse(UncheckedBaseModel):
     Warning message about missing API version header if applicable
     """
 
-    edit_run: typing_extensions.Annotated[EditGetResponseEditRun, FieldMetadata(alias="editRun")]
+    edit_run: typing_extensions.Annotated[EditGetResponseEditRun, FieldMetadata(alias="editRun")] = pydantic.Field(
+        alias="editRun"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
