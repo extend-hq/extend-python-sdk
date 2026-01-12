@@ -38,6 +38,7 @@ class JsonOutputMetadataValue(UncheckedBaseModel):
     - 1: Very low confidence, significant problems detected
     
     These scores will be present when the `reviewAgent.enabled` flag is set to `true` in the processor config.
+    If the review agent is enabled but a score is not returned for a field, this value will be `null`.
     To learn more, view the [Review Agent Documentation](https://docs.extend.ai/product/extraction/review-agent)
     """
 
