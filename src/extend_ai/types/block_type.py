@@ -2,4 +2,6 @@
 
 import typing
 
-BlockType = typing.Union[typing.Literal["text", "heading", "section_heading", "table", "figure"], typing.Any]
+BlockType = typing.Union[
+    typing.Literal["text", "heading", "section_heading", "table", "figure", "table_head", "table_cell"], typing.Any
+]
