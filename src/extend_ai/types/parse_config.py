@@ -10,6 +10,7 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 from .parse_config_advanced_options import ParseConfigAdvancedOptions
 from .parse_config_block_options import ParseConfigBlockOptions
 from .parse_config_chunking_strategy import ParseConfigChunkingStrategy
+from .parse_config_engine import ParseConfigEngine
 from .parse_config_target import ParseConfigTarget
 
 
@@ -32,7 +33,7 @@ class ParseConfig(UncheckedBaseModel):
     * Prefer `markdown` for most documents, multi-column reading order, and retrieval use cases
     * Prefer `spatial` for messy/scanned/handwritten or skewed documents, when you need near 1:1 layout fidelity, or for BOL-like logistics docs
     
-    See “Markdown vs Spatial” in the Parse guide for details: /2025-04-21/developers/guides/parse#markdown-vs-spatial
+    See "Markdown vs Spatial" in the Parse guide for details: /2025-04-21/developers/guides/parse#markdown-vs-spatial
     """
 
     chunking_strategy: typing_extensions.Annotated[
@@ -40,6 +41,13 @@ class ParseConfig(UncheckedBaseModel):
     ] = pydantic.Field(alias="chunkingStrategy", default=None)
     """
     Strategy for dividing the document into chunks.
+    """
+
+    engine: typing.Optional[ParseConfigEngine] = pydantic.Field(default=None)
+    """
+    The parsing engine to use. Supported values:
+    * `parse_performance`: Full-featured parsing engine with highest accuracy (default)
+    * `parse_light`: Lightweight parsing engine optimized for speed. This does not have robust layout support and does not support markdown layout target.
     """
 
     block_options: typing_extensions.Annotated[

@@ -128,6 +128,7 @@ if typing.TYPE_CHECKING:
     from .parse_async_request_file import ParseAsyncRequestFile
     from .parse_config import ParseConfig
     from .parse_config_advanced_options import ParseConfigAdvancedOptions
+    from .parse_config_advanced_options_return_ocr import ParseConfigAdvancedOptionsReturnOcr
     from .parse_config_block_options import ParseConfigBlockOptions
     from .parse_config_block_options_figures import ParseConfigBlockOptionsFigures
     from .parse_config_block_options_tables import ParseConfigBlockOptionsTables
@@ -136,6 +137,7 @@ if typing.TYPE_CHECKING:
     from .parse_config_chunking_strategy import ParseConfigChunkingStrategy
     from .parse_config_chunking_strategy_options import ParseConfigChunkingStrategyOptions
     from .parse_config_chunking_strategy_type import ParseConfigChunkingStrategyType
+    from .parse_config_engine import ParseConfigEngine
     from .parse_config_target import ParseConfigTarget
     from .parse_error import ParseError
     from .parse_error_code import ParseErrorCode
@@ -338,6 +340,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ParseAsyncRequestFile": ".parse_async_request_file",
     "ParseConfig": ".parse_config",
     "ParseConfigAdvancedOptions": ".parse_config_advanced_options",
+    "ParseConfigAdvancedOptionsReturnOcr": ".parse_config_advanced_options_return_ocr",
     "ParseConfigBlockOptions": ".parse_config_block_options",
     "ParseConfigBlockOptionsFigures": ".parse_config_block_options_figures",
     "ParseConfigBlockOptionsTables": ".parse_config_block_options_tables",
@@ -346,6 +349,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ParseConfigChunkingStrategy": ".parse_config_chunking_strategy",
     "ParseConfigChunkingStrategyOptions": ".parse_config_chunking_strategy_options",
     "ParseConfigChunkingStrategyType": ".parse_config_chunking_strategy_type",
+    "ParseConfigEngine": ".parse_config_engine",
     "ParseConfigTarget": ".parse_config_target",
     "ParseError": ".parse_error",
     "ParseErrorCode": ".parse_error_code",
@@ -568,6 +572,7 @@ __all__ = [
     "ParseAsyncRequestFile",
     "ParseConfig",
     "ParseConfigAdvancedOptions",
+    "ParseConfigAdvancedOptionsReturnOcr",
     "ParseConfigBlockOptions",
     "ParseConfigBlockOptionsFigures",
     "ParseConfigBlockOptionsTables",
@@ -576,6 +581,7 @@ __all__ = [
     "ParseConfigChunkingStrategy",
     "ParseConfigChunkingStrategyOptions",
     "ParseConfigChunkingStrategyType",
+    "ParseConfigEngine",
     "ParseConfigTarget",
     "ParseError",
     "ParseErrorCode",
