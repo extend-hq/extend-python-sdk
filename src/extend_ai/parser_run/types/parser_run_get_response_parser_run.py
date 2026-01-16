@@ -6,7 +6,7 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ...core.serialization import FieldMetadata
 from ...core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
 from ...types.chunk import Chunk
@@ -62,3 +62,4 @@ ParserRunGetResponseParserRun = typing_extensions.Annotated[
     typing.Union[ParserRunGetResponseParserRun_ParserRunStatus, ParserRunGetResponseParserRun_ParserRun],
     UnionMetadata(discriminant="object"),
 ]
+update_forward_refs(ParserRunGetResponseParserRun_ParserRun)

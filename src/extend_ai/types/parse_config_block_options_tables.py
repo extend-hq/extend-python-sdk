@@ -36,6 +36,13 @@ class ParseConfigBlockOptionsTables(UncheckedBaseModel):
     Whether to automatically copy table headers to headerless tables on subsequent pages when they have matching column counts. Useful for multi-page tables.
     """
 
+    cell_blocks_enabled: typing_extensions.Annotated[
+        typing.Optional[bool], FieldMetadata(alias="cellBlocksEnabled")
+    ] = pydantic.Field(alias="cellBlocksEnabled", default=None)
+    """
+    Whether to include individual table cell blocks in the output. When enabled, each cell in a table will be represented as a separate block with its own bounding box and content and will be `children` of the table block.
+    """
+
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
     else:
