@@ -23,7 +23,7 @@ class ParseConfigAdvancedOptions(UncheckedBaseModel):
         typing.Optional[bool], FieldMetadata(alias="agenticOcrEnabled")
     ] = pydantic.Field(alias="agenticOcrEnabled", default=None)
     """
-    Whether to enable agentic OCR corrections using VLM-based review and correction of OCR errors for messy handwriting and poorly scanned text.
+    Whether to enable agentic OCR corrections using VLM-based review and correction of OCR errors for messy handwriting and poorly scanned text. Deprecated - use `blockOptions.text.agentic` or `blockOptions.tables.agentic` instead for more granular control.
     """
 
     page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = (

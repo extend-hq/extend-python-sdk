@@ -7,6 +7,7 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .parse_config_block_options_text_agentic import ParseConfigBlockOptionsTextAgentic
 
 
 class ParseConfigBlockOptionsText(UncheckedBaseModel):
@@ -19,6 +20,11 @@ class ParseConfigBlockOptionsText(UncheckedBaseModel):
     ] = pydantic.Field(alias="signatureDetectionEnabled", default=None)
     """
     Whether an additional vision model will be utilized for advanced signature detection. Recommended for most use cases, but should be disabled if signature detection is not necessary and latency is a concern.
+    """
+
+    agentic: typing.Optional[ParseConfigBlockOptionsTextAgentic] = pydantic.Field(default=None)
+    """
+    Options for agentic text processing using VLM-based review and correction.
     """
 
     if IS_PYDANTIC_V2:
