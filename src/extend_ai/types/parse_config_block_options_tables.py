@@ -7,6 +7,7 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .parse_config_block_options_tables_agentic import ParseConfigBlockOptionsTablesAgentic
 from .parse_config_block_options_tables_target_format import ParseConfigBlockOptionsTablesTargetFormat
 
 
@@ -17,7 +18,7 @@ class ParseConfigBlockOptionsTables(UncheckedBaseModel):
 
     enabled: typing.Optional[bool] = pydantic.Field(default=None)
     """
-    Whether to include tables in the output.
+    This option is deprecated and will have no effect. It will be removed in the next API version.
     """
 
     target_format: typing_extensions.Annotated[
@@ -41,6 +42,11 @@ class ParseConfigBlockOptionsTables(UncheckedBaseModel):
     ] = pydantic.Field(alias="cellBlocksEnabled", default=None)
     """
     Whether to include individual table cell blocks in the output. When enabled, each cell in a table will be represented as a separate block with its own bounding box and content and will be `children` of the table block.
+    """
+
+    agentic: typing.Optional[ParseConfigBlockOptionsTablesAgentic] = pydantic.Field(default=None)
+    """
+    Options for agentic table processing using VLM-based review and correction.
     """
 
     if IS_PYDANTIC_V2:

@@ -132,8 +132,10 @@ if typing.TYPE_CHECKING:
     from .parse_config_block_options import ParseConfigBlockOptions
     from .parse_config_block_options_figures import ParseConfigBlockOptionsFigures
     from .parse_config_block_options_tables import ParseConfigBlockOptionsTables
+    from .parse_config_block_options_tables_agentic import ParseConfigBlockOptionsTablesAgentic
     from .parse_config_block_options_tables_target_format import ParseConfigBlockOptionsTablesTargetFormat
     from .parse_config_block_options_text import ParseConfigBlockOptionsText
+    from .parse_config_block_options_text_agentic import ParseConfigBlockOptionsTextAgentic
     from .parse_config_chunking_strategy import ParseConfigChunkingStrategy
     from .parse_config_chunking_strategy_options import ParseConfigChunkingStrategyOptions
     from .parse_config_chunking_strategy_type import ParseConfigChunkingStrategyType
@@ -344,8 +346,10 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ParseConfigBlockOptions": ".parse_config_block_options",
     "ParseConfigBlockOptionsFigures": ".parse_config_block_options_figures",
     "ParseConfigBlockOptionsTables": ".parse_config_block_options_tables",
+    "ParseConfigBlockOptionsTablesAgentic": ".parse_config_block_options_tables_agentic",
     "ParseConfigBlockOptionsTablesTargetFormat": ".parse_config_block_options_tables_target_format",
     "ParseConfigBlockOptionsText": ".parse_config_block_options_text",
+    "ParseConfigBlockOptionsTextAgentic": ".parse_config_block_options_text_agentic",
     "ParseConfigChunkingStrategy": ".parse_config_chunking_strategy",
     "ParseConfigChunkingStrategyOptions": ".parse_config_chunking_strategy_options",
     "ParseConfigChunkingStrategyType": ".parse_config_chunking_strategy_type",
@@ -576,8 +580,10 @@ __all__ = [
     "ParseConfigBlockOptions",
     "ParseConfigBlockOptionsFigures",
     "ParseConfigBlockOptionsTables",
+    "ParseConfigBlockOptionsTablesAgentic",
     "ParseConfigBlockOptionsTablesTargetFormat",
     "ParseConfigBlockOptionsText",
+    "ParseConfigBlockOptionsTextAgentic",
     "ParseConfigChunkingStrategy",
     "ParseConfigChunkingStrategyOptions",
     "ParseConfigChunkingStrategyType",
