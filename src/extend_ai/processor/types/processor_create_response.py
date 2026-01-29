@@ -7,12 +7,12 @@ import typing
 import pydantic
 from ...core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ...core.unchecked_base_model import UncheckedBaseModel
-from ...types.processor import Processor
+from ...types.legacy_processor import LegacyProcessor
 
 
 class ProcessorCreateResponse(UncheckedBaseModel):
     success: bool
-    processor: Processor
+    processor: LegacyProcessor
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

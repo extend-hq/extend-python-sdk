@@ -7,17 +7,14 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .file_summary import FileSummary
 from .provided_processor_output import ProvidedProcessorOutput
 
 
 class EvaluationSetItem(UncheckedBaseModel):
+    object: typing.Literal["evaluation_set_item"] = pydantic.Field(default="evaluation_set_item")
     """
-    The EvaluationSetItem object represents an item in an evaluation set in Extend. Items are the individual files and expected outputs that are used to evaluate the performance of a given processor in Extend.
-    """
-
-    object: str = pydantic.Field()
-    """
-    The type of response. In this case, it will always be `"evaluation_set_item"`.
+    The type of object. In this case, it will always be `"evaluation_set_item"`.
     """
 
     id: str = pydantic.Field()
@@ -36,18 +33,16 @@ class EvaluationSetItem(UncheckedBaseModel):
     Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
     """
 
-    file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field(alias="fileId")
+    file: FileSummary = pydantic.Field()
     """
-    Extend's internal ID for the file. It will always start with "file_".
-    
-    Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
+    A summary of the file associated with the evaluation set item.
     """
 
     expected_output: typing_extensions.Annotated[ProvidedProcessorOutput, FieldMetadata(alias="expectedOutput")] = (
         pydantic.Field(alias="expectedOutput")
     )
     """
-    The expected output that will be used to evaluate the processor's performance. This will confirm to the output type schema of the processor.
+    The expected output that will be used to evaluate the performance of the extractor, classifier, or splitter associated with the evaluation set. This must conform to the output schema of the entity associated with the evaluation set.
     """
 
     if IS_PYDANTIC_V2:

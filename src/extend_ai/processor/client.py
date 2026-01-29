@@ -4,8 +4,8 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.list_processors_response import ListProcessorsResponse
-from ..types.processor_type import ProcessorType
+from ..types.legacy_list_processors_response import LegacyListProcessorsResponse
+from ..types.legacy_processor_type import LegacyProcessorType
 from .raw_client import AsyncRawProcessorClient, RawProcessorClient
 from .types.processor_create_request_config import ProcessorCreateRequestConfig
 from .types.processor_create_response import ProcessorCreateResponse
@@ -36,19 +36,19 @@ class ProcessorClient:
     def list(
         self,
         *,
-        type: typing.Optional[ProcessorType] = None,
+        type: typing.Optional[LegacyProcessorType] = None,
         next_page_token: typing.Optional[str] = None,
         max_page_size: typing.Optional[int] = None,
         sort_by: typing.Optional[ProcessorListRequestSortBy] = None,
         sort_dir: typing.Optional[ProcessorListRequestSortDir] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> ListProcessorsResponse:
+    ) -> LegacyListProcessorsResponse:
         """
         List all processors in your organization
 
         Parameters
         ----------
-        type : typing.Optional[ProcessorType]
+        type : typing.Optional[LegacyProcessorType]
             Filter processors by type
 
         next_page_token : typing.Optional[str]
@@ -68,7 +68,7 @@ class ProcessorClient:
 
         Returns
         -------
-        ListProcessorsResponse
+        LegacyListProcessorsResponse
             Successfully retrieved processors
 
         Examples
@@ -78,13 +78,7 @@ class ProcessorClient:
         client = Extend(
             token="YOUR_TOKEN",
         )
-        client.processor.list(
-            type="EXTRACT",
-            next_page_token="nextPageToken",
-            max_page_size=1,
-            sort_by="createdAt",
-            sort_dir="asc",
-        )
+        client.processor.list()
         """
         _response = self._raw_client.list(
             type=type,
@@ -100,7 +94,7 @@ class ProcessorClient:
         self,
         *,
         name: str,
-        type: ProcessorType,
+        type: LegacyProcessorType,
         clone_processor_id: typing.Optional[str] = OMIT,
         config: typing.Optional[ProcessorCreateRequestConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -113,7 +107,7 @@ class ProcessorClient:
         name : str
             The name of the new processor
 
-        type : ProcessorType
+        type : LegacyProcessorType
 
         clone_processor_id : typing.Optional[str]
             The ID of an existing processor to clone. One of `cloneProcessorId` or `config` must be provided.
@@ -216,19 +210,19 @@ class AsyncProcessorClient:
     async def list(
         self,
         *,
-        type: typing.Optional[ProcessorType] = None,
+        type: typing.Optional[LegacyProcessorType] = None,
         next_page_token: typing.Optional[str] = None,
         max_page_size: typing.Optional[int] = None,
         sort_by: typing.Optional[ProcessorListRequestSortBy] = None,
         sort_dir: typing.Optional[ProcessorListRequestSortDir] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> ListProcessorsResponse:
+    ) -> LegacyListProcessorsResponse:
         """
         List all processors in your organization
 
         Parameters
         ----------
-        type : typing.Optional[ProcessorType]
+        type : typing.Optional[LegacyProcessorType]
             Filter processors by type
 
         next_page_token : typing.Optional[str]
@@ -248,7 +242,7 @@ class AsyncProcessorClient:
 
         Returns
         -------
-        ListProcessorsResponse
+        LegacyListProcessorsResponse
             Successfully retrieved processors
 
         Examples
@@ -263,13 +257,7 @@ class AsyncProcessorClient:
 
 
         async def main() -> None:
-            await client.processor.list(
-                type="EXTRACT",
-                next_page_token="nextPageToken",
-                max_page_size=1,
-                sort_by="createdAt",
-                sort_dir="asc",
-            )
+            await client.processor.list()
 
 
         asyncio.run(main())
@@ -288,7 +276,7 @@ class AsyncProcessorClient:
         self,
         *,
         name: str,
-        type: ProcessorType,
+        type: LegacyProcessorType,
         clone_processor_id: typing.Optional[str] = OMIT,
         config: typing.Optional[ProcessorCreateRequestConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -301,7 +289,7 @@ class AsyncProcessorClient:
         name : str
             The name of the new processor
 
-        type : ProcessorType
+        type : LegacyProcessorType
 
         clone_processor_id : typing.Optional[str]
             The ID of an existing processor to clone. One of `cloneProcessorId` or `config` must be provided.
