@@ -441,7 +441,7 @@ if typing.TYPE_CHECKING:
         ClassifyRunsListResponse,
         ClassifyRunsRetrieveResponse,
     )
-    from .client import AsyncExtend, Extend
+    from .wrapper import AsyncExtend, Extend, Webhooks, PollingOptions, PollingTimeoutError
     from .edit_runs import (
         EditRunsCreateRequestConfig,
         EditRunsCreateRequestConfigAdvancedOptions,
@@ -569,7 +569,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ApiVersionEnum": ".types",
     "ArrayStrategy": ".types",
     "ArrayStrategyType": ".types",
-    "AsyncExtend": ".client",
+    "AsyncExtend": ".wrapper",
     "BadRequestError": ".errors",
     "BadRequestErrorBody": ".types",
     "BatchProcessorRun": ".types",
@@ -695,7 +695,10 @@ _dynamic_imports: typing.Dict[str, str] = {
     "EvaluationSetsListResponse": ".evaluation_sets",
     "EvaluationSetsRetrieveResponse": ".evaluation_sets",
     "ExcelSheetRange": ".types",
-    "Extend": ".client",
+    "Extend": ".wrapper",
+    "Webhooks": ".wrapper",
+    "PollingOptions": ".wrapper",
+    "PollingTimeoutError": ".wrapper",
     "ExtendEnvironment": ".environment",
     "ExternalDataValidationResult": ".types",
     "ExternalDataValidationResultResponse": ".types",
@@ -1245,6 +1248,9 @@ __all__ = [
     "ExcelSheetRange",
     "Extend",
     "ExtendEnvironment",
+    "Webhooks",
+    "PollingOptions",
+    "PollingTimeoutError",
     "ExternalDataValidationResult",
     "ExternalDataValidationResultResponse",
     "ExternalDataValidationStepRun",
