@@ -2,4 +2,4 @@
 
 import typing
 
-ExtractChunkingOptionsChunkingStrategy = typing.Union[typing.Literal["standard", "semantic"], typing.Any]
+ExtractChunkingOptionsChunkingStrategy = typing.Union[typing.Literal["standard", "semantic", "contextual"], typing.Any]

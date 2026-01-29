@@ -22,7 +22,7 @@ The Extendconfig Python library provides convenient access to the Extendconfig A
 
 ## Documentation
 
-API reference documentation is available [here](https://docs.extend.ai/2025-04-21/developers).
+API reference documentation is available [here](https://docs.extend.ai/2026-01-01/developers).
 
 ## Installation
 
@@ -39,15 +39,12 @@ A full reference for this library is available [here](https://github.com/extend-
 Instantiate and use the client with the following:
 
 ```python
-from extend_ai import Extend, ParseRequestFile
+from extend_ai import Extend
 
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.parse(
-    response_type="json",
-    file=ParseRequestFile(),
-)
+client.files.upload()
 ```
 
 ## Async Client
@@ -57,7 +54,7 @@ The SDK also exports an `async` client so that you can make non-blocking calls t
 ```python
 import asyncio
 
-from extend_ai import AsyncExtend, ParseRequestFile
+from extend_ai import AsyncExtend
 
 client = AsyncExtend(
     token="YOUR_TOKEN",
@@ -65,10 +62,7 @@ client = AsyncExtend(
 
 
 async def main() -> None:
-    await client.parse(
-        response_type="json",
-        file=ParseRequestFile(),
-    )
+    await client.files.upload()
 
 
 asyncio.run(main())
@@ -83,7 +77,7 @@ will be thrown.
 from extend_ai.core.api_error import ApiError
 
 try:
-    client.parse(...)
+    client.files.upload(...)
 except ApiError as e:
     print(e.status_code)
     print(e.body)
@@ -102,7 +96,7 @@ from extend_ai import Extend
 client = Extend(
     ...,
 )
-response = client.with_raw_response.parse(...)
+response = client.files.with_raw_response.upload(...)
 print(response.headers)  # access the response headers
 print(response.data)  # access the underlying object
 ```
@@ -122,7 +116,7 @@ A request is deemed retryable when any of the following HTTP status codes is ret
 Use the `max_retries` request option to configure this behavior.
 
 ```python
-client.parse(..., request_options={
+client.files.upload(..., request_options={
     "max_retries": 1
 })
 ```
@@ -142,7 +136,7 @@ client = Extend(
 
 
 # Override timeout for a specific method
-client.parse(..., request_options={
+client.files.upload(..., request_options={
     "timeout_in_seconds": 1
 })
 ```

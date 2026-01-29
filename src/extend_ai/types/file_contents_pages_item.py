@@ -20,24 +20,25 @@ class FileContentsPagesItem(UncheckedBaseModel):
     page_height: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageHeight")] = (
         pydantic.Field(alias="pageHeight", default=None)
     )
+    """
+    The height of the page in points. Available for PDF and IMG file types.
+    """
+
     page_width: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageWidth")] = pydantic.Field(
         alias="pageWidth", default=None
     )
-    raw_text: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="rawText")] = pydantic.Field(
-        alias="rawText", default=None
-    )
     """
-    The raw text content extracted from this page.
+    The width of the page in points. Available for PDF and IMG file types.
     """
 
     markdown: typing.Optional[str] = pydantic.Field(default=None)
     """
-    Cleaned and structured markdown content of this page.
+    Cleaned and structured markdown content of this page. Available for PDF and IMG file types when the `markdown` query parameter is set to true.
     """
 
     html: typing.Optional[str] = pydantic.Field(default=None)
     """
-    Cleaned and structured html content of the page. Available for DOCX file types (that were not auto-converted to PDFs). Only included if the `html` query parameter is set to true in the endpoint request.
+    HTML content of the page. Available for DOCX file types when the `html` query parameter is set to true.
     """
 
     if IS_PYDANTIC_V2:

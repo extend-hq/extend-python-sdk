@@ -12,22 +12,22 @@ class EditBoundingBox(UncheckedBaseModel):
     Bounding box coordinates for the field location in the PDF (pixel coordinates)
     """
 
-    left: typing.Optional[float] = pydantic.Field(default=None)
+    left: float = pydantic.Field()
     """
     The left coordinate of the bounding box (pixels)
     """
 
-    top: typing.Optional[float] = pydantic.Field(default=None)
+    top: float = pydantic.Field()
     """
     The top coordinate of the bounding box (pixels)
     """
 
-    right: typing.Optional[float] = pydantic.Field(default=None)
+    right: float = pydantic.Field()
     """
     The right coordinate of the bounding box (pixels)
     """
 
-    bottom: typing.Optional[float] = pydantic.Field(default=None)
+    bottom: float = pydantic.Field()
     """
     The bottom coordinate of the bounding box (pixels)
     """

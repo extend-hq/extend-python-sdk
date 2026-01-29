@@ -2,48 +2,4 @@
 
 import typing
 
-import pydantic
-import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
-from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
-from .edit_run_status_status import EditRunStatusStatus
-
-
-class EditRunStatus(UncheckedBaseModel):
-    """
-    Minimal edit run status object without edit results.
-    """
-
-    object: typing.Literal["edit_run_status"] = pydantic.Field(default="edit_run_status")
-    """
-    The type of object. Will always be `"edit_run_status"`.
-    """
-
-    id: str = pydantic.Field()
-    """
-    A unique identifier for the edit run. Will always start with `"edit_run_"`
-    
-    Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
-    """
-
-    status: EditRunStatusStatus = pydantic.Field()
-    """
-    The status of the edit run.
-    """
-
-    failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
-        pydantic.Field(alias="failureReason", default=None)
-    )
-    """
-    The reason for failure if status is "FAILED".
-    """
-
-    if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
-    else:
-
-        class Config:
-            frozen = True
-            smart_union = True
-            extra = pydantic.Extra.allow
+EditRunStatus = typing.Union[typing.Literal["PROCESSING", "PROCESSED", "FAILED"], typing.Any]
