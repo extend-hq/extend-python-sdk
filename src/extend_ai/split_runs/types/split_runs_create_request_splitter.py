@@ -4,13 +4,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ...core.pydantic_utilities import IS_PYDANTIC_V2
 from ...core.serialization import FieldMetadata
+from ...core.unchecked_base_model import UncheckedBaseModel
 from ...types.processor_version_string import ProcessorVersionString
 from ...types.split_config import SplitConfig
 
 
-class SplitRunsCreateRequestSplitter(UniversalBaseModel):
+class SplitRunsCreateRequestSplitter(UncheckedBaseModel):
     """
     Reference to an existing splitter. One of `splitter` or `config` must be provided.
     """

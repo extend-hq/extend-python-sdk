@@ -4,8 +4,9 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .batch_run_entity import BatchRunEntity
 from .batch_run_entity_version import BatchRunEntityVersion
 from .batch_run_metrics import BatchRunMetrics
@@ -14,7 +15,7 @@ from .created_at import CreatedAt
 from .updated_at import UpdatedAt
 
 
-class BatchRun(UniversalBaseModel):
+class BatchRun(UncheckedBaseModel):
     object: typing.Literal["batch_run"] = pydantic.Field(default="batch_run")
     """
     The type of object. In this case, it will always be `"batch_run"`.

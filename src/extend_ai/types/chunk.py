@@ -5,12 +5,13 @@ from __future__ import annotations
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .chunk_metadata import ChunkMetadata
 from .chunk_type import ChunkType
 
 
-class Chunk(UniversalBaseModel):
+class Chunk(UncheckedBaseModel):
     object: typing.Literal["chunk"] = pydantic.Field(default="chunk")
     """
     The type of object. In this case, it will always be `"chunk"`.

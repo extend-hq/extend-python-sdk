@@ -6,14 +6,15 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .edit_bounding_box import EditBoundingBox
 from .edit_json_extend_edit_field_type import EditJsonExtendEditFieldType
 from .edit_text_options import EditTextOptions
 
 
-class EditJson(UniversalBaseModel):
+class EditJson(UncheckedBaseModel):
     """
     Schema definition for a field to edit in a PDF. This is a union type that supports:
     * `EditStringJSONSchema` - type: ["string", "null"], field_type: "text" | "signature"

@@ -3,12 +3,13 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .extract_output_metadata import ExtractOutputMetadata
 from .json_object import JsonObject
 
 
-class ExtractOutputJson(UniversalBaseModel):
+class ExtractOutputJson(UncheckedBaseModel):
     value: JsonObject = pydantic.Field()
     """
     The extracted values conforming to the schema defined in the processor config

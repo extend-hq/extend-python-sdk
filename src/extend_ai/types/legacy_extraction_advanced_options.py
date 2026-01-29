@@ -4,8 +4,9 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .array_strategy import ArrayStrategy
 from .excel_sheet_range import ExcelSheetRange
 from .legacy_extract_chunking_options import LegacyExtractChunkingOptions
@@ -19,7 +20,7 @@ from .legacy_extraction_advanced_options_review_agent import LegacyExtractionAdv
 from .page_ranges import PageRanges
 
 
-class LegacyExtractionAdvancedOptions(UniversalBaseModel):
+class LegacyExtractionAdvancedOptions(UncheckedBaseModel):
     document_kind: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="documentKind")] = (
         pydantic.Field(alias="documentKind", default=None)
     )

@@ -4,8 +4,9 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .batch_run_status import BatchRunStatus
 from .created_at import CreatedAt
 from .evaluation_set_run_entity import EvaluationSetRunEntity
@@ -15,7 +16,7 @@ from .evaluation_set_run_options import EvaluationSetRunOptions
 from .updated_at import UpdatedAt
 
 
-class EvaluationSetRun(UniversalBaseModel):
+class EvaluationSetRun(UncheckedBaseModel):
     object: typing.Literal["evaluation_set_run"] = pydantic.Field(default="evaluation_set_run")
     """
     The type of object. In this case, it will always be `"evaluation_set_run"`.

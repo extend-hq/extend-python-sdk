@@ -4,12 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ...core.pydantic_utilities import IS_PYDANTIC_V2
 from ...core.serialization import FieldMetadata
+from ...core.unchecked_base_model import UncheckedBaseModel
 from ...types.split_run import SplitRun
 
 
-class SplitRunsRetrieveResponse(UniversalBaseModel):
+class SplitRunsRetrieveResponse(UncheckedBaseModel):
     split_run: typing_extensions.Annotated[SplitRun, FieldMetadata(alias="splitRun")] = pydantic.Field(alias="splitRun")
 
     if IS_PYDANTIC_V2:

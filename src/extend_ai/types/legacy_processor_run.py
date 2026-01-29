@@ -6,8 +6,9 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .file import File
 from .json_object import JsonObject
 from .legacy_document_processor_run_credits import LegacyDocumentProcessorRunCredits
@@ -19,7 +20,7 @@ from .legacy_processor_run_type import LegacyProcessorRunType
 from .legacy_processor_status import LegacyProcessorStatus
 
 
-class LegacyProcessorRun(UniversalBaseModel):
+class LegacyProcessorRun(UncheckedBaseModel):
     object: str = pydantic.Field()
     """
     The type of response. In this case, it will always be `"document_processor_run"`.

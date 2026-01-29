@@ -4,13 +4,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ...core.pydantic_utilities import IS_PYDANTIC_V2
 from ...core.serialization import FieldMetadata
+from ...core.unchecked_base_model import UncheckedBaseModel
 from ...types.extractor_version_summary import ExtractorVersionSummary
 from ...types.next_page_token import NextPageToken
 
 
-class ExtractorVersionsListResponse(UniversalBaseModel):
+class ExtractorVersionsListResponse(UncheckedBaseModel):
     extractor_versions: typing_extensions.Annotated[
         typing.List[ExtractorVersionSummary], FieldMetadata(alias="extractorVersions")
     ] = pydantic.Field(alias="extractorVersions")

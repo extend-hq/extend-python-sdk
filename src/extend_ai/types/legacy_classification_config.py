@@ -4,15 +4,16 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .legacy_classification import LegacyClassification
 from .legacy_classification_advanced_options import LegacyClassificationAdvancedOptions
 from .legacy_classification_config_base_processor import LegacyClassificationConfigBaseProcessor
 from .parse_config import ParseConfig
 
 
-class LegacyClassificationConfig(UniversalBaseModel):
+class LegacyClassificationConfig(UncheckedBaseModel):
     base_processor: typing_extensions.Annotated[
         typing.Optional[LegacyClassificationConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
     ] = pydantic.Field(alias="baseProcessor", default=None)

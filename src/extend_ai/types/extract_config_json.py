@@ -4,15 +4,16 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .extract_advanced_options import ExtractAdvancedOptions
 from .extract_config_json_base_processor import ExtractConfigJsonBaseProcessor
 from .json_object import JsonObject
 from .parse_config import ParseConfig
 
 
-class ExtractConfigJson(UniversalBaseModel):
+class ExtractConfigJson(UncheckedBaseModel):
     base_processor: typing_extensions.Annotated[
         typing.Optional[ExtractConfigJsonBaseProcessor], FieldMetadata(alias="baseProcessor")
     ] = pydantic.Field(alias="baseProcessor", default=None)

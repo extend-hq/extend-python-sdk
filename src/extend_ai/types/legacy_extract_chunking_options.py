@@ -4,13 +4,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .legacy_extract_chunking_options_chunk_selection_strategy import LegacyExtractChunkingOptionsChunkSelectionStrategy
 from .legacy_extract_chunking_options_chunking_strategy import LegacyExtractChunkingOptionsChunkingStrategy
 
 
-class LegacyExtractChunkingOptions(UniversalBaseModel):
+class LegacyExtractChunkingOptions(UncheckedBaseModel):
     chunking_strategy: typing_extensions.Annotated[
         typing.Optional[LegacyExtractChunkingOptionsChunkingStrategy], FieldMetadata(alias="chunkingStrategy")
     ] = pydantic.Field(alias="chunkingStrategy", default=None)

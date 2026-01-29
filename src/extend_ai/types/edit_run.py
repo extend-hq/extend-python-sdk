@@ -6,8 +6,9 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .edit_config import EditConfig
 from .edit_run_metrics import EditRunMetrics
 from .edit_run_output import EditRunOutput
@@ -16,7 +17,7 @@ from .file_summary import FileSummary
 from .run_usage import RunUsage
 
 
-class EditRun(UniversalBaseModel):
+class EditRun(UncheckedBaseModel):
     """
     Edit run object.
     """

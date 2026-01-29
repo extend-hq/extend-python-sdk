@@ -6,15 +6,16 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .enum_option import EnumOption
 from .extraction_field_result_reference import ExtractionFieldResultReference
 from .extraction_field_result_type import ExtractionFieldResultType
 from .insight import Insight
 
 
-class ExtractionFieldResult(UniversalBaseModel):
+class ExtractionFieldResult(UncheckedBaseModel):
     id: str = pydantic.Field()
     """
     The unique identifier for this field

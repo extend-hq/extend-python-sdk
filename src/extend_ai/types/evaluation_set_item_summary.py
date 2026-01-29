@@ -3,11 +3,12 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .file_summary import FileSummary
 
 
-class EvaluationSetItemSummary(UniversalBaseModel):
+class EvaluationSetItemSummary(UncheckedBaseModel):
     object: typing.Literal["evaluation_set_item_summary"] = pydantic.Field(default="evaluation_set_item_summary")
     """
     The type of object. In this case, it will always be `"evaluation_set_item_summary"`.

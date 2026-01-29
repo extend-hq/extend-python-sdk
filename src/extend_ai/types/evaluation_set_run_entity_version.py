@@ -6,12 +6,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
 from .created_at import CreatedAt
 
 
-class EvaluationSetRunEntityVersion_ExtractorVersionSummary(UniversalBaseModel):
+class EvaluationSetRunEntityVersion_ExtractorVersionSummary(UncheckedBaseModel):
     """
     The version of the extractor, classifier, or splitter that was run.
     """
@@ -37,7 +38,7 @@ class EvaluationSetRunEntityVersion_ExtractorVersionSummary(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-class EvaluationSetRunEntityVersion_ClassifierVersionSummary(UniversalBaseModel):
+class EvaluationSetRunEntityVersion_ClassifierVersionSummary(UncheckedBaseModel):
     """
     The version of the extractor, classifier, or splitter that was run.
     """
@@ -63,7 +64,7 @@ class EvaluationSetRunEntityVersion_ClassifierVersionSummary(UniversalBaseModel)
             extra = pydantic.Extra.allow
 
 
-class EvaluationSetRunEntityVersion_SplitterVersionSummary(UniversalBaseModel):
+class EvaluationSetRunEntityVersion_SplitterVersionSummary(UncheckedBaseModel):
     """
     The version of the extractor, classifier, or splitter that was run.
     """
@@ -95,5 +96,5 @@ EvaluationSetRunEntityVersion = typing_extensions.Annotated[
         EvaluationSetRunEntityVersion_ClassifierVersionSummary,
         EvaluationSetRunEntityVersion_SplitterVersionSummary,
     ],
-    pydantic.Field(discriminator="object"),
+    UnionMetadata(discriminant="object"),
 ]

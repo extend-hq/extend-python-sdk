@@ -7,7 +7,7 @@
     "package_name": "extend_ai",
     "timeout_in_seconds": 300,
     "pydantic_config": {
-      "skip_validation": false
+      "skip_validation": true
     }
   },
   "sdkVersion": "0.0.20"

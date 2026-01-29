@@ -4,13 +4,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .created_at import CreatedAt
 from .updated_at import UpdatedAt
 
 
-class ClassifierSummary(UniversalBaseModel):
+class ClassifierSummary(UncheckedBaseModel):
     object: typing.Literal["classifier_summary"] = pydantic.Field(default="classifier_summary")
     """
     The type of object. Will always be `"classifier_summary"`.

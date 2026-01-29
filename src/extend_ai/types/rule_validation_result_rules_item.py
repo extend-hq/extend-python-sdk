@@ -4,12 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .rule_validation_result_rules_item_failure_reason import RuleValidationResultRulesItemFailureReason
 
 
-class RuleValidationResultRulesItem(UniversalBaseModel):
+class RuleValidationResultRulesItem(UncheckedBaseModel):
     name: str = pydantic.Field()
     """
     The name of the validation rule.

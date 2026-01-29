@@ -4,8 +4,9 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .created_at import CreatedAt
 from .extractor_summary import ExtractorSummary
 from .extractor_version_summary import ExtractorVersionSummary
@@ -16,7 +17,7 @@ from .run_usage import RunUsage
 from .updated_at import UpdatedAt
 
 
-class ExtractRunSummary(UniversalBaseModel):
+class ExtractRunSummary(UncheckedBaseModel):
     """
     Summary representation of an extract run.
     """

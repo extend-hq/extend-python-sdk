@@ -4,11 +4,12 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ...core.pydantic_utilities import IS_PYDANTIC_V2
 from ...core.serialization import FieldMetadata
+from ...core.unchecked_base_model import UncheckedBaseModel
 
 
-class ProcessorRunDeleteResponse(UniversalBaseModel):
+class ProcessorRunDeleteResponse(UncheckedBaseModel):
     success: bool
     document_processor_run_id: typing_extensions.Annotated[str, FieldMetadata(alias="documentProcessorRunId")] = (
         pydantic.Field(alias="documentProcessorRunId")

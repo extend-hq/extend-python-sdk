@@ -6,14 +6,15 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .extract_advanced_options import ExtractAdvancedOptions
 from .extract_config_legacy_base_processor import ExtractConfigLegacyBaseProcessor
 from .parse_config import ParseConfig
 
 
-class ExtractConfigLegacy(UniversalBaseModel):
+class ExtractConfigLegacy(UncheckedBaseModel):
     base_processor: typing_extensions.Annotated[
         typing.Optional[ExtractConfigLegacyBaseProcessor], FieldMetadata(alias="baseProcessor")
     ] = pydantic.Field(alias="baseProcessor", default=None)

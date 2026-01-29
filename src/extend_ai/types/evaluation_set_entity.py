@@ -6,13 +6,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
 from .created_at import CreatedAt
 from .updated_at import UpdatedAt
 
 
-class EvaluationSetEntity_ExtractorSummary(UniversalBaseModel):
+class EvaluationSetEntity_ExtractorSummary(UncheckedBaseModel):
     """
     The extractor, classifier, or splitter associated with this evaluation set.
     """
@@ -37,7 +38,7 @@ class EvaluationSetEntity_ExtractorSummary(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-class EvaluationSetEntity_ClassifierSummary(UniversalBaseModel):
+class EvaluationSetEntity_ClassifierSummary(UncheckedBaseModel):
     """
     The extractor, classifier, or splitter associated with this evaluation set.
     """
@@ -62,7 +63,7 @@ class EvaluationSetEntity_ClassifierSummary(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-class EvaluationSetEntity_SplitterSummary(UniversalBaseModel):
+class EvaluationSetEntity_SplitterSummary(UncheckedBaseModel):
     """
     The extractor, classifier, or splitter associated with this evaluation set.
     """
@@ -91,5 +92,5 @@ EvaluationSetEntity = typing_extensions.Annotated[
     typing.Union[
         EvaluationSetEntity_ExtractorSummary, EvaluationSetEntity_ClassifierSummary, EvaluationSetEntity_SplitterSummary
     ],
-    pydantic.Field(discriminator="object"),
+    UnionMetadata(discriminant="object"),
 ]

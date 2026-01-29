@@ -3,11 +3,12 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .array_strategy_type import ArrayStrategyType
 
 
-class ArrayStrategy(UniversalBaseModel):
+class ArrayStrategy(UncheckedBaseModel):
     type: ArrayStrategyType = pydantic.Field()
     """
     The strategy type for handling large array use cases. For most use cases this should be left null, or should be set to `large_array_heuristics`. If you're unsure of what your use case needs, reach out to the Extend team for help.

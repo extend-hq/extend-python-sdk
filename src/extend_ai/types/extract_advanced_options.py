@@ -4,8 +4,9 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .array_strategy import ArrayStrategy
 from .excel_sheet_range import ExcelSheetRange
 from .extract_advanced_options_array_citation_strategy import ExtractAdvancedOptionsArrayCitationStrategy
@@ -15,7 +16,7 @@ from .extract_chunking_options import ExtractChunkingOptions
 from .page_ranges import PageRanges
 
 
-class ExtractAdvancedOptions(UniversalBaseModel):
+class ExtractAdvancedOptions(UncheckedBaseModel):
     model_reasoning_insights_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="modelReasoningInsightsEnabled")
     ] = pydantic.Field(alias="modelReasoningInsightsEnabled", default=None)

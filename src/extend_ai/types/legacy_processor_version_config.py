@@ -6,8 +6,9 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
 from .json_object import JsonObject
 from .legacy_classification import LegacyClassification
 from .legacy_classification_advanced_options import LegacyClassificationAdvancedOptions
@@ -19,7 +20,7 @@ from .legacy_splitter_config_base_processor import LegacySplitterConfigBaseProce
 from .parse_config import ParseConfig
 
 
-class LegacyProcessorVersionConfig_Classify(UniversalBaseModel):
+class LegacyProcessorVersionConfig_Classify(UncheckedBaseModel):
     """
     The configuration settings for this version of the document processor. The structure of this object will vary depending on the processor type.
 
@@ -52,7 +53,7 @@ class LegacyProcessorVersionConfig_Classify(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-class LegacyProcessorVersionConfig_Extract(UniversalBaseModel):
+class LegacyProcessorVersionConfig_Extract(UncheckedBaseModel):
     """
     The configuration settings for this version of the document processor. The structure of this object will vary depending on the processor type.
 
@@ -88,7 +89,7 @@ class LegacyProcessorVersionConfig_Extract(UniversalBaseModel):
             extra = pydantic.Extra.allow
 
 
-class LegacyProcessorVersionConfig_Splitter(UniversalBaseModel):
+class LegacyProcessorVersionConfig_Splitter(UncheckedBaseModel):
     """
     The configuration settings for this version of the document processor. The structure of this object will vary depending on the processor type.
 
@@ -129,7 +130,7 @@ LegacyProcessorVersionConfig = typing_extensions.Annotated[
         LegacyProcessorVersionConfig_Extract,
         LegacyProcessorVersionConfig_Splitter,
     ],
-    pydantic.Field(discriminator="type"),
+    UnionMetadata(discriminant="type"),
 ]
 from .legacy_extraction_field import LegacyExtractionField  # noqa: E402, I001
 

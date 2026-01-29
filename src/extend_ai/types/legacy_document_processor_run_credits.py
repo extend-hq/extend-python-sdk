@@ -3,10 +3,11 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.unchecked_base_model import UncheckedBaseModel
 
 
-class LegacyDocumentProcessorRunCredits(UniversalBaseModel):
+class LegacyDocumentProcessorRunCredits(UncheckedBaseModel):
     """
     These are usage credits for document processing (extraction, classification, or splitting). File parsing credits are tracked separately and can be retrieved from the [Get File](/developers/api-reference/file-endpoints/get-file) endpoint.
 

@@ -6,13 +6,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .enum import Enum
 from .legacy_extraction_field_type import LegacyExtractionFieldType
 
 
-class LegacyExtractionField(UniversalBaseModel):
+class LegacyExtractionField(UncheckedBaseModel):
     id: str = pydantic.Field()
     """
     Unique identifier for the field.

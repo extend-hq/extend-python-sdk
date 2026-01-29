@@ -6,13 +6,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .edit_config_advanced_options import EditConfigAdvancedOptions
 from .edit_root_json import EditRootJson
 
 
-class EditConfig(UniversalBaseModel):
+class EditConfig(UncheckedBaseModel):
     """
     Configuration options for the editing process.
     """

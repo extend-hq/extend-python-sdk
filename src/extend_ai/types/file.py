@@ -4,8 +4,9 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .created_at import CreatedAt
 from .file_contents import FileContents
 from .file_metadata import FileMetadata
@@ -13,7 +14,7 @@ from .file_type import FileType
 from .updated_at import UpdatedAt
 
 
-class File(UniversalBaseModel):
+class File(UncheckedBaseModel):
     object: typing.Literal["file"] = pydantic.Field(default="file")
     """
     The type of object. Will always be `"file"`.

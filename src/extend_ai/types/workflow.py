@@ -3,10 +3,11 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.unchecked_base_model import UncheckedBaseModel
 
 
-class Workflow(UniversalBaseModel):
+class Workflow(UncheckedBaseModel):
     object: typing.Literal["workflow"] = pydantic.Field(default="workflow")
     """
     The type of object. In this case, it will always be `"workflow"`.

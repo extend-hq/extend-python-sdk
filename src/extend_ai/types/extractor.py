@@ -6,14 +6,15 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .created_at import CreatedAt
 from .extractor_version import ExtractorVersion
 from .updated_at import UpdatedAt
 
 
-class Extractor(UniversalBaseModel):
+class Extractor(UncheckedBaseModel):
     object: typing.Literal["extractor"] = pydantic.Field(default="extractor")
     """
     The type of object. Will always be `"extractor"`.

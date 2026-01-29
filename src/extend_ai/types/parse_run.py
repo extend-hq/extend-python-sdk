@@ -6,8 +6,9 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .file_summary import FileSummary
 from .parse_config import ParseConfig
 from .parse_run_metrics import ParseRunMetrics
@@ -16,7 +17,7 @@ from .parse_run_status_enum import ParseRunStatusEnum
 from .run_usage import RunUsage
 
 
-class ParseRun(UniversalBaseModel):
+class ParseRun(UncheckedBaseModel):
     """
     Parse run object.
     """

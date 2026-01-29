@@ -4,12 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ...core.pydantic_utilities import IS_PYDANTIC_V2
 from ...core.serialization import FieldMetadata
+from ...core.unchecked_base_model import UncheckedBaseModel
 from ...types.classifier_version import ClassifierVersion
 
 
-class ClassifierVersionsCreateResponse(UniversalBaseModel):
+class ClassifierVersionsCreateResponse(UncheckedBaseModel):
     classifier_version: typing_extensions.Annotated[ClassifierVersion, FieldMetadata(alias="classifierVersion")] = (
         pydantic.Field(alias="classifierVersion")
     )

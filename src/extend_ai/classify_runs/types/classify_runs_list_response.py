@@ -4,13 +4,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ...core.pydantic_utilities import IS_PYDANTIC_V2
 from ...core.serialization import FieldMetadata
+from ...core.unchecked_base_model import UncheckedBaseModel
 from ...types.classify_run_summary import ClassifyRunSummary
 from ...types.next_page_token import NextPageToken
 
 
-class ClassifyRunsListResponse(UniversalBaseModel):
+class ClassifyRunsListResponse(UncheckedBaseModel):
     classify_runs: typing_extensions.Annotated[typing.List[ClassifyRunSummary], FieldMetadata(alias="classifyRuns")] = (
         pydantic.Field(alias="classifyRuns")
     )

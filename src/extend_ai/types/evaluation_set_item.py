@@ -4,13 +4,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 from .file_summary import FileSummary
 from .provided_processor_output import ProvidedProcessorOutput
 
 
-class EvaluationSetItem(UniversalBaseModel):
+class EvaluationSetItem(UncheckedBaseModel):
     object: typing.Literal["evaluation_set_item"] = pydantic.Field(default="evaluation_set_item")
     """
     The type of object. In this case, it will always be `"evaluation_set_item"`.

@@ -4,11 +4,12 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
 
 
-class ParseConfigBlockOptionsTextAgentic(UniversalBaseModel):
+class ParseConfigBlockOptionsTextAgentic(UncheckedBaseModel):
     """
     Options for agentic text processing using VLM-based review and correction.
     """
