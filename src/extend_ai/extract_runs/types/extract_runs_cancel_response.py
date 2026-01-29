@@ -11,7 +11,9 @@ from ...types.extract_run_summary import ExtractRunSummary
 
 
 class ExtractRunsCancelResponse(UncheckedBaseModel):
-    extract_run: typing_extensions.Annotated[ExtractRunSummary, FieldMetadata(alias="extractRun")]
+    extract_run: typing_extensions.Annotated[ExtractRunSummary, FieldMetadata(alias="extractRun")] = pydantic.Field(
+        alias="extractRun"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

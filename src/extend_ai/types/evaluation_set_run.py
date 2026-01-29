@@ -29,7 +29,9 @@ class EvaluationSetRun(UncheckedBaseModel):
     Example: `"eval_set_run_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
-    evaluation_set_id: typing_extensions.Annotated[str, FieldMetadata(alias="evaluationSetId")] = pydantic.Field()
+    evaluation_set_id: typing_extensions.Annotated[str, FieldMetadata(alias="evaluationSetId")] = pydantic.Field(
+        alias="evaluationSetId"
+    )
     """
     The ID of the evaluation set that was run.
     
@@ -42,7 +44,7 @@ class EvaluationSetRun(UncheckedBaseModel):
     """
 
     entity_version: typing_extensions.Annotated[EvaluationSetRunEntityVersion, FieldMetadata(alias="entityVersion")] = (
-        pydantic.Field()
+        pydantic.Field(alias="entityVersion")
     )
     """
     The version of the extractor, classifier, or splitter that was run.
@@ -55,8 +57,12 @@ class EvaluationSetRun(UncheckedBaseModel):
     The options for the evaluation set run.
     """
 
-    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
-    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")]
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
+    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

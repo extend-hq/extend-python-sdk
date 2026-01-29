@@ -13,7 +13,9 @@ from .workflow_runs_cancel_response_workflow_run import WorkflowRunsCancelRespon
 
 
 class WorkflowRunsCancelResponse(UncheckedBaseModel):
-    workflow_run: typing_extensions.Annotated[WorkflowRunsCancelResponseWorkflowRun, FieldMetadata(alias="workflowRun")]
+    workflow_run: typing_extensions.Annotated[
+        WorkflowRunsCancelResponseWorkflowRun, FieldMetadata(alias="workflowRun")
+    ] = pydantic.Field(alias="workflowRun")
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -12,13 +12,15 @@ from .parent_split import ParentSplit
 
 class FileMetadata(UncheckedBaseModel):
     page_count: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageCount")] = pydantic.Field(
-        default=None
+        alias="pageCount", default=None
     )
     """
     The number of pages in the file. This is only set for PDF/DOCX files.
     """
 
-    parent_split: typing_extensions.Annotated[typing.Optional[ParentSplit], FieldMetadata(alias="parentSplit")] = None
+    parent_split: typing_extensions.Annotated[typing.Optional[ParentSplit], FieldMetadata(alias="parentSplit")] = (
+        pydantic.Field(alias="parentSplit", default=None)
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

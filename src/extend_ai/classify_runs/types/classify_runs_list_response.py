@@ -12,10 +12,12 @@ from ...types.next_page_token import NextPageToken
 
 
 class ClassifyRunsListResponse(UncheckedBaseModel):
-    classify_runs: typing_extensions.Annotated[typing.List[ClassifyRunSummary], FieldMetadata(alias="classifyRuns")]
+    classify_runs: typing_extensions.Annotated[typing.List[ClassifyRunSummary], FieldMetadata(alias="classifyRuns")] = (
+        pydantic.Field(alias="classifyRuns")
+    )
     next_page_token: typing_extensions.Annotated[
         typing.Optional[NextPageToken], FieldMetadata(alias="nextPageToken")
-    ] = None
+    ] = pydantic.Field(alias="nextPageToken", default=None)
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

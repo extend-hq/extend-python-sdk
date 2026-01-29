@@ -49,8 +49,8 @@ class WebhookEvent_WorkflowRunCompleted(UncheckedBaseModel):
 
     event_type: typing_extensions.Annotated[
         typing.Literal["workflow_run.completed"], FieldMetadata(alias="eventType")
-    ] = "workflow_run.completed"
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    ] = pydantic.Field(alias="eventType", default="workflow_run.completed")
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: WorkflowRun
 
     if IS_PYDANTIC_V2:
@@ -86,9 +86,9 @@ class WebhookEvent_WorkflowRunFailed(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["workflow_run.failed"], FieldMetadata(alias="eventType")] = (
-        "workflow_run.failed"
+        pydantic.Field(alias="eventType", default="workflow_run.failed")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: WorkflowRun
 
     if IS_PYDANTIC_V2:
@@ -125,8 +125,8 @@ class WebhookEvent_WorkflowRunNeedsReview(UncheckedBaseModel):
 
     event_type: typing_extensions.Annotated[
         typing.Literal["workflow_run.needs_review"], FieldMetadata(alias="eventType")
-    ] = "workflow_run.needs_review"
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    ] = pydantic.Field(alias="eventType", default="workflow_run.needs_review")
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: WorkflowRun
 
     if IS_PYDANTIC_V2:
@@ -163,8 +163,8 @@ class WebhookEvent_WorkflowRunRejected(UncheckedBaseModel):
 
     event_type: typing_extensions.Annotated[
         typing.Literal["workflow_run.rejected"], FieldMetadata(alias="eventType")
-    ] = "workflow_run.rejected"
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    ] = pydantic.Field(alias="eventType", default="workflow_run.rejected")
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: WorkflowRun
 
     if IS_PYDANTIC_V2:
@@ -201,8 +201,8 @@ class WebhookEvent_WorkflowRunCancelled(UncheckedBaseModel):
 
     event_type: typing_extensions.Annotated[
         typing.Literal["workflow_run.cancelled"], FieldMetadata(alias="eventType")
-    ] = "workflow_run.cancelled"
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    ] = pydantic.Field(alias="eventType", default="workflow_run.cancelled")
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: WorkflowRun
 
     if IS_PYDANTIC_V2:
@@ -239,8 +239,8 @@ class WebhookEvent_WorkflowRunStepRunProcessed(UncheckedBaseModel):
 
     event_type: typing_extensions.Annotated[
         typing.Literal["workflow_run.step_run.processed"], FieldMetadata(alias="eventType")
-    ] = "workflow_run.step_run.processed"
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    ] = pydantic.Field(alias="eventType", default="workflow_run.step_run.processed")
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: StepRun
 
     if IS_PYDANTIC_V2:
@@ -277,8 +277,8 @@ class WebhookEvent_ExtractRunProcessed(UncheckedBaseModel):
 
     event_type: typing_extensions.Annotated[
         typing.Literal["extract_run.processed"], FieldMetadata(alias="eventType")
-    ] = "extract_run.processed"
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    ] = pydantic.Field(alias="eventType", default="extract_run.processed")
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: ExtractRun
 
     if IS_PYDANTIC_V2:
@@ -314,9 +314,9 @@ class WebhookEvent_ExtractRunFailed(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["extract_run.failed"], FieldMetadata(alias="eventType")] = (
-        "extract_run.failed"
+        pydantic.Field(alias="eventType", default="extract_run.failed")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: ExtractRun
 
     if IS_PYDANTIC_V2:
@@ -353,8 +353,8 @@ class WebhookEvent_ClassifyRunProcessed(UncheckedBaseModel):
 
     event_type: typing_extensions.Annotated[
         typing.Literal["classify_run.processed"], FieldMetadata(alias="eventType")
-    ] = "classify_run.processed"
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    ] = pydantic.Field(alias="eventType", default="classify_run.processed")
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: ClassifyRun
 
     if IS_PYDANTIC_V2:
@@ -390,9 +390,9 @@ class WebhookEvent_ClassifyRunFailed(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["classify_run.failed"], FieldMetadata(alias="eventType")] = (
-        "classify_run.failed"
+        pydantic.Field(alias="eventType", default="classify_run.failed")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: ClassifyRun
 
     if IS_PYDANTIC_V2:
@@ -428,9 +428,9 @@ class WebhookEvent_SplitRunProcessed(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["split_run.processed"], FieldMetadata(alias="eventType")] = (
-        "split_run.processed"
+        pydantic.Field(alias="eventType", default="split_run.processed")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: SplitRun
 
     if IS_PYDANTIC_V2:
@@ -466,9 +466,9 @@ class WebhookEvent_SplitRunFailed(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["split_run.failed"], FieldMetadata(alias="eventType")] = (
-        "split_run.failed"
+        pydantic.Field(alias="eventType", default="split_run.failed")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: SplitRun
 
     if IS_PYDANTIC_V2:
@@ -504,9 +504,9 @@ class WebhookEvent_ParseRunProcessed(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["parse_run.processed"], FieldMetadata(alias="eventType")] = (
-        "parse_run.processed"
+        pydantic.Field(alias="eventType", default="parse_run.processed")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: ParseRunStatus
 
     if IS_PYDANTIC_V2:
@@ -542,9 +542,9 @@ class WebhookEvent_ParseRunFailed(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["parse_run.failed"], FieldMetadata(alias="eventType")] = (
-        "parse_run.failed"
+        pydantic.Field(alias="eventType", default="parse_run.failed")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: ParseRunStatus
 
     if IS_PYDANTIC_V2:
@@ -580,9 +580,9 @@ class WebhookEvent_EditRunProcessed(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["edit_run.processed"], FieldMetadata(alias="eventType")] = (
-        "edit_run.processed"
+        pydantic.Field(alias="eventType", default="edit_run.processed")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: EditRun
 
     if IS_PYDANTIC_V2:
@@ -618,9 +618,9 @@ class WebhookEvent_EditRunFailed(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["edit_run.failed"], FieldMetadata(alias="eventType")] = (
-        "edit_run.failed"
+        pydantic.Field(alias="eventType", default="edit_run.failed")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: EditRun
 
     if IS_PYDANTIC_V2:
@@ -656,9 +656,9 @@ class WebhookEvent_WorkflowCreated(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["workflow.created"], FieldMetadata(alias="eventType")] = (
-        "workflow.created"
+        pydantic.Field(alias="eventType", default="workflow.created")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: Workflow
 
     if IS_PYDANTIC_V2:
@@ -694,9 +694,9 @@ class WebhookEvent_WorkflowDeployed(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["workflow.deployed"], FieldMetadata(alias="eventType")] = (
-        "workflow.deployed"
+        pydantic.Field(alias="eventType", default="workflow.deployed")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: Workflow
 
     if IS_PYDANTIC_V2:
@@ -732,9 +732,9 @@ class WebhookEvent_WorkflowDeleted(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["workflow.deleted"], FieldMetadata(alias="eventType")] = (
-        "workflow.deleted"
+        pydantic.Field(alias="eventType", default="workflow.deleted")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: Workflow
 
     if IS_PYDANTIC_V2:
@@ -770,9 +770,9 @@ class WebhookEvent_ExtractorCreated(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["extractor.created"], FieldMetadata(alias="eventType")] = (
-        "extractor.created"
+        pydantic.Field(alias="eventType", default="extractor.created")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: Extractor
 
     if IS_PYDANTIC_V2:
@@ -808,9 +808,9 @@ class WebhookEvent_ExtractorUpdated(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["extractor.updated"], FieldMetadata(alias="eventType")] = (
-        "extractor.updated"
+        pydantic.Field(alias="eventType", default="extractor.updated")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: Extractor
 
     if IS_PYDANTIC_V2:
@@ -846,9 +846,9 @@ class WebhookEvent_ExtractorDeleted(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["extractor.deleted"], FieldMetadata(alias="eventType")] = (
-        "extractor.deleted"
+        pydantic.Field(alias="eventType", default="extractor.deleted")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: Extractor
 
     if IS_PYDANTIC_V2:
@@ -885,8 +885,8 @@ class WebhookEvent_ExtractorDraftUpdated(UncheckedBaseModel):
 
     event_type: typing_extensions.Annotated[
         typing.Literal["extractor.draft.updated"], FieldMetadata(alias="eventType")
-    ] = "extractor.draft.updated"
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    ] = pydantic.Field(alias="eventType", default="extractor.draft.updated")
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: Extractor
 
     if IS_PYDANTIC_V2:
@@ -923,8 +923,8 @@ class WebhookEvent_ExtractorVersionPublished(UncheckedBaseModel):
 
     event_type: typing_extensions.Annotated[
         typing.Literal["extractor.version.published"], FieldMetadata(alias="eventType")
-    ] = "extractor.version.published"
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    ] = pydantic.Field(alias="eventType", default="extractor.version.published")
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: ExtractorVersion
 
     if IS_PYDANTIC_V2:
@@ -960,9 +960,9 @@ class WebhookEvent_ClassifierCreated(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["classifier.created"], FieldMetadata(alias="eventType")] = (
-        "classifier.created"
+        pydantic.Field(alias="eventType", default="classifier.created")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: Classifier
 
     if IS_PYDANTIC_V2:
@@ -998,9 +998,9 @@ class WebhookEvent_ClassifierUpdated(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["classifier.updated"], FieldMetadata(alias="eventType")] = (
-        "classifier.updated"
+        pydantic.Field(alias="eventType", default="classifier.updated")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: Classifier
 
     if IS_PYDANTIC_V2:
@@ -1036,9 +1036,9 @@ class WebhookEvent_ClassifierDeleted(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["classifier.deleted"], FieldMetadata(alias="eventType")] = (
-        "classifier.deleted"
+        pydantic.Field(alias="eventType", default="classifier.deleted")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: Classifier
 
     if IS_PYDANTIC_V2:
@@ -1075,8 +1075,8 @@ class WebhookEvent_ClassifierDraftUpdated(UncheckedBaseModel):
 
     event_type: typing_extensions.Annotated[
         typing.Literal["classifier.draft.updated"], FieldMetadata(alias="eventType")
-    ] = "classifier.draft.updated"
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    ] = pydantic.Field(alias="eventType", default="classifier.draft.updated")
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: Classifier
 
     if IS_PYDANTIC_V2:
@@ -1113,8 +1113,8 @@ class WebhookEvent_ClassifierVersionPublished(UncheckedBaseModel):
 
     event_type: typing_extensions.Annotated[
         typing.Literal["classifier.version.published"], FieldMetadata(alias="eventType")
-    ] = "classifier.version.published"
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    ] = pydantic.Field(alias="eventType", default="classifier.version.published")
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: ClassifierVersion
 
     if IS_PYDANTIC_V2:
@@ -1150,9 +1150,9 @@ class WebhookEvent_SplitterCreated(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["splitter.created"], FieldMetadata(alias="eventType")] = (
-        "splitter.created"
+        pydantic.Field(alias="eventType", default="splitter.created")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: Splitter
 
     if IS_PYDANTIC_V2:
@@ -1188,9 +1188,9 @@ class WebhookEvent_SplitterUpdated(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["splitter.updated"], FieldMetadata(alias="eventType")] = (
-        "splitter.updated"
+        pydantic.Field(alias="eventType", default="splitter.updated")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: Splitter
 
     if IS_PYDANTIC_V2:
@@ -1226,9 +1226,9 @@ class WebhookEvent_SplitterDeleted(UncheckedBaseModel):
     """
 
     event_type: typing_extensions.Annotated[typing.Literal["splitter.deleted"], FieldMetadata(alias="eventType")] = (
-        "splitter.deleted"
+        pydantic.Field(alias="eventType", default="splitter.deleted")
     )
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: Splitter
 
     if IS_PYDANTIC_V2:
@@ -1265,8 +1265,8 @@ class WebhookEvent_SplitterDraftUpdated(UncheckedBaseModel):
 
     event_type: typing_extensions.Annotated[
         typing.Literal["splitter.draft.updated"], FieldMetadata(alias="eventType")
-    ] = "splitter.draft.updated"
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    ] = pydantic.Field(alias="eventType", default="splitter.draft.updated")
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: Splitter
 
     if IS_PYDANTIC_V2:
@@ -1303,8 +1303,8 @@ class WebhookEvent_SplitterVersionPublished(UncheckedBaseModel):
 
     event_type: typing_extensions.Annotated[
         typing.Literal["splitter.version.published"], FieldMetadata(alias="eventType")
-    ] = "splitter.version.published"
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    ] = pydantic.Field(alias="eventType", default="splitter.version.published")
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     payload: SplitterVersion
 
     if IS_PYDANTIC_V2:

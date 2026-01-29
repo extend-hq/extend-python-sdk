@@ -11,7 +11,9 @@ from ...types.classifier_version import ClassifierVersion
 
 
 class ClassifierVersionsCreateResponse(UncheckedBaseModel):
-    classifier_version: typing_extensions.Annotated[ClassifierVersion, FieldMetadata(alias="classifierVersion")]
+    classifier_version: typing_extensions.Annotated[ClassifierVersion, FieldMetadata(alias="classifierVersion")] = (
+        pydantic.Field(alias="classifierVersion")
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -28,7 +28,9 @@ class StepRunBase(UncheckedBaseModel):
     Example: `"workflow_step_run_xKm9pNv3qWsY_jL2tR5Dh"`
     """
 
-    workflow_run_id: typing_extensions.Annotated[str, FieldMetadata(alias="workflowRunId")] = pydantic.Field()
+    workflow_run_id: typing_extensions.Annotated[str, FieldMetadata(alias="workflowRunId")] = pydantic.Field(
+        alias="workflowRunId"
+    )
     """
     The ID of the parent workflow run.
     

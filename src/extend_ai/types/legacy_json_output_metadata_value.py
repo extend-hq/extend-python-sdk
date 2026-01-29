@@ -13,7 +13,7 @@ from .legacy_json_output_metadata_value_citations_item import LegacyJsonOutputMe
 
 class LegacyJsonOutputMetadataValue(UncheckedBaseModel):
     ocr_confidence: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="ocrConfidence")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="ocrConfidence", default=None)
     )
     """
     Confidence score from OCR processing, if applicable
@@ -21,13 +21,13 @@ class LegacyJsonOutputMetadataValue(UncheckedBaseModel):
 
     logprobs_confidence: typing_extensions.Annotated[
         typing.Optional[float], FieldMetadata(alias="logprobsConfidence")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="logprobsConfidence", default=None)
     """
     Confidence score based on model logprobs
     """
 
     review_agent_score: typing_extensions.Annotated[typing.Optional[int], FieldMetadata(alias="reviewAgentScore")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="reviewAgentScore", default=None)
     )
     """
     A 1-5 score indicating the review agent's confidence in the extracted value.

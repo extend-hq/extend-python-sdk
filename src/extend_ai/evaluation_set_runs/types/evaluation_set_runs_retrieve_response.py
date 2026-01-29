@@ -11,7 +11,9 @@ from ...types.evaluation_set_run import EvaluationSetRun
 
 
 class EvaluationSetRunsRetrieveResponse(UncheckedBaseModel):
-    evaluation_set_run: typing_extensions.Annotated[EvaluationSetRun, FieldMetadata(alias="evaluationSetRun")]
+    evaluation_set_run: typing_extensions.Annotated[EvaluationSetRun, FieldMetadata(alias="evaluationSetRun")] = (
+        pydantic.Field(alias="evaluationSetRun")
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

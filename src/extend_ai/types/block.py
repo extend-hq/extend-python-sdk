@@ -28,7 +28,7 @@ class Block(UncheckedBaseModel):
     """
 
     parent_block_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parentBlockId")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="parentBlockId", default=None)
     )
     """
     The ID of the parent block. For example, for a table cell block, this would be the ID of the parent table block. Only set if this is a child block.
@@ -66,7 +66,9 @@ class Block(UncheckedBaseModel):
     An array of points defining the polygon that bounds the block.
     """
 
-    bounding_box: typing_extensions.Annotated[BlockBoundingBox, FieldMetadata(alias="boundingBox")] = pydantic.Field()
+    bounding_box: typing_extensions.Annotated[BlockBoundingBox, FieldMetadata(alias="boundingBox")] = pydantic.Field(
+        alias="boundingBox"
+    )
     """
     A simplified bounding box for the block.
     """

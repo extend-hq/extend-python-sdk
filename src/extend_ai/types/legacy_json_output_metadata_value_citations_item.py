@@ -19,7 +19,7 @@ class LegacyJsonOutputMetadataValueCitationsItem(UncheckedBaseModel):
     """
 
     reference_text: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="referenceText")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="referenceText", default=None)
     )
     """
     The text that was referenced

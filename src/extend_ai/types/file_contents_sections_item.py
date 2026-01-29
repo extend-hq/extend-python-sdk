@@ -10,12 +10,16 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 
 
 class FileContentsSectionsItem(UncheckedBaseModel):
-    start_page_number: typing_extensions.Annotated[int, FieldMetadata(alias="startPageNumber")] = pydantic.Field()
+    start_page_number: typing_extensions.Annotated[int, FieldMetadata(alias="startPageNumber")] = pydantic.Field(
+        alias="startPageNumber"
+    )
     """
     The starting page number of this section.
     """
 
-    end_page_number: typing_extensions.Annotated[int, FieldMetadata(alias="endPageNumber")] = pydantic.Field()
+    end_page_number: typing_extensions.Annotated[int, FieldMetadata(alias="endPageNumber")] = pydantic.Field(
+        alias="endPageNumber"
+    )
     """
     The ending page number of this section.
     """

@@ -44,8 +44,12 @@ class EvaluationSet(UncheckedBaseModel):
     The extractor, classifier, or splitter associated with this evaluation set.
     """
 
-    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
-    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")]
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
+    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

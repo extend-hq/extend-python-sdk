@@ -13,7 +13,7 @@ from ...types.parse_run import ParseRun
 
 
 class ParseRunsCreateResponse(UncheckedBaseModel):
-    parse_run: typing_extensions.Annotated[ParseRun, FieldMetadata(alias="parseRun")]
+    parse_run: typing_extensions.Annotated[ParseRun, FieldMetadata(alias="parseRun")] = pydantic.Field(alias="parseRun")
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -37,14 +37,18 @@ class SplitterVersionSummary(UncheckedBaseModel):
     Examples: `"1.0"`, `"2.1"`, `"draft"`
     """
 
-    splitter_id: typing_extensions.Annotated[str, FieldMetadata(alias="splitterId")] = pydantic.Field()
+    splitter_id: typing_extensions.Annotated[str, FieldMetadata(alias="splitterId")] = pydantic.Field(
+        alias="splitterId"
+    )
     """
     The ID of the splitter that this version belongs to.
     
     Example: `"splitter_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
-    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

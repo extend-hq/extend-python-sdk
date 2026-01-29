@@ -37,7 +37,7 @@ class ParseRunStatus(UncheckedBaseModel):
     """
 
     failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="failureReason", default=None)
     )
     """
     The reason for failure.
@@ -46,7 +46,7 @@ class ParseRunStatus(UncheckedBaseModel):
     """
 
     failure_message: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureMessage")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="failureMessage", default=None)
     )
     """
     A human-readable description of the failure.

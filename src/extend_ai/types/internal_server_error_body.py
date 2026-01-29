@@ -28,14 +28,14 @@ class InternalServerErrorBody(UncheckedBaseModel):
     """
 
     doc_url: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="docUrl")] = pydantic.Field(
-        default=None
+        alias="docUrl", default=None
     )
     """
     Link to documentation about this error.
     """
 
     request_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="requestId")] = pydantic.Field(
-        default=None
+        alias="requestId", default=None
     )
     """
     Unique request identifier for support purposes. Always include this 

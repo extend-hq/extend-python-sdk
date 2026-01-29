@@ -13,7 +13,9 @@ from ...types.extractor_version import ExtractorVersion
 
 
 class ExtractorVersionsCreateResponse(UncheckedBaseModel):
-    extractor_version: typing_extensions.Annotated[ExtractorVersion, FieldMetadata(alias="extractorVersion")]
+    extractor_version: typing_extensions.Annotated[ExtractorVersion, FieldMetadata(alias="extractorVersion")] = (
+        pydantic.Field(alias="extractorVersion")
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

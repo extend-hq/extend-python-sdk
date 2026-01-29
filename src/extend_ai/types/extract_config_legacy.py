@@ -17,20 +17,20 @@ from .parse_config import ParseConfig
 class ExtractConfigLegacy(UncheckedBaseModel):
     base_processor: typing_extensions.Annotated[
         typing.Optional[ExtractConfigLegacyBaseProcessor], FieldMetadata(alias="baseProcessor")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="baseProcessor", default=None)
     """
     The base processor to use. For extractors, this can be either `"extraction_performance"` or `"extraction_light"`. Defaults to `"extraction_performance"` if not provided. See [Extraction Changelog](https://docs.extend.ai/2026-01-01/changelog/extraction/extraction-performance) for more details.
     """
 
     base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="baseVersion", default=None)
     )
     """
     The version of the `"extraction_performance"` or `"extraction_light"` processor to use. If not provided, the latest stable version for the selected `baseProcessor` will be used automatically. See [Extraction Changelog](https://docs.extend.ai/2026-01-01/changelog/extraction/extraction-performance) for more details.
     """
 
     extraction_rules: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="extractionRules")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="extractionRules", default=None)
     )
     """
     Custom rules to guide the extraction process in natural language.
@@ -45,13 +45,13 @@ class ExtractConfigLegacy(UncheckedBaseModel):
 
     advanced_options: typing_extensions.Annotated[
         typing.Optional[ExtractAdvancedOptions], FieldMetadata(alias="advancedOptions")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="advancedOptions", default=None)
     """
     Advanced configuration options.
     """
 
     parse_config: typing_extensions.Annotated[typing.Optional[ParseConfig], FieldMetadata(alias="parseConfig")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="parseConfig", default=None)
     )
     """
     Configuration options for the parsing process.

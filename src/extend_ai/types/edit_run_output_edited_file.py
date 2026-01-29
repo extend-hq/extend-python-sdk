@@ -19,7 +19,9 @@ class EditRunOutputEditedFile(UncheckedBaseModel):
     The ID of the edited output file.
     """
 
-    presigned_url: typing_extensions.Annotated[str, FieldMetadata(alias="presignedUrl")] = pydantic.Field()
+    presigned_url: typing_extensions.Annotated[str, FieldMetadata(alias="presignedUrl")] = pydantic.Field(
+        alias="presignedUrl"
+    )
     """
     A presigned URL to download the edited file. Expires after 15 minutes.
     """

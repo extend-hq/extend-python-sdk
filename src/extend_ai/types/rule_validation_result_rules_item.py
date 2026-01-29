@@ -22,7 +22,7 @@ class RuleValidationResultRulesItem(UncheckedBaseModel):
     """
 
     valid_array: typing_extensions.Annotated[typing.Optional[typing.List[bool]], FieldMetadata(alias="validArray")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="validArray", default=None)
     )
     """
     Present if the validation rule's formula is array valued. This field contains the formula's evaluated result for every item in the array.
@@ -30,7 +30,7 @@ class RuleValidationResultRulesItem(UncheckedBaseModel):
 
     failure_reason: typing_extensions.Annotated[
         typing.Optional[RuleValidationResultRulesItemFailureReason], FieldMetadata(alias="failureReason")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="failureReason", default=None)
     """
     If the validation rule is not valid, then this describes why the rule failed.
     * `"RULE_FAILED"` - The formula evaluated to `false` or `null`

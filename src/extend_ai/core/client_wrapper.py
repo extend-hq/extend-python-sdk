@@ -23,9 +23,13 @@ class BaseClientWrapper:
         self._extend_api_version = extend_api_version
 
     def get_headers(self) -> typing.Dict[str, str]:
+        import platform
+
         headers: typing.Dict[str, str] = {
             "User-Agent": "extend_ai/0.0.20",
             "X-Fern-Language": "Python",
+            "X-Fern-Runtime": f"python/{platform.python_version()}",
+            "X-Fern-Platform": f"{platform.system().lower()}/{platform.release()}",
             "X-Fern-SDK-Name": "extend_ai",
             "X-Fern-SDK-Version": "0.0.20",
             **(self.get_custom_headers() or {}),

@@ -40,28 +40,40 @@ class WorkflowRunOutput_ExtractRun(UncheckedBaseModel):
     extractor: typing.Optional[ExtractorSummary] = None
     extractor_version: typing_extensions.Annotated[
         typing.Optional[ExtractorVersionSummary], FieldMetadata(alias="extractorVersion")
-    ] = None
+    ] = pydantic.Field(alias="extractorVersion", default=None)
     status: ProcessorRunStatus
     output: typing.Optional[ExtractOutput] = None
     initial_output: typing_extensions.Annotated[
         typing.Optional[ExtractOutput], FieldMetadata(alias="initialOutput")
-    ] = None
+    ] = pydantic.Field(alias="initialOutput", default=None)
     reviewed_output: typing_extensions.Annotated[
         typing.Optional[ExtractOutput], FieldMetadata(alias="reviewedOutput")
-    ] = None
-    failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = None
-    failure_message: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureMessage")] = None
+    ] = pydantic.Field(alias="reviewedOutput", default=None)
+    failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
+        pydantic.Field(alias="failureReason", default=None)
+    )
+    failure_message: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureMessage")] = (
+        pydantic.Field(alias="failureMessage", default=None)
+    )
     metadata: typing.Optional[RunMetadata] = None
     reviewed: bool
     edited: bool
     edits: typing.Optional[typing.Dict[str, typing.Optional[ExtractOutputEdits]]] = None
     config: ExtractConfig
     file: FileSummary
-    parse_run_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parseRunId")] = None
-    dashboard_url: typing_extensions.Annotated[str, FieldMetadata(alias="dashboardUrl")]
+    parse_run_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parseRunId")] = pydantic.Field(
+        alias="parseRunId", default=None
+    )
+    dashboard_url: typing_extensions.Annotated[str, FieldMetadata(alias="dashboardUrl")] = pydantic.Field(
+        alias="dashboardUrl"
+    )
     usage: typing.Optional[RunUsage] = None
-    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
-    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")]
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
+    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -83,27 +95,39 @@ class WorkflowRunOutput_ClassifyRun(UncheckedBaseModel):
     classifier: typing.Optional[ClassifierSummary] = None
     classifier_version: typing_extensions.Annotated[
         typing.Optional[ClassifierVersionSummary], FieldMetadata(alias="classifierVersion")
-    ] = None
+    ] = pydantic.Field(alias="classifierVersion", default=None)
     status: ProcessorRunStatus
     output: typing.Optional[ClassifyOutput] = None
     initial_output: typing_extensions.Annotated[
         typing.Optional[ClassifyOutput], FieldMetadata(alias="initialOutput")
-    ] = None
+    ] = pydantic.Field(alias="initialOutput", default=None)
     reviewed_output: typing_extensions.Annotated[
         typing.Optional[ClassifyOutput], FieldMetadata(alias="reviewedOutput")
-    ] = None
-    failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = None
-    failure_message: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureMessage")] = None
+    ] = pydantic.Field(alias="reviewedOutput", default=None)
+    failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
+        pydantic.Field(alias="failureReason", default=None)
+    )
+    failure_message: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureMessage")] = (
+        pydantic.Field(alias="failureMessage", default=None)
+    )
     metadata: typing.Optional[RunMetadata] = None
     reviewed: bool
     edited: bool
     config: ClassifyConfig
     file: FileSummary
-    parse_run_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parseRunId")] = None
-    dashboard_url: typing_extensions.Annotated[str, FieldMetadata(alias="dashboardUrl")]
+    parse_run_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parseRunId")] = pydantic.Field(
+        alias="parseRunId", default=None
+    )
+    dashboard_url: typing_extensions.Annotated[str, FieldMetadata(alias="dashboardUrl")] = pydantic.Field(
+        alias="dashboardUrl"
+    )
     usage: typing.Optional[RunUsage] = None
-    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
-    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")]
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
+    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -125,27 +149,39 @@ class WorkflowRunOutput_SplitRun(UncheckedBaseModel):
     splitter: typing.Optional[SplitterSummary] = None
     splitter_version: typing_extensions.Annotated[
         typing.Optional[SplitterVersionSummary], FieldMetadata(alias="splitterVersion")
-    ] = None
+    ] = pydantic.Field(alias="splitterVersion", default=None)
     status: ProcessorRunStatus
     output: typing.Optional[SplitOutput] = None
     initial_output: typing_extensions.Annotated[typing.Optional[SplitOutput], FieldMetadata(alias="initialOutput")] = (
-        None
+        pydantic.Field(alias="initialOutput", default=None)
     )
     reviewed_output: typing_extensions.Annotated[
         typing.Optional[SplitOutput], FieldMetadata(alias="reviewedOutput")
-    ] = None
-    failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = None
-    failure_message: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureMessage")] = None
+    ] = pydantic.Field(alias="reviewedOutput", default=None)
+    failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
+        pydantic.Field(alias="failureReason", default=None)
+    )
+    failure_message: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureMessage")] = (
+        pydantic.Field(alias="failureMessage", default=None)
+    )
     metadata: typing.Optional[RunMetadata] = None
     reviewed: bool
     edited: bool
     config: SplitConfig
     file: FileSummary
-    parse_run_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parseRunId")] = None
-    dashboard_url: typing_extensions.Annotated[str, FieldMetadata(alias="dashboardUrl")]
+    parse_run_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parseRunId")] = pydantic.Field(
+        alias="parseRunId", default=None
+    )
+    dashboard_url: typing_extensions.Annotated[str, FieldMetadata(alias="dashboardUrl")] = pydantic.Field(
+        alias="dashboardUrl"
+    )
     usage: typing.Optional[RunUsage] = None
-    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
-    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")]
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
+    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

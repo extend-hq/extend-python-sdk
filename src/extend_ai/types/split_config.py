@@ -16,21 +16,23 @@ from .split_config_base_processor import SplitConfigBaseProcessor
 class SplitConfig(UncheckedBaseModel):
     base_processor: typing_extensions.Annotated[
         typing.Optional[SplitConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="baseProcessor", default=None)
     """
     The base processor to use. For splitters, this can be either `"splitting_performance"` or `"splitting_light"`. Defaults to `"splitting_performance"` if not provided. See [Splitting Changelog](https://docs.extend.ai/2026-01-01/changelog/splitting/splitting-performance) for more details.
     """
 
     base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="baseVersion", default=None)
     )
     """
     The version of the `"splitting_performance"` or `"splitting_light"` processor to use. If not provided, the latest stable version for the selected `baseProcessor` will be used automatically. See [Splitting Changelog](https://docs.extend.ai/2026-01-01/changelog/splitting/splitting-performance) for more details.
     """
 
-    split_classifications: typing_extensions.Annotated[Classifications, FieldMetadata(alias="splitClassifications")]
+    split_classifications: typing_extensions.Annotated[Classifications, FieldMetadata(alias="splitClassifications")] = (
+        pydantic.Field(alias="splitClassifications")
+    )
     split_rules: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="splitRules")] = pydantic.Field(
-        default=None
+        alias="splitRules", default=None
     )
     """
     Custom rules to guide the document splitting process in natural language.
@@ -38,13 +40,13 @@ class SplitConfig(UncheckedBaseModel):
 
     advanced_options: typing_extensions.Annotated[
         typing.Optional[SplitAdvancedOptions], FieldMetadata(alias="advancedOptions")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="advancedOptions", default=None)
     """
     Advanced configuration options.
     """
 
     parse_config: typing_extensions.Annotated[typing.Optional[ParseConfig], FieldMetadata(alias="parseConfig")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="parseConfig", default=None)
     )
     """
     Configuration options for the parsing process.

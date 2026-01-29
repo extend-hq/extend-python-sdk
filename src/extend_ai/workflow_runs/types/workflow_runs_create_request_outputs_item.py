@@ -11,7 +11,9 @@ from ...types.provided_processor_output import ProvidedProcessorOutput
 
 
 class WorkflowRunsCreateRequestOutputsItem(UncheckedBaseModel):
-    processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field()
+    processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field(
+        alias="processorId"
+    )
     """
     The ID of the extractor, classifier, or splitter that the output is associated with.
     Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`

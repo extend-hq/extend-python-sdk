@@ -37,7 +37,7 @@ class BatchRun(UncheckedBaseModel):
 
     entity_version: typing_extensions.Annotated[
         typing.Optional[BatchRunEntityVersion], FieldMetadata(alias="entityVersion")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="entityVersion", default=None)
     """
     The version of the extractor, classifier, or splitter that was run.
     
@@ -46,8 +46,12 @@ class BatchRun(UncheckedBaseModel):
 
     status: BatchRunStatus
     metrics: BatchRunMetrics
-    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
-    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")]
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
+    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

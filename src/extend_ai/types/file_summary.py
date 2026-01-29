@@ -41,7 +41,7 @@ class FileSummary(UncheckedBaseModel):
     """
 
     parent_file_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parentFileId")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="parentFileId", default=None)
     )
     """
     ID of the parent file.
@@ -50,8 +50,12 @@ class FileSummary(UncheckedBaseModel):
     """
 
     metadata: FileMetadata
-    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
-    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")]
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
+    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

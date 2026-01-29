@@ -14,7 +14,9 @@ from ...types.legacy_processor_version import LegacyProcessorVersion
 
 class ProcessorVersionCreateResponse(UncheckedBaseModel):
     success: bool
-    processor_version: typing_extensions.Annotated[LegacyProcessorVersion, FieldMetadata(alias="processorVersion")]
+    processor_version: typing_extensions.Annotated[LegacyProcessorVersion, FieldMetadata(alias="processorVersion")] = (
+        pydantic.Field(alias="processorVersion")
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

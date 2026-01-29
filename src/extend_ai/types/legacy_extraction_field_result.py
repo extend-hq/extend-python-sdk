@@ -34,7 +34,7 @@ class LegacyExtractionFieldResult(UncheckedBaseModel):
 
     schema_: typing_extensions.Annotated[
         typing.Optional[typing.List["LegacyExtractionField"]], FieldMetadata(alias="schema")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="schema", default=None)
     """
     The field schema of nested fields
     """

@@ -11,7 +11,9 @@ from ...types.splitter_version import SplitterVersion
 
 
 class SplitterVersionsRetrieveResponse(UncheckedBaseModel):
-    splitter_version: typing_extensions.Annotated[SplitterVersion, FieldMetadata(alias="splitterVersion")]
+    splitter_version: typing_extensions.Annotated[SplitterVersion, FieldMetadata(alias="splitterVersion")] = (
+        pydantic.Field(alias="splitterVersion")
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

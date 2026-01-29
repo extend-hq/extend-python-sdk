@@ -45,14 +45,18 @@ class ExtractorVersion(UncheckedBaseModel):
     The configuration settings for this version of the extractor.
     """
 
-    extractor_id: typing_extensions.Annotated[str, FieldMetadata(alias="extractorId")] = pydantic.Field()
+    extractor_id: typing_extensions.Annotated[str, FieldMetadata(alias="extractorId")] = pydantic.Field(
+        alias="extractorId"
+    )
     """
     The ID of the extractor that this version belongs to.
     
     Example: `"extractor_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
-    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -13,7 +13,7 @@ from ...types.edit_run import EditRun
 
 
 class EditRunsCreateResponse(UncheckedBaseModel):
-    edit_run: typing_extensions.Annotated[EditRun, FieldMetadata(alias="editRun")]
+    edit_run: typing_extensions.Annotated[EditRun, FieldMetadata(alias="editRun")] = pydantic.Field(alias="editRun")
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

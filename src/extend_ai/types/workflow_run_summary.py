@@ -31,8 +31,12 @@ class WorkflowRunSummary(UncheckedBaseModel):
 
     status: WorkflowRunStatus
     workflow: WorkflowSummary
-    workflow_version: typing_extensions.Annotated[WorkflowVersionSummary, FieldMetadata(alias="workflowVersion")]
-    dashboard_url: typing_extensions.Annotated[str, FieldMetadata(alias="dashboardUrl")] = pydantic.Field()
+    workflow_version: typing_extensions.Annotated[WorkflowVersionSummary, FieldMetadata(alias="workflowVersion")] = (
+        pydantic.Field(alias="workflowVersion")
+    )
+    dashboard_url: typing_extensions.Annotated[str, FieldMetadata(alias="dashboardUrl")] = pydantic.Field(
+        alias="dashboardUrl"
+    )
     """
     A URL to view this workflow run in the Extend dashboard.
     
@@ -40,7 +44,7 @@ class WorkflowRunSummary(UncheckedBaseModel):
     """
 
     reviewed_by_user: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="reviewedByUser")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="reviewedByUser", default=None)
     )
     """
     The user of the person who reviewed the workflow run. Will be null if the workflow run has not been reviewed.
@@ -49,7 +53,7 @@ class WorkflowRunSummary(UncheckedBaseModel):
     """
 
     reviewed_at: typing_extensions.Annotated[typing.Optional[dt.datetime], FieldMetadata(alias="reviewedAt")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="reviewedAt", default=None)
     )
     """
     The time (in UTC) at which the workflow run was reviewed. Will follow the RFC 3339 format. Will be null if the workflow run has not been reviewed.
@@ -58,7 +62,7 @@ class WorkflowRunSummary(UncheckedBaseModel):
     """
 
     initial_run_at: typing_extensions.Annotated[typing.Optional[dt.datetime], FieldMetadata(alias="initialRunAt")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="initialRunAt", default=None)
     )
     """
     The time (in UTC) at which the workflow was initially created. Will follow the RFC 3339 format. Will be null if the run hasn't started yet.
@@ -67,7 +71,7 @@ class WorkflowRunSummary(UncheckedBaseModel):
     """
 
     start_time: typing_extensions.Annotated[typing.Optional[dt.datetime], FieldMetadata(alias="startTime")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="startTime", default=None)
     )
     """
     The start time (in UTC) that the workflow actually started executing. This occurs after the `initialRunAt` time. Will follow the RFC 3339 format. Will be null if not started.
@@ -76,7 +80,7 @@ class WorkflowRunSummary(UncheckedBaseModel):
     """
 
     end_time: typing_extensions.Annotated[typing.Optional[dt.datetime], FieldMetadata(alias="endTime")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="endTime", default=None)
     )
     """
     The end time (in UTC) that the workflow finished. Will follow the RFC 3339 format. Will be null if not finished.
@@ -85,7 +89,7 @@ class WorkflowRunSummary(UncheckedBaseModel):
     """
 
     batch_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="batchId")] = pydantic.Field(
-        default=None
+        alias="batchId", default=None
     )
     """
     The batch ID of the workflow run. If that workflow run was created from a batch of files, all runs in that batch will have the same batch ID.
@@ -94,7 +98,7 @@ class WorkflowRunSummary(UncheckedBaseModel):
     """
 
     rejection_note: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="rejectionNote")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="rejectionNote", default=None)
     )
     """
     The note that was added when the workflow run was rejected.
@@ -102,8 +106,12 @@ class WorkflowRunSummary(UncheckedBaseModel):
     Example: `"Invalid invoice format"`
     """
 
-    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
-    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")]
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
+    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
     usage: typing.Optional[RunUsage] = None
 
     if IS_PYDANTIC_V2:

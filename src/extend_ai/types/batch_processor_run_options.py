@@ -16,14 +16,14 @@ class BatchProcessorRunOptions(UncheckedBaseModel):
 
     fuzzy_match_fields: typing_extensions.Annotated[
         typing.Optional[typing.List[str]], FieldMetadata(alias="fuzzyMatchFields")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="fuzzyMatchFields", default=None)
     """
     The fields that were fuzzy matched.
     """
 
     exclude_fields: typing_extensions.Annotated[
         typing.Optional[typing.List[str]], FieldMetadata(alias="excludeFields")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="excludeFields", default=None)
     """
     The fields that were excluded from the run.
     """

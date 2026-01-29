@@ -10,20 +10,22 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 
 
 class FileContentsPagesItem(UncheckedBaseModel):
-    page_number: typing_extensions.Annotated[int, FieldMetadata(alias="pageNumber")] = pydantic.Field()
+    page_number: typing_extensions.Annotated[int, FieldMetadata(alias="pageNumber")] = pydantic.Field(
+        alias="pageNumber"
+    )
     """
     The page number of this page in the document.
     """
 
     page_height: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageHeight")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="pageHeight", default=None)
     )
     """
     The height of the page in points. Available for PDF and IMG file types.
     """
 
     page_width: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageWidth")] = pydantic.Field(
-        default=None
+        alias="pageWidth", default=None
     )
     """
     The width of the page in points. Available for PDF and IMG file types.

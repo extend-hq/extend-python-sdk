@@ -11,14 +11,14 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 
 class EvaluationSetRunMetrics(UncheckedBaseModel):
     num_files: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="numFiles")] = pydantic.Field(
-        default=None
+        alias="numFiles", default=None
     )
     """
     The total number of files processed in this evaluation set run
     """
 
     num_pages: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="numPages")] = pydantic.Field(
-        default=None
+        alias="numPages", default=None
     )
     """
     The total number of pages processed in this evaluation set run

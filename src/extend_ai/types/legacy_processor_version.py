@@ -27,7 +27,9 @@ class LegacyProcessorVersion(UncheckedBaseModel):
     Example: `"dpv_xK9mLPqRtN3vS8wF5hB2cQ"`
     """
 
-    processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field()
+    processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field(
+        alias="processorId"
+    )
     """
     The ID of the parent document processor.
     
@@ -35,7 +37,7 @@ class LegacyProcessorVersion(UncheckedBaseModel):
     """
 
     processor_name: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="processorName")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="processorName", default=None)
     )
     """
     The name of the parent document processor.
@@ -43,7 +45,9 @@ class LegacyProcessorVersion(UncheckedBaseModel):
     Example: `"Invoice Processor"`
     """
 
-    processor_type: typing_extensions.Annotated[LegacyProcessorType, FieldMetadata(alias="processorType")]
+    processor_type: typing_extensions.Annotated[LegacyProcessorType, FieldMetadata(alias="processorType")] = (
+        pydantic.Field(alias="processorType")
+    )
     description: typing.Optional[str] = pydantic.Field(default=None)
     """
     An optional description of this version of the document processor.
@@ -65,14 +69,18 @@ class LegacyProcessorVersion(UncheckedBaseModel):
     See the configuration section in the "Guides" tab, for yout specific processor type, for more details on the configuration settings.
     """
 
-    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field()
+    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
     """
     The time (in UTC) at which this version of the document processor was created. Will follow the RFC 3339 format.
     
     Example: `"2024-03-21T15:30:00Z"`
     """
 
-    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field()
+    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
     """
     The time (in UTC) at which this version of the document processor was last updated. Will follow the RFC 3339 format.
     

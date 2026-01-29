@@ -10,17 +10,23 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 
 
 class MergeExtractResultMergedExtractorsItem(UncheckedBaseModel):
-    extractor_id: typing_extensions.Annotated[str, FieldMetadata(alias="extractorId")] = pydantic.Field()
+    extractor_id: typing_extensions.Annotated[str, FieldMetadata(alias="extractorId")] = pydantic.Field(
+        alias="extractorId"
+    )
     """
     The ID of the extractor that was merged.
     """
 
-    extractor_version_id: typing_extensions.Annotated[str, FieldMetadata(alias="extractorVersionId")] = pydantic.Field()
+    extractor_version_id: typing_extensions.Annotated[str, FieldMetadata(alias="extractorVersionId")] = pydantic.Field(
+        alias="extractorVersionId"
+    )
     """
     The ID of the extractor version that was merged.
     """
 
-    extractor_name: typing_extensions.Annotated[str, FieldMetadata(alias="extractorName")] = pydantic.Field()
+    extractor_name: typing_extensions.Annotated[str, FieldMetadata(alias="extractorName")] = pydantic.Field(
+        alias="extractorName"
+    )
     """
     The name of the extractor that was merged.
     """

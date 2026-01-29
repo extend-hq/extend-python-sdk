@@ -11,7 +11,7 @@ from .split_run import SplitRun
 
 
 class SplitRunProcessedWebhookEvent(UncheckedBaseModel):
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field()
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     """
     Unique identifier for the event
     """

@@ -20,7 +20,7 @@ class RuleValidationResult(UncheckedBaseModel):
     The list of validation rules and their results.
     """
 
-    all_passed: typing_extensions.Annotated[bool, FieldMetadata(alias="allPassed")] = pydantic.Field()
+    all_passed: typing_extensions.Annotated[bool, FieldMetadata(alias="allPassed")] = pydantic.Field(alias="allPassed")
     """
     Indicates whether all validation rules passed.
     """

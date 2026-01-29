@@ -18,7 +18,9 @@ class EditConfig(UncheckedBaseModel):
     Configuration options for the editing process.
     """
 
-    schema_: typing_extensions.Annotated[typing.Optional[EditRootJson], FieldMetadata(alias="schema")] = None
+    schema_: typing_extensions.Annotated[typing.Optional[EditRootJson], FieldMetadata(alias="schema")] = pydantic.Field(
+        alias="schema", default=None
+    )
     instructions: typing.Optional[str] = pydantic.Field(default=None)
     """
     Custom instructions provided for the edit operation.
@@ -26,7 +28,7 @@ class EditConfig(UncheckedBaseModel):
 
     advanced_options: typing_extensions.Annotated[
         typing.Optional[EditConfigAdvancedOptions], FieldMetadata(alias="advancedOptions")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="advancedOptions", default=None)
     """
     Advanced options for the edit operation.
     """

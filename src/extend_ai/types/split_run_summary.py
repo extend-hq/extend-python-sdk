@@ -41,7 +41,7 @@ class SplitRunSummary(UncheckedBaseModel):
 
     splitter_version: typing_extensions.Annotated[
         typing.Optional[SplitterVersionSummary], FieldMetadata(alias="splitterVersion")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="splitterVersion", default=None)
     """
     The version of the splitter that was used for this run.
     
@@ -50,7 +50,7 @@ class SplitRunSummary(UncheckedBaseModel):
 
     status: ProcessorRunStatus
     failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="failureReason", default=None)
     )
     """
     The reason for failure.
@@ -59,7 +59,7 @@ class SplitRunSummary(UncheckedBaseModel):
     """
 
     failure_message: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureMessage")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="failureMessage", default=None)
     )
     """
     A detailed message about the failure.
@@ -90,7 +90,7 @@ class SplitRunSummary(UncheckedBaseModel):
     """
 
     parse_run_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parseRunId")] = pydantic.Field(
-        default=None
+        alias="parseRunId", default=None
     )
     """
     The ID of the parse run that was used for this split run.
@@ -98,7 +98,9 @@ class SplitRunSummary(UncheckedBaseModel):
     **Availability:** Present when a parse run was created.
     """
 
-    dashboard_url: typing_extensions.Annotated[str, FieldMetadata(alias="dashboardUrl")] = pydantic.Field()
+    dashboard_url: typing_extensions.Annotated[str, FieldMetadata(alias="dashboardUrl")] = pydantic.Field(
+        alias="dashboardUrl"
+    )
     """
     The URL to view the split run in the Extend dashboard.
     """
@@ -110,8 +112,12 @@ class SplitRunSummary(UncheckedBaseModel):
     **Availability:** Present when `status` is `"PROCESSED"`.
     """
 
-    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
-    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")]
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
+    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

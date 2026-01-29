@@ -18,7 +18,7 @@ class EditRunOutput(UncheckedBaseModel):
     """
 
     edited_file: typing_extensions.Annotated[EditRunOutputEditedFile, FieldMetadata(alias="editedFile")] = (
-        pydantic.Field()
+        pydantic.Field(alias="editedFile")
     )
     """
     Information about the edited output file.
@@ -26,7 +26,7 @@ class EditRunOutput(UncheckedBaseModel):
 
     filled_values: typing_extensions.Annotated[
         typing.Optional[typing.Dict[str, typing.Any]], FieldMetadata(alias="filledValues")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="filledValues", default=None)
     """
     The field values that were filled into the document. Keys correspond to the property names in the schema. Will not be present if no values were filled.
     """

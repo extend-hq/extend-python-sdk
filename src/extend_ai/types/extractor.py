@@ -34,9 +34,15 @@ class Extractor(UncheckedBaseModel):
     Example: `"Invoice Extractor"`
     """
 
-    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
-    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")]
-    draft_version: typing_extensions.Annotated[ExtractorVersion, FieldMetadata(alias="draftVersion")] = pydantic.Field()
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
+    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
+    draft_version: typing_extensions.Annotated[ExtractorVersion, FieldMetadata(alias="draftVersion")] = pydantic.Field(
+        alias="draftVersion"
+    )
     """
     The draft version of the extractor. This is the editable version in the Extend dashboard.
     """

@@ -14,13 +14,13 @@ from .legacy_extract_chunking_options_chunking_strategy import LegacyExtractChun
 class LegacyExtractChunkingOptions(UncheckedBaseModel):
     chunking_strategy: typing_extensions.Annotated[
         typing.Optional[LegacyExtractChunkingOptionsChunkingStrategy], FieldMetadata(alias="chunkingStrategy")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="chunkingStrategy", default=None)
     """
     The strategy to use for chunking the document.
     """
 
     page_chunk_size: typing_extensions.Annotated[typing.Optional[int], FieldMetadata(alias="pageChunkSize")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="pageChunkSize", default=None)
     )
     """
     The size of page chunks.
@@ -29,14 +29,14 @@ class LegacyExtractChunkingOptions(UncheckedBaseModel):
     chunk_selection_strategy: typing_extensions.Annotated[
         typing.Optional[LegacyExtractChunkingOptionsChunkSelectionStrategy],
         FieldMetadata(alias="chunkSelectionStrategy"),
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="chunkSelectionStrategy", default=None)
     """
     The strategy to use for selecting chunks.
     """
 
     custom_semantic_chunking_rules: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="customSemanticChunkingRules")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="customSemanticChunkingRules", default=None)
     """
     Custom rules for semantic chunking.
     """

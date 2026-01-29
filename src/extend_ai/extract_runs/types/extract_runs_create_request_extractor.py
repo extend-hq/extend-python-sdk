@@ -24,7 +24,7 @@ class ExtractRunsCreateRequestExtractor(UncheckedBaseModel):
     version: typing.Optional[ProcessorVersionString] = None
     override_config: typing_extensions.Annotated[
         typing.Optional[ExtractConfigJson], FieldMetadata(alias="overrideConfig")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="overrideConfig", default=None)
     """
     Optional configuration override. If provided, this configuration will override the extractor's saved configuration.
     """

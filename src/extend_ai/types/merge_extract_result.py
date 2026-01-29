@@ -20,8 +20,10 @@ class MergeExtractResult(UncheckedBaseModel):
 
     merged_extractors: typing_extensions.Annotated[
         typing.List[MergeExtractResultMergedExtractorsItem], FieldMetadata(alias="mergedExtractors")
-    ]
-    extract_run: typing_extensions.Annotated[ExtractRun, FieldMetadata(alias="extractRun")] = pydantic.Field()
+    ] = pydantic.Field(alias="mergedExtractors")
+    extract_run: typing_extensions.Annotated[ExtractRun, FieldMetadata(alias="extractRun")] = pydantic.Field(
+        alias="extractRun"
+    )
     """
     The resulting extract run containing the merged output.
     """

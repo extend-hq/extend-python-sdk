@@ -11,7 +11,7 @@ from ...types.split_run import SplitRun
 
 
 class SplitRunsRetrieveResponse(UncheckedBaseModel):
-    split_run: typing_extensions.Annotated[SplitRun, FieldMetadata(alias="splitRun")]
+    split_run: typing_extensions.Annotated[SplitRun, FieldMetadata(alias="splitRun")] = pydantic.Field(alias="splitRun")
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

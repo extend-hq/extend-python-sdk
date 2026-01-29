@@ -32,9 +32,15 @@ class Splitter(UncheckedBaseModel):
     Example: `"Invoice Packet Splitter"`
     """
 
-    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
-    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")]
-    draft_version: typing_extensions.Annotated[SplitterVersion, FieldMetadata(alias="draftVersion")] = pydantic.Field()
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
+    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
+    draft_version: typing_extensions.Annotated[SplitterVersion, FieldMetadata(alias="draftVersion")] = pydantic.Field(
+        alias="draftVersion"
+    )
     """
     The draft version of the splitter. This is the editable version in the Extend dashboard.
     """

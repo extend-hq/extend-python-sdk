@@ -19,20 +19,20 @@ from .page_ranges import PageRanges
 class ExtractAdvancedOptions(UncheckedBaseModel):
     model_reasoning_insights_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="modelReasoningInsightsEnabled")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="modelReasoningInsightsEnabled", default=None)
     """
     Whether to enable model reasoning insights.
     """
 
     advanced_multimodal_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="advancedMultimodalEnabled")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="advancedMultimodalEnabled", default=None)
     """
     Whether to enable advanced multimodal features.
     """
 
     citations_enabled: typing_extensions.Annotated[typing.Optional[bool], FieldMetadata(alias="citationsEnabled")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="citationsEnabled", default=None)
     )
     """
     Whether to enable citations in the output.
@@ -40,24 +40,24 @@ class ExtractAdvancedOptions(UncheckedBaseModel):
 
     array_citation_strategy: typing_extensions.Annotated[
         typing.Optional[ExtractAdvancedOptionsArrayCitationStrategy], FieldMetadata(alias="arrayCitationStrategy")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="arrayCitationStrategy", default=None)
     """
     Granularity for array citations. This requires citationsEnabled=true and a base processor version that supports property-level array citations (extraction_performance ≥ 4.4.0).
     """
 
     array_strategy: typing_extensions.Annotated[
         typing.Optional[ArrayStrategy], FieldMetadata(alias="arrayStrategy")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="arrayStrategy", default=None)
     """
     Strategy for handling large arrays in documents.
     """
 
     chunking_options: typing_extensions.Annotated[
         typing.Optional[ExtractChunkingOptions], FieldMetadata(alias="chunkingOptions")
-    ] = None
+    ] = pydantic.Field(alias="chunkingOptions", default=None)
     excel_sheet_ranges: typing_extensions.Annotated[
         typing.Optional[typing.List[ExcelSheetRange]], FieldMetadata(alias="excelSheetRanges")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="excelSheetRanges", default=None)
     """
     Ranges of sheet indices to extract from Excel documents.
     """
@@ -65,15 +65,17 @@ class ExtractAdvancedOptions(UncheckedBaseModel):
     excel_sheet_selection_strategy: typing_extensions.Annotated[
         typing.Optional[ExtractAdvancedOptionsExcelSheetSelectionStrategy],
         FieldMetadata(alias="excelSheetSelectionStrategy"),
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="excelSheetSelectionStrategy", default=None)
     """
     Strategy for selecting sheets from Excel documents.
     """
 
-    page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = None
+    page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = (
+        pydantic.Field(alias="pageRanges", default=None)
+    )
     review_agent: typing_extensions.Annotated[
         typing.Optional[ExtractAdvancedOptionsReviewAgent], FieldMetadata(alias="reviewAgent")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="reviewAgent", default=None)
     """
     Configuration for the review agent that analyzes extraction results.
     When enabled, each field in the output metadata will include a `reviewAgentScore` (1-5)

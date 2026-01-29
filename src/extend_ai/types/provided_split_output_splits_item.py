@@ -10,7 +10,9 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 
 
 class ProvidedSplitOutputSplitsItem(UncheckedBaseModel):
-    classification_id: typing_extensions.Annotated[str, FieldMetadata(alias="classificationId")] = pydantic.Field()
+    classification_id: typing_extensions.Annotated[str, FieldMetadata(alias="classificationId")] = pydantic.Field(
+        alias="classificationId"
+    )
     """
     ID of the classification type (defined in the splitter config)
     """
@@ -20,12 +22,12 @@ class ProvidedSplitOutputSplitsItem(UncheckedBaseModel):
     The type of the split document (defined in the splitter config), corresponds to the classificationId
     """
 
-    start_page: typing_extensions.Annotated[int, FieldMetadata(alias="startPage")] = pydantic.Field()
+    start_page: typing_extensions.Annotated[int, FieldMetadata(alias="startPage")] = pydantic.Field(alias="startPage")
     """
     The start page of the split document
     """
 
-    end_page: typing_extensions.Annotated[int, FieldMetadata(alias="endPage")] = pydantic.Field()
+    end_page: typing_extensions.Annotated[int, FieldMetadata(alias="endPage")] = pydantic.Field(alias="endPage")
     """
     The end page of the split document
     """

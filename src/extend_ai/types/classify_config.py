@@ -16,13 +16,13 @@ from .parse_config import ParseConfig
 class ClassifyConfig(UncheckedBaseModel):
     base_processor: typing_extensions.Annotated[
         typing.Optional[ClassifyConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="baseProcessor", default=None)
     """
     The base processor to use. For classifiers, this can be either `"classification_performance"` or `"classification_light"`. Defaults to `"classification_performance"` if not provided. See [Classification Changelog](https://docs.extend.ai/2026-01-01/changelog/classification/classification-performance) for more details.
     """
 
     base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="baseVersion", default=None)
     )
     """
     The version of the `"classification_performance"` or `"classification_light"` processor to use. If not provided, the latest stable version for the selected `baseProcessor` will be used automatically. See [Classification Changelog](https://docs.extend.ai/2026-01-01/changelog/classification/classification-performance) for more details.
@@ -31,20 +31,20 @@ class ClassifyConfig(UncheckedBaseModel):
     classifications: Classifications
     classification_rules: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="classificationRules")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="classificationRules", default=None)
     """
     Custom rules to guide the classification process in natural language.
     """
 
     advanced_options: typing_extensions.Annotated[
         typing.Optional[ClassifyAdvancedOptions], FieldMetadata(alias="advancedOptions")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="advancedOptions", default=None)
     """
     Advanced configuration options.
     """
 
     parse_config: typing_extensions.Annotated[typing.Optional[ParseConfig], FieldMetadata(alias="parseConfig")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="parseConfig", default=None)
     )
     """
     Configuration options for the parsing process.

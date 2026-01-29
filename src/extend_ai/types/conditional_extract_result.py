@@ -17,7 +17,7 @@ class ConditionalExtractResult(UncheckedBaseModel):
     The result of a conditional extract step, which routes to different extractors based on rules.
     """
 
-    rule_name: typing_extensions.Annotated[str, FieldMetadata(alias="ruleName")] = pydantic.Field()
+    rule_name: typing_extensions.Annotated[str, FieldMetadata(alias="ruleName")] = pydantic.Field(alias="ruleName")
     """
     The name of the rule that was matched and used to route to the extractor.
     
@@ -25,7 +25,7 @@ class ConditionalExtractResult(UncheckedBaseModel):
     """
 
     extract_run: typing_extensions.Annotated[typing.Optional[ExtractRun], FieldMetadata(alias="extractRun")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="extractRun", default=None)
     )
     """
     The extract run that was executed based on the matched rule. Will be null if the conditional extract step was not successful.

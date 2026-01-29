@@ -24,7 +24,9 @@ class EvaluationSetItem(UncheckedBaseModel):
     Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
     """
 
-    evaluation_set_id: typing_extensions.Annotated[str, FieldMetadata(alias="evaluationSetId")] = pydantic.Field()
+    evaluation_set_id: typing_extensions.Annotated[str, FieldMetadata(alias="evaluationSetId")] = pydantic.Field(
+        alias="evaluationSetId"
+    )
     """
     The ID of the evaluation set that this item belongs to.
     
@@ -37,7 +39,7 @@ class EvaluationSetItem(UncheckedBaseModel):
     """
 
     expected_output: typing_extensions.Annotated[ProvidedProcessorOutput, FieldMetadata(alias="expectedOutput")] = (
-        pydantic.Field()
+        pydantic.Field(alias="expectedOutput")
     )
     """
     The expected output that will be used to evaluate the performance of the extractor, classifier, or splitter associated with the evaluation set. This must conform to the output schema of the entity associated with the evaluation set.

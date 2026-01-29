@@ -15,7 +15,7 @@ class FilesListResponse(UncheckedBaseModel):
     files: typing.List[FileSummary]
     next_page_token: typing_extensions.Annotated[
         typing.Optional[NextPageToken], FieldMetadata(alias="nextPageToken")
-    ] = None
+    ] = pydantic.Field(alias="nextPageToken", default=None)
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

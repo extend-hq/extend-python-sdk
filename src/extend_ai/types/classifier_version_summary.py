@@ -37,14 +37,18 @@ class ClassifierVersionSummary(UncheckedBaseModel):
     Examples: `"1.0"`, `"2.1"`, `"draft"`
     """
 
-    classifier_id: typing_extensions.Annotated[str, FieldMetadata(alias="classifierId")] = pydantic.Field()
+    classifier_id: typing_extensions.Annotated[str, FieldMetadata(alias="classifierId")] = pydantic.Field(
+        alias="classifierId"
+    )
     """
     The ID of the classifier that this version belongs to.
     
     Example: `"classifier_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
-    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

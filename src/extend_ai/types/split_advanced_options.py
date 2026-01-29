@@ -14,29 +14,31 @@ from .split_advanced_options_split_method import SplitAdvancedOptionsSplitMethod
 class SplitAdvancedOptions(UncheckedBaseModel):
     split_identifier_rules: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="splitIdentifierRules")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="splitIdentifierRules", default=None)
     """
     Custom rules for identifying split points.
     """
 
     split_method: typing_extensions.Annotated[
         typing.Optional[SplitAdvancedOptionsSplitMethod], FieldMetadata(alias="splitMethod")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="splitMethod", default=None)
     """
     The method to use for splitting documents. `high_precision` is more accurate but slower, while `basic_precision` is faster but less precise.
     """
 
     split_excel_documents_by_sheet_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="splitExcelDocumentsBySheetEnabled")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="splitExcelDocumentsBySheetEnabled", default=None)
     """
     For Excel documents, split by worksheet.
     """
 
-    page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = None
+    page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = (
+        pydantic.Field(alias="pageRanges", default=None)
+    )
     page_overlap_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="pageOverlapEnabled")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="pageOverlapEnabled", default=None)
     """
     When enabled, the splitter will allow for page overlap when splitting a document such that a page can occur in multiple adjacent splits when context from the previous split is on the page and context from the next split is on the page.
     """

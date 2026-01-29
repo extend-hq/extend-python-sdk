@@ -11,7 +11,9 @@ from ...types.classify_run import ClassifyRun
 
 
 class ClassifyRunsRetrieveResponse(UncheckedBaseModel):
-    classify_run: typing_extensions.Annotated[ClassifyRun, FieldMetadata(alias="classifyRun")]
+    classify_run: typing_extensions.Annotated[ClassifyRun, FieldMetadata(alias="classifyRun")] = pydantic.Field(
+        alias="classifyRun"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

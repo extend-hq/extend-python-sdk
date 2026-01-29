@@ -16,12 +16,14 @@ class ParseRunMetrics(UncheckedBaseModel):
     **Availability:** Present when `status` is `"PROCESSED"`.
     """
 
-    processing_time_ms: typing_extensions.Annotated[float, FieldMetadata(alias="processingTimeMs")] = pydantic.Field()
+    processing_time_ms: typing_extensions.Annotated[float, FieldMetadata(alias="processingTimeMs")] = pydantic.Field(
+        alias="processingTimeMs"
+    )
     """
     The time taken to process the document in milliseconds.
     """
 
-    page_count: typing_extensions.Annotated[float, FieldMetadata(alias="pageCount")] = pydantic.Field()
+    page_count: typing_extensions.Annotated[float, FieldMetadata(alias="pageCount")] = pydantic.Field(alias="pageCount")
     """
     The number of pages from the document that were parsed. For PDF and image files, this is the actual page count. For spreadsheet files (Excel, CSV), this is an estimated page count based on content volume (~1000 tokens per page).
     """

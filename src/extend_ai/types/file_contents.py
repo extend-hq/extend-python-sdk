@@ -22,7 +22,7 @@ class FileContents(UncheckedBaseModel):
     """
 
     raw_text: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="rawText")] = pydantic.Field(
-        default=None
+        alias="rawText", default=None
     )
     """
     The raw text content of the file. Available for all file types when the `rawText` query parameter is set to true.

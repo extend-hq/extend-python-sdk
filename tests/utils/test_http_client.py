@@ -7,6 +7,7 @@ import pytest
 from extend_ai.core.http_client import (
     AsyncHttpClient,
     HttpClient,
+    _build_url,
     get_request_body,
     remove_none_from_dict,
 )
@@ -96,6 +97,25 @@ def test_get_empty_json_request_body() -> None:
     json_body, data_body = get_request_body(json=None, data=None, request_options=unrelated_request_options, omit=None)
     assert json_body is None
     assert data_body is None
+
+
+def test_explicit_empty_json_body_is_preserved() -> None:
+    """Test that explicit empty bodies (json={}) are preserved and sent as {}.
+
+    This is important for endpoints where the request body is required but all
+    fields are optional. The server expects valid JSON ({}) not an empty body.
+    """
+    unrelated_request_options: RequestOptions = {"max_retries": 3}
+
+    # Explicit json={} should be preserved
+    json_body, data_body = get_request_body(json={}, data=None, request_options=unrelated_request_options, omit=None)
+    assert json_body == {}
+    assert data_body is None
+
+    # Explicit data={} should also be preserved
+    json_body2, data_body2 = get_request_body(json=None, data={}, request_options=unrelated_request_options, omit=None)
+    assert json_body2 is None
+    assert data_body2 == {}
 
 
 def test_json_body_preserves_none_values() -> None:
@@ -252,3 +272,29 @@ async def test_async_http_client_passes_encoded_params_when_present() -> None:
     assert params == [("after", "456")]
 
 
+def test_basic_url_joining() -> None:
+    """Test basic URL joining with a simple base URL and path."""
+    result = _build_url("https://api.example.com", "/users")
+    assert result == "https://api.example.com/users"
+
+
+def test_basic_url_joining_trailing_slash() -> None:
+    """Test basic URL joining with a simple base URL and path."""
+    result = _build_url("https://api.example.com/", "/users")
+    assert result == "https://api.example.com/users"
+
+
+def test_preserves_base_url_path_prefix() -> None:
+    """Test that path prefixes in base URL are preserved.
+
+    This is the critical bug fix - urllib.parse.urljoin() would strip
+    the path prefix when the path starts with '/'.
+    """
+    result = _build_url("https://cloud.example.com/org/tenant/api", "/users")
+    assert result == "https://cloud.example.com/org/tenant/api/users"
+
+
+def test_preserves_base_url_path_prefix_trailing_slash() -> None:
+    """Test that path prefixes in base URL are preserved."""
+    result = _build_url("https://cloud.example.com/org/tenant/api/", "/users")
+    assert result == "https://cloud.example.com/org/tenant/api/users"

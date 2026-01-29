@@ -21,8 +21,12 @@ class EvaluationSetRunEntityVersion_ExtractorVersionSummary(UncheckedBaseModel):
     id: str
     description: typing.Optional[str] = None
     version: str
-    extractor_id: typing_extensions.Annotated[str, FieldMetadata(alias="extractorId")]
-    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
+    extractor_id: typing_extensions.Annotated[str, FieldMetadata(alias="extractorId")] = pydantic.Field(
+        alias="extractorId"
+    )
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -43,8 +47,12 @@ class EvaluationSetRunEntityVersion_ClassifierVersionSummary(UncheckedBaseModel)
     id: str
     description: typing.Optional[str] = None
     version: str
-    classifier_id: typing_extensions.Annotated[str, FieldMetadata(alias="classifierId")]
-    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
+    classifier_id: typing_extensions.Annotated[str, FieldMetadata(alias="classifierId")] = pydantic.Field(
+        alias="classifierId"
+    )
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -65,8 +73,12 @@ class EvaluationSetRunEntityVersion_SplitterVersionSummary(UncheckedBaseModel):
     id: str
     description: typing.Optional[str] = None
     version: str
-    splitter_id: typing_extensions.Annotated[str, FieldMetadata(alias="splitterId")]
-    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
+    splitter_id: typing_extensions.Annotated[str, FieldMetadata(alias="splitterId")] = pydantic.Field(
+        alias="splitterId"
+    )
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -16,7 +16,7 @@ class ExtractionFieldResultReference(UncheckedBaseModel):
     The unique identifier for this field
     """
 
-    field_name: typing_extensions.Annotated[str, FieldMetadata(alias="fieldName")] = pydantic.Field()
+    field_name: typing_extensions.Annotated[str, FieldMetadata(alias="fieldName")] = pydantic.Field(alias="fieldName")
     """
     The name of the extracted field
     """
@@ -28,7 +28,7 @@ class ExtractionFieldResultReference(UncheckedBaseModel):
 
     bounding_boxes: typing_extensions.Annotated[
         typing.List[ExtractionFieldResultReferenceBoundingBoxesItem], FieldMetadata(alias="boundingBoxes")
-    ] = pydantic.Field()
+    ] = pydantic.Field(alias="boundingBoxes")
     """
     The bounding boxes of the field
     """

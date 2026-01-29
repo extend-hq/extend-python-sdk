@@ -45,7 +45,7 @@ class ClassifyRun(UncheckedBaseModel):
 
     classifier_version: typing_extensions.Annotated[
         typing.Optional[ClassifierVersionSummary], FieldMetadata(alias="classifierVersion")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="classifierVersion", default=None)
     """
     The version of the classifier that was used for this run.
     
@@ -62,7 +62,7 @@ class ClassifyRun(UncheckedBaseModel):
 
     initial_output: typing_extensions.Annotated[
         typing.Optional[ClassifyOutput], FieldMetadata(alias="initialOutput")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="initialOutput", default=None)
     """
     The initial output from the classify run, before any review edits.
     
@@ -71,7 +71,7 @@ class ClassifyRun(UncheckedBaseModel):
 
     reviewed_output: typing_extensions.Annotated[
         typing.Optional[ClassifyOutput], FieldMetadata(alias="reviewedOutput")
-    ] = pydantic.Field(default=None)
+    ] = pydantic.Field(alias="reviewedOutput", default=None)
     """
     The output after human review.
     
@@ -79,7 +79,7 @@ class ClassifyRun(UncheckedBaseModel):
     """
 
     failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="failureReason", default=None)
     )
     """
     The reason for failure.
@@ -101,7 +101,7 @@ class ClassifyRun(UncheckedBaseModel):
     """
 
     failure_message: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureMessage")] = (
-        pydantic.Field(default=None)
+        pydantic.Field(alias="failureMessage", default=None)
     )
     """
     A detailed message about the failure.
@@ -137,7 +137,7 @@ class ClassifyRun(UncheckedBaseModel):
     """
 
     parse_run_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parseRunId")] = pydantic.Field(
-        default=None
+        alias="parseRunId", default=None
     )
     """
     The ID of the parse run that was used for this classify run.
@@ -145,7 +145,9 @@ class ClassifyRun(UncheckedBaseModel):
     **Availability:** Present when a parse run was created.
     """
 
-    dashboard_url: typing_extensions.Annotated[str, FieldMetadata(alias="dashboardUrl")] = pydantic.Field()
+    dashboard_url: typing_extensions.Annotated[str, FieldMetadata(alias="dashboardUrl")] = pydantic.Field(
+        alias="dashboardUrl"
+    )
     """
     The URL to view the classify run in the Extend dashboard.
     """
@@ -159,8 +161,12 @@ class ClassifyRun(UncheckedBaseModel):
     * Customers on legacy billing systems
     """
 
-    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
-    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")]
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
+    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
