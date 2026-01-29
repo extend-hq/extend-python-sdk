@@ -12,7 +12,7 @@ from ...core.unchecked_base_model import UncheckedBaseModel
 class ProcessorRunDeleteResponse(UncheckedBaseModel):
     success: bool
     document_processor_run_id: typing_extensions.Annotated[str, FieldMetadata(alias="documentProcessorRunId")] = (
-        pydantic.Field(alias="documentProcessorRunId")
+        pydantic.Field()
     )
     """
     The ID of the deleted processor run

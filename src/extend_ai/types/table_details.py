@@ -19,14 +19,12 @@ class TableDetails(UncheckedBaseModel):
     Indicates this is a table details object
     """
 
-    row_count: typing_extensions.Annotated[int, FieldMetadata(alias="rowCount")] = pydantic.Field(alias="rowCount")
+    row_count: typing_extensions.Annotated[int, FieldMetadata(alias="rowCount")] = pydantic.Field()
     """
     The number of rows in the table
     """
 
-    column_count: typing_extensions.Annotated[int, FieldMetadata(alias="columnCount")] = pydantic.Field(
-        alias="columnCount"
-    )
+    column_count: typing_extensions.Annotated[int, FieldMetadata(alias="columnCount")] = pydantic.Field()
     """
     The number of columns in the table
     """

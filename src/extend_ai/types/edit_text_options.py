@@ -15,14 +15,14 @@ class EditTextOptions(UncheckedBaseModel):
     """
 
     font_size: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="fontSize")] = pydantic.Field(
-        alias="fontSize", default=None
+        default=None
     )
     """
     Font size in points
     """
 
     font_color: typing_extensions.Annotated[typing.Optional[typing.List[float]], FieldMetadata(alias="fontColor")] = (
-        pydantic.Field(alias="fontColor", default=None)
+        pydantic.Field(default=None)
     )
     """
     RGB color values (0-255) for text color
@@ -39,7 +39,7 @@ class EditTextOptions(UncheckedBaseModel):
     """
 
     max_length: typing_extensions.Annotated[typing.Optional[int], FieldMetadata(alias="maxLength")] = pydantic.Field(
-        alias="maxLength", default=None
+        default=None
     )
     """
     Maximum number of characters allowed

@@ -21,7 +21,7 @@ class FigureDetails(UncheckedBaseModel):
     """
 
     image_url: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="imageUrl")] = pydantic.Field(
-        alias="imageUrl", default=None
+        default=None
     )
     """
     URL to the clipped/segmented figure image. Only set if the option `figureImageClippingEnabled` in the input is `true`, which it is by default.
@@ -29,7 +29,7 @@ class FigureDetails(UncheckedBaseModel):
 
     figure_type: typing_extensions.Annotated[
         typing.Optional[FigureDetailsFigureType], FieldMetadata(alias="figureType")
-    ] = pydantic.Field(alias="figureType", default=None)
+    ] = pydantic.Field(default=None)
     """
     The refined type of figure - only set when figure classification and summarization is enabled. Possible values:
     

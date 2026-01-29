@@ -15,16 +15,15 @@ from ..errors.internal_server_error import InternalServerError
 from ..errors.not_found_error import NotFoundError
 from ..errors.too_many_requests_error import TooManyRequestsError
 from ..errors.unauthorized_error import UnauthorizedError
-from ..types.error import Error
-from ..types.json_object import JsonObject
-from ..types.max_page_size import MaxPageSize
-from ..types.next_page_token import NextPageToken
-from ..types.processor_id import ProcessorId
-from ..types.processor_run_file_input import ProcessorRunFileInput
-from ..types.processor_status import ProcessorStatus
-from ..types.processor_type import ProcessorType
-from ..types.sort_by_enum import SortByEnum
-from ..types.sort_dir_enum import SortDirEnum
+from ..types.legacy_json_object import LegacyJsonObject
+from ..types.legacy_max_page_size import LegacyMaxPageSize
+from ..types.legacy_next_page_token import LegacyNextPageToken
+from ..types.legacy_processor_id import LegacyProcessorId
+from ..types.legacy_processor_run_file_input import LegacyProcessorRunFileInput
+from ..types.legacy_processor_status import LegacyProcessorStatus
+from ..types.legacy_processor_type import LegacyProcessorType
+from ..types.legacy_sort_by_enum import LegacySortByEnum
+from ..types.legacy_sort_dir_enum import LegacySortDirEnum
 from .types.processor_run_cancel_response import ProcessorRunCancelResponse
 from .types.processor_run_create_request_config import ProcessorRunCreateRequestConfig
 from .types.processor_run_create_response import ProcessorRunCreateResponse
@@ -44,16 +43,16 @@ class RawProcessorRunClient:
     def list(
         self,
         *,
-        status: typing.Optional[ProcessorStatus] = None,
+        status: typing.Optional[LegacyProcessorStatus] = None,
         processor_id: typing.Optional[str] = None,
-        processor_type: typing.Optional[ProcessorType] = None,
+        processor_type: typing.Optional[LegacyProcessorType] = None,
         source_id: typing.Optional[str] = None,
         source: typing.Optional[ProcessorRunListRequestSource] = None,
         file_name_contains: typing.Optional[str] = None,
-        sort_by: typing.Optional[SortByEnum] = None,
-        sort_dir: typing.Optional[SortDirEnum] = None,
-        next_page_token: typing.Optional[NextPageToken] = None,
-        max_page_size: typing.Optional[MaxPageSize] = None,
+        sort_by: typing.Optional[LegacySortByEnum] = None,
+        sort_dir: typing.Optional[LegacySortDirEnum] = None,
+        next_page_token: typing.Optional[LegacyNextPageToken] = None,
+        max_page_size: typing.Optional[LegacyMaxPageSize] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ProcessorRunListResponse]:
         """
@@ -61,7 +60,7 @@ class RawProcessorRunClient:
 
         Parameters
         ----------
-        status : typing.Optional[ProcessorStatus]
+        status : typing.Optional[LegacyProcessorStatus]
             Filters processor runs by their status. If not provided, no filter is applied.
 
              The status of a processor run:
@@ -76,7 +75,7 @@ class RawProcessorRunClient:
 
             Example: `"dp_BMdfq_yWM3sT-ZzvCnA3f"`
 
-        processor_type : typing.Optional[ProcessorType]
+        processor_type : typing.Optional[LegacyProcessorType]
             Filters processor runs by the processor type. If not provided, runs for all processor types are returned.
 
             Example: `"EXTRACT"`
@@ -103,15 +102,15 @@ class RawProcessorRunClient:
 
             Example: `"invoice"`
 
-        sort_by : typing.Optional[SortByEnum]
+        sort_by : typing.Optional[LegacySortByEnum]
             Sorts the processor runs by the given field.
 
-        sort_dir : typing.Optional[SortDirEnum]
+        sort_dir : typing.Optional[LegacySortDirEnum]
             Sorts the processor runs in ascending or descending order. Ascending order means the earliest processor run is returned first.
 
-        next_page_token : typing.Optional[NextPageToken]
+        next_page_token : typing.Optional[LegacyNextPageToken]
 
-        max_page_size : typing.Optional[MaxPageSize]
+        max_page_size : typing.Optional[LegacyMaxPageSize]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -165,9 +164,9 @@ class RawProcessorRunClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -180,13 +179,13 @@ class RawProcessorRunClient:
     def create(
         self,
         *,
-        processor_id: ProcessorId,
+        processor_id: LegacyProcessorId,
         version: typing.Optional[str] = OMIT,
-        file: typing.Optional[ProcessorRunFileInput] = OMIT,
+        file: typing.Optional[LegacyProcessorRunFileInput] = OMIT,
         raw_text: typing.Optional[str] = OMIT,
         sync: typing.Optional[bool] = OMIT,
         priority: typing.Optional[int] = OMIT,
-        metadata: typing.Optional[JsonObject] = OMIT,
+        metadata: typing.Optional[LegacyJsonObject] = OMIT,
         config: typing.Optional[ProcessorRunCreateRequestConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ProcessorRunCreateResponse]:
@@ -198,12 +197,12 @@ class RawProcessorRunClient:
         - **Synchronous**: Set `sync: true` to wait for completion and get final results in the response (5-minute timeout).
 
         **For asynchronous processing:**
-        - You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+        - You can [configure webhooks](https://docs.extend.ai/product/webhooks/configuration) to receive notifications when a processor run is complete or failed.
         - Or you can [poll the get endpoint](https://docs.extend.ai/2025-04-21/developers/api-reference/processor-endpoints/get-processor-run) for updates on the status of the processor run.
 
         Parameters
         ----------
-        processor_id : ProcessorId
+        processor_id : LegacyProcessorId
 
         version : typing.Optional[str]
             An optional version of the processor to use. When not supplied, the most recent published version of the processor will be used. Special values include:
@@ -211,7 +210,7 @@ class RawProcessorRunClient:
             - `"draft"` for the draft version.
             - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
 
-        file : typing.Optional[ProcessorRunFileInput]
+        file : typing.Optional[LegacyProcessorRunFileInput]
             The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/general/supported-file-types).
 
         raw_text : typing.Optional[str]
@@ -225,7 +224,7 @@ class RawProcessorRunClient:
         priority : typing.Optional[int]
             An optional value used to determine the relative order of ProcessorRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
 
-        metadata : typing.Optional[JsonObject]
+        metadata : typing.Optional[LegacyJsonObject]
             An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
 
             To categorize processor runs for billing and usage tracking, include `extend:usage_tags` with an array of string values (e.g., `{"extend:usage_tags": ["production", "team-eng", "customer-123"]}`). Tags must contain only alphanumeric characters, hyphens, and underscores; any special characters will be automatically removed.
@@ -248,7 +247,7 @@ class RawProcessorRunClient:
                 "processorId": processor_id,
                 "version": version,
                 "file": convert_and_respect_annotation_metadata(
-                    object_=file, annotation=ProcessorRunFileInput, direction="write"
+                    object_=file, annotation=LegacyProcessorRunFileInput, direction="write"
                 ),
                 "rawText": raw_text,
                 "sync": sync,
@@ -289,9 +288,9 @@ class RawProcessorRunClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -376,9 +375,9 @@ class RawProcessorRunClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -517,9 +516,9 @@ class RawProcessorRunClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -548,16 +547,16 @@ class AsyncRawProcessorRunClient:
     async def list(
         self,
         *,
-        status: typing.Optional[ProcessorStatus] = None,
+        status: typing.Optional[LegacyProcessorStatus] = None,
         processor_id: typing.Optional[str] = None,
-        processor_type: typing.Optional[ProcessorType] = None,
+        processor_type: typing.Optional[LegacyProcessorType] = None,
         source_id: typing.Optional[str] = None,
         source: typing.Optional[ProcessorRunListRequestSource] = None,
         file_name_contains: typing.Optional[str] = None,
-        sort_by: typing.Optional[SortByEnum] = None,
-        sort_dir: typing.Optional[SortDirEnum] = None,
-        next_page_token: typing.Optional[NextPageToken] = None,
-        max_page_size: typing.Optional[MaxPageSize] = None,
+        sort_by: typing.Optional[LegacySortByEnum] = None,
+        sort_dir: typing.Optional[LegacySortDirEnum] = None,
+        next_page_token: typing.Optional[LegacyNextPageToken] = None,
+        max_page_size: typing.Optional[LegacyMaxPageSize] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ProcessorRunListResponse]:
         """
@@ -565,7 +564,7 @@ class AsyncRawProcessorRunClient:
 
         Parameters
         ----------
-        status : typing.Optional[ProcessorStatus]
+        status : typing.Optional[LegacyProcessorStatus]
             Filters processor runs by their status. If not provided, no filter is applied.
 
              The status of a processor run:
@@ -580,7 +579,7 @@ class AsyncRawProcessorRunClient:
 
             Example: `"dp_BMdfq_yWM3sT-ZzvCnA3f"`
 
-        processor_type : typing.Optional[ProcessorType]
+        processor_type : typing.Optional[LegacyProcessorType]
             Filters processor runs by the processor type. If not provided, runs for all processor types are returned.
 
             Example: `"EXTRACT"`
@@ -607,15 +606,15 @@ class AsyncRawProcessorRunClient:
 
             Example: `"invoice"`
 
-        sort_by : typing.Optional[SortByEnum]
+        sort_by : typing.Optional[LegacySortByEnum]
             Sorts the processor runs by the given field.
 
-        sort_dir : typing.Optional[SortDirEnum]
+        sort_dir : typing.Optional[LegacySortDirEnum]
             Sorts the processor runs in ascending or descending order. Ascending order means the earliest processor run is returned first.
 
-        next_page_token : typing.Optional[NextPageToken]
+        next_page_token : typing.Optional[LegacyNextPageToken]
 
-        max_page_size : typing.Optional[MaxPageSize]
+        max_page_size : typing.Optional[LegacyMaxPageSize]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -669,9 +668,9 @@ class AsyncRawProcessorRunClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -684,13 +683,13 @@ class AsyncRawProcessorRunClient:
     async def create(
         self,
         *,
-        processor_id: ProcessorId,
+        processor_id: LegacyProcessorId,
         version: typing.Optional[str] = OMIT,
-        file: typing.Optional[ProcessorRunFileInput] = OMIT,
+        file: typing.Optional[LegacyProcessorRunFileInput] = OMIT,
         raw_text: typing.Optional[str] = OMIT,
         sync: typing.Optional[bool] = OMIT,
         priority: typing.Optional[int] = OMIT,
-        metadata: typing.Optional[JsonObject] = OMIT,
+        metadata: typing.Optional[LegacyJsonObject] = OMIT,
         config: typing.Optional[ProcessorRunCreateRequestConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ProcessorRunCreateResponse]:
@@ -702,12 +701,12 @@ class AsyncRawProcessorRunClient:
         - **Synchronous**: Set `sync: true` to wait for completion and get final results in the response (5-minute timeout).
 
         **For asynchronous processing:**
-        - You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+        - You can [configure webhooks](https://docs.extend.ai/product/webhooks/configuration) to receive notifications when a processor run is complete or failed.
         - Or you can [poll the get endpoint](https://docs.extend.ai/2025-04-21/developers/api-reference/processor-endpoints/get-processor-run) for updates on the status of the processor run.
 
         Parameters
         ----------
-        processor_id : ProcessorId
+        processor_id : LegacyProcessorId
 
         version : typing.Optional[str]
             An optional version of the processor to use. When not supplied, the most recent published version of the processor will be used. Special values include:
@@ -715,7 +714,7 @@ class AsyncRawProcessorRunClient:
             - `"draft"` for the draft version.
             - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
 
-        file : typing.Optional[ProcessorRunFileInput]
+        file : typing.Optional[LegacyProcessorRunFileInput]
             The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/general/supported-file-types).
 
         raw_text : typing.Optional[str]
@@ -729,7 +728,7 @@ class AsyncRawProcessorRunClient:
         priority : typing.Optional[int]
             An optional value used to determine the relative order of ProcessorRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
 
-        metadata : typing.Optional[JsonObject]
+        metadata : typing.Optional[LegacyJsonObject]
             An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
 
             To categorize processor runs for billing and usage tracking, include `extend:usage_tags` with an array of string values (e.g., `{"extend:usage_tags": ["production", "team-eng", "customer-123"]}`). Tags must contain only alphanumeric characters, hyphens, and underscores; any special characters will be automatically removed.
@@ -752,7 +751,7 @@ class AsyncRawProcessorRunClient:
                 "processorId": processor_id,
                 "version": version,
                 "file": convert_and_respect_annotation_metadata(
-                    object_=file, annotation=ProcessorRunFileInput, direction="write"
+                    object_=file, annotation=LegacyProcessorRunFileInput, direction="write"
                 ),
                 "rawText": raw_text,
                 "sync": sync,
@@ -793,9 +792,9 @@ class AsyncRawProcessorRunClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -880,9 +879,9 @@ class AsyncRawProcessorRunClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1021,9 +1020,9 @@ class AsyncRawProcessorRunClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

@@ -19,10 +19,8 @@ class TableCellDetails(UncheckedBaseModel):
     Indicates this is a table cell details object
     """
 
-    row_index: typing_extensions.Annotated[int, FieldMetadata(alias="rowIndex")] = pydantic.Field(alias="rowIndex")
-    column_index: typing_extensions.Annotated[int, FieldMetadata(alias="columnIndex")] = pydantic.Field(
-        alias="columnIndex"
-    )
+    row_index: typing_extensions.Annotated[int, FieldMetadata(alias="rowIndex")]
+    column_index: typing_extensions.Annotated[int, FieldMetadata(alias="columnIndex")]
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -3,5 +3,5 @@
 import typing
 
 ApiVersionEnum = typing.Union[
-    typing.Literal["2025-04-21", "2024-12-23", "2024-11-14", "2024-07-30", "2024-02-01"], typing.Any
+    typing.Literal["2026-01-01", "2025-04-21", "2024-12-23", "2024-11-14", "2024-07-30", "2024-02-01"], typing.Any
 ]

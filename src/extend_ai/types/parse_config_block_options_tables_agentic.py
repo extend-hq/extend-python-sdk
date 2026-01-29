@@ -21,7 +21,7 @@ class ParseConfigBlockOptionsTablesAgentic(UncheckedBaseModel):
 
     custom_instructions: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="customInstructions")
-    ] = pydantic.Field(alias="customInstructions", default=None)
+    ] = pydantic.Field(default=None)
     """
     Custom instructions to guide the agentic table processing.
     """

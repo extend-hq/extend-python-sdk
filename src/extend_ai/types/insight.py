@@ -5,21 +5,17 @@ import typing
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .insight_type import InsightType
 
 
 class Insight(UncheckedBaseModel):
-    type: InsightType = pydantic.Field()
+    type: typing.Literal["reasoning"] = pydantic.Field(default="reasoning")
     """
-    The type of insight:
-    - `reasoning`: Model reasoning about the extraction decision
-    - `issue`: A potential problem or concern identified by the agentic confidence system
-    - `review_summary`: A summary explanation from the agentic confidence system about why the field may need manual review
+    The type of insight. Will always be `"reasoning"` for now.
     """
 
     content: str = pydantic.Field()
     """
-    The content of the insight.
+    The content of the reasoning insight.
     """
 
     if IS_PYDANTIC_V2:
