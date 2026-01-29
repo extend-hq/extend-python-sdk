@@ -17,7 +17,7 @@ from .block_type import BlockType
 
 
 class Block(UncheckedBaseModel):
-    object: str = pydantic.Field()
+    object: typing.Literal["block"] = pydantic.Field(default="block")
     """
     The type of object. In this case, it will always be `"block"`.
     """

@@ -8,24 +8,50 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .file_contents_pages_item import FileContentsPagesItem
+from .file_contents_sections_item import FileContentsSectionsItem
 from .file_contents_sheets_item import FileContentsSheetsItem
 
 
 class FileContents(UncheckedBaseModel):
+    """
+    **Deprecated:** Use the `POST /parse_runs` endpoint instead to parse and retrieve file contents. The parse runs endpoint provides more control over parsing configuration and better performance.
+
+    The parsed content of the file. This field will only contain data after the file has been parsed via a parse run, extract run, classify run, split run, edit run, or workflow run.
+
+    **Availability:** Only present and populated on `GET /files/{id}` when the file has been previously parsed and the corresponding query parameters are set to true. Will be `null` on `POST /files/upload` and for files that haven't been parsed. The structure varies based on file type.
+    """
+
     raw_text: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="rawText")] = pydantic.Field(
         alias="rawText", default=None
     )
     """
-    The raw text content of the file. This is included for all file types if the `rawText` query parameter is set to true in the endpoint request.
+    The raw text content of the file. Available for all file types when the `rawText` query parameter is set to true.
+    
+    - **PDF/IMG**: Concatenated raw text from all pages
+    - **DOCX**: The document's raw text
+    - **CSV**: Concatenated chunks or CSV text
+    - **EXCEL**: Not included (use `sheets` instead)
+    - **TXT/XML/HTML**: The file's text content
     """
 
-    markdown: typing.Optional[str] = pydantic.Field(default=None)
+    pages: typing.Optional[typing.List[FileContentsPagesItem]] = pydantic.Field(default=None)
     """
-    Cleaned and structured markdown content of the entire file. Available for PDF and IMG file types. Only included if the `markdown` query parameter is set to true in the endpoint request.
+    Page-level content for document file types.
+    
+    - **PDF/IMG**: Contains `pageNumber`, `pageHeight`, `pageWidth`, and `markdown` (if `markdown` query param is true)
+    - **DOCX**: Contains `pageNumber` and `html` (if `html` query param is true)
+    - **Other file types**: Empty array
     """
 
-    pages: typing.Optional[typing.List[FileContentsPagesItem]] = None
-    sheets: typing.Optional[typing.List[FileContentsSheetsItem]] = None
+    sections: typing.Optional[typing.List[FileContentsSectionsItem]] = pydantic.Field(default=None)
+    """
+    Section-level content for documents that support section-based chunking. Available for PDF and IMG file types.
+    """
+
+    sheets: typing.Optional[typing.List[FileContentsSheetsItem]] = pydantic.Field(default=None)
+    """
+    Sheet-level content for spreadsheet file types. Available for EXCEL files.
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

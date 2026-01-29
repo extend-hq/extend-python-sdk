@@ -15,9 +15,8 @@ from ..errors.internal_server_error import InternalServerError
 from ..errors.not_found_error import NotFoundError
 from ..errors.too_many_requests_error import TooManyRequestsError
 from ..errors.unauthorized_error import UnauthorizedError
-from ..types.error import Error
-from ..types.list_processors_response import ListProcessorsResponse
-from ..types.processor_type import ProcessorType
+from ..types.legacy_list_processors_response import LegacyListProcessorsResponse
+from ..types.legacy_processor_type import LegacyProcessorType
 from .types.processor_create_request_config import ProcessorCreateRequestConfig
 from .types.processor_create_response import ProcessorCreateResponse
 from .types.processor_list_request_sort_by import ProcessorListRequestSortBy
@@ -36,19 +35,19 @@ class RawProcessorClient:
     def list(
         self,
         *,
-        type: typing.Optional[ProcessorType] = None,
+        type: typing.Optional[LegacyProcessorType] = None,
         next_page_token: typing.Optional[str] = None,
         max_page_size: typing.Optional[int] = None,
         sort_by: typing.Optional[ProcessorListRequestSortBy] = None,
         sort_dir: typing.Optional[ProcessorListRequestSortDir] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[ListProcessorsResponse]:
+    ) -> HttpResponse[LegacyListProcessorsResponse]:
         """
         List all processors in your organization
 
         Parameters
         ----------
-        type : typing.Optional[ProcessorType]
+        type : typing.Optional[LegacyProcessorType]
             Filter processors by type
 
         next_page_token : typing.Optional[str]
@@ -68,7 +67,7 @@ class RawProcessorClient:
 
         Returns
         -------
-        HttpResponse[ListProcessorsResponse]
+        HttpResponse[LegacyListProcessorsResponse]
             Successfully retrieved processors
         """
         _response = self._client_wrapper.httpx_client.request(
@@ -86,9 +85,9 @@ class RawProcessorClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    ListProcessorsResponse,
+                    LegacyListProcessorsResponse,
                     construct_type(
-                        type_=ListProcessorsResponse,  # type: ignore
+                        type_=LegacyListProcessorsResponse,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -108,9 +107,9 @@ class RawProcessorClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -146,7 +145,7 @@ class RawProcessorClient:
         self,
         *,
         name: str,
-        type: ProcessorType,
+        type: LegacyProcessorType,
         clone_processor_id: typing.Optional[str] = OMIT,
         config: typing.Optional[ProcessorCreateRequestConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -159,7 +158,7 @@ class RawProcessorClient:
         name : str
             The name of the new processor
 
-        type : ProcessorType
+        type : LegacyProcessorType
 
         clone_processor_id : typing.Optional[str]
             The ID of an existing processor to clone. One of `cloneProcessorId` or `config` must be provided.
@@ -219,9 +218,9 @@ class RawProcessorClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -317,9 +316,9 @@ class RawProcessorClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -348,19 +347,19 @@ class AsyncRawProcessorClient:
     async def list(
         self,
         *,
-        type: typing.Optional[ProcessorType] = None,
+        type: typing.Optional[LegacyProcessorType] = None,
         next_page_token: typing.Optional[str] = None,
         max_page_size: typing.Optional[int] = None,
         sort_by: typing.Optional[ProcessorListRequestSortBy] = None,
         sort_dir: typing.Optional[ProcessorListRequestSortDir] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[ListProcessorsResponse]:
+    ) -> AsyncHttpResponse[LegacyListProcessorsResponse]:
         """
         List all processors in your organization
 
         Parameters
         ----------
-        type : typing.Optional[ProcessorType]
+        type : typing.Optional[LegacyProcessorType]
             Filter processors by type
 
         next_page_token : typing.Optional[str]
@@ -380,7 +379,7 @@ class AsyncRawProcessorClient:
 
         Returns
         -------
-        AsyncHttpResponse[ListProcessorsResponse]
+        AsyncHttpResponse[LegacyListProcessorsResponse]
             Successfully retrieved processors
         """
         _response = await self._client_wrapper.httpx_client.request(
@@ -398,9 +397,9 @@ class AsyncRawProcessorClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    ListProcessorsResponse,
+                    LegacyListProcessorsResponse,
                     construct_type(
-                        type_=ListProcessorsResponse,  # type: ignore
+                        type_=LegacyListProcessorsResponse,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -420,9 +419,9 @@ class AsyncRawProcessorClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -458,7 +457,7 @@ class AsyncRawProcessorClient:
         self,
         *,
         name: str,
-        type: ProcessorType,
+        type: LegacyProcessorType,
         clone_processor_id: typing.Optional[str] = OMIT,
         config: typing.Optional[ProcessorCreateRequestConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -471,7 +470,7 @@ class AsyncRawProcessorClient:
         name : str
             The name of the new processor
 
-        type : ProcessorType
+        type : LegacyProcessorType
 
         clone_processor_id : typing.Optional[str]
             The ID of an existing processor to clone. One of `cloneProcessorId` or `config` must be provided.
@@ -531,9 +530,9 @@ class AsyncRawProcessorClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -629,9 +628,9 @@ class AsyncRawProcessorClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
