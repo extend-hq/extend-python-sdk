@@ -2,27 +2,27 @@
 Extended EditRuns client with polling utilities.
 
 Example:
-    from extend_ai import Extend
+    from extend_ai import Extend, FileFromId
 
     client = Extend(token="...")
 
     # Create and poll until completion
     result = client.edit_runs.create_and_poll(
-        file={"url": "https://example.com/form.pdf"},
-        config={"edits": [...]},
+        file=FileFromId(id="file_xxx"),
+        config=EditRunsCreateRequestConfig(schema_={...}),
     )
 
     if result.edit_run.status == "PROCESSED":
         print(result.edit_run.output)
 """
 
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...edit_runs.client import AsyncEditRunsClient, EditRunsClient
+from ...edit_runs.types.edit_runs_create_request_config import EditRunsCreateRequestConfig
+from ...edit_runs.types.edit_runs_create_request_file import EditRunsCreateRequestFile
 from ...edit_runs.types.edit_runs_retrieve_response import EditRunsRetrieveResponse
-from ...types.run_metadata import RunMetadata
-from ...types.run_priority import RunPriority
 from ..polling import PollingOptions, poll_until_done, poll_until_done_async
 
 # Re-export for convenience
@@ -56,10 +56,8 @@ class EditRunsWrapper(EditRunsClient):
     def create_and_poll(
         self,
         *,
-        file: dict,
-        config: dict,
-        priority: Optional[RunPriority] = None,
-        metadata: Optional[RunMetadata] = None,
+        file: EditRunsCreateRequestFile,
+        config: Optional[EditRunsCreateRequestConfig] = None,
         polling_options: Optional[PollingOptions] = None,
     ) -> EditRunsRetrieveResponse:
         """
@@ -73,8 +71,6 @@ class EditRunsWrapper(EditRunsClient):
         Args:
             file: The file to edit (must be a fillable PDF form).
             config: Edit configuration specifying the edits to make.
-            priority: Priority of the run.
-            metadata: Additional metadata for the run.
             polling_options: Options for polling behavior.
 
         Returns:
@@ -84,21 +80,24 @@ class EditRunsWrapper(EditRunsClient):
             PollingTimeoutError: If the run doesn't complete within max_wait_ms.
 
         Example:
+            from extend_ai import FileFromId
+            from extend_ai.edit_runs.types import EditRunsCreateRequestConfig
+
             result = client.edit_runs.create_and_poll(
-                file={"url": "https://example.com/form.pdf"},
-                config={"edits": [{"field_name": "Name", "value": "John Doe"}]}
+                file=FileFromId(id="file_xxx"),
+                config=EditRunsCreateRequestConfig(schema_={...})
             )
 
             if result.edit_run.status == "PROCESSED":
                 print(result.edit_run.output)
         """
+        # Build kwargs, only including non-None values to avoid passing null
+        kwargs: Dict[str, Any] = {"file": file}
+        if config is not None:
+            kwargs["config"] = config
+
         # Create the edit run
-        create_response = self.create(
-            file=file,
-            config=config,
-            priority=priority,
-            metadata=metadata,
-        )
+        create_response = self.create(**kwargs)
         run_id = create_response.edit_run.id
 
         # Poll until terminal state
@@ -120,22 +119,20 @@ class AsyncEditRunsWrapper(AsyncEditRunsClient):
     async def create_and_poll(
         self,
         *,
-        file: dict,
-        config: dict,
-        priority: Optional[RunPriority] = None,
-        metadata: Optional[RunMetadata] = None,
+        file: EditRunsCreateRequestFile,
+        config: Optional[EditRunsCreateRequestConfig] = None,
         polling_options: Optional[PollingOptions] = None,
     ) -> EditRunsRetrieveResponse:
         """
         Creates an edit run and polls until it reaches a terminal state (async version).
         """
+        # Build kwargs, only including non-None values to avoid passing null
+        kwargs: Dict[str, Any] = {"file": file}
+        if config is not None:
+            kwargs["config"] = config
+
         # Create the edit run
-        create_response = await self.create(
-            file=file,
-            config=config,
-            priority=priority,
-            metadata=metadata,
-        )
+        create_response = await self.create(**kwargs)
         run_id = create_response.edit_run.id
 
         # Poll until terminal state

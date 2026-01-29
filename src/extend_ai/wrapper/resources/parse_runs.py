@@ -2,27 +2,26 @@
 Extended ParseRuns client with polling utilities.
 
 Example:
-    from extend_ai import Extend
+    from extend_ai import Extend, FileFromId
 
     client = Extend(token="...")
 
     # Create and poll until completion
     result = client.parse_runs.create_and_poll(
-        file={"url": "https://example.com/document.pdf"},
+        file=FileFromId(id="file_xxx"),
     )
 
     if result.parse_run.status == "PROCESSED":
         print(result.parse_run.output)
 """
 
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...parse_runs.client import AsyncParseRunsClient, ParseRunsClient
+from ...parse_runs.types.parse_runs_create_request_file import ParseRunsCreateRequestFile
 from ...parse_runs.types.parse_runs_retrieve_response import ParseRunsRetrieveResponse
 from ...types.parse_config import ParseConfig
-from ...types.run_metadata import RunMetadata
-from ...types.run_priority import RunPriority
 from ..polling import PollingOptions, poll_until_done, poll_until_done_async
 
 # Re-export for convenience
@@ -56,10 +55,8 @@ class ParseRunsWrapper(ParseRunsClient):
     def create_and_poll(
         self,
         *,
-        file: dict,
+        file: ParseRunsCreateRequestFile,
         config: Optional[ParseConfig] = None,
-        priority: Optional[RunPriority] = None,
-        metadata: Optional[RunMetadata] = None,
         polling_options: Optional[PollingOptions] = None,
     ) -> ParseRunsRetrieveResponse:
         """
@@ -71,10 +68,8 @@ class ParseRunsWrapper(ParseRunsClient):
         Terminal states: PROCESSED, FAILED
 
         Args:
-            file: The file to parse.
+            file: The file to parse (FileFromId or FileFromUrl).
             config: Parse configuration options.
-            priority: Priority of the run.
-            metadata: Additional metadata for the run.
             polling_options: Options for polling behavior.
 
         Returns:
@@ -84,26 +79,22 @@ class ParseRunsWrapper(ParseRunsClient):
             PollingTimeoutError: If the run doesn't complete within max_wait_ms.
 
         Example:
+            from extend_ai import FileFromId
+
             result = client.parse_runs.create_and_poll(
-                file={"url": "https://example.com/doc.pdf"},
-                config={
-                    "block_options": {
-                        "text": {"enabled": True},
-                        "tables": {"enabled": True},
-                    },
-                },
+                file=FileFromId(id="file_xxx"),
             )
 
             if result.parse_run.status == "PROCESSED":
                 print(result.parse_run.output)
         """
+        # Build kwargs, only including non-None values to avoid passing null
+        kwargs: Dict[str, Any] = {"file": file}
+        if config is not None:
+            kwargs["config"] = config
+
         # Create the parse run
-        create_response = self.create(
-            file=file,
-            config=config,
-            priority=priority,
-            metadata=metadata,
-        )
+        create_response = self.create(**kwargs)
         run_id = create_response.parse_run.id
 
         # Poll until terminal state
@@ -126,22 +117,20 @@ class AsyncParseRunsWrapper(AsyncParseRunsClient):
     async def create_and_poll(
         self,
         *,
-        file: dict,
+        file: ParseRunsCreateRequestFile,
         config: Optional[ParseConfig] = None,
-        priority: Optional[RunPriority] = None,
-        metadata: Optional[RunMetadata] = None,
         polling_options: Optional[PollingOptions] = None,
     ) -> ParseRunsRetrieveResponse:
         """
         Creates a parse run and polls until it reaches a terminal state (async version).
         """
+        # Build kwargs, only including non-None values to avoid passing null
+        kwargs: Dict[str, Any] = {"file": file}
+        if config is not None:
+            kwargs["config"] = config
+
         # Create the parse run
-        create_response = await self.create(
-            file=file,
-            config=config,
-            priority=priority,
-            metadata=metadata,
-        )
+        create_response = await self.create(**kwargs)
         run_id = create_response.parse_run.id
 
         # Poll until terminal state
