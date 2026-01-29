@@ -6,3 +6,6 @@ README.md
 src/extend_ai/wrapper/
 src/extend_ai/__init__.py
 src/extend_ai/py.typed
+
+# Protect custom wrapper tests
+tests/wrapper/
