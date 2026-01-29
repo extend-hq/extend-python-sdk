@@ -3,11 +3,10 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
-from ..core.unchecked_base_model import UncheckedBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 
 
-class EditBoundingBox(UncheckedBaseModel):
+class EditBoundingBox(UniversalBaseModel):
     """
     Bounding box coordinates for the field location in the PDF (pixel coordinates)
     """

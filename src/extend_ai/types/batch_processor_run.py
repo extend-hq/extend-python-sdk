@@ -5,16 +5,15 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .batch_processor_run_metrics import BatchProcessorRunMetrics
 from .batch_processor_run_options import BatchProcessorRunOptions
 from .batch_processor_run_source import BatchProcessorRunSource
 from .batch_processor_run_status import BatchProcessorRunStatus
 
 
-class BatchProcessorRun(UncheckedBaseModel):
+class BatchProcessorRun(UniversalBaseModel):
     object: str = pydantic.Field()
     """
     The type of response. In this case, it will always be `"batch_processor_run"`.

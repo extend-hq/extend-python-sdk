@@ -4,14 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .page_ranges import PageRanges
 from .split_advanced_options_split_method import SplitAdvancedOptionsSplitMethod
 
 
-class SplitAdvancedOptions(UncheckedBaseModel):
+class SplitAdvancedOptions(UniversalBaseModel):
     split_identifier_rules: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="splitIdentifierRules")
     ] = pydantic.Field(alias="splitIdentifierRules", default=None)

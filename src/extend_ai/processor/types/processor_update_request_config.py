@@ -6,9 +6,8 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
 from ...core.serialization import FieldMetadata
-from ...core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
 from ...types.json_object import JsonObject
 from ...types.legacy_classification import LegacyClassification
 from ...types.legacy_classification_advanced_options import LegacyClassificationAdvancedOptions
@@ -20,7 +19,7 @@ from ...types.legacy_splitter_config_base_processor import LegacySplitterConfigB
 from ...types.parse_config import ParseConfig
 
 
-class ProcessorUpdateRequestConfig_Classify(UncheckedBaseModel):
+class ProcessorUpdateRequestConfig_Classify(UniversalBaseModel):
     """
     The new configuration for the processor. The type of configuration must match the processor type:
     * For classification processors, use `ClassificationConfig`
@@ -54,7 +53,7 @@ class ProcessorUpdateRequestConfig_Classify(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class ProcessorUpdateRequestConfig_Extract(UncheckedBaseModel):
+class ProcessorUpdateRequestConfig_Extract(UniversalBaseModel):
     """
     The new configuration for the processor. The type of configuration must match the processor type:
     * For classification processors, use `ClassificationConfig`
@@ -91,7 +90,7 @@ class ProcessorUpdateRequestConfig_Extract(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class ProcessorUpdateRequestConfig_Splitter(UncheckedBaseModel):
+class ProcessorUpdateRequestConfig_Splitter(UniversalBaseModel):
     """
     The new configuration for the processor. The type of configuration must match the processor type:
     * For classification processors, use `ClassificationConfig`
@@ -133,7 +132,7 @@ ProcessorUpdateRequestConfig = typing_extensions.Annotated[
         ProcessorUpdateRequestConfig_Extract,
         ProcessorUpdateRequestConfig_Splitter,
     ],
-    UnionMetadata(discriminant="type"),
+    pydantic.Field(discriminator="type"),
 ]
 from ...types.legacy_extraction_field import LegacyExtractionField  # noqa: E402, I001
 

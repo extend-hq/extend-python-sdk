@@ -4,12 +4,11 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 
 
-class LegacyBatchProcessorRunOptions(UncheckedBaseModel):
+class LegacyBatchProcessorRunOptions(UniversalBaseModel):
     """
     The options for the batch processor run.
     """

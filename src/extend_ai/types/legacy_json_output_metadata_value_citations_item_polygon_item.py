@@ -3,11 +3,10 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
-from ..core.unchecked_base_model import UncheckedBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 
 
-class LegacyJsonOutputMetadataValueCitationsItemPolygonItem(UncheckedBaseModel):
+class LegacyJsonOutputMetadataValueCitationsItemPolygonItem(UniversalBaseModel):
     x: float = pydantic.Field()
     """
     X coordinate of the point

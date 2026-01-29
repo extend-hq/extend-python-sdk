@@ -3,12 +3,11 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
-from ..core.unchecked_base_model import UncheckedBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from .provided_split_output_splits_item import ProvidedSplitOutputSplitsItem
 
 
-class ProvidedSplitOutput(UncheckedBaseModel):
+class ProvidedSplitOutput(UniversalBaseModel):
     splits: typing.List[ProvidedSplitOutputSplitsItem]
 
     if IS_PYDANTIC_V2:

@@ -6,9 +6,8 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
 from .classifier import Classifier
 from .classifier_version import ClassifierVersion
 from .classify_run import ClassifyRun
@@ -25,7 +24,7 @@ from .workflow import Workflow
 from .workflow_run import WorkflowRun
 
 
-class WebhookEvent_WorkflowRunCompleted(UncheckedBaseModel):
+class WebhookEvent_WorkflowRunCompleted(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -63,7 +62,7 @@ class WebhookEvent_WorkflowRunCompleted(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_WorkflowRunFailed(UncheckedBaseModel):
+class WebhookEvent_WorkflowRunFailed(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -101,7 +100,7 @@ class WebhookEvent_WorkflowRunFailed(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_WorkflowRunNeedsReview(UncheckedBaseModel):
+class WebhookEvent_WorkflowRunNeedsReview(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -139,7 +138,7 @@ class WebhookEvent_WorkflowRunNeedsReview(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_WorkflowRunRejected(UncheckedBaseModel):
+class WebhookEvent_WorkflowRunRejected(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -177,7 +176,7 @@ class WebhookEvent_WorkflowRunRejected(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_WorkflowRunCancelled(UncheckedBaseModel):
+class WebhookEvent_WorkflowRunCancelled(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -215,7 +214,7 @@ class WebhookEvent_WorkflowRunCancelled(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_WorkflowRunStepRunProcessed(UncheckedBaseModel):
+class WebhookEvent_WorkflowRunStepRunProcessed(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -253,7 +252,7 @@ class WebhookEvent_WorkflowRunStepRunProcessed(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_ExtractRunProcessed(UncheckedBaseModel):
+class WebhookEvent_ExtractRunProcessed(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -291,7 +290,7 @@ class WebhookEvent_ExtractRunProcessed(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_ExtractRunFailed(UncheckedBaseModel):
+class WebhookEvent_ExtractRunFailed(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -329,7 +328,7 @@ class WebhookEvent_ExtractRunFailed(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_ClassifyRunProcessed(UncheckedBaseModel):
+class WebhookEvent_ClassifyRunProcessed(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -367,7 +366,7 @@ class WebhookEvent_ClassifyRunProcessed(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_ClassifyRunFailed(UncheckedBaseModel):
+class WebhookEvent_ClassifyRunFailed(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -405,7 +404,7 @@ class WebhookEvent_ClassifyRunFailed(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_SplitRunProcessed(UncheckedBaseModel):
+class WebhookEvent_SplitRunProcessed(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -443,7 +442,7 @@ class WebhookEvent_SplitRunProcessed(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_SplitRunFailed(UncheckedBaseModel):
+class WebhookEvent_SplitRunFailed(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -481,7 +480,7 @@ class WebhookEvent_SplitRunFailed(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_ParseRunProcessed(UncheckedBaseModel):
+class WebhookEvent_ParseRunProcessed(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -519,7 +518,7 @@ class WebhookEvent_ParseRunProcessed(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_ParseRunFailed(UncheckedBaseModel):
+class WebhookEvent_ParseRunFailed(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -557,7 +556,7 @@ class WebhookEvent_ParseRunFailed(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_EditRunProcessed(UncheckedBaseModel):
+class WebhookEvent_EditRunProcessed(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -595,7 +594,7 @@ class WebhookEvent_EditRunProcessed(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_EditRunFailed(UncheckedBaseModel):
+class WebhookEvent_EditRunFailed(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -633,7 +632,7 @@ class WebhookEvent_EditRunFailed(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_WorkflowCreated(UncheckedBaseModel):
+class WebhookEvent_WorkflowCreated(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -671,7 +670,7 @@ class WebhookEvent_WorkflowCreated(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_WorkflowDeployed(UncheckedBaseModel):
+class WebhookEvent_WorkflowDeployed(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -709,7 +708,7 @@ class WebhookEvent_WorkflowDeployed(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_WorkflowDeleted(UncheckedBaseModel):
+class WebhookEvent_WorkflowDeleted(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -747,7 +746,7 @@ class WebhookEvent_WorkflowDeleted(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_ExtractorCreated(UncheckedBaseModel):
+class WebhookEvent_ExtractorCreated(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -785,7 +784,7 @@ class WebhookEvent_ExtractorCreated(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_ExtractorUpdated(UncheckedBaseModel):
+class WebhookEvent_ExtractorUpdated(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -823,7 +822,7 @@ class WebhookEvent_ExtractorUpdated(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_ExtractorDeleted(UncheckedBaseModel):
+class WebhookEvent_ExtractorDeleted(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -861,7 +860,7 @@ class WebhookEvent_ExtractorDeleted(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_ExtractorDraftUpdated(UncheckedBaseModel):
+class WebhookEvent_ExtractorDraftUpdated(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -899,7 +898,7 @@ class WebhookEvent_ExtractorDraftUpdated(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_ExtractorVersionPublished(UncheckedBaseModel):
+class WebhookEvent_ExtractorVersionPublished(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -937,7 +936,7 @@ class WebhookEvent_ExtractorVersionPublished(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_ClassifierCreated(UncheckedBaseModel):
+class WebhookEvent_ClassifierCreated(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -975,7 +974,7 @@ class WebhookEvent_ClassifierCreated(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_ClassifierUpdated(UncheckedBaseModel):
+class WebhookEvent_ClassifierUpdated(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -1013,7 +1012,7 @@ class WebhookEvent_ClassifierUpdated(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_ClassifierDeleted(UncheckedBaseModel):
+class WebhookEvent_ClassifierDeleted(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -1051,7 +1050,7 @@ class WebhookEvent_ClassifierDeleted(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_ClassifierDraftUpdated(UncheckedBaseModel):
+class WebhookEvent_ClassifierDraftUpdated(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -1089,7 +1088,7 @@ class WebhookEvent_ClassifierDraftUpdated(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_ClassifierVersionPublished(UncheckedBaseModel):
+class WebhookEvent_ClassifierVersionPublished(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -1127,7 +1126,7 @@ class WebhookEvent_ClassifierVersionPublished(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_SplitterCreated(UncheckedBaseModel):
+class WebhookEvent_SplitterCreated(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -1165,7 +1164,7 @@ class WebhookEvent_SplitterCreated(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_SplitterUpdated(UncheckedBaseModel):
+class WebhookEvent_SplitterUpdated(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -1203,7 +1202,7 @@ class WebhookEvent_SplitterUpdated(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_SplitterDeleted(UncheckedBaseModel):
+class WebhookEvent_SplitterDeleted(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -1241,7 +1240,7 @@ class WebhookEvent_SplitterDeleted(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_SplitterDraftUpdated(UncheckedBaseModel):
+class WebhookEvent_SplitterDraftUpdated(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -1279,7 +1278,7 @@ class WebhookEvent_SplitterDraftUpdated(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WebhookEvent_SplitterVersionPublished(UncheckedBaseModel):
+class WebhookEvent_SplitterVersionPublished(UniversalBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
     to determine the specific event type and narrow the `payload` type.
@@ -1354,7 +1353,7 @@ WebhookEvent = typing_extensions.Annotated[
         WebhookEvent_SplitterDraftUpdated,
         WebhookEvent_SplitterVersionPublished,
     ],
-    UnionMetadata(discriminant="event_type"),
+    pydantic.Field(discriminator="event_type"),
 ]
 update_forward_refs(WebhookEvent_WorkflowRunCompleted)
 update_forward_refs(WebhookEvent_WorkflowRunFailed)

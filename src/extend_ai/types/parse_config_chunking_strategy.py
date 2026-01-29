@@ -3,13 +3,12 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
-from ..core.unchecked_base_model import UncheckedBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from .parse_config_chunking_strategy_options import ParseConfigChunkingStrategyOptions
 from .parse_config_chunking_strategy_type import ParseConfigChunkingStrategyType
 
 
-class ParseConfigChunkingStrategy(UncheckedBaseModel):
+class ParseConfigChunkingStrategy(UniversalBaseModel):
     """
     Strategy for dividing the document into chunks.
     """

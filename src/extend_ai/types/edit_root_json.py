@@ -6,12 +6,11 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 
 
-class EditRootJson(UncheckedBaseModel):
+class EditRootJson(UniversalBaseModel):
     """
     JSON Schema definition for editing PDF documents. The schema defines the structure and placement of fields to edit.
     """

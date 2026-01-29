@@ -4,13 +4,12 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .parse_run_status_status import ParseRunStatusStatus
 
 
-class ParseRunStatus(UncheckedBaseModel):
+class ParseRunStatus(UniversalBaseModel):
     """
     Minimal parse run status object sent in webhook notifications.
     Contains only the essential status information, without the full output data.

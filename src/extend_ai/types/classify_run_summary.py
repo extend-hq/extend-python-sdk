@@ -4,9 +4,8 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .classifier_summary import ClassifierSummary
 from .classifier_version_summary import ClassifierVersionSummary
 from .created_at import CreatedAt
@@ -17,7 +16,7 @@ from .run_usage import RunUsage
 from .updated_at import UpdatedAt
 
 
-class ClassifyRunSummary(UncheckedBaseModel):
+class ClassifyRunSummary(UniversalBaseModel):
     """
     Summary representation of a classify run.
     """

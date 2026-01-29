@@ -3,12 +3,11 @@
 import typing
 
 import pydantic
-from ...core.pydantic_utilities import IS_PYDANTIC_V2
-from ...core.unchecked_base_model import UncheckedBaseModel
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ...types.file import File
 
 
-class FilesRetrieveResponse(UncheckedBaseModel):
+class FilesRetrieveResponse(UniversalBaseModel):
     file: File
 
     if IS_PYDANTIC_V2:

@@ -4,13 +4,12 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .parent_split import ParentSplit
 
 
-class FileMetadata(UncheckedBaseModel):
+class FileMetadata(UniversalBaseModel):
     page_count: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageCount")] = pydantic.Field(
         alias="pageCount", default=None
     )

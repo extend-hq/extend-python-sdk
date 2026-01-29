@@ -4,14 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .citation import Citation
 from .insight import Insight
 
 
-class ExtractOutputMetadataValue(UncheckedBaseModel):
+class ExtractOutputMetadataValue(UniversalBaseModel):
     ocr_confidence: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="ocrConfidence")] = (
         pydantic.Field(alias="ocrConfidence", default=None)
     )

@@ -3,11 +3,10 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
-from ..core.unchecked_base_model import UncheckedBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 
 
-class ChunkMetadataPageRange(UncheckedBaseModel):
+class ChunkMetadataPageRange(UniversalBaseModel):
     """
     The page range this chunk covers. Often will just be a partial page, in which cases `start` and `end` will be the same.
     """

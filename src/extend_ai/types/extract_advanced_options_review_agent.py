@@ -3,11 +3,10 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
-from ..core.unchecked_base_model import UncheckedBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 
 
-class ExtractAdvancedOptionsReviewAgent(UncheckedBaseModel):
+class ExtractAdvancedOptionsReviewAgent(UniversalBaseModel):
     """
     Configuration for the review agent that analyzes extraction results.
     When enabled, each field in the output metadata will include a `reviewAgentScore` (1-5)

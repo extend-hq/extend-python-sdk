@@ -7,9 +7,8 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
 from ...core.serialization import FieldMetadata
-from ...core.unchecked_base_model import UncheckedBaseModel
 from ...types.file_summary import FileSummary
 from ...types.run_metadata import RunMetadata
 from ...types.run_usage import RunUsage
@@ -18,7 +17,7 @@ from ...types.workflow_summary import WorkflowSummary
 from ...types.workflow_version_summary import WorkflowVersionSummary
 
 
-class WorkflowRunsCancelResponseWorkflowRun(UncheckedBaseModel):
+class WorkflowRunsCancelResponseWorkflowRun(UniversalBaseModel):
     status: typing.Optional[str] = None
     object: typing.Literal["workflow_run"] = pydantic.Field(default="workflow_run")
     """

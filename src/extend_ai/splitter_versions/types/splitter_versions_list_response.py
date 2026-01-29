@@ -4,14 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ...core.serialization import FieldMetadata
-from ...core.unchecked_base_model import UncheckedBaseModel
 from ...types.next_page_token import NextPageToken
 from ...types.splitter_version_summary import SplitterVersionSummary
 
 
-class SplitterVersionsListResponse(UncheckedBaseModel):
+class SplitterVersionsListResponse(UniversalBaseModel):
     splitter_versions: typing_extensions.Annotated[
         typing.List[SplitterVersionSummary], FieldMetadata(alias="splitterVersions")
     ] = pydantic.Field(alias="splitterVersions")

@@ -7,14 +7,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .legacy_processor_type import LegacyProcessorType
 from .legacy_processor_version_config import LegacyProcessorVersionConfig
 
 
-class LegacyProcessorVersion(UncheckedBaseModel):
+class LegacyProcessorVersion(UniversalBaseModel):
     object: str = pydantic.Field()
     """
     The type of the object. In this case, it will always be `"document_processor_version"`.

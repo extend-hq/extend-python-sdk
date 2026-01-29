@@ -3,14 +3,13 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
-from ..core.unchecked_base_model import UncheckedBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from .parse_config_block_options_figures import ParseConfigBlockOptionsFigures
 from .parse_config_block_options_tables import ParseConfigBlockOptionsTables
 from .parse_config_block_options_text import ParseConfigBlockOptionsText
 
 
-class ParseConfigBlockOptions(UncheckedBaseModel):
+class ParseConfigBlockOptions(UniversalBaseModel):
     """
     Options for controlling how different block types are processed.
     """

@@ -3,11 +3,10 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
-from ..core.unchecked_base_model import UncheckedBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 
 
-class CitationPage(UncheckedBaseModel):
+class CitationPage(UniversalBaseModel):
     number: float = pydantic.Field()
     """
     Page number where the citation was found. Starts at 1.

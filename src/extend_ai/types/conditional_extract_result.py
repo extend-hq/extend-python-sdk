@@ -6,13 +6,12 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .extract_run import ExtractRun
 
 
-class ConditionalExtractResult(UncheckedBaseModel):
+class ConditionalExtractResult(UniversalBaseModel):
     """
     The result of a conditional extract step, which routes to different extractors based on rules.
     """

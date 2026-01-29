@@ -4,12 +4,11 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ...core.serialization import FieldMetadata
-from ...core.unchecked_base_model import UncheckedBaseModel
 
 
-class WorkflowRunsCreateBatchResponse(UncheckedBaseModel):
+class WorkflowRunsCreateBatchResponse(UniversalBaseModel):
     batch_id: typing_extensions.Annotated[str, FieldMetadata(alias="batchId")] = pydantic.Field(alias="batchId")
     """
     A unique identifier for the submitted batch. This ID can be used to correlate the workflow runs created by this request. You can find this `batchId` associated with individual runs when listing workflow runs or in webhook payloads.

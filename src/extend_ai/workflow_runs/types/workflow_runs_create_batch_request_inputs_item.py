@@ -3,14 +3,13 @@
 import typing
 
 import pydantic
-from ...core.pydantic_utilities import IS_PYDANTIC_V2
-from ...core.unchecked_base_model import UncheckedBaseModel
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ...types.run_metadata import RunMetadata
 from ...types.run_secrets import RunSecrets
 from .workflow_runs_create_batch_request_inputs_item_file import WorkflowRunsCreateBatchRequestInputsItemFile
 
 
-class WorkflowRunsCreateBatchRequestInputsItem(UncheckedBaseModel):
+class WorkflowRunsCreateBatchRequestInputsItem(UniversalBaseModel):
     file: WorkflowRunsCreateBatchRequestInputsItemFile = pydantic.Field()
     """
     The file to be processed. Files can be provided as a URL, an Extend file ID, or raw text.

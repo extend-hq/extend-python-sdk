@@ -5,14 +5,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .legacy_list_processors_processor_version import LegacyListProcessorsProcessorVersion
 from .legacy_processor_type import LegacyProcessorType
 
 
-class LegacyListProcessorsProcessor(UncheckedBaseModel):
+class LegacyListProcessorsProcessor(UniversalBaseModel):
     object: typing.Literal["document_processor"] = pydantic.Field(default="document_processor")
     """
     The type of response. In this case, it will always be `"document_processor"`.

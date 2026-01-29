@@ -4,14 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .classify_config import ClassifyConfig
 from .created_at import CreatedAt
 
 
-class ClassifierVersion(UncheckedBaseModel):
+class ClassifierVersion(UniversalBaseModel):
     object: typing.Literal["classifier_version"] = pydantic.Field(default="classifier_version")
     """
     The type of object. Will always be `"classifier_version"`.

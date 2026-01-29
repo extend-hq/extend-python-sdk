@@ -3,11 +3,10 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
-from ..core.unchecked_base_model import UncheckedBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 
 
-class FileFromUrl(UncheckedBaseModel):
+class FileFromUrl(UniversalBaseModel):
     url: str = pydantic.Field()
     """
     A URL to download the file. For production use cases, we recommend using presigned URLs with a 5-15 minute expiration time.

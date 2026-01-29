@@ -4,14 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .citation_page import CitationPage
 from .polygon import Polygon
 
 
-class Citation(UncheckedBaseModel):
+class Citation(UniversalBaseModel):
     page: typing.Optional[CitationPage] = None
     reference_text: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="referenceText")] = (
         pydantic.Field(alias="referenceText", default=None)

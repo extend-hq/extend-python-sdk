@@ -7,9 +7,9 @@ from ..core.api_error import ApiError
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.jsonable_encoder import jsonable_encoder
+from ..core.pydantic_utilities import parse_obj_as
 from ..core.request_options import RequestOptions
 from ..core.serialization import convert_and_respect_annotation_metadata
-from ..core.unchecked_base_model import construct_type
 from ..errors.bad_request_error import BadRequestError
 from ..errors.forbidden_error import ForbiddenError
 from ..errors.internal_server_error import InternalServerError
@@ -91,7 +91,7 @@ class RawEvaluationSetItemsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     EvaluationSetItemsListResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=EvaluationSetItemsListResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -102,7 +102,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -113,7 +113,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -124,7 +124,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -135,7 +135,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -146,7 +146,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -157,7 +157,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -168,7 +168,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -179,7 +179,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -242,7 +242,7 @@ class RawEvaluationSetItemsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     EvaluationSetItemsCreateResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=EvaluationSetItemsCreateResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -253,7 +253,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -264,7 +264,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -275,7 +275,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -286,7 +286,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -297,7 +297,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -308,7 +308,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -319,7 +319,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -330,7 +330,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -376,7 +376,7 @@ class RawEvaluationSetItemsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     EvaluationSetItemsRetrieveResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=EvaluationSetItemsRetrieveResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -387,7 +387,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -398,7 +398,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -409,7 +409,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -420,7 +420,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -431,7 +431,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -442,7 +442,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -453,7 +453,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -464,7 +464,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -527,7 +527,7 @@ class RawEvaluationSetItemsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     EvaluationSetItemsUpdateResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=EvaluationSetItemsUpdateResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -538,7 +538,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -549,7 +549,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -560,7 +560,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -571,7 +571,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -582,7 +582,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -593,7 +593,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -604,7 +604,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -615,7 +615,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -661,7 +661,7 @@ class RawEvaluationSetItemsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     EvaluationSetItemsDeleteResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=EvaluationSetItemsDeleteResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -672,7 +672,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -683,7 +683,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -694,7 +694,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -705,7 +705,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -716,7 +716,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -727,7 +727,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -738,7 +738,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -749,7 +749,7 @@ class RawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -818,7 +818,7 @@ class AsyncRawEvaluationSetItemsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     EvaluationSetItemsListResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=EvaluationSetItemsListResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -829,7 +829,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -840,7 +840,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -851,7 +851,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -862,7 +862,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -873,7 +873,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -884,7 +884,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -895,7 +895,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -906,7 +906,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -969,7 +969,7 @@ class AsyncRawEvaluationSetItemsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     EvaluationSetItemsCreateResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=EvaluationSetItemsCreateResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -980,7 +980,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -991,7 +991,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1002,7 +1002,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1013,7 +1013,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1024,7 +1024,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1035,7 +1035,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1046,7 +1046,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1057,7 +1057,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1103,7 +1103,7 @@ class AsyncRawEvaluationSetItemsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     EvaluationSetItemsRetrieveResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=EvaluationSetItemsRetrieveResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -1114,7 +1114,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1125,7 +1125,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1136,7 +1136,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1147,7 +1147,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1158,7 +1158,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1169,7 +1169,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1180,7 +1180,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1191,7 +1191,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1254,7 +1254,7 @@ class AsyncRawEvaluationSetItemsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     EvaluationSetItemsUpdateResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=EvaluationSetItemsUpdateResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -1265,7 +1265,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1276,7 +1276,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1287,7 +1287,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1298,7 +1298,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1309,7 +1309,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1320,7 +1320,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1331,7 +1331,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1342,7 +1342,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1388,7 +1388,7 @@ class AsyncRawEvaluationSetItemsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     EvaluationSetItemsDeleteResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=EvaluationSetItemsDeleteResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -1399,7 +1399,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1410,7 +1410,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1421,7 +1421,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1432,7 +1432,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1443,7 +1443,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1454,7 +1454,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1465,7 +1465,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1476,7 +1476,7 @@ class AsyncRawEvaluationSetItemsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),

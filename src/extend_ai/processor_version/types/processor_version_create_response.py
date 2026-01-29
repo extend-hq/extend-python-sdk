@@ -6,13 +6,12 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
 from ...core.serialization import FieldMetadata
-from ...core.unchecked_base_model import UncheckedBaseModel
 from ...types.legacy_processor_version import LegacyProcessorVersion
 
 
-class ProcessorVersionCreateResponse(UncheckedBaseModel):
+class ProcessorVersionCreateResponse(UniversalBaseModel):
     success: bool
     processor_version: typing_extensions.Annotated[LegacyProcessorVersion, FieldMetadata(alias="processorVersion")] = (
         pydantic.Field(alias="processorVersion")

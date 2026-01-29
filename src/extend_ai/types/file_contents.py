@@ -4,15 +4,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .file_contents_pages_item import FileContentsPagesItem
 from .file_contents_sections_item import FileContentsSectionsItem
 from .file_contents_sheets_item import FileContentsSheetsItem
 
 
-class FileContents(UncheckedBaseModel):
+class FileContents(UniversalBaseModel):
     """
     **Deprecated:** Use the `POST /parse_runs` endpoint instead to parse and retrieve file contents. The parse runs endpoint provides more control over parsing configuration and better performance.
 

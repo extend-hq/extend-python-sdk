@@ -6,14 +6,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .extract_run import ExtractRun
 from .merge_extract_result_merged_extractors_item import MergeExtractResultMergedExtractorsItem
 
 
-class MergeExtractResult(UncheckedBaseModel):
+class MergeExtractResult(UniversalBaseModel):
     """
     The result of a merge extract step, which combines outputs from multiple extraction runs into a single output.
     """

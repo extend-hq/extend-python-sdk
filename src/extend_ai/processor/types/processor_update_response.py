@@ -5,12 +5,11 @@ from __future__ import annotations
 import typing
 
 import pydantic
-from ...core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
-from ...core.unchecked_base_model import UncheckedBaseModel
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
 from ...types.legacy_processor import LegacyProcessor
 
 
-class ProcessorUpdateResponse(UncheckedBaseModel):
+class ProcessorUpdateResponse(UniversalBaseModel):
     success: bool
     processor: LegacyProcessor
 

@@ -4,14 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .file_summary import FileSummary
 from .step_run_base_status import StepRunBaseStatus
 
 
-class StepRunBase(UncheckedBaseModel):
+class StepRunBase(UniversalBaseModel):
     """
     Base properties shared by all step run types.
     """

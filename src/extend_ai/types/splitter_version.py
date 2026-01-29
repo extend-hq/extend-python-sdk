@@ -4,14 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .created_at import CreatedAt
 from .split_config import SplitConfig
 
 
-class SplitterVersion(UncheckedBaseModel):
+class SplitterVersion(UniversalBaseModel):
     object: typing.Literal["splitter_version"] = pydantic.Field(default="splitter_version")
     """
     The type of object. Will always be `"splitter_version"`.

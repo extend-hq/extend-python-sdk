@@ -3,11 +3,10 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
-from ..core.unchecked_base_model import UncheckedBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 
 
-class Insight(UncheckedBaseModel):
+class Insight(UniversalBaseModel):
     type: typing.Literal["reasoning"] = pydantic.Field(default="reasoning")
     """
     The type of insight. Will always be `"reasoning"` for now.

@@ -6,9 +6,8 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .created_at import CreatedAt
 from .extract_config import ExtractConfig
 from .extract_output import ExtractOutput
@@ -22,7 +21,7 @@ from .run_usage import RunUsage
 from .updated_at import UpdatedAt
 
 
-class ExtractRun(UncheckedBaseModel):
+class ExtractRun(UniversalBaseModel):
     """
     Extract run object.
     """

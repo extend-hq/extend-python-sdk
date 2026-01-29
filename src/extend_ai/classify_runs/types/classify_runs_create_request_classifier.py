@@ -4,14 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ...core.serialization import FieldMetadata
-from ...core.unchecked_base_model import UncheckedBaseModel
 from ...types.classify_config import ClassifyConfig
 from ...types.processor_version_string import ProcessorVersionString
 
 
-class ClassifyRunsCreateRequestClassifier(UncheckedBaseModel):
+class ClassifyRunsCreateRequestClassifier(UniversalBaseModel):
     """
     Reference to an existing classifier. One of `classifier` or `config` must be provided.
     """

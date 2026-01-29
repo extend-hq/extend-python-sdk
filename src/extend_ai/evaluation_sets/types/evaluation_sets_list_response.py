@@ -4,14 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ...core.serialization import FieldMetadata
-from ...core.unchecked_base_model import UncheckedBaseModel
 from ...types.evaluation_set import EvaluationSet
 from ...types.next_page_token import NextPageToken
 
 
-class EvaluationSetsListResponse(UncheckedBaseModel):
+class EvaluationSetsListResponse(UniversalBaseModel):
     evaluation_sets: typing_extensions.Annotated[typing.List[EvaluationSet], FieldMetadata(alias="evaluationSets")] = (
         pydantic.Field(alias="evaluationSets")
     )

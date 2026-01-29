@@ -4,14 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .page_ranges import PageRanges
 from .parse_config_advanced_options_return_ocr import ParseConfigAdvancedOptionsReturnOcr
 
 
-class ParseConfigAdvancedOptions(UncheckedBaseModel):
+class ParseConfigAdvancedOptions(UniversalBaseModel):
     page_rotation_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="pageRotationEnabled")
     ] = pydantic.Field(alias="pageRotationEnabled", default=None)

@@ -4,13 +4,12 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .legacy_list_processors_processor import LegacyListProcessorsProcessor
 
 
-class LegacyListProcessorsResponse(UncheckedBaseModel):
+class LegacyListProcessorsResponse(UniversalBaseModel):
     success: bool = pydantic.Field()
     """
     Indicates the request was successful

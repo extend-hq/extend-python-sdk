@@ -6,9 +6,8 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
 from .classifier_summary import ClassifierSummary
 from .classifier_version_summary import ClassifierVersionSummary
 from .classify_config import ClassifyConfig
@@ -30,7 +29,7 @@ from .splitter_version_summary import SplitterVersionSummary
 from .updated_at import UpdatedAt
 
 
-class WorkflowRunOutput_ExtractRun(UncheckedBaseModel):
+class WorkflowRunOutput_ExtractRun(UniversalBaseModel):
     """
     Output from a document processor (extractor, classifier, or splitter) in a workflow run.
     """
@@ -85,7 +84,7 @@ class WorkflowRunOutput_ExtractRun(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WorkflowRunOutput_ClassifyRun(UncheckedBaseModel):
+class WorkflowRunOutput_ClassifyRun(UniversalBaseModel):
     """
     Output from a document processor (extractor, classifier, or splitter) in a workflow run.
     """
@@ -139,7 +138,7 @@ class WorkflowRunOutput_ClassifyRun(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class WorkflowRunOutput_SplitRun(UncheckedBaseModel):
+class WorkflowRunOutput_SplitRun(UniversalBaseModel):
     """
     Output from a document processor (extractor, classifier, or splitter) in a workflow run.
     """
@@ -195,6 +194,6 @@ class WorkflowRunOutput_SplitRun(UncheckedBaseModel):
 
 WorkflowRunOutput = typing_extensions.Annotated[
     typing.Union[WorkflowRunOutput_ExtractRun, WorkflowRunOutput_ClassifyRun, WorkflowRunOutput_SplitRun],
-    UnionMetadata(discriminant="object"),
+    pydantic.Field(discriminator="object"),
 ]
 update_forward_refs(WorkflowRunOutput_ExtractRun)

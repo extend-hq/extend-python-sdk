@@ -7,9 +7,9 @@ from ..core.api_error import ApiError
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.jsonable_encoder import jsonable_encoder
+from ..core.pydantic_utilities import parse_obj_as
 from ..core.request_options import RequestOptions
 from ..core.serialization import convert_and_respect_annotation_metadata
-from ..core.unchecked_base_model import construct_type
 from ..errors.bad_request_error import BadRequestError
 from ..errors.forbidden_error import ForbiddenError
 from ..errors.internal_server_error import InternalServerError
@@ -118,7 +118,7 @@ class RawWorkflowRunsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     WorkflowRunsListResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=WorkflowRunsListResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -129,7 +129,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -140,7 +140,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -151,7 +151,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -162,7 +162,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -173,7 +173,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -184,7 +184,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -195,7 +195,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -206,7 +206,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -282,7 +282,7 @@ class RawWorkflowRunsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     WorkflowRunsCreateResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=WorkflowRunsCreateResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -293,7 +293,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -304,7 +304,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -315,7 +315,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -326,7 +326,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -337,7 +337,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -348,7 +348,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -359,7 +359,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -370,7 +370,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -411,7 +411,7 @@ class RawWorkflowRunsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     WorkflowRunsRetrieveResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=WorkflowRunsRetrieveResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -422,7 +422,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -433,7 +433,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -444,7 +444,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -455,7 +455,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -466,7 +466,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -477,7 +477,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -488,7 +488,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -499,7 +499,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -563,7 +563,7 @@ class RawWorkflowRunsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     WorkflowRunsUpdateResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=WorkflowRunsUpdateResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -574,7 +574,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -585,7 +585,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -596,7 +596,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -607,7 +607,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -618,7 +618,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -629,7 +629,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -640,7 +640,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -651,7 +651,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -694,7 +694,7 @@ class RawWorkflowRunsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     WorkflowRunsDeleteResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=WorkflowRunsDeleteResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -705,7 +705,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -716,7 +716,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -727,7 +727,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -738,7 +738,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -749,7 +749,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -760,7 +760,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -771,7 +771,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -782,7 +782,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -825,7 +825,7 @@ class RawWorkflowRunsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     WorkflowRunsCancelResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=WorkflowRunsCancelResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -836,7 +836,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -847,7 +847,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -858,7 +858,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -869,7 +869,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -880,7 +880,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -891,7 +891,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -902,7 +902,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -913,7 +913,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -984,7 +984,7 @@ class RawWorkflowRunsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     WorkflowRunsCreateBatchResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=WorkflowRunsCreateBatchResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -995,7 +995,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1006,7 +1006,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1017,7 +1017,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1028,7 +1028,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1039,7 +1039,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1050,7 +1050,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1061,7 +1061,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1072,7 +1072,7 @@ class RawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1160,7 +1160,7 @@ class AsyncRawWorkflowRunsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     WorkflowRunsListResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=WorkflowRunsListResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -1171,7 +1171,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1182,7 +1182,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1193,7 +1193,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1204,7 +1204,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1215,7 +1215,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1226,7 +1226,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1237,7 +1237,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1248,7 +1248,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1324,7 +1324,7 @@ class AsyncRawWorkflowRunsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     WorkflowRunsCreateResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=WorkflowRunsCreateResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -1335,7 +1335,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1346,7 +1346,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1357,7 +1357,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1368,7 +1368,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1379,7 +1379,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1390,7 +1390,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1401,7 +1401,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1412,7 +1412,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1453,7 +1453,7 @@ class AsyncRawWorkflowRunsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     WorkflowRunsRetrieveResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=WorkflowRunsRetrieveResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -1464,7 +1464,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1475,7 +1475,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1486,7 +1486,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1497,7 +1497,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1508,7 +1508,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1519,7 +1519,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1530,7 +1530,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1541,7 +1541,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1605,7 +1605,7 @@ class AsyncRawWorkflowRunsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     WorkflowRunsUpdateResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=WorkflowRunsUpdateResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -1616,7 +1616,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1627,7 +1627,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1638,7 +1638,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1649,7 +1649,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1660,7 +1660,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1671,7 +1671,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1682,7 +1682,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1693,7 +1693,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1736,7 +1736,7 @@ class AsyncRawWorkflowRunsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     WorkflowRunsDeleteResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=WorkflowRunsDeleteResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -1747,7 +1747,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1758,7 +1758,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1769,7 +1769,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1780,7 +1780,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1791,7 +1791,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1802,7 +1802,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1813,7 +1813,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1824,7 +1824,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1867,7 +1867,7 @@ class AsyncRawWorkflowRunsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     WorkflowRunsCancelResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=WorkflowRunsCancelResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -1878,7 +1878,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1889,7 +1889,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1900,7 +1900,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1911,7 +1911,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1922,7 +1922,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1933,7 +1933,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1944,7 +1944,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -1955,7 +1955,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -2026,7 +2026,7 @@ class AsyncRawWorkflowRunsClient:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
                     WorkflowRunsCreateBatchResponse,
-                    construct_type(
+                    parse_obj_as(
                         type_=WorkflowRunsCreateBatchResponse,  # type: ignore
                         object_=_response.json(),
                     ),
@@ -2037,7 +2037,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -2048,7 +2048,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -2059,7 +2059,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -2070,7 +2070,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -2081,7 +2081,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -2092,7 +2092,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -2103,7 +2103,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
@@ -2114,7 +2114,7 @@ class AsyncRawWorkflowRunsClient:
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
-                        construct_type(
+                        parse_obj_as(
                             type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),

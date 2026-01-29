@@ -5,15 +5,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .legacy_document_processor_run_credits import LegacyDocumentProcessorRunCredits
 from .legacy_processor_run_summary_type import LegacyProcessorRunSummaryType
 from .legacy_processor_status import LegacyProcessorStatus
 
 
-class LegacyProcessorRunSummary(UncheckedBaseModel):
+class LegacyProcessorRunSummary(UniversalBaseModel):
     id: str = pydantic.Field()
     """
     The ID of the processor run.

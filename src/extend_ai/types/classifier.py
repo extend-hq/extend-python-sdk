@@ -4,15 +4,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .classifier_version import ClassifierVersion
 from .created_at import CreatedAt
 from .updated_at import UpdatedAt
 
 
-class Classifier(UncheckedBaseModel):
+class Classifier(UniversalBaseModel):
     object: typing.Literal["classifier"] = pydantic.Field(default="classifier")
     """
     The type of object. Will always be `"classifier"`.

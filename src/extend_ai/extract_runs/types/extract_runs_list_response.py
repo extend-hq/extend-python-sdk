@@ -4,14 +4,13 @@ import typing
 
 import pydantic
 import typing_extensions
-from ...core.pydantic_utilities import IS_PYDANTIC_V2
+from ...core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ...core.serialization import FieldMetadata
-from ...core.unchecked_base_model import UncheckedBaseModel
 from ...types.extract_run_summary import ExtractRunSummary
 from ...types.next_page_token import NextPageToken
 
 
-class ExtractRunsListResponse(UncheckedBaseModel):
+class ExtractRunsListResponse(UniversalBaseModel):
     extract_runs: typing_extensions.Annotated[typing.List[ExtractRunSummary], FieldMetadata(alias="extractRuns")] = (
         pydantic.Field(alias="extractRuns")
     )

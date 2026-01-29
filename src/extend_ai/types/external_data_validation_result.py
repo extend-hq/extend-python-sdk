@@ -3,12 +3,11 @@
 import typing
 
 import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
-from ..core.unchecked_base_model import UncheckedBaseModel
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from .external_data_validation_result_response import ExternalDataValidationResultResponse
 
 
-class ExternalDataValidationResult(UncheckedBaseModel):
+class ExternalDataValidationResult(UniversalBaseModel):
     """
     The result of an external data validation step.
     """

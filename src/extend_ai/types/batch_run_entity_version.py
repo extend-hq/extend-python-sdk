@@ -6,13 +6,12 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
 from .created_at import CreatedAt
 
 
-class BatchRunEntityVersion_ExtractorVersionSummary(UncheckedBaseModel):
+class BatchRunEntityVersion_ExtractorVersionSummary(UniversalBaseModel):
     """
     The version of the extractor, classifier, or splitter that was run.
 
@@ -40,7 +39,7 @@ class BatchRunEntityVersion_ExtractorVersionSummary(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class BatchRunEntityVersion_ClassifierVersionSummary(UncheckedBaseModel):
+class BatchRunEntityVersion_ClassifierVersionSummary(UniversalBaseModel):
     """
     The version of the extractor, classifier, or splitter that was run.
 
@@ -68,7 +67,7 @@ class BatchRunEntityVersion_ClassifierVersionSummary(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class BatchRunEntityVersion_SplitterVersionSummary(UncheckedBaseModel):
+class BatchRunEntityVersion_SplitterVersionSummary(UniversalBaseModel):
     """
     The version of the extractor, classifier, or splitter that was run.
 
@@ -102,5 +101,5 @@ BatchRunEntityVersion = typing_extensions.Annotated[
         BatchRunEntityVersion_ClassifierVersionSummary,
         BatchRunEntityVersion_SplitterVersionSummary,
     ],
-    UnionMetadata(discriminant="object"),
+    pydantic.Field(discriminator="object"),
 ]

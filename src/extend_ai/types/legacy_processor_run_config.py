@@ -6,9 +6,8 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel, update_forward_refs
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
 from .json_object import JsonObject
 from .legacy_classification import LegacyClassification
 from .legacy_classification_advanced_options import LegacyClassificationAdvancedOptions
@@ -20,7 +19,7 @@ from .legacy_splitter_config_base_processor import LegacySplitterConfigBaseProce
 from .parse_config import ParseConfig
 
 
-class LegacyProcessorRunConfig_Classify(UncheckedBaseModel):
+class LegacyProcessorRunConfig_Classify(UniversalBaseModel):
     """
     The configuration used for this processor run. The type of configuration will match the processor type.
     """
@@ -51,7 +50,7 @@ class LegacyProcessorRunConfig_Classify(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class LegacyProcessorRunConfig_Extract(UncheckedBaseModel):
+class LegacyProcessorRunConfig_Extract(UniversalBaseModel):
     """
     The configuration used for this processor run. The type of configuration will match the processor type.
     """
@@ -85,7 +84,7 @@ class LegacyProcessorRunConfig_Extract(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class LegacyProcessorRunConfig_Splitter(UncheckedBaseModel):
+class LegacyProcessorRunConfig_Splitter(UniversalBaseModel):
     """
     The configuration used for this processor run. The type of configuration will match the processor type.
     """
@@ -122,7 +121,7 @@ LegacyProcessorRunConfig = typing_extensions.Annotated[
     typing.Union[
         LegacyProcessorRunConfig_Classify, LegacyProcessorRunConfig_Extract, LegacyProcessorRunConfig_Splitter
     ],
-    UnionMetadata(discriminant="type"),
+    pydantic.Field(discriminator="type"),
 ]
 from .legacy_extraction_field import LegacyExtractionField  # noqa: E402, I001
 

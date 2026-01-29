@@ -4,15 +4,14 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, UniversalBaseModel
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
 from .created_at import CreatedAt
 from .evaluation_set_entity import EvaluationSetEntity
 from .updated_at import UpdatedAt
 
 
-class EvaluationSet(UncheckedBaseModel):
+class EvaluationSet(UniversalBaseModel):
     object: typing.Literal["evaluation_set"] = pydantic.Field(default="evaluation_set")
     """
     The type of object. In this case, it will always be `"evaluation_set"`.
