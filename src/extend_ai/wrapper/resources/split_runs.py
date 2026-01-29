@@ -2,24 +2,26 @@
 Extended SplitRuns client with polling utilities.
 
 Example:
-    from extend_ai import Extend
+    from extend_ai import Extend, FileFromId
 
     client = Extend(token="...")
 
     # Create and poll until completion
     result = client.split_runs.create_and_poll(
-        file={"url": "https://example.com/document.pdf"},
-        splitter={"id": "splitter_abc123"},
+        file=FileFromId(id="file_xxx"),
+        splitter=SplitRunsCreateRequestSplitter(id="splitter_abc123"),
     )
 
     if result.split_run.status == "PROCESSED":
         print(result.split_run.output)
 """
 
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...split_runs.client import AsyncSplitRunsClient, SplitRunsClient
+from ...split_runs.types.split_runs_create_request_file import SplitRunsCreateRequestFile
+from ...split_runs.types.split_runs_create_request_splitter import SplitRunsCreateRequestSplitter
 from ...split_runs.types.split_runs_retrieve_response import SplitRunsRetrieveResponse
 from ...types.run_metadata import RunMetadata
 from ...types.run_priority import RunPriority
@@ -55,8 +57,8 @@ class SplitRunsWrapper(SplitRunsClient):
     def create_and_poll(
         self,
         *,
-        file: dict,
-        splitter: Optional[dict] = None,
+        file: SplitRunsCreateRequestFile,
+        splitter: Optional[SplitRunsCreateRequestSplitter] = None,
         config: Optional[SplitConfig] = None,
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
@@ -85,22 +87,30 @@ class SplitRunsWrapper(SplitRunsClient):
             PollingTimeoutError: If the run doesn't complete within max_wait_ms.
 
         Example:
+            from extend_ai import FileFromId
+            from extend_ai.split_runs.types import SplitRunsCreateRequestSplitter
+
             result = client.split_runs.create_and_poll(
-                file={"url": "https://example.com/doc.pdf"},
-                splitter={"id": "splitter_abc123"}
+                file=FileFromId(id="file_xxx"),
+                splitter=SplitRunsCreateRequestSplitter(id="splitter_abc123")
             )
 
             if result.split_run.status == "PROCESSED":
                 print(result.split_run.output)
         """
+        # Build kwargs, only including non-None values to avoid passing null
+        kwargs: Dict[str, Any] = {"file": file}
+        if splitter is not None:
+            kwargs["splitter"] = splitter
+        if config is not None:
+            kwargs["config"] = config
+        if priority is not None:
+            kwargs["priority"] = priority
+        if metadata is not None:
+            kwargs["metadata"] = metadata
+
         # Create the split run
-        create_response = self.create(
-            file=file,
-            splitter=splitter,
-            config=config,
-            priority=priority,
-            metadata=metadata,
-        )
+        create_response = self.create(**kwargs)
         run_id = create_response.split_run.id
 
         # Poll until terminal state
@@ -122,8 +132,8 @@ class AsyncSplitRunsWrapper(AsyncSplitRunsClient):
     async def create_and_poll(
         self,
         *,
-        file: dict,
-        splitter: Optional[dict] = None,
+        file: SplitRunsCreateRequestFile,
+        splitter: Optional[SplitRunsCreateRequestSplitter] = None,
         config: Optional[SplitConfig] = None,
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
@@ -132,14 +142,19 @@ class AsyncSplitRunsWrapper(AsyncSplitRunsClient):
         """
         Creates a split run and polls until it reaches a terminal state (async version).
         """
+        # Build kwargs, only including non-None values to avoid passing null
+        kwargs: Dict[str, Any] = {"file": file}
+        if splitter is not None:
+            kwargs["splitter"] = splitter
+        if config is not None:
+            kwargs["config"] = config
+        if priority is not None:
+            kwargs["priority"] = priority
+        if metadata is not None:
+            kwargs["metadata"] = metadata
+
         # Create the split run
-        create_response = await self.create(
-            file=file,
-            splitter=splitter,
-            config=config,
-            priority=priority,
-            metadata=metadata,
-        )
+        create_response = await self.create(**kwargs)
         run_id = create_response.split_run.id
 
         # Poll until terminal state

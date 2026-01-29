@@ -2,26 +2,30 @@
 Extended WorkflowRuns client with polling utilities.
 
 Example:
-    from extend_ai import Extend
+    from extend_ai import Extend, FileFromId
 
     client = Extend(token="...")
 
     # Create and poll until completion
     result = client.workflow_runs.create_and_poll(
-        file={"url": "https://example.com/document.pdf"},
-        workflow={"id": "workflow_abc123"},
+        file=FileFromId(id="file_xxx"),
+        workflow=WorkflowReference(id="workflow_abc123"),
     )
 
     if result.workflow_run.status == "PROCESSED":
         print(result.workflow_run.step_runs)
 """
 
-from typing import Optional
+from typing import Any, Dict, Optional, Sequence
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...types.run_metadata import RunMetadata
 from ...types.run_priority import RunPriority
+from ...types.run_secrets import RunSecrets
+from ...types.workflow_reference import WorkflowReference
 from ...workflow_runs.client import AsyncWorkflowRunsClient, WorkflowRunsClient
+from ...workflow_runs.types.workflow_runs_create_request_file import WorkflowRunsCreateRequestFile
+from ...workflow_runs.types.workflow_runs_create_request_outputs_item import WorkflowRunsCreateRequestOutputsItem
 from ...workflow_runs.types.workflow_runs_retrieve_response import WorkflowRunsRetrieveResponse
 from ..polling import PollingOptions, poll_until_done, poll_until_done_async
 
@@ -61,11 +65,12 @@ class WorkflowRunsWrapper(WorkflowRunsClient):
     def create_and_poll(
         self,
         *,
-        file: dict,
-        workflow: dict,
-        outputs: Optional[list] = None,
+        workflow: WorkflowReference,
+        file: WorkflowRunsCreateRequestFile,
+        outputs: Optional[Sequence[WorkflowRunsCreateRequestOutputsItem]] = None,
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
+        secrets: Optional[RunSecrets] = None,
         polling_options: Optional[PollingOptions] = None,
     ) -> WorkflowRunsRetrieveResponse:
         """
@@ -81,11 +86,12 @@ class WorkflowRunsWrapper(WorkflowRunsClient):
         workflows.
 
         Args:
-            file: The file to process.
             workflow: Reference to the workflow to run.
+            file: The file to process.
             outputs: Optional list of output configurations.
             priority: Priority of the run.
             metadata: Additional metadata for the run.
+            secrets: Secret values for the run.
             polling_options: Options for polling behavior. Default max_wait_ms is
                            2 hours for workflow runs.
 
@@ -96,9 +102,12 @@ class WorkflowRunsWrapper(WorkflowRunsClient):
             PollingTimeoutError: If the run doesn't complete within max_wait_ms.
 
         Example:
+            from extend_ai import FileFromId
+            from extend_ai.types import WorkflowReference
+
             result = client.workflow_runs.create_and_poll(
-                file={"url": "https://example.com/doc.pdf"},
-                workflow={"id": "workflow_abc123"}
+                file=FileFromId(id="file_xxx"),
+                workflow=WorkflowReference(id="workflow_abc123")
             )
 
             match result.workflow_run.status:
@@ -109,14 +118,19 @@ class WorkflowRunsWrapper(WorkflowRunsClient):
                 case "FAILED":
                     print("Failed:", result.workflow_run.failure_message)
         """
+        # Build kwargs, only including non-None values to avoid passing null
+        kwargs: Dict[str, Any] = {"workflow": workflow, "file": file}
+        if outputs is not None:
+            kwargs["outputs"] = outputs
+        if priority is not None:
+            kwargs["priority"] = priority
+        if metadata is not None:
+            kwargs["metadata"] = metadata
+        if secrets is not None:
+            kwargs["secrets"] = secrets
+
         # Create the workflow run
-        create_response = self.create(
-            file=file,
-            workflow=workflow,
-            outputs=outputs,
-            priority=priority,
-            metadata=metadata,
-        )
+        create_response = self.create(**kwargs)
         run_id = create_response.workflow_run.id
 
         # Use default workflow timeout if not specified
@@ -144,24 +158,30 @@ class AsyncWorkflowRunsWrapper(AsyncWorkflowRunsClient):
     async def create_and_poll(
         self,
         *,
-        file: dict,
-        workflow: dict,
-        outputs: Optional[list] = None,
+        workflow: WorkflowReference,
+        file: WorkflowRunsCreateRequestFile,
+        outputs: Optional[Sequence[WorkflowRunsCreateRequestOutputsItem]] = None,
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
+        secrets: Optional[RunSecrets] = None,
         polling_options: Optional[PollingOptions] = None,
     ) -> WorkflowRunsRetrieveResponse:
         """
         Creates a workflow run and polls until it reaches a terminal state (async version).
         """
+        # Build kwargs, only including non-None values to avoid passing null
+        kwargs: Dict[str, Any] = {"workflow": workflow, "file": file}
+        if outputs is not None:
+            kwargs["outputs"] = outputs
+        if priority is not None:
+            kwargs["priority"] = priority
+        if metadata is not None:
+            kwargs["metadata"] = metadata
+        if secrets is not None:
+            kwargs["secrets"] = secrets
+
         # Create the workflow run
-        create_response = await self.create(
-            file=file,
-            workflow=workflow,
-            outputs=outputs,
-            priority=priority,
-            metadata=metadata,
-        )
+        create_response = await self.create(**kwargs)
         run_id = create_response.workflow_run.id
 
         # Use default workflow timeout if not specified

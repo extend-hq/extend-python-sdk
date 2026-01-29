@@ -2,23 +2,25 @@
 Extended ClassifyRuns client with polling utilities.
 
 Example:
-    from extend_ai import Extend
+    from extend_ai import Extend, FileFromId
 
     client = Extend(token="...")
 
     # Create and poll until completion
     result = client.classify_runs.create_and_poll(
-        file={"url": "https://example.com/document.pdf"},
-        classifier={"id": "classifier_abc123"},
+        file=FileFromId(id="file_xxx"),
+        classifier=ClassifyRunsCreateRequestClassifier(id="classifier_abc123"),
     )
 
     if result.classify_run.status == "PROCESSED":
         print(result.classify_run.output)
 """
 
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from ...classify_runs.client import AsyncClassifyRunsClient, ClassifyRunsClient
+from ...classify_runs.types.classify_runs_create_request_classifier import ClassifyRunsCreateRequestClassifier
+from ...classify_runs.types.classify_runs_create_request_file import ClassifyRunsCreateRequestFile
 from ...classify_runs.types.classify_runs_retrieve_response import ClassifyRunsRetrieveResponse
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...types.classify_config import ClassifyConfig
@@ -55,8 +57,8 @@ class ClassifyRunsWrapper(ClassifyRunsClient):
     def create_and_poll(
         self,
         *,
-        file: dict,
-        classifier: Optional[dict] = None,
+        file: ClassifyRunsCreateRequestFile,
+        classifier: Optional[ClassifyRunsCreateRequestClassifier] = None,
         config: Optional[ClassifyConfig] = None,
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
@@ -85,22 +87,30 @@ class ClassifyRunsWrapper(ClassifyRunsClient):
             PollingTimeoutError: If the run doesn't complete within max_wait_ms.
 
         Example:
+            from extend_ai import FileFromId
+            from extend_ai.classify_runs.types import ClassifyRunsCreateRequestClassifier
+
             result = client.classify_runs.create_and_poll(
-                file={"url": "https://example.com/doc.pdf"},
-                classifier={"id": "classifier_abc123"}
+                file=FileFromId(id="file_xxx"),
+                classifier=ClassifyRunsCreateRequestClassifier(id="classifier_abc123")
             )
 
             if result.classify_run.status == "PROCESSED":
                 print(result.classify_run.output)
         """
+        # Build kwargs, only including non-None values to avoid passing null
+        kwargs: Dict[str, Any] = {"file": file}
+        if classifier is not None:
+            kwargs["classifier"] = classifier
+        if config is not None:
+            kwargs["config"] = config
+        if priority is not None:
+            kwargs["priority"] = priority
+        if metadata is not None:
+            kwargs["metadata"] = metadata
+
         # Create the classify run
-        create_response = self.create(
-            file=file,
-            classifier=classifier,
-            config=config,
-            priority=priority,
-            metadata=metadata,
-        )
+        create_response = self.create(**kwargs)
         run_id = create_response.classify_run.id
 
         # Poll until terminal state
@@ -122,8 +132,8 @@ class AsyncClassifyRunsWrapper(AsyncClassifyRunsClient):
     async def create_and_poll(
         self,
         *,
-        file: dict,
-        classifier: Optional[dict] = None,
+        file: ClassifyRunsCreateRequestFile,
+        classifier: Optional[ClassifyRunsCreateRequestClassifier] = None,
         config: Optional[ClassifyConfig] = None,
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
@@ -132,14 +142,19 @@ class AsyncClassifyRunsWrapper(AsyncClassifyRunsClient):
         """
         Creates a classify run and polls until it reaches a terminal state (async version).
         """
+        # Build kwargs, only including non-None values to avoid passing null
+        kwargs: Dict[str, Any] = {"file": file}
+        if classifier is not None:
+            kwargs["classifier"] = classifier
+        if config is not None:
+            kwargs["config"] = config
+        if priority is not None:
+            kwargs["priority"] = priority
+        if metadata is not None:
+            kwargs["metadata"] = metadata
+
         # Create the classify run
-        create_response = await self.create(
-            file=file,
-            classifier=classifier,
-            config=config,
-            priority=priority,
-            metadata=metadata,
-        )
+        create_response = await self.create(**kwargs)
         run_id = create_response.classify_run.id
 
         # Poll until terminal state
