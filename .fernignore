@@ -1,2 +1,5 @@
 # Specify files that shouldn't be modified by Fern
-# README.md
+
+# Protect custom wrapper code
+src/extend_ai/wrapper/
+src/extend_ai/__init__.py
