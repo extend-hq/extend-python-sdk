@@ -4,7 +4,7 @@ import hashlib
 import hmac
 import json
 import time
-from typing import Dict
+from typing import Dict, Optional
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
@@ -32,7 +32,7 @@ def create_signature(body: str, secret: str, timestamp: int) -> str:
     return hmac.new(secret.encode(), message.encode(), hashlib.sha256).hexdigest()
 
 
-def create_valid_headers(body: str, secret: str, timestamp: int = None) -> Dict[str, str]:
+def create_valid_headers(body: str, secret: str, timestamp: Optional[int] = None) -> Dict[str, str]:
     """Create valid webhook headers."""
     ts = timestamp if timestamp is not None else int(time.time())
     return {
