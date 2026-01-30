@@ -1,0 +1,177 @@
+"""
+Extended WorkflowRuns client with polling utilities.
+
+Example:
+    from extend_ai import Extend, FileFromId
+
+    client = Extend(token="...")
+
+    # Create and poll until completion
+    result = client.workflow_runs.create_and_poll(
+        file=FileFromId(id="file_xxx"),
+        workflow=WorkflowReference(id="workflow_abc123"),
+    )
+
+    if result.workflow_run.status == "PROCESSED":
+        print(result.workflow_run.step_runs)
+"""
+
+from typing import Any, Dict, Optional, Sequence
+
+from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
+from ...types.run_metadata import RunMetadata
+from ...types.run_priority import RunPriority
+from ...types.run_secrets import RunSecrets
+from ...types.workflow_reference import WorkflowReference
+from ...workflow_runs.client import AsyncWorkflowRunsClient, WorkflowRunsClient
+from ...workflow_runs.types.workflow_runs_create_request_file import WorkflowRunsCreateRequestFile
+from ...workflow_runs.types.workflow_runs_create_request_outputs_item import WorkflowRunsCreateRequestOutputsItem
+from ...workflow_runs.types.workflow_runs_retrieve_response import WorkflowRunsRetrieveResponse
+from ..polling import PollingOptions, poll_until_done, poll_until_done_async
+
+# Re-export for convenience
+from ..polling import PollingTimeoutError
+
+__all__ = ["WorkflowRunsWrapper", "AsyncWorkflowRunsWrapper", "PollingTimeoutError"]
+
+
+def _is_terminal_status(status: str) -> bool:
+    """
+    Check if a WorkflowRunStatus is terminal (no longer processing).
+    We check for non-terminal states rather than terminal states so that
+    if new terminal states are added, polling will still complete.
+
+    Non-terminal states: PENDING, PROCESSING, CANCELLING
+    Terminal states: PROCESSED, FAILED, CANCELLED, NEEDS_REVIEW, REJECTED
+    """
+    return status not in ("PROCESSING", "PENDING", "CANCELLING")
+
+
+class WorkflowRunsWrapper(WorkflowRunsClient):
+    """
+    Extended WorkflowRuns client with create_and_poll method.
+
+    Inherits all methods from WorkflowRunsClient and adds create_and_poll
+    for convenient polling until completion.
+    """
+
+    def __init__(self, *, client_wrapper: SyncClientWrapper):
+        super().__init__(client_wrapper=client_wrapper)
+
+    def create_and_poll(
+        self,
+        *,
+        workflow: WorkflowReference,
+        file: WorkflowRunsCreateRequestFile,
+        outputs: Optional[Sequence[WorkflowRunsCreateRequestOutputsItem]] = None,
+        priority: Optional[RunPriority] = None,
+        metadata: Optional[RunMetadata] = None,
+        secrets: Optional[RunSecrets] = None,
+        polling_options: Optional[PollingOptions] = None,
+    ) -> WorkflowRunsRetrieveResponse:
+        """
+        Creates a workflow run and polls until it reaches a terminal state.
+
+        This is a convenience method that combines create() and polling via
+        retrieve() with exponential backoff and jitter.
+
+        Terminal states: PROCESSED, FAILED, CANCELLED, NEEDS_REVIEW, REJECTED
+
+        Args:
+            workflow: Reference to the workflow to run.
+            file: The file to process.
+            outputs: Optional list of output configurations.
+            priority: Priority of the run.
+            metadata: Additional metadata for the run.
+            secrets: Secret values for the run.
+            polling_options: Options for polling behavior.
+
+        Returns:
+            The final workflow run response when processing is complete.
+
+        Raises:
+            PollingTimeoutError: If max_wait_ms is set and exceeded.
+
+        Example:
+            from extend_ai import FileFromId
+            from extend_ai.types import WorkflowReference
+
+            result = client.workflow_runs.create_and_poll(
+                file=FileFromId(id="file_xxx"),
+                workflow=WorkflowReference(id="workflow_abc123")
+            )
+
+            match result.workflow_run.status:
+                case "PROCESSED":
+                    print("Success:", result.workflow_run.step_runs)
+                case "NEEDS_REVIEW":
+                    print("Needs review:", result.workflow_run.dashboard_url)
+                case "FAILED":
+                    print("Failed:", result.workflow_run.failure_message)
+        """
+        # Build kwargs, only including non-None values to avoid passing null
+        kwargs: Dict[str, Any] = {"workflow": workflow, "file": file}
+        if outputs is not None:
+            kwargs["outputs"] = outputs
+        if priority is not None:
+            kwargs["priority"] = priority
+        if metadata is not None:
+            kwargs["metadata"] = metadata
+        if secrets is not None:
+            kwargs["secrets"] = secrets
+
+        # Create the workflow run
+        create_response = self.create(**kwargs)
+        run_id = create_response.workflow_run.id
+
+        # Poll until terminal state
+        return poll_until_done(
+            retrieve=lambda: self.retrieve(run_id),
+            is_terminal=lambda response: _is_terminal_status(response.workflow_run.status),
+            options=polling_options,
+        )
+
+
+class AsyncWorkflowRunsWrapper(AsyncWorkflowRunsClient):
+    """
+    Extended AsyncWorkflowRuns client with create_and_poll method.
+    """
+
+    def __init__(self, *, client_wrapper: AsyncClientWrapper):
+        super().__init__(client_wrapper=client_wrapper)
+
+    async def create_and_poll(
+        self,
+        *,
+        workflow: WorkflowReference,
+        file: WorkflowRunsCreateRequestFile,
+        outputs: Optional[Sequence[WorkflowRunsCreateRequestOutputsItem]] = None,
+        priority: Optional[RunPriority] = None,
+        metadata: Optional[RunMetadata] = None,
+        secrets: Optional[RunSecrets] = None,
+        polling_options: Optional[PollingOptions] = None,
+    ) -> WorkflowRunsRetrieveResponse:
+        """
+        Creates a workflow run and polls until it reaches a terminal state (async version).
+        """
+        # Build kwargs, only including non-None values to avoid passing null
+        kwargs: Dict[str, Any] = {"workflow": workflow, "file": file}
+        if outputs is not None:
+            kwargs["outputs"] = outputs
+        if priority is not None:
+            kwargs["priority"] = priority
+        if metadata is not None:
+            kwargs["metadata"] = metadata
+        if secrets is not None:
+            kwargs["secrets"] = secrets
+
+        # Create the workflow run
+        create_response = await self.create(**kwargs)
+        run_id = create_response.workflow_run.id
+
+        # Poll until terminal state
+        return await poll_until_done_async(
+            retrieve=lambda: self.retrieve(run_id),
+            is_terminal=lambda response: _is_terminal_status(response.workflow_run.status),
+            options=polling_options,
+        )
