@@ -25,10 +25,9 @@ class PollingOptions:
 
     Attributes:
         max_wait_ms: Maximum total wait time in milliseconds. Default: 300000 (5 minutes).
-            Note: Workflow runs can take significantly longer (p99 ~2.5 hours).
+            Note: Workflow runs can take significantly longer.
             Consider increasing this value for workflow runs.
         initial_delay_ms: Initial delay between polls in milliseconds. Default: 1000 (1 second).
-            Based on p50 processing times of 3-21 seconds across run types,
             1 second provides a good balance between responsiveness and efficiency.
         max_delay_ms: Maximum delay between polls in milliseconds. Default: 30000 (30 seconds).
         jitter_fraction: Jitter fraction for randomization. A value of 0.25 means delays
