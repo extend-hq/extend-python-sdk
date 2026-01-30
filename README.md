@@ -68,13 +68,14 @@ from extend_ai import Extend, PollingOptions
 
 client = Extend(token="YOUR_TOKEN")
 
+# With custom timeout
 result = client.extract_runs.create_and_poll(
     file={"url": "https://example.com/doc.pdf"},
     extractor={"id": "extractor_123"},
     polling_options=PollingOptions(
-        max_wait_ms=600_000,      # 10 minute timeout
-        initial_delay_ms=2_000,   # Start with 2s delay
-        max_delay_ms=30_000,      # Cap at 30s delay
+        max_wait_ms=300_000,      # 5 minute timeout (default: no timeout)
+        initial_delay_ms=1_000,   # Start with 1s delay (default)
+        max_delay_ms=60_000,      # Cap at 60s delay (default)
     ),
 )
 ```

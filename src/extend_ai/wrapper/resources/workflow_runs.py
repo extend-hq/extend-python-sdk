@@ -34,10 +34,6 @@ from ..polling import PollingTimeoutError
 
 __all__ = ["WorkflowRunsWrapper", "AsyncWorkflowRunsWrapper", "PollingTimeoutError"]
 
-# Default maximum wait time for workflow runs (2 hours).
-# Workflow runs can take significantly longer than other run types.
-DEFAULT_WORKFLOW_MAX_WAIT_MS = 2 * 60 * 60 * 1000
-
 
 def _is_terminal_status(status: str) -> bool:
     """
@@ -81,10 +77,6 @@ class WorkflowRunsWrapper(WorkflowRunsClient):
 
         Terminal states: PROCESSED, FAILED, CANCELLED, NEEDS_REVIEW, REJECTED
 
-        Note: Workflow runs can take significantly longer than other run types.
-        The default max_wait_ms is 2 hours. Consider increasing this for complex
-        workflows.
-
         Args:
             workflow: Reference to the workflow to run.
             file: The file to process.
@@ -92,14 +84,13 @@ class WorkflowRunsWrapper(WorkflowRunsClient):
             priority: Priority of the run.
             metadata: Additional metadata for the run.
             secrets: Secret values for the run.
-            polling_options: Options for polling behavior. Default max_wait_ms is
-                           2 hours for workflow runs.
+            polling_options: Options for polling behavior.
 
         Returns:
             The final workflow run response when processing is complete.
 
         Raises:
-            PollingTimeoutError: If the run doesn't complete within max_wait_ms.
+            PollingTimeoutError: If max_wait_ms is set and exceeded.
 
         Example:
             from extend_ai import FileFromId
@@ -132,12 +123,6 @@ class WorkflowRunsWrapper(WorkflowRunsClient):
         # Create the workflow run
         create_response = self.create(**kwargs)
         run_id = create_response.workflow_run.id
-
-        # Use default workflow timeout if not specified
-        if polling_options is None:
-            polling_options = PollingOptions(max_wait_ms=DEFAULT_WORKFLOW_MAX_WAIT_MS)
-        elif polling_options.max_wait_ms == 300_000:  # Default value
-            polling_options.max_wait_ms = DEFAULT_WORKFLOW_MAX_WAIT_MS
 
         # Poll until terminal state
         return poll_until_done(
@@ -183,12 +168,6 @@ class AsyncWorkflowRunsWrapper(AsyncWorkflowRunsClient):
         # Create the workflow run
         create_response = await self.create(**kwargs)
         run_id = create_response.workflow_run.id
-
-        # Use default workflow timeout if not specified
-        if polling_options is None:
-            polling_options = PollingOptions(max_wait_ms=DEFAULT_WORKFLOW_MAX_WAIT_MS)
-        elif polling_options.max_wait_ms == 300_000:  # Default value
-            polling_options.max_wait_ms = DEFAULT_WORKFLOW_MAX_WAIT_MS
 
         # Poll until terminal state
         return await poll_until_done_async(
