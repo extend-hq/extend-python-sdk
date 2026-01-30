@@ -157,7 +157,7 @@ class TestPollUntilDone:
         is_terminal.assert_called_with(test_result)
 
     def test_throws_timeout_error_when_exceeded(self):
-        """Should throw PollingTimeoutError when maxWaitMs is exceeded."""
+        """Should throw PollingTimeoutError when maxWaitMs is set and exceeded."""
         retrieve = MagicMock(return_value={"status": "PROCESSING"})
         is_terminal = MagicMock(return_value=False)
 
@@ -323,11 +323,11 @@ class TestPollingOptions:
     """Tests for PollingOptions dataclass."""
 
     def test_default_values(self):
-        """Should have correct default values."""
+        """Should poll indefinitely by default (no timeout)."""
         options = PollingOptions()
-        assert options.max_wait_ms == 300_000  # 5 minutes
+        assert options.max_wait_ms is None  # Polls indefinitely
         assert options.initial_delay_ms == 1_000  # 1 second
-        assert options.max_delay_ms == 30_000  # 30 seconds
+        assert options.max_delay_ms == 60_000  # 60 seconds
         assert options.jitter_fraction == 0.25
 
     def test_custom_values(self):
@@ -342,3 +342,29 @@ class TestPollingOptions:
         assert options.initial_delay_ms == 500
         assert options.max_delay_ms == 10_000
         assert options.jitter_fraction == 0.1
+
+
+class TestInfinitePolling:
+    """Tests for infinite polling behavior."""
+
+    def test_polls_indefinitely_when_no_timeout(self):
+        """Should poll indefinitely when max_wait_ms is not set."""
+        call_count = {"value": 0}
+
+        def retrieve():
+            call_count["value"] += 1
+            return {"done": call_count["value"] >= 3}
+
+        def is_terminal(result):
+            return result["done"]
+
+        # No max_wait_ms - should complete without timeout
+        options = PollingOptions(
+            initial_delay_ms=1,
+            jitter_fraction=0,
+        )
+
+        result = poll_until_done(retrieve, is_terminal, options)
+
+        assert call_count["value"] == 3
+        assert result["done"] is True

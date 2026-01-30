@@ -5,7 +5,6 @@ from unittest.mock import MagicMock
 import pytest
 
 from extend_ai.wrapper.polling import PollingOptions, PollingTimeoutError
-from extend_ai.wrapper.resources.workflow_runs import DEFAULT_WORKFLOW_MAX_WAIT_MS
 
 
 # ============================================================================
@@ -222,11 +221,6 @@ class TestWorkflowRunsWrapperCreateAndPoll:
                     jitter_fraction=0,
                 ),
             )
-
-    def test_default_max_wait_is_two_hours(self):
-        """Should use default max_wait of 2 hours for workflows."""
-        # Verify the constant value
-        assert DEFAULT_WORKFLOW_MAX_WAIT_MS == 2 * 60 * 60 * 1000  # 2 hours in ms
 
     def test_completes_with_default_options(self):
         """Should complete successfully with default polling options."""

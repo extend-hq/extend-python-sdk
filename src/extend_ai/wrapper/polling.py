@@ -2,10 +2,17 @@
 Polling utilities with exponential backoff and proportional jitter.
 
 Example:
+    # Polls until complete
+    result = poll_until_done(
+        retrieve=lambda: client.extract_runs.retrieve(id),
+        is_terminal=lambda res: res.extract_run.status != "PROCESSING"
+    )
+
+    # With custom timeout
     result = poll_until_done(
         retrieve=lambda: client.extract_runs.retrieve(id),
         is_terminal=lambda res: res.extract_run.status != "PROCESSING",
-        options=PollingOptions(max_wait_ms=60000)
+        options=PollingOptions(max_wait_ms=300000)  # 5 minute timeout
     )
 """
 
@@ -24,19 +31,16 @@ class PollingOptions:
     Configuration options for polling behavior.
 
     Attributes:
-        max_wait_ms: Maximum total wait time in milliseconds. Default: 300000 (5 minutes).
-            Note: Workflow runs can take significantly longer.
-            Consider increasing this value for workflow runs.
+        max_wait_ms: Maximum total wait time in milliseconds. Default: None (polls indefinitely).
         initial_delay_ms: Initial delay between polls in milliseconds. Default: 1000 (1 second).
-            1 second provides a good balance between responsiveness and efficiency.
-        max_delay_ms: Maximum delay between polls in milliseconds. Default: 30000 (30 seconds).
+        max_delay_ms: Maximum delay between polls in milliseconds. Default: 60000 (60 seconds).
         jitter_fraction: Jitter fraction for randomization. A value of 0.25 means delays
             will be randomized by +/-25%. Default: 0.25.
     """
 
-    max_wait_ms: int = 300_000  # 5 minutes
+    max_wait_ms: Optional[int] = None  # None = poll indefinitely
     initial_delay_ms: int = 1_000  # 1 second
-    max_delay_ms: int = 30_000  # 30 seconds
+    max_delay_ms: int = 60_000  # 60 seconds
     jitter_fraction: float = 0.25
 
 
@@ -100,13 +104,12 @@ def poll_until_done(
         The final result when is_terminal returns True
 
     Raises:
-        PollingTimeoutError: If max_wait_ms is exceeded
+        PollingTimeoutError: If max_wait_ms is set and exceeded
 
     Example:
         result = poll_until_done(
             retrieve=lambda: client.extract_runs.retrieve(run_id),
-            is_terminal=lambda res: res.extract_run.status != "PROCESSING",
-            options=PollingOptions(max_wait_ms=60000, initial_delay_ms=1000)
+            is_terminal=lambda res: res.extract_run.status != "PROCESSING"
         )
     """
     if options is None:
@@ -128,7 +131,8 @@ def poll_until_done(
 
         elapsed_ms = (time.time() * 1000) - start_time
 
-        if elapsed_ms >= max_wait_ms:
+        # Only check timeout if max_wait_ms is set
+        if max_wait_ms is not None and elapsed_ms >= max_wait_ms:
             raise PollingTimeoutError(
                 f"Polling timed out after {int(elapsed_ms)}ms (max: {max_wait_ms}ms)",
                 int(elapsed_ms),
@@ -137,9 +141,12 @@ def poll_until_done(
 
         delay = calculate_backoff_delay(attempt, initial_delay_ms, max_delay_ms, jitter_fraction)
 
-        # Don't wait longer than the remaining time
-        remaining_ms = max_wait_ms - elapsed_ms
-        actual_delay = min(delay, remaining_ms)
+        # If timeout is set, don't wait longer than remaining time
+        if max_wait_ms is not None:
+            remaining_ms = max_wait_ms - elapsed_ms
+            actual_delay = min(delay, remaining_ms)
+        else:
+            actual_delay = delay
 
         time.sleep(actual_delay / 1000)  # Convert to seconds for time.sleep
         attempt += 1
@@ -165,13 +172,12 @@ async def poll_until_done_async(
         The final result when is_terminal returns True
 
     Raises:
-        PollingTimeoutError: If max_wait_ms is exceeded
+        PollingTimeoutError: If max_wait_ms is set and exceeded
 
     Example:
         result = await poll_until_done_async(
             retrieve=lambda: client.extract_runs.retrieve(run_id),
-            is_terminal=lambda res: res.extract_run.status != "PROCESSING",
-            options=PollingOptions(max_wait_ms=60000, initial_delay_ms=1000)
+            is_terminal=lambda res: res.extract_run.status != "PROCESSING"
         )
     """
     if options is None:
@@ -193,7 +199,8 @@ async def poll_until_done_async(
 
         elapsed_ms = (time.time() * 1000) - start_time
 
-        if elapsed_ms >= max_wait_ms:
+        # Only check timeout if max_wait_ms is set
+        if max_wait_ms is not None and elapsed_ms >= max_wait_ms:
             raise PollingTimeoutError(
                 f"Polling timed out after {int(elapsed_ms)}ms (max: {max_wait_ms}ms)",
                 int(elapsed_ms),
@@ -202,9 +209,12 @@ async def poll_until_done_async(
 
         delay = calculate_backoff_delay(attempt, initial_delay_ms, max_delay_ms, jitter_fraction)
 
-        # Don't wait longer than the remaining time
-        remaining_ms = max_wait_ms - elapsed_ms
-        actual_delay = min(delay, remaining_ms)
+        # If timeout is set, don't wait longer than remaining time
+        if max_wait_ms is not None:
+            remaining_ms = max_wait_ms - elapsed_ms
+            actual_delay = min(delay, remaining_ms)
+        else:
+            actual_delay = delay
 
         await asyncio.sleep(actual_delay / 1000)  # Convert to seconds for asyncio.sleep
         attempt += 1
