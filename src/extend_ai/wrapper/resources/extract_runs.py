@@ -2,14 +2,14 @@
 Extended ExtractRuns client with polling utilities.
 
 Example:
-    from extend_ai import Extend, FileFromId
+    from extend_ai import Extend
 
     client = Extend(token="...")
 
     # Create and poll until completion
     result = client.extract_runs.create_and_poll(
-        file=FileFromId(id="file_xxx"),
-        extractor=ExtractRunsCreateRequestExtractor(id="extractor_abc123"),
+        file={"id": "file_xxx"},
+        extractor={"id": "extractor_abc123"},
     )
 
     if result.extract_run.status == "PROCESSED":
@@ -20,10 +20,10 @@ from typing import Any, Dict, Optional
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...extract_runs.client import AsyncExtractRunsClient, ExtractRunsClient
-from ...extract_runs.types.extract_runs_create_request_extractor import ExtractRunsCreateRequestExtractor
-from ...extract_runs.types.extract_runs_create_request_file import ExtractRunsCreateRequestFile
+from ...extract_runs.requests.extract_runs_create_request_extractor import ExtractRunsCreateRequestExtractorParams
+from ...extract_runs.requests.extract_runs_create_request_file import ExtractRunsCreateRequestFileParams
 from ...extract_runs.types.extract_runs_retrieve_response import ExtractRunsRetrieveResponse
-from ...types.extract_config_json import ExtractConfigJson
+from ...requests.extract_config_json import ExtractConfigJsonParams
 from ...types.run_metadata import RunMetadata
 from ...types.run_priority import RunPriority
 from ..polling import PollingOptions, poll_until_done, poll_until_done_async
@@ -57,9 +57,9 @@ class ExtractRunsWrapper(ExtractRunsClient):
     def create_and_poll(
         self,
         *,
-        file: ExtractRunsCreateRequestFile,
-        extractor: Optional[ExtractRunsCreateRequestExtractor] = None,
-        config: Optional[ExtractConfigJson] = None,
+        file: ExtractRunsCreateRequestFileParams,
+        extractor: Optional[ExtractRunsCreateRequestExtractorParams] = None,
+        config: Optional[ExtractConfigJsonParams] = None,
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
         polling_options: Optional[PollingOptions] = None,
@@ -91,12 +91,9 @@ class ExtractRunsWrapper(ExtractRunsClient):
             PollingTimeoutError: If the run doesn't complete within max_wait_ms.
 
         Example:
-            from extend_ai import FileFromId
-            from extend_ai.extract_runs.types import ExtractRunsCreateRequestExtractor
-
             result = client.extract_runs.create_and_poll(
-                file=FileFromId(id="file_xxx"),
-                extractor=ExtractRunsCreateRequestExtractor(id="extractor_abc123")
+                file={"id": "file_xxx"},
+                extractor={"id": "extractor_abc123"}
             )
 
             if result.extract_run.status == "PROCESSED":
@@ -139,9 +136,9 @@ class AsyncExtractRunsWrapper(AsyncExtractRunsClient):
     async def create_and_poll(
         self,
         *,
-        file: ExtractRunsCreateRequestFile,
-        extractor: Optional[ExtractRunsCreateRequestExtractor] = None,
-        config: Optional[ExtractConfigJson] = None,
+        file: ExtractRunsCreateRequestFileParams,
+        extractor: Optional[ExtractRunsCreateRequestExtractorParams] = None,
+        config: Optional[ExtractConfigJsonParams] = None,
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
         polling_options: Optional[PollingOptions] = None,

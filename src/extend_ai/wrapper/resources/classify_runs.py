@@ -2,14 +2,14 @@
 Extended ClassifyRuns client with polling utilities.
 
 Example:
-    from extend_ai import Extend, FileFromId
+    from extend_ai import Extend
 
     client = Extend(token="...")
 
     # Create and poll until completion
     result = client.classify_runs.create_and_poll(
-        file=FileFromId(id="file_xxx"),
-        classifier=ClassifyRunsCreateRequestClassifier(id="classifier_abc123"),
+        file={"id": "file_xxx"},
+        classifier={"id": "classifier_abc123"},
     )
 
     if result.classify_run.status == "PROCESSED":
@@ -19,11 +19,11 @@ Example:
 from typing import Any, Dict, Optional
 
 from ...classify_runs.client import AsyncClassifyRunsClient, ClassifyRunsClient
-from ...classify_runs.types.classify_runs_create_request_classifier import ClassifyRunsCreateRequestClassifier
-from ...classify_runs.types.classify_runs_create_request_file import ClassifyRunsCreateRequestFile
+from ...classify_runs.requests.classify_runs_create_request_classifier import ClassifyRunsCreateRequestClassifierParams
+from ...classify_runs.requests.classify_runs_create_request_file import ClassifyRunsCreateRequestFileParams
 from ...classify_runs.types.classify_runs_retrieve_response import ClassifyRunsRetrieveResponse
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
-from ...types.classify_config import ClassifyConfig
+from ...requests.classify_config import ClassifyConfigParams
 from ...types.run_metadata import RunMetadata
 from ...types.run_priority import RunPriority
 from ..polling import PollingOptions, poll_until_done, poll_until_done_async
@@ -57,9 +57,9 @@ class ClassifyRunsWrapper(ClassifyRunsClient):
     def create_and_poll(
         self,
         *,
-        file: ClassifyRunsCreateRequestFile,
-        classifier: Optional[ClassifyRunsCreateRequestClassifier] = None,
-        config: Optional[ClassifyConfig] = None,
+        file: ClassifyRunsCreateRequestFileParams,
+        classifier: Optional[ClassifyRunsCreateRequestClassifierParams] = None,
+        config: Optional[ClassifyConfigParams] = None,
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
         polling_options: Optional[PollingOptions] = None,
@@ -87,12 +87,9 @@ class ClassifyRunsWrapper(ClassifyRunsClient):
             PollingTimeoutError: If the run doesn't complete within max_wait_ms.
 
         Example:
-            from extend_ai import FileFromId
-            from extend_ai.classify_runs.types import ClassifyRunsCreateRequestClassifier
-
             result = client.classify_runs.create_and_poll(
-                file=FileFromId(id="file_xxx"),
-                classifier=ClassifyRunsCreateRequestClassifier(id="classifier_abc123")
+                file={"id": "file_xxx"},
+                classifier={"id": "classifier_abc123"}
             )
 
             if result.classify_run.status == "PROCESSED":
@@ -132,9 +129,9 @@ class AsyncClassifyRunsWrapper(AsyncClassifyRunsClient):
     async def create_and_poll(
         self,
         *,
-        file: ClassifyRunsCreateRequestFile,
-        classifier: Optional[ClassifyRunsCreateRequestClassifier] = None,
-        config: Optional[ClassifyConfig] = None,
+        file: ClassifyRunsCreateRequestFileParams,
+        classifier: Optional[ClassifyRunsCreateRequestClassifierParams] = None,
+        config: Optional[ClassifyConfigParams] = None,
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
         polling_options: Optional[PollingOptions] = None,

@@ -2,13 +2,13 @@
 Extended ParseRuns client with polling utilities.
 
 Example:
-    from extend_ai import Extend, FileFromId
+    from extend_ai import Extend
 
     client = Extend(token="...")
 
     # Create and poll until completion
     result = client.parse_runs.create_and_poll(
-        file=FileFromId(id="file_xxx"),
+        file={"id": "file_xxx"},
     )
 
     if result.parse_run.status == "PROCESSED":
@@ -19,9 +19,9 @@ from typing import Any, Dict, Optional
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...parse_runs.client import AsyncParseRunsClient, ParseRunsClient
-from ...parse_runs.types.parse_runs_create_request_file import ParseRunsCreateRequestFile
+from ...parse_runs.requests.parse_runs_create_request_file import ParseRunsCreateRequestFileParams
 from ...parse_runs.types.parse_runs_retrieve_response import ParseRunsRetrieveResponse
-from ...types.parse_config import ParseConfig
+from ...requests.parse_config import ParseConfigParams
 from ..polling import PollingOptions, poll_until_done, poll_until_done_async
 
 # Re-export for convenience
@@ -55,8 +55,8 @@ class ParseRunsWrapper(ParseRunsClient):
     def create_and_poll(
         self,
         *,
-        file: ParseRunsCreateRequestFile,
-        config: Optional[ParseConfig] = None,
+        file: ParseRunsCreateRequestFileParams,
+        config: Optional[ParseConfigParams] = None,
         polling_options: Optional[PollingOptions] = None,
     ) -> ParseRunsRetrieveResponse:
         """
@@ -79,10 +79,8 @@ class ParseRunsWrapper(ParseRunsClient):
             PollingTimeoutError: If the run doesn't complete within max_wait_ms.
 
         Example:
-            from extend_ai import FileFromId
-
             result = client.parse_runs.create_and_poll(
-                file=FileFromId(id="file_xxx"),
+                file={"id": "file_xxx"},
             )
 
             if result.parse_run.status == "PROCESSED":
@@ -117,8 +115,8 @@ class AsyncParseRunsWrapper(AsyncParseRunsClient):
     async def create_and_poll(
         self,
         *,
-        file: ParseRunsCreateRequestFile,
-        config: Optional[ParseConfig] = None,
+        file: ParseRunsCreateRequestFileParams,
+        config: Optional[ParseConfigParams] = None,
         polling_options: Optional[PollingOptions] = None,
     ) -> ParseRunsRetrieveResponse:
         """
