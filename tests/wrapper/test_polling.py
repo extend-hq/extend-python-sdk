@@ -323,11 +323,11 @@ class TestPollingOptions:
     """Tests for PollingOptions dataclass."""
 
     def test_default_values(self):
-        """Should have sensible defaults matching TypeScript SDK."""
+        """Should poll indefinitely by default (no timeout)."""
         options = PollingOptions()
-        assert options.max_wait_ms == 300_000  # 5 minutes
+        assert options.max_wait_ms is None  # Polls indefinitely
         assert options.initial_delay_ms == 1_000  # 1 second
-        assert options.max_delay_ms == 30_000  # 30 seconds
+        assert options.max_delay_ms == 60_000  # 60 seconds
         assert options.jitter_fraction == 0.25
 
     def test_custom_values(self):
