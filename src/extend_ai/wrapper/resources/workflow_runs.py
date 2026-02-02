@@ -2,14 +2,14 @@
 Extended WorkflowRuns client with polling utilities.
 
 Example:
-    from extend_ai import Extend, FileFromId
+    from extend_ai import Extend
 
     client = Extend(token="...")
 
     # Create and poll until completion
     result = client.workflow_runs.create_and_poll(
-        file=FileFromId(id="file_xxx"),
-        workflow=WorkflowReference(id="workflow_abc123"),
+        file={"id": "file_xxx"},
+        workflow={"id": "workflow_abc123"},
     )
 
     if result.workflow_run.status == "PROCESSED":
@@ -19,13 +19,13 @@ Example:
 from typing import Any, Dict, Optional, Sequence
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
+from ...requests.workflow_reference import WorkflowReferenceParams
 from ...types.run_metadata import RunMetadata
 from ...types.run_priority import RunPriority
 from ...types.run_secrets import RunSecrets
-from ...types.workflow_reference import WorkflowReference
 from ...workflow_runs.client import AsyncWorkflowRunsClient, WorkflowRunsClient
-from ...workflow_runs.types.workflow_runs_create_request_file import WorkflowRunsCreateRequestFile
-from ...workflow_runs.types.workflow_runs_create_request_outputs_item import WorkflowRunsCreateRequestOutputsItem
+from ...workflow_runs.requests.workflow_runs_create_request_file import WorkflowRunsCreateRequestFileParams
+from ...workflow_runs.requests.workflow_runs_create_request_outputs_item import WorkflowRunsCreateRequestOutputsItemParams
 from ...workflow_runs.types.workflow_runs_retrieve_response import WorkflowRunsRetrieveResponse
 from ..polling import PollingOptions, poll_until_done, poll_until_done_async
 
@@ -61,9 +61,9 @@ class WorkflowRunsWrapper(WorkflowRunsClient):
     def create_and_poll(
         self,
         *,
-        workflow: WorkflowReference,
-        file: WorkflowRunsCreateRequestFile,
-        outputs: Optional[Sequence[WorkflowRunsCreateRequestOutputsItem]] = None,
+        workflow: WorkflowReferenceParams,
+        file: WorkflowRunsCreateRequestFileParams,
+        outputs: Optional[Sequence[WorkflowRunsCreateRequestOutputsItemParams]] = None,
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
         secrets: Optional[RunSecrets] = None,
@@ -93,12 +93,9 @@ class WorkflowRunsWrapper(WorkflowRunsClient):
             PollingTimeoutError: If max_wait_ms is set and exceeded.
 
         Example:
-            from extend_ai import FileFromId
-            from extend_ai.types import WorkflowReference
-
             result = client.workflow_runs.create_and_poll(
-                file=FileFromId(id="file_xxx"),
-                workflow=WorkflowReference(id="workflow_abc123")
+                file={"id": "file_xxx"},
+                workflow={"id": "workflow_abc123"}
             )
 
             match result.workflow_run.status:
@@ -143,9 +140,9 @@ class AsyncWorkflowRunsWrapper(AsyncWorkflowRunsClient):
     async def create_and_poll(
         self,
         *,
-        workflow: WorkflowReference,
-        file: WorkflowRunsCreateRequestFile,
-        outputs: Optional[Sequence[WorkflowRunsCreateRequestOutputsItem]] = None,
+        workflow: WorkflowReferenceParams,
+        file: WorkflowRunsCreateRequestFileParams,
+        outputs: Optional[Sequence[WorkflowRunsCreateRequestOutputsItemParams]] = None,
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
         secrets: Optional[RunSecrets] = None,

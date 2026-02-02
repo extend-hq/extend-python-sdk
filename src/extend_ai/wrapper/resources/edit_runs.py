@@ -2,14 +2,14 @@
 Extended EditRuns client with polling utilities.
 
 Example:
-    from extend_ai import Extend, FileFromId
+    from extend_ai import Extend
 
     client = Extend(token="...")
 
     # Create and poll until completion
     result = client.edit_runs.create_and_poll(
-        file=FileFromId(id="file_xxx"),
-        config=EditRunsCreateRequestConfig(schema_={...}),
+        file={"id": "file_xxx"},
+        config={"schema": {...}},
     )
 
     if result.edit_run.status == "PROCESSED":
@@ -20,8 +20,8 @@ from typing import Any, Dict, Optional
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...edit_runs.client import AsyncEditRunsClient, EditRunsClient
-from ...edit_runs.types.edit_runs_create_request_config import EditRunsCreateRequestConfig
-from ...edit_runs.types.edit_runs_create_request_file import EditRunsCreateRequestFile
+from ...edit_runs.requests.edit_runs_create_request_config import EditRunsCreateRequestConfigParams
+from ...edit_runs.requests.edit_runs_create_request_file import EditRunsCreateRequestFileParams
 from ...edit_runs.types.edit_runs_retrieve_response import EditRunsRetrieveResponse
 from ..polling import PollingOptions, poll_until_done, poll_until_done_async
 
@@ -56,8 +56,8 @@ class EditRunsWrapper(EditRunsClient):
     def create_and_poll(
         self,
         *,
-        file: EditRunsCreateRequestFile,
-        config: Optional[EditRunsCreateRequestConfig] = None,
+        file: EditRunsCreateRequestFileParams,
+        config: Optional[EditRunsCreateRequestConfigParams] = None,
         polling_options: Optional[PollingOptions] = None,
     ) -> EditRunsRetrieveResponse:
         """
@@ -80,12 +80,9 @@ class EditRunsWrapper(EditRunsClient):
             PollingTimeoutError: If the run doesn't complete within max_wait_ms.
 
         Example:
-            from extend_ai import FileFromId
-            from extend_ai.edit_runs.types import EditRunsCreateRequestConfig
-
             result = client.edit_runs.create_and_poll(
-                file=FileFromId(id="file_xxx"),
-                config=EditRunsCreateRequestConfig(schema_={...})
+                file={"id": "file_xxx"},
+                config={"schema": {...}}
             )
 
             if result.edit_run.status == "PROCESSED":
@@ -119,8 +116,8 @@ class AsyncEditRunsWrapper(AsyncEditRunsClient):
     async def create_and_poll(
         self,
         *,
-        file: EditRunsCreateRequestFile,
-        config: Optional[EditRunsCreateRequestConfig] = None,
+        file: EditRunsCreateRequestFileParams,
+        config: Optional[EditRunsCreateRequestConfigParams] = None,
         polling_options: Optional[PollingOptions] = None,
     ) -> EditRunsRetrieveResponse:
         """

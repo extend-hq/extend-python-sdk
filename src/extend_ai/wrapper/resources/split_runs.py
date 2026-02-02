@@ -2,14 +2,14 @@
 Extended SplitRuns client with polling utilities.
 
 Example:
-    from extend_ai import Extend, FileFromId
+    from extend_ai import Extend
 
     client = Extend(token="...")
 
     # Create and poll until completion
     result = client.split_runs.create_and_poll(
-        file=FileFromId(id="file_xxx"),
-        splitter=SplitRunsCreateRequestSplitter(id="splitter_abc123"),
+        file={"id": "file_xxx"},
+        splitter={"id": "splitter_abc123"},
     )
 
     if result.split_run.status == "PROCESSED":
@@ -19,13 +19,13 @@ Example:
 from typing import Any, Dict, Optional
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
+from ...requests.split_config import SplitConfigParams
 from ...split_runs.client import AsyncSplitRunsClient, SplitRunsClient
-from ...split_runs.types.split_runs_create_request_file import SplitRunsCreateRequestFile
-from ...split_runs.types.split_runs_create_request_splitter import SplitRunsCreateRequestSplitter
+from ...split_runs.requests.split_runs_create_request_file import SplitRunsCreateRequestFileParams
+from ...split_runs.requests.split_runs_create_request_splitter import SplitRunsCreateRequestSplitterParams
 from ...split_runs.types.split_runs_retrieve_response import SplitRunsRetrieveResponse
 from ...types.run_metadata import RunMetadata
 from ...types.run_priority import RunPriority
-from ...types.split_config import SplitConfig
 from ..polling import PollingOptions, poll_until_done, poll_until_done_async
 
 # Re-export for convenience
@@ -57,9 +57,9 @@ class SplitRunsWrapper(SplitRunsClient):
     def create_and_poll(
         self,
         *,
-        file: SplitRunsCreateRequestFile,
-        splitter: Optional[SplitRunsCreateRequestSplitter] = None,
-        config: Optional[SplitConfig] = None,
+        file: SplitRunsCreateRequestFileParams,
+        splitter: Optional[SplitRunsCreateRequestSplitterParams] = None,
+        config: Optional[SplitConfigParams] = None,
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
         polling_options: Optional[PollingOptions] = None,
@@ -87,12 +87,9 @@ class SplitRunsWrapper(SplitRunsClient):
             PollingTimeoutError: If the run doesn't complete within max_wait_ms.
 
         Example:
-            from extend_ai import FileFromId
-            from extend_ai.split_runs.types import SplitRunsCreateRequestSplitter
-
             result = client.split_runs.create_and_poll(
-                file=FileFromId(id="file_xxx"),
-                splitter=SplitRunsCreateRequestSplitter(id="splitter_abc123")
+                file={"id": "file_xxx"},
+                splitter={"id": "splitter_abc123"}
             )
 
             if result.split_run.status == "PROCESSED":
@@ -132,9 +129,9 @@ class AsyncSplitRunsWrapper(AsyncSplitRunsClient):
     async def create_and_poll(
         self,
         *,
-        file: SplitRunsCreateRequestFile,
-        splitter: Optional[SplitRunsCreateRequestSplitter] = None,
-        config: Optional[SplitConfig] = None,
+        file: SplitRunsCreateRequestFileParams,
+        splitter: Optional[SplitRunsCreateRequestSplitterParams] = None,
+        config: Optional[SplitConfigParams] = None,
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
         polling_options: Optional[PollingOptions] = None,
