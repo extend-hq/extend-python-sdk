@@ -12,8 +12,8 @@ Example:
         classifier={"id": "classifier_abc123"},
     )
 
-    if result.classify_run.status == "PROCESSED":
-        print(result.classify_run.output)
+    if result.status == "PROCESSED":
+        print(result.output)
 """
 
 from typing import Any, Dict, Optional
@@ -21,9 +21,9 @@ from typing import Any, Dict, Optional
 from ...classify_runs.client import AsyncClassifyRunsClient, ClassifyRunsClient
 from ...classify_runs.requests.classify_runs_create_request_classifier import ClassifyRunsCreateRequestClassifierParams
 from ...classify_runs.requests.classify_runs_create_request_file import ClassifyRunsCreateRequestFileParams
-from ...classify_runs.types.classify_runs_retrieve_response import ClassifyRunsRetrieveResponse
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...requests.classify_config import ClassifyConfigParams
+from ...types.classify_run import ClassifyRun
 from ...types.run_metadata import RunMetadata
 from ...types.run_priority import RunPriority
 from ..polling import PollingOptions, poll_until_done, poll_until_done_async
@@ -63,7 +63,7 @@ class ClassifyRunsWrapper(ClassifyRunsClient):
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
         polling_options: Optional[PollingOptions] = None,
-    ) -> ClassifyRunsRetrieveResponse:
+    ) -> ClassifyRun:
         """
         Creates a classify run and polls until it reaches a terminal state.
 
@@ -81,7 +81,7 @@ class ClassifyRunsWrapper(ClassifyRunsClient):
             polling_options: Options for polling behavior.
 
         Returns:
-            The final classify run response when processing is complete.
+            The final classify run when processing is complete.
 
         Raises:
             PollingTimeoutError: If the run doesn't complete within max_wait_ms.
@@ -92,8 +92,8 @@ class ClassifyRunsWrapper(ClassifyRunsClient):
                 classifier={"id": "classifier_abc123"}
             )
 
-            if result.classify_run.status == "PROCESSED":
-                print(result.classify_run.output)
+            if result.status == "PROCESSED":
+                print(result.output)
         """
         # Build kwargs, only including non-None values to avoid passing null
         kwargs: Dict[str, Any] = {"file": file}
@@ -108,12 +108,12 @@ class ClassifyRunsWrapper(ClassifyRunsClient):
 
         # Create the classify run
         create_response = self.create(**kwargs)
-        run_id = create_response.classify_run.id
+        run_id = create_response.id
 
         # Poll until terminal state
         return poll_until_done(
             retrieve=lambda: self.retrieve(run_id),
-            is_terminal=lambda response: _is_terminal_status(response.classify_run.status),
+            is_terminal=lambda response: _is_terminal_status(response.status),
             options=polling_options,
         )
 
@@ -135,7 +135,7 @@ class AsyncClassifyRunsWrapper(AsyncClassifyRunsClient):
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
         polling_options: Optional[PollingOptions] = None,
-    ) -> ClassifyRunsRetrieveResponse:
+    ) -> ClassifyRun:
         """
         Creates a classify run and polls until it reaches a terminal state (async version).
         """
@@ -152,11 +152,11 @@ class AsyncClassifyRunsWrapper(AsyncClassifyRunsClient):
 
         # Create the classify run
         create_response = await self.create(**kwargs)
-        run_id = create_response.classify_run.id
+        run_id = create_response.id
 
         # Poll until terminal state
         return await poll_until_done_async(
             retrieve=lambda: self.retrieve(run_id),
-            is_terminal=lambda response: _is_terminal_status(response.classify_run.status),
+            is_terminal=lambda response: _is_terminal_status(response.status),
             options=polling_options,
         )

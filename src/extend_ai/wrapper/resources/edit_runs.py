@@ -12,17 +12,17 @@ Example:
         config={"schema": {...}},
     )
 
-    if result.edit_run.status == "PROCESSED":
-        print(result.edit_run.output)
+    if result.status == "PROCESSED":
+        print(result.output)
 """
 
 from typing import Any, Dict, Optional
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...edit_runs.client import AsyncEditRunsClient, EditRunsClient
-from ...edit_runs.requests.edit_runs_create_request_config import EditRunsCreateRequestConfigParams
 from ...edit_runs.requests.edit_runs_create_request_file import EditRunsCreateRequestFileParams
-from ...edit_runs.types.edit_runs_retrieve_response import EditRunsRetrieveResponse
+from ...requests.edit_config import EditConfigParams
+from ...types.edit_run import EditRun
 from ..polling import PollingOptions, poll_until_done, poll_until_done_async
 
 # Re-export for convenience
@@ -57,14 +57,11 @@ class EditRunsWrapper(EditRunsClient):
         self,
         *,
         file: EditRunsCreateRequestFileParams,
-        config: Optional[EditRunsCreateRequestConfigParams] = None,
+        config: Optional[EditConfigParams] = None,
         polling_options: Optional[PollingOptions] = None,
-    ) -> EditRunsRetrieveResponse:
+    ) -> EditRun:
         """
         Creates an edit run and polls until it reaches a terminal state.
-
-        This is a convenience method that combines create() and polling via
-        retrieve() with exponential backoff and jitter.
 
         Terminal states: PROCESSED, FAILED
 
@@ -74,7 +71,7 @@ class EditRunsWrapper(EditRunsClient):
             polling_options: Options for polling behavior.
 
         Returns:
-            The final edit run response when processing is complete.
+            The final edit run when processing is complete.
 
         Raises:
             PollingTimeoutError: If the run doesn't complete within max_wait_ms.
@@ -85,8 +82,8 @@ class EditRunsWrapper(EditRunsClient):
                 config={"schema": {...}}
             )
 
-            if result.edit_run.status == "PROCESSED":
-                print(result.edit_run.output)
+            if result.status == "PROCESSED":
+                print(result.output)
         """
         # Build kwargs, only including non-None values to avoid passing null
         kwargs: Dict[str, Any] = {"file": file}
@@ -95,12 +92,12 @@ class EditRunsWrapper(EditRunsClient):
 
         # Create the edit run
         create_response = self.create(**kwargs)
-        run_id = create_response.edit_run.id
+        run_id = create_response.id
 
         # Poll until terminal state
         return poll_until_done(
             retrieve=lambda: self.retrieve(run_id),
-            is_terminal=lambda response: _is_terminal_status(response.edit_run.status),
+            is_terminal=lambda response: _is_terminal_status(response.status),
             options=polling_options,
         )
 
@@ -117,9 +114,9 @@ class AsyncEditRunsWrapper(AsyncEditRunsClient):
         self,
         *,
         file: EditRunsCreateRequestFileParams,
-        config: Optional[EditRunsCreateRequestConfigParams] = None,
+        config: Optional[EditConfigParams] = None,
         polling_options: Optional[PollingOptions] = None,
-    ) -> EditRunsRetrieveResponse:
+    ) -> EditRun:
         """
         Creates an edit run and polls until it reaches a terminal state (async version).
         """
@@ -130,11 +127,11 @@ class AsyncEditRunsWrapper(AsyncEditRunsClient):
 
         # Create the edit run
         create_response = await self.create(**kwargs)
-        run_id = create_response.edit_run.id
+        run_id = create_response.id
 
         # Poll until terminal state
         return await poll_until_done_async(
             retrieve=lambda: self.retrieve(run_id),
-            is_terminal=lambda response: _is_terminal_status(response.edit_run.status),
+            is_terminal=lambda response: _is_terminal_status(response.status),
             options=polling_options,
         )

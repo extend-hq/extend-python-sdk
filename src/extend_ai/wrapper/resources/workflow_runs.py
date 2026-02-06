@@ -12,8 +12,8 @@ Example:
         workflow={"id": "workflow_abc123"},
     )
 
-    if result.workflow_run.status == "PROCESSED":
-        print(result.workflow_run.step_runs)
+    if result.status == "PROCESSED":
+        print(result.step_runs)
 """
 
 from typing import Any, Dict, Optional, Sequence
@@ -23,10 +23,10 @@ from ...requests.workflow_reference import WorkflowReferenceParams
 from ...types.run_metadata import RunMetadata
 from ...types.run_priority import RunPriority
 from ...types.run_secrets import RunSecrets
+from ...types.workflow_run import WorkflowRun
 from ...workflow_runs.client import AsyncWorkflowRunsClient, WorkflowRunsClient
 from ...workflow_runs.requests.workflow_runs_create_request_file import WorkflowRunsCreateRequestFileParams
 from ...workflow_runs.requests.workflow_runs_create_request_outputs_item import WorkflowRunsCreateRequestOutputsItemParams
-from ...workflow_runs.types.workflow_runs_retrieve_response import WorkflowRunsRetrieveResponse
 from ..polling import PollingOptions, poll_until_done, poll_until_done_async
 
 # Re-export for convenience
@@ -68,7 +68,7 @@ class WorkflowRunsWrapper(WorkflowRunsClient):
         metadata: Optional[RunMetadata] = None,
         secrets: Optional[RunSecrets] = None,
         polling_options: Optional[PollingOptions] = None,
-    ) -> WorkflowRunsRetrieveResponse:
+    ) -> WorkflowRun:
         """
         Creates a workflow run and polls until it reaches a terminal state.
 
@@ -87,7 +87,7 @@ class WorkflowRunsWrapper(WorkflowRunsClient):
             polling_options: Options for polling behavior.
 
         Returns:
-            The final workflow run response when processing is complete.
+            The final workflow run when processing is complete.
 
         Raises:
             PollingTimeoutError: If max_wait_ms is set and exceeded.
@@ -98,13 +98,13 @@ class WorkflowRunsWrapper(WorkflowRunsClient):
                 workflow={"id": "workflow_abc123"}
             )
 
-            match result.workflow_run.status:
+            match result.status:
                 case "PROCESSED":
-                    print("Success:", result.workflow_run.step_runs)
+                    print("Success:", result.step_runs)
                 case "NEEDS_REVIEW":
-                    print("Needs review:", result.workflow_run.dashboard_url)
+                    print("Needs review:", result.dashboard_url)
                 case "FAILED":
-                    print("Failed:", result.workflow_run.failure_message)
+                    print("Failed:", result.failure_message)
         """
         # Build kwargs, only including non-None values to avoid passing null
         kwargs: Dict[str, Any] = {"workflow": workflow, "file": file}
@@ -119,12 +119,12 @@ class WorkflowRunsWrapper(WorkflowRunsClient):
 
         # Create the workflow run
         create_response = self.create(**kwargs)
-        run_id = create_response.workflow_run.id
+        run_id = create_response.id
 
         # Poll until terminal state
         return poll_until_done(
             retrieve=lambda: self.retrieve(run_id),
-            is_terminal=lambda response: _is_terminal_status(response.workflow_run.status),
+            is_terminal=lambda response: _is_terminal_status(response.status),
             options=polling_options,
         )
 
@@ -147,7 +147,7 @@ class AsyncWorkflowRunsWrapper(AsyncWorkflowRunsClient):
         metadata: Optional[RunMetadata] = None,
         secrets: Optional[RunSecrets] = None,
         polling_options: Optional[PollingOptions] = None,
-    ) -> WorkflowRunsRetrieveResponse:
+    ) -> WorkflowRun:
         """
         Creates a workflow run and polls until it reaches a terminal state (async version).
         """
@@ -164,11 +164,11 @@ class AsyncWorkflowRunsWrapper(AsyncWorkflowRunsClient):
 
         # Create the workflow run
         create_response = await self.create(**kwargs)
-        run_id = create_response.workflow_run.id
+        run_id = create_response.id
 
         # Poll until terminal state
         return await poll_until_done_async(
             retrieve=lambda: self.retrieve(run_id),
-            is_terminal=lambda response: _is_terminal_status(response.workflow_run.status),
+            is_terminal=lambda response: _is_terminal_status(response.status),
             options=polling_options,
         )

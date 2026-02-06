@@ -12,26 +12,21 @@ from extend_ai.wrapper.polling import PollingOptions, PollingTimeoutError
 # ============================================================================
 
 
-def create_mock_parse_run(status: str = "PROCESSED", run_id: str = "parse_run_test123"):
-    """Create a mock ParseRun response."""
-    mock_run = MagicMock()
-    mock_run.id = run_id
-    mock_run.status = status
-    mock_run.object = "parse_run"
-    return mock_run
-
-
 def create_mock_create_response(status: str = "PROCESSING"):
     """Create a mock create response."""
     response = MagicMock()
-    response.parse_run = create_mock_parse_run(status)
+    response.id = "parse_run_test123"
+    response.status = status
+    response.object = "parse_run"
     return response
 
 
 def create_mock_retrieve_response(status: str = "PROCESSED"):
     """Create a mock retrieve response."""
     response = MagicMock()
-    response.parse_run = create_mock_parse_run(status)
+    response.id = "parse_run_test123"
+    response.status = status
+    response.object = "parse_run"
     return response
 
 
@@ -74,7 +69,7 @@ class TestParseRunsWrapperCreateAndPoll:
 
         assert self.wrapper.create.call_count == 1
         assert self.wrapper.retrieve.call_count == 2
-        assert result.parse_run.status == "PROCESSED"
+        assert result.status == "PROCESSED"
 
     def test_returns_immediately_if_processed_on_first_retrieve(self):
         """Should return immediately if already processed on first retrieve."""
@@ -85,7 +80,7 @@ class TestParseRunsWrapperCreateAndPoll:
             file=MagicMock(),
         )
 
-        assert result.parse_run.status == "PROCESSED"
+        assert result.status == "PROCESSED"
         assert self.wrapper.retrieve.call_count == 1
 
     def test_handles_failed_status_as_terminal(self):
@@ -97,7 +92,7 @@ class TestParseRunsWrapperCreateAndPoll:
             file=MagicMock(),
         )
 
-        assert result.parse_run.status == "FAILED"
+        assert result.status == "FAILED"
 
     def test_throws_polling_timeout_error(self):
         """Should throw PollingTimeoutError when timeout exceeded."""
