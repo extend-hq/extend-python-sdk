@@ -12,8 +12,8 @@ Example:
         splitter={"id": "splitter_abc123"},
     )
 
-    if result.split_run.status == "PROCESSED":
-        print(result.split_run.output)
+    if result.status == "PROCESSED":
+        print(result.output)
 """
 
 from typing import Any, Dict, Optional
@@ -23,9 +23,9 @@ from ...requests.split_config import SplitConfigParams
 from ...split_runs.client import AsyncSplitRunsClient, SplitRunsClient
 from ...split_runs.requests.split_runs_create_request_file import SplitRunsCreateRequestFileParams
 from ...split_runs.requests.split_runs_create_request_splitter import SplitRunsCreateRequestSplitterParams
-from ...split_runs.types.split_runs_retrieve_response import SplitRunsRetrieveResponse
 from ...types.run_metadata import RunMetadata
 from ...types.run_priority import RunPriority
+from ...types.split_run import SplitRun
 from ..polling import PollingOptions, poll_until_done, poll_until_done_async
 
 # Re-export for convenience
@@ -63,12 +63,9 @@ class SplitRunsWrapper(SplitRunsClient):
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
         polling_options: Optional[PollingOptions] = None,
-    ) -> SplitRunsRetrieveResponse:
+    ) -> SplitRun:
         """
         Creates a split run and polls until it reaches a terminal state.
-
-        This is a convenience method that combines create() and polling via
-        retrieve() with exponential backoff and jitter.
 
         Terminal states: PROCESSED, FAILED, CANCELLED
 
@@ -81,7 +78,7 @@ class SplitRunsWrapper(SplitRunsClient):
             polling_options: Options for polling behavior.
 
         Returns:
-            The final split run response when processing is complete.
+            The final split run when processing is complete.
 
         Raises:
             PollingTimeoutError: If the run doesn't complete within max_wait_ms.
@@ -92,8 +89,8 @@ class SplitRunsWrapper(SplitRunsClient):
                 splitter={"id": "splitter_abc123"}
             )
 
-            if result.split_run.status == "PROCESSED":
-                print(result.split_run.output)
+            if result.status == "PROCESSED":
+                print(result.output)
         """
         # Build kwargs, only including non-None values to avoid passing null
         kwargs: Dict[str, Any] = {"file": file}
@@ -108,12 +105,12 @@ class SplitRunsWrapper(SplitRunsClient):
 
         # Create the split run
         create_response = self.create(**kwargs)
-        run_id = create_response.split_run.id
+        run_id = create_response.id
 
         # Poll until terminal state
         return poll_until_done(
             retrieve=lambda: self.retrieve(run_id),
-            is_terminal=lambda response: _is_terminal_status(response.split_run.status),
+            is_terminal=lambda response: _is_terminal_status(response.status),
             options=polling_options,
         )
 
@@ -135,7 +132,7 @@ class AsyncSplitRunsWrapper(AsyncSplitRunsClient):
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
         polling_options: Optional[PollingOptions] = None,
-    ) -> SplitRunsRetrieveResponse:
+    ) -> SplitRun:
         """
         Creates a split run and polls until it reaches a terminal state (async version).
         """
@@ -152,11 +149,11 @@ class AsyncSplitRunsWrapper(AsyncSplitRunsClient):
 
         # Create the split run
         create_response = await self.create(**kwargs)
-        run_id = create_response.split_run.id
+        run_id = create_response.id
 
         # Poll until terminal state
         return await poll_until_done_async(
             retrieve=lambda: self.retrieve(run_id),
-            is_terminal=lambda response: _is_terminal_status(response.split_run.status),
+            is_terminal=lambda response: _is_terminal_status(response.status),
             options=polling_options,
         )

@@ -12,26 +12,21 @@ from extend_ai.wrapper.polling import PollingOptions, PollingTimeoutError
 # ============================================================================
 
 
-def create_mock_workflow_run(status: str = "PROCESSED", run_id: str = "workflow_run_test123"):
-    """Create a mock WorkflowRun response."""
-    mock_run = MagicMock()
-    mock_run.id = run_id
-    mock_run.status = status
-    mock_run.object = "workflow_run"
-    return mock_run
-
-
 def create_mock_create_response(status: str = "PROCESSING"):
     """Create a mock create response."""
     response = MagicMock()
-    response.workflow_run = create_mock_workflow_run(status)
+    response.id = "workflow_run_test123"
+    response.status = status
+    response.object = "workflow_run"
     return response
 
 
 def create_mock_retrieve_response(status: str = "PROCESSED"):
     """Create a mock retrieve response."""
     response = MagicMock()
-    response.workflow_run = create_mock_workflow_run(status)
+    response.id = "workflow_run_test123"
+    response.status = status
+    response.object = "workflow_run"
     return response
 
 
@@ -75,7 +70,7 @@ class TestWorkflowRunsWrapperCreateAndPoll:
 
         assert self.wrapper.create.call_count == 1
         assert self.wrapper.retrieve.call_count == 2
-        assert result.workflow_run.status == "PROCESSED"
+        assert result.status == "PROCESSED"
 
     def test_returns_immediately_if_processed_on_first_retrieve(self):
         """Should return immediately if already processed on first retrieve."""
@@ -92,7 +87,7 @@ class TestWorkflowRunsWrapperCreateAndPoll:
             ),
         )
 
-        assert result.workflow_run.status == "PROCESSED"
+        assert result.status == "PROCESSED"
         assert self.wrapper.retrieve.call_count == 1
 
     def test_handles_failed_status_as_terminal(self):
@@ -110,7 +105,7 @@ class TestWorkflowRunsWrapperCreateAndPoll:
             ),
         )
 
-        assert result.workflow_run.status == "FAILED"
+        assert result.status == "FAILED"
 
     def test_handles_cancelled_status_as_terminal(self):
         """Should handle CANCELLED status as terminal."""
@@ -127,7 +122,7 @@ class TestWorkflowRunsWrapperCreateAndPoll:
             ),
         )
 
-        assert result.workflow_run.status == "CANCELLED"
+        assert result.status == "CANCELLED"
 
     def test_handles_needs_review_status_as_terminal(self):
         """Should handle NEEDS_REVIEW status as terminal."""
@@ -144,7 +139,7 @@ class TestWorkflowRunsWrapperCreateAndPoll:
             ),
         )
 
-        assert result.workflow_run.status == "NEEDS_REVIEW"
+        assert result.status == "NEEDS_REVIEW"
 
     def test_handles_rejected_status_as_terminal(self):
         """Should handle REJECTED status as terminal."""
@@ -161,7 +156,7 @@ class TestWorkflowRunsWrapperCreateAndPoll:
             ),
         )
 
-        assert result.workflow_run.status == "REJECTED"
+        assert result.status == "REJECTED"
 
     def test_continues_polling_during_pending_status(self):
         """Should continue polling during PENDING status."""
@@ -182,7 +177,7 @@ class TestWorkflowRunsWrapperCreateAndPoll:
             ),
         )
 
-        assert result.workflow_run.status == "PROCESSED"
+        assert result.status == "PROCESSED"
         assert self.wrapper.retrieve.call_count == 3
 
     def test_continues_polling_during_cancelling_status(self):
@@ -203,7 +198,7 @@ class TestWorkflowRunsWrapperCreateAndPoll:
             ),
         )
 
-        assert result.workflow_run.status == "CANCELLED"
+        assert result.status == "CANCELLED"
         assert self.wrapper.retrieve.call_count == 2
 
     def test_throws_polling_timeout_error(self):
@@ -233,4 +228,4 @@ class TestWorkflowRunsWrapperCreateAndPoll:
             file=MagicMock(),
         )
 
-        assert result.workflow_run.status == "PROCESSED"
+        assert result.status == "PROCESSED"

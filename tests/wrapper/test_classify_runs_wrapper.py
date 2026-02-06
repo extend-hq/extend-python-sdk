@@ -12,26 +12,21 @@ from extend_ai.wrapper.polling import PollingOptions, PollingTimeoutError
 # ============================================================================
 
 
-def create_mock_classify_run(status: str = "PROCESSED", run_id: str = "classify_run_test123"):
-    """Create a mock ClassifyRun response."""
-    mock_run = MagicMock()
-    mock_run.id = run_id
-    mock_run.status = status
-    mock_run.object = "classify_run"
-    return mock_run
-
-
 def create_mock_create_response(status: str = "PROCESSING"):
     """Create a mock create response."""
     response = MagicMock()
-    response.classify_run = create_mock_classify_run(status)
+    response.id = "classify_run_test123"
+    response.status = status
+    response.object = "classify_run"
     return response
 
 
 def create_mock_retrieve_response(status: str = "PROCESSED"):
     """Create a mock retrieve response."""
     response = MagicMock()
-    response.classify_run = create_mock_classify_run(status)
+    response.id = "classify_run_test123"
+    response.status = status
+    response.object = "classify_run"
     return response
 
 
@@ -75,7 +70,7 @@ class TestClassifyRunsWrapperCreateAndPoll:
 
         assert self.wrapper.create.call_count == 1
         assert self.wrapper.retrieve.call_count == 2
-        assert result.classify_run.status == "PROCESSED"
+        assert result.status == "PROCESSED"
 
     def test_returns_immediately_if_processed_on_first_retrieve(self):
         """Should return immediately if already processed on first retrieve."""
@@ -87,7 +82,7 @@ class TestClassifyRunsWrapperCreateAndPoll:
             classifier=MagicMock(),
         )
 
-        assert result.classify_run.status == "PROCESSED"
+        assert result.status == "PROCESSED"
         assert self.wrapper.retrieve.call_count == 1
 
     def test_handles_failed_status_as_terminal(self):
@@ -100,7 +95,7 @@ class TestClassifyRunsWrapperCreateAndPoll:
             classifier=MagicMock(),
         )
 
-        assert result.classify_run.status == "FAILED"
+        assert result.status == "FAILED"
 
     def test_handles_cancelled_status_as_terminal(self):
         """Should handle CANCELLED status as terminal."""
@@ -112,7 +107,7 @@ class TestClassifyRunsWrapperCreateAndPoll:
             classifier=MagicMock(),
         )
 
-        assert result.classify_run.status == "CANCELLED"
+        assert result.status == "CANCELLED"
 
     def test_throws_polling_timeout_error(self):
         """Should throw PollingTimeoutError when timeout exceeded."""
