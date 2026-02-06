@@ -7,12 +7,12 @@ import typing
 import pydantic
 from ...core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ...core.unchecked_base_model import UncheckedBaseModel
-from ...types.processor_version import ProcessorVersion
+from ...types.legacy_processor_version import LegacyProcessorVersion
 
 
 class ProcessorVersionListResponse(UncheckedBaseModel):
     success: bool
-    versions: typing.List[ProcessorVersion] = pydantic.Field()
+    versions: typing.List[LegacyProcessorVersion] = pydantic.Field()
     """
     An array of ProcessorVersion objects representing all versions of the specified processor.
     """

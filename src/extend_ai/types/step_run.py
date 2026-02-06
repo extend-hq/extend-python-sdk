@@ -2,50 +2,22 @@
 
 import typing
 
-import pydantic
-from ..core.pydantic_utilities import IS_PYDANTIC_V2
-from ..core.unchecked_base_model import UncheckedBaseModel
-from .step_run_output import StepRunOutput
-from .step_run_status import StepRunStatus
-from .step_run_step import StepRunStep
+from .classify_step_run import ClassifyStepRun
+from .conditional_extract_step_run import ConditionalExtractStepRun
+from .external_data_validation_step_run import ExternalDataValidationStepRun
+from .extract_step_run import ExtractStepRun
+from .merge_extract_step_run import MergeExtractStepRun
+from .parse_step_run import ParseStepRun
+from .rule_validation_step_run import RuleValidationStepRun
+from .split_step_run import SplitStepRun
 
-
-class StepRun(UncheckedBaseModel):
-    object: str = pydantic.Field()
-    """
-    The type of response. In this case, it will always be `"workflow_step_run"`.
-    """
-
-    id: str = pydantic.Field()
-    """
-    The ID of the workflow step run.
-    
-    Example: `"workflow_step_run_xKm9pNv3qWsY_jL2tR5Dh"`
-    """
-
-    status: StepRunStatus = pydantic.Field()
-    """
-    The status of the workflow step run:
-    * `"PENDING"` - The step run is waiting to be executed
-    * `"PROCESSING"` - The step run is currently executing
-    * `"PROCESSED"` - The step run completed successfully
-    * `"FAILED"` - The step run encountered an error
-    * `"CANCELLED"` - The step run was cancelled
-    """
-
-    step: StepRunStep
-    output: typing.Optional[StepRunOutput] = pydantic.Field(default=None)
-    """
-    The output of the WorkflowStepRun. The shape of the output depends on the type of the WorkflowStep in the `step` field:
-    * For `"EXTERNAL_DATA_VALIDATION"` steps - The output will be the same object that was returned by the external endpoint configured for this step
-    * For `"RULE_VALIDATION"` steps - See the below shape:
-    """
-
-    if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
-    else:
-
-        class Config:
-            frozen = True
-            smart_union = True
-            extra = pydantic.Extra.allow
+StepRun = typing.Union[
+    ParseStepRun,
+    ExtractStepRun,
+    ClassifyStepRun,
+    SplitStepRun,
+    MergeExtractStepRun,
+    ConditionalExtractStepRun,
+    RuleValidationStepRun,
+    ExternalDataValidationStepRun,
+]

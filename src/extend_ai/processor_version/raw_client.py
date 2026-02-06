@@ -13,8 +13,7 @@ from ..core.unchecked_base_model import construct_type
 from ..errors.bad_request_error import BadRequestError
 from ..errors.not_found_error import NotFoundError
 from ..errors.unauthorized_error import UnauthorizedError
-from ..types.error import Error
-from .types.processor_version_create_request_config import ProcessorVersionCreateRequestConfig
+from .requests.processor_version_create_request_config import ProcessorVersionCreateRequestConfigParams
 from .types.processor_version_create_request_release_type import ProcessorVersionCreateRequestReleaseType
 from .types.processor_version_create_response import ProcessorVersionCreateResponse
 from .types.processor_version_get_response import ProcessorVersionGetResponse
@@ -27,85 +26,6 @@ OMIT = typing.cast(typing.Any, ...)
 class RawProcessorVersionClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
-
-    def get(
-        self, processor_id: str, processor_version_id: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> HttpResponse[ProcessorVersionGetResponse]:
-        """
-        Retrieve a specific version of a processor in Extend
-
-        Parameters
-        ----------
-        processor_id : str
-            The ID of the processor.
-
-            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
-
-        processor_version_id : str
-            The ID of the specific processor version to retrieve.
-
-            Example: `"dpv_QYk6jgHA_8CsO8rVWhyNC"`
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        HttpResponse[ProcessorVersionGetResponse]
-            Successfully retrieved processor version
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            f"processors/{jsonable_encoder(processor_id)}/versions/{jsonable_encoder(processor_version_id)}",
-            method="GET",
-            request_options=request_options,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    ProcessorVersionGetResponse,
-                    construct_type(
-                        type_=ProcessorVersionGetResponse,  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 401:
-                raise UnauthorizedError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        Error,
-                        construct_type(
-                            type_=Error,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
-        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     def list(
         self, id: str, *, request_options: typing.Optional[RequestOptions] = None
@@ -121,7 +41,7 @@ class RawProcessorVersionClient:
         id : str
             The ID of the processor to retrieve versions for.
 
-            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -161,9 +81,9 @@ class RawProcessorVersionClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -190,7 +110,7 @@ class RawProcessorVersionClient:
         *,
         release_type: ProcessorVersionCreateRequestReleaseType,
         description: typing.Optional[str] = OMIT,
-        config: typing.Optional[ProcessorVersionCreateRequestConfig] = OMIT,
+        config: typing.Optional[ProcessorVersionCreateRequestConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ProcessorVersionCreateResponse]:
         """
@@ -203,7 +123,7 @@ class RawProcessorVersionClient:
         id : str
             The ID of the processor to publish a new version for.
 
-            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         release_type : ProcessorVersionCreateRequestReleaseType
             The type of release for this version. The two options are "major" and "minor", which will increment the version number accordingly.
@@ -211,7 +131,7 @@ class RawProcessorVersionClient:
         description : typing.Optional[str]
             A description of the changes in this version. This helps track the evolution of the processor over time.
 
-        config : typing.Optional[ProcessorVersionCreateRequestConfig]
+        config : typing.Optional[ProcessorVersionCreateRequestConfigParams]
             The configuration for this version of the processor. The type of configuration must match the processor type.
 
         request_options : typing.Optional[RequestOptions]
@@ -229,7 +149,7 @@ class RawProcessorVersionClient:
                 "releaseType": release_type,
                 "description": description,
                 "config": convert_and_respect_annotation_metadata(
-                    object_=config, annotation=ProcessorVersionCreateRequestConfig, direction="write"
+                    object_=config, annotation=ProcessorVersionCreateRequestConfigParams, direction="write"
                 ),
             },
             headers={
@@ -263,9 +183,9 @@ class RawProcessorVersionClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -275,14 +195,9 @@ class RawProcessorVersionClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-
-class AsyncRawProcessorVersionClient:
-    def __init__(self, *, client_wrapper: AsyncClientWrapper):
-        self._client_wrapper = client_wrapper
-
-    async def get(
+    def get(
         self, processor_id: str, processor_version_id: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> AsyncHttpResponse[ProcessorVersionGetResponse]:
+    ) -> HttpResponse[ProcessorVersionGetResponse]:
         """
         Retrieve a specific version of a processor in Extend
 
@@ -291,22 +206,22 @@ class AsyncRawProcessorVersionClient:
         processor_id : str
             The ID of the processor.
 
-            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         processor_version_id : str
             The ID of the specific processor version to retrieve.
 
-            Example: `"dpv_QYk6jgHA_8CsO8rVWhyNC"`
+            Example: `"exv_QYk6jgHA_8CsO8rVWhyNC"`
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[ProcessorVersionGetResponse]
+        HttpResponse[ProcessorVersionGetResponse]
             Successfully retrieved processor version
         """
-        _response = await self._client_wrapper.httpx_client.request(
+        _response = self._client_wrapper.httpx_client.request(
             f"processors/{jsonable_encoder(processor_id)}/versions/{jsonable_encoder(processor_version_id)}",
             method="GET",
             request_options=request_options,
@@ -320,7 +235,7 @@ class AsyncRawProcessorVersionClient:
                         object_=_response.json(),
                     ),
                 )
-                return AsyncHttpResponse(response=_response, data=_data)
+                return HttpResponse(response=_response, data=_data)
             if _response.status_code == 400:
                 raise BadRequestError(
                     headers=dict(_response.headers),
@@ -336,9 +251,9 @@ class AsyncRawProcessorVersionClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -359,6 +274,11 @@ class AsyncRawProcessorVersionClient:
             raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
+
+class AsyncRawProcessorVersionClient:
+    def __init__(self, *, client_wrapper: AsyncClientWrapper):
+        self._client_wrapper = client_wrapper
+
     async def list(
         self, id: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> AsyncHttpResponse[ProcessorVersionListResponse]:
@@ -373,7 +293,7 @@ class AsyncRawProcessorVersionClient:
         id : str
             The ID of the processor to retrieve versions for.
 
-            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -413,9 +333,9 @@ class AsyncRawProcessorVersionClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -442,7 +362,7 @@ class AsyncRawProcessorVersionClient:
         *,
         release_type: ProcessorVersionCreateRequestReleaseType,
         description: typing.Optional[str] = OMIT,
-        config: typing.Optional[ProcessorVersionCreateRequestConfig] = OMIT,
+        config: typing.Optional[ProcessorVersionCreateRequestConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ProcessorVersionCreateResponse]:
         """
@@ -455,7 +375,7 @@ class AsyncRawProcessorVersionClient:
         id : str
             The ID of the processor to publish a new version for.
 
-            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         release_type : ProcessorVersionCreateRequestReleaseType
             The type of release for this version. The two options are "major" and "minor", which will increment the version number accordingly.
@@ -463,7 +383,7 @@ class AsyncRawProcessorVersionClient:
         description : typing.Optional[str]
             A description of the changes in this version. This helps track the evolution of the processor over time.
 
-        config : typing.Optional[ProcessorVersionCreateRequestConfig]
+        config : typing.Optional[ProcessorVersionCreateRequestConfigParams]
             The configuration for this version of the processor. The type of configuration must match the processor type.
 
         request_options : typing.Optional[RequestOptions]
@@ -481,7 +401,7 @@ class AsyncRawProcessorVersionClient:
                 "releaseType": release_type,
                 "description": description,
                 "config": convert_and_respect_annotation_metadata(
-                    object_=config, annotation=ProcessorVersionCreateRequestConfig, direction="write"
+                    object_=config, annotation=ProcessorVersionCreateRequestConfigParams, direction="write"
                 ),
             },
             headers={
@@ -515,9 +435,88 @@ class AsyncRawProcessorVersionClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        Error,
+                        typing.Any,
                         construct_type(
-                            type_=Error,  # type: ignore
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def get(
+        self, processor_id: str, processor_version_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> AsyncHttpResponse[ProcessorVersionGetResponse]:
+        """
+        Retrieve a specific version of a processor in Extend
+
+        Parameters
+        ----------
+        processor_id : str
+            The ID of the processor.
+
+            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        processor_version_id : str
+            The ID of the specific processor version to retrieve.
+
+            Example: `"exv_QYk6jgHA_8CsO8rVWhyNC"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ProcessorVersionGetResponse]
+            Successfully retrieved processor version
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            f"processors/{jsonable_encoder(processor_id)}/versions/{jsonable_encoder(processor_version_id)}",
+            method="GET",
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ProcessorVersionGetResponse,
+                    construct_type(
+                        type_=ProcessorVersionGetResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

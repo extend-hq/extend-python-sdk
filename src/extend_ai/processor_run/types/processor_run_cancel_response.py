@@ -9,13 +9,13 @@ import typing_extensions
 from ...core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ...core.serialization import FieldMetadata
 from ...core.unchecked_base_model import UncheckedBaseModel
-from ...types.processor_run import ProcessorRun
+from ...types.legacy_processor_run import LegacyProcessorRun
 
 
 class ProcessorRunCancelResponse(UncheckedBaseModel):
     success: bool
-    processor_run: typing_extensions.Annotated[ProcessorRun, FieldMetadata(alias="processorRun")] = pydantic.Field(
-        alias="processorRun"
+    processor_run: typing_extensions.Annotated[LegacyProcessorRun, FieldMetadata(alias="processorRun")] = (
+        pydantic.Field(alias="processorRun")
     )
 
     if IS_PYDANTIC_V2:

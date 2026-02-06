@@ -2,4 +2,49 @@
 
 import typing
 
-BatchProcessorRunStatus = typing.Union[typing.Literal["PENDING", "PROCESSING", "PROCESSED", "FAILED"], typing.Any]
+from ..core import enum
+
+T_Result = typing.TypeVar("T_Result")
+
+
+class BatchProcessorRunStatus(enum.StrEnum):
+    """
+    The current status of the batch processor run:
+    * `"PENDING"` - The batch processor run is waiting to start
+    * `"PROCESSING"` - The batch processor run is in progress
+    * `"PROCESSED"` - The batch processor run completed successfully
+    * `"FAILED"` - The batch processor run encountered an error
+    """
+
+    PENDING = "PENDING"
+    PROCESSING = "PROCESSING"
+    PROCESSED = "PROCESSED"
+    FAILED = "FAILED"
+    _UNKNOWN = "__BATCHPROCESSORRUNSTATUS_UNKNOWN__"
+    """
+    This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
+    """
+
+    @classmethod
+    def _missing_(cls, value: typing.Any) -> "BatchProcessorRunStatus":
+        unknown = cls._UNKNOWN
+        unknown._value_ = value
+        return unknown
+
+    def visit(
+        self,
+        pending: typing.Callable[[], T_Result],
+        processing: typing.Callable[[], T_Result],
+        processed: typing.Callable[[], T_Result],
+        failed: typing.Callable[[], T_Result],
+        _unknown_member: typing.Callable[[str], T_Result],
+    ) -> T_Result:
+        if self is BatchProcessorRunStatus.PENDING:
+            return pending()
+        if self is BatchProcessorRunStatus.PROCESSING:
+            return processing()
+        if self is BatchProcessorRunStatus.PROCESSED:
+            return processed()
+        if self is BatchProcessorRunStatus.FAILED:
+            return failed()
+        return _unknown_member(self._value_)

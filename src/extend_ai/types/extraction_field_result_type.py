@@ -2,7 +2,65 @@
 
 import typing
 
-ExtractionFieldResultType = typing.Union[
-    typing.Literal["string", "number", "currency", "boolean", "date", "enum", "array", "object", "signature"],
-    typing.Any,
-]
+from ..core import enum
+
+T_Result = typing.TypeVar("T_Result")
+
+
+class ExtractionFieldResultType(enum.StrEnum):
+    """
+    The type of the extracted field
+    """
+
+    STRING = "string"
+    NUMBER = "number"
+    CURRENCY = "currency"
+    BOOLEAN = "boolean"
+    DATE = "date"
+    ENUM = "enum"
+    ARRAY = "array"
+    OBJECT = "object"
+    SIGNATURE = "signature"
+    _UNKNOWN = "__EXTRACTIONFIELDRESULTTYPE_UNKNOWN__"
+    """
+    This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
+    """
+
+    @classmethod
+    def _missing_(cls, value: typing.Any) -> "ExtractionFieldResultType":
+        unknown = cls._UNKNOWN
+        unknown._value_ = value
+        return unknown
+
+    def visit(
+        self,
+        string: typing.Callable[[], T_Result],
+        number: typing.Callable[[], T_Result],
+        currency: typing.Callable[[], T_Result],
+        boolean: typing.Callable[[], T_Result],
+        date: typing.Callable[[], T_Result],
+        enum: typing.Callable[[], T_Result],
+        array: typing.Callable[[], T_Result],
+        object: typing.Callable[[], T_Result],
+        signature: typing.Callable[[], T_Result],
+        _unknown_member: typing.Callable[[str], T_Result],
+    ) -> T_Result:
+        if self is ExtractionFieldResultType.STRING:
+            return string()
+        if self is ExtractionFieldResultType.NUMBER:
+            return number()
+        if self is ExtractionFieldResultType.CURRENCY:
+            return currency()
+        if self is ExtractionFieldResultType.BOOLEAN:
+            return boolean()
+        if self is ExtractionFieldResultType.DATE:
+            return date()
+        if self is ExtractionFieldResultType.ENUM:
+            return enum()
+        if self is ExtractionFieldResultType.ARRAY:
+            return array()
+        if self is ExtractionFieldResultType.OBJECT:
+            return object()
+        if self is ExtractionFieldResultType.SIGNATURE:
+            return signature()
+        return _unknown_member(self._value_)

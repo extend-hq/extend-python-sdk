@@ -7,12 +7,12 @@ import typing
 import pydantic
 from ...core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ...core.unchecked_base_model import UncheckedBaseModel
-from ...types.processor_version import ProcessorVersion
+from ...types.legacy_processor_version import LegacyProcessorVersion
 
 
 class ProcessorVersionGetResponse(UncheckedBaseModel):
     success: bool
-    version: ProcessorVersion = pydantic.Field()
+    version: LegacyProcessorVersion = pydantic.Field()
     """
     A ProcessorVersion object representing the requested version of the processor.
     """

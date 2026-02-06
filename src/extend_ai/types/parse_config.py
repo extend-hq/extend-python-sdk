@@ -16,7 +16,7 @@ from .parse_config_target import ParseConfigTarget
 
 class ParseConfig(UncheckedBaseModel):
     """
-    Configuration options for the parsing process.
+    Configuration options for the parsing process. Defaults depend on the selected parser engine and version.
     """
 
     target: typing.Optional[ParseConfigTarget] = pydantic.Field(default=None)
@@ -33,7 +33,7 @@ class ParseConfig(UncheckedBaseModel):
     * Prefer `markdown` for most documents, multi-column reading order, and retrieval use cases
     * Prefer `spatial` for messy/scanned/handwritten or skewed documents, when you need near 1:1 layout fidelity, or for BOL-like logistics docs
     
-    See "Markdown vs Spatial" in the Parse guide for details: /2025-04-21/developers/guides/parse#markdown-vs-spatial
+    See “Markdown vs Spatial” in the [Parse guide](https://docs.extend.ai/2026-02-09/developers/guides/parse#markdown-vs-spatial) for details.
     """
 
     chunking_strategy: typing_extensions.Annotated[

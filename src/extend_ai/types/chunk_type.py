@@ -2,4 +2,41 @@
 
 import typing
 
-ChunkType = typing.Union[typing.Literal["page", "document", "section"], typing.Any]
+from ..core import enum
+
+T_Result = typing.TypeVar("T_Result")
+
+
+class ChunkType(enum.StrEnum):
+    """
+    The type of chunk.
+    """
+
+    PAGE = "page"
+    DOCUMENT = "document"
+    SECTION = "section"
+    _UNKNOWN = "__CHUNKTYPE_UNKNOWN__"
+    """
+    This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
+    """
+
+    @classmethod
+    def _missing_(cls, value: typing.Any) -> "ChunkType":
+        unknown = cls._UNKNOWN
+        unknown._value_ = value
+        return unknown
+
+    def visit(
+        self,
+        page: typing.Callable[[], T_Result],
+        document: typing.Callable[[], T_Result],
+        section: typing.Callable[[], T_Result],
+        _unknown_member: typing.Callable[[str], T_Result],
+    ) -> T_Result:
+        if self is ChunkType.PAGE:
+            return page()
+        if self is ChunkType.DOCUMENT:
+            return document()
+        if self is ChunkType.SECTION:
+            return section()
+        return _unknown_member(self._value_)

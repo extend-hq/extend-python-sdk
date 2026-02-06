@@ -18,17 +18,37 @@ if typing.TYPE_CHECKING:
         ProcessorRunListRequestSource,
         ProcessorRunListResponse,
     )
+    from .requests import (
+        ProcessorRunCancelResponseParams,
+        ProcessorRunCreateRequestConfigParams,
+        ProcessorRunCreateRequestConfig_ClassifyParams,
+        ProcessorRunCreateRequestConfig_ExtractParams,
+        ProcessorRunCreateRequestConfig_SplitterParams,
+        ProcessorRunCreateResponseParams,
+        ProcessorRunDeleteResponseParams,
+        ProcessorRunGetResponseParams,
+        ProcessorRunListResponseParams,
+    )
 _dynamic_imports: typing.Dict[str, str] = {
     "ProcessorRunCancelResponse": ".types",
+    "ProcessorRunCancelResponseParams": ".requests",
     "ProcessorRunCreateRequestConfig": ".types",
+    "ProcessorRunCreateRequestConfigParams": ".requests",
     "ProcessorRunCreateRequestConfig_Classify": ".types",
+    "ProcessorRunCreateRequestConfig_ClassifyParams": ".requests",
     "ProcessorRunCreateRequestConfig_Extract": ".types",
+    "ProcessorRunCreateRequestConfig_ExtractParams": ".requests",
     "ProcessorRunCreateRequestConfig_Splitter": ".types",
+    "ProcessorRunCreateRequestConfig_SplitterParams": ".requests",
     "ProcessorRunCreateResponse": ".types",
+    "ProcessorRunCreateResponseParams": ".requests",
     "ProcessorRunDeleteResponse": ".types",
+    "ProcessorRunDeleteResponseParams": ".requests",
     "ProcessorRunGetResponse": ".types",
+    "ProcessorRunGetResponseParams": ".requests",
     "ProcessorRunListRequestSource": ".types",
     "ProcessorRunListResponse": ".types",
+    "ProcessorRunListResponseParams": ".requests",
 }
 
 
@@ -55,13 +75,22 @@ def __dir__():
 
 __all__ = [
     "ProcessorRunCancelResponse",
+    "ProcessorRunCancelResponseParams",
     "ProcessorRunCreateRequestConfig",
+    "ProcessorRunCreateRequestConfigParams",
     "ProcessorRunCreateRequestConfig_Classify",
+    "ProcessorRunCreateRequestConfig_ClassifyParams",
     "ProcessorRunCreateRequestConfig_Extract",
+    "ProcessorRunCreateRequestConfig_ExtractParams",
     "ProcessorRunCreateRequestConfig_Splitter",
+    "ProcessorRunCreateRequestConfig_SplitterParams",
     "ProcessorRunCreateResponse",
+    "ProcessorRunCreateResponseParams",
     "ProcessorRunDeleteResponse",
+    "ProcessorRunDeleteResponseParams",
     "ProcessorRunGetResponse",
+    "ProcessorRunGetResponseParams",
     "ProcessorRunListRequestSource",
     "ProcessorRunListResponse",
+    "ProcessorRunListResponseParams",
 ]
