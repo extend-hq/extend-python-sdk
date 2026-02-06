@@ -28,6 +28,20 @@ class Citation(UncheckedBaseModel):
     Array of points defining the polygon
     """
 
+    page_width: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageWidth")] = pydantic.Field(
+        alias="pageWidth", default=None
+    )
+    """
+    Width of the page in points
+    """
+
+    page_height: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageHeight")] = (
+        pydantic.Field(alias="pageHeight", default=None)
+    )
+    """
+    Height of the page in points
+    """
+
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
     else:
