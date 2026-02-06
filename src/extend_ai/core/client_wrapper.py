@@ -10,7 +10,7 @@ class BaseClientWrapper:
     def __init__(
         self,
         *,
-        token: typing.Optional[typing.Union[str, typing.Callable[[], str]]] = None,
+        token: typing.Union[str, typing.Callable[[], str]],
         headers: typing.Optional[typing.Dict[str, str]] = None,
         base_url: str,
         timeout: typing.Optional[float] = None,
@@ -23,23 +23,25 @@ class BaseClientWrapper:
         self._extend_api_version = extend_api_version
 
     def get_headers(self) -> typing.Dict[str, str]:
+        import platform
+
         headers: typing.Dict[str, str] = {
-            "User-Agent": "extend_ai/0.0.20",
+            "User-Agent": "extend_ai/0.0.21",
             "X-Fern-Language": "Python",
+            "X-Fern-Runtime": f"python/{platform.python_version()}",
+            "X-Fern-Platform": f"{platform.system().lower()}/{platform.release()}",
             "X-Fern-SDK-Name": "extend_ai",
-            "X-Fern-SDK-Version": "0.0.20",
+            "X-Fern-SDK-Version": "0.0.21",
             **(self.get_custom_headers() or {}),
         }
-        token = self._get_token()
-        if token is not None:
-            headers["Authorization"] = f"Bearer {token}"
+        headers["Authorization"] = f"Bearer {self._get_token()}"
         headers["x-extend-api-version"] = (
-            self._extend_api_version if self._extend_api_version is not None else "2025-04-21"
+            self._extend_api_version if self._extend_api_version is not None else "2026-02-09"
         )
         return headers
 
-    def _get_token(self) -> typing.Optional[str]:
-        if isinstance(self._token, str) or self._token is None:
+    def _get_token(self) -> str:
+        if isinstance(self._token, str):
             return self._token
         else:
             return self._token()
@@ -58,7 +60,7 @@ class SyncClientWrapper(BaseClientWrapper):
     def __init__(
         self,
         *,
-        token: typing.Optional[typing.Union[str, typing.Callable[[], str]]] = None,
+        token: typing.Union[str, typing.Callable[[], str]],
         headers: typing.Optional[typing.Dict[str, str]] = None,
         base_url: str,
         timeout: typing.Optional[float] = None,
@@ -80,7 +82,7 @@ class AsyncClientWrapper(BaseClientWrapper):
     def __init__(
         self,
         *,
-        token: typing.Optional[typing.Union[str, typing.Callable[[], str]]] = None,
+        token: typing.Union[str, typing.Callable[[], str]],
         headers: typing.Optional[typing.Dict[str, str]] = None,
         base_url: str,
         timeout: typing.Optional[float] = None,

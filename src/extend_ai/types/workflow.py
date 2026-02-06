@@ -8,9 +8,9 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 
 
 class Workflow(UncheckedBaseModel):
-    object: str = pydantic.Field()
+    object: typing.Literal["workflow"] = pydantic.Field(default="workflow")
     """
-    The type of response. In this case, it will always be `"workflow"`.
+    The type of object. In this case, it will always be `"workflow"`.
     """
 
     id: str = pydantic.Field()
@@ -18,13 +18,6 @@ class Workflow(UncheckedBaseModel):
     The ID of the workflow.
     
     Example: `"workflow_BMlfq_yWM3sT-ZzvCnA3f"`
-    """
-
-    version: str = pydantic.Field()
-    """
-    The version of the workflow.
-    
-    Examples: `"3"`, `"draft"`
     """
 
     name: str = pydantic.Field()

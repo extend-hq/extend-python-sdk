@@ -2,8 +2,8 @@
 
 import typing
 
-from .provided_classifier_output import ProvidedClassifierOutput
-from .provided_extraction_output import ProvidedExtractionOutput
-from .provided_splitter_output import ProvidedSplitterOutput
+from .provided_classify_output import ProvidedClassifyOutput
+from .provided_extract_output import ProvidedExtractOutput
+from .provided_split_output import ProvidedSplitOutput
 
-ProvidedProcessorOutput = typing.Union[ProvidedExtractionOutput, ProvidedClassifierOutput, ProvidedSplitterOutput]
+ProvidedProcessorOutput = typing.Union[ProvidedExtractOutput, ProvidedClassifyOutput, ProvidedSplitOutput]

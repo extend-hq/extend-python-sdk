@@ -22,7 +22,7 @@ The Extendconfig Python library provides convenient access to the Extendconfig A
 
 ## Documentation
 
-API reference documentation is available [here](https://docs.extend.ai/2025-04-21/developers).
+API reference documentation is available [here](https://docs.extend.ai/2026-02-09/developers).
 
 ## Installation
 
@@ -39,14 +39,13 @@ A full reference for this library is available [here](https://github.com/extend-
 Instantiate and use the client with the following:
 
 ```python
-from extend_ai import Extend, ParseRequestFile
+from extend_ai import Extend
 
 client = Extend(
     token="YOUR_TOKEN",
 )
 client.parse(
-    response_type="json",
-    file=ParseRequestFile(),
+    file={"url": "url"},
 )
 ```
 
@@ -57,7 +56,7 @@ The SDK also exports an `async` client so that you can make non-blocking calls t
 ```python
 import asyncio
 
-from extend_ai import AsyncExtend, ParseRequestFile
+from extend_ai import AsyncExtend
 
 client = AsyncExtend(
     token="YOUR_TOKEN",
@@ -66,8 +65,7 @@ client = AsyncExtend(
 
 async def main() -> None:
     await client.parse(
-        response_type="json",
-        file=ParseRequestFile(),
+        file={"url": "url"},
     )
 
 
