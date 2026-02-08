@@ -13,6 +13,7 @@ from ...types.chunk import Chunk
 from ...types.parse_config import ParseConfig
 from ...types.parser_run_credits import ParserRunCredits
 from ...types.parser_run_metrics import ParserRunMetrics
+from ...types.parser_run_ocr import ParserRunOcr
 from ...types.parser_run_status_enum import ParserRunStatusEnum
 from ...types.parser_run_status_status import ParserRunStatusStatus
 
@@ -40,6 +41,7 @@ class ParserRunGetResponseParserRun_ParserRun(UncheckedBaseModel):
     id: str
     file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field(alias="fileId")
     chunks: typing.List[Chunk]
+    ocr: typing.Optional[ParserRunOcr] = None
     status: ParserRunStatusEnum
     failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
         pydantic.Field(alias="failureReason", default=None)

@@ -13,6 +13,7 @@ from .chunk import Chunk
 from .parse_config import ParseConfig
 from .parser_run_credits import ParserRunCredits
 from .parser_run_metrics import ParserRunMetrics
+from .parser_run_ocr import ParserRunOcr
 from .parser_run_status_enum import ParserRunStatusEnum
 
 
@@ -41,6 +42,11 @@ class ParserRun(UncheckedBaseModel):
     chunks: typing.List[Chunk] = pydantic.Field()
     """
     An array of chunks that were parsed from the file.
+    """
+
+    ocr: typing.Optional[ParserRunOcr] = pydantic.Field(default=None)
+    """
+    Raw OCR data from the parsing process. Only included when `returnOcr` is configured in the parse config's advanced options.
     """
 
     status: ParserRunStatusEnum = pydantic.Field()
