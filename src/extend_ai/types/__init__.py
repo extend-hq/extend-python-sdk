@@ -148,6 +148,9 @@ if typing.TYPE_CHECKING:
     from .parser_run import ParserRun
     from .parser_run_credits import ParserRunCredits
     from .parser_run_metrics import ParserRunMetrics
+    from .parser_run_ocr import ParserRunOcr
+    from .parser_run_ocr_words_item import ParserRunOcrWordsItem
+    from .parser_run_ocr_words_item_bounding_box import ParserRunOcrWordsItemBoundingBox
     from .parser_run_status import ParserRunStatus
     from .parser_run_status_enum import ParserRunStatusEnum
     from .parser_run_status_status import ParserRunStatusStatus
@@ -362,6 +365,9 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ParserRun": ".parser_run",
     "ParserRunCredits": ".parser_run_credits",
     "ParserRunMetrics": ".parser_run_metrics",
+    "ParserRunOcr": ".parser_run_ocr",
+    "ParserRunOcrWordsItem": ".parser_run_ocr_words_item",
+    "ParserRunOcrWordsItemBoundingBox": ".parser_run_ocr_words_item_bounding_box",
     "ParserRunStatus": ".parser_run_status",
     "ParserRunStatusEnum": ".parser_run_status_enum",
     "ParserRunStatusStatus": ".parser_run_status_status",
@@ -596,6 +602,9 @@ __all__ = [
     "ParserRun",
     "ParserRunCredits",
     "ParserRunMetrics",
+    "ParserRunOcr",
+    "ParserRunOcrWordsItem",
+    "ParserRunOcrWordsItemBoundingBox",
     "ParserRunStatus",
     "ParserRunStatusEnum",
     "ParserRunStatusStatus",
