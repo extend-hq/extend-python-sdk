@@ -1,10 +1,9 @@
 # Extend Python Library
 
-The Extend Python library provides convenient access to the Extend API from Python.
+[![PyPI version](https://img.shields.io/pypi/v/extend-ai.svg)](https://pypi.python.org/pypi/extend-ai)
+[![Python versions](https://img.shields.io/pypi/pyversions/extend-ai.svg)](https://pypi.python.org/pypi/extend-ai)
 
-## Documentation
-
-API reference documentation is available [here](https://docs.extend.ai/2026-02-09/developers).
+The Extend Python library provides convenient, typed access to the [Extend API](https://docs.extend.ai/2026-02-09/developers) — enabling you to parse, extract, classify, split, and edit documents with a few lines of code.
 
 ## Installation
 
@@ -12,222 +11,342 @@ API reference documentation is available [here](https://docs.extend.ai/2026-02-0
 pip install extend-ai
 ```
 
-## Reference
+> Requires Python 3.8+
 
-A full reference for this library is available [here](./reference.md).
+## Quick start
 
-## Usage
-
-Instantiate and use the client with the following:
+Parse any document in three lines:
 
 ```python
 from extend_ai import Extend
 
-client = Extend(token="YOUR_TOKEN")
+client = Extend(token="YOUR_API_KEY")
 
-# Create a workflow run
-result = client.workflow_runs.create(
-    file={"url": "https://example.com/doc.pdf"},
-    workflow={"id": "workflow_id_here"},
+result = client.parse(file={"url": "https://example.com/invoice.pdf"})
+
+for chunk in result.output.chunks:
+    print(chunk.content)
+```
+
+`client.parse` is synchronous — it sends the file, waits for processing, and returns a fully populated `ParseRun` with parsed chunks ready to use. The same pattern works for every capability:
+
+```python
+# Extract structured data
+extract_run = client.extract(
+    file={"url": "https://example.com/invoice.pdf"},
+    extractor={"id": "ext_abc123"},
+)
+
+# Classify a document
+classify_run = client.classify(
+    file={"url": "https://example.com/document.pdf"},
+    classifier={"id": "cls_abc123"},
+)
+
+# Split a multi-document file
+split_run = client.split(
+    file={"url": "https://example.com/packet.pdf"},
+    splitter={"id": "spl_abc123"},
+)
+
+# Fill form fields in a PDF
+edit_run = client.edit(
+    file={"url": "https://example.com/form.pdf"},
+    config={"fields": [{"name": "Full Name", "value": "Jane Doe"}]},
 )
 ```
 
-## Polling Helpers
+> **Note:** The synchronous methods above have a 5-minute timeout and are best suited for onboarding and testing. For production workloads, use [polling helpers](#polling-helpers) or [webhooks](#webhook-verification) instead.
 
-The SDK includes `create_and_poll()` methods for run resources that automatically poll until completion:
+## Polling helpers
+
+Every run resource exposes a `create_and_poll()` method that creates the run and automatically polls until it reaches a terminal state (`PROCESSED`, `FAILED`, or `CANCELLED`):
 
 ```python
 from extend_ai import Extend
 
-client = Extend(token="YOUR_TOKEN")
+client = Extend(token="YOUR_API_KEY")
 
-# Create and wait for extract run to complete
 result = client.extract_runs.create_and_poll(
-    file={"url": "https://example.com/doc.pdf"},
-    extractor={"id": "extractor_123"},
+    file={"url": "https://example.com/invoice.pdf"},
+    extractor={"id": "ext_abc123"},
 )
 
-print(f"Status: {result.extract_run.status}")  # PROCESSED or FAILED
-
-# Works with all run types
-classify_result = client.classify_runs.create_and_poll(
-    file={"url": "https://example.com/doc.pdf"},
-    classifier={"id": "classifier_123"},
-)
-
-workflow_result = client.workflow_runs.create_and_poll(
-    file={"url": "https://example.com/doc.pdf"},
-    workflow={"id": "workflow_123"},
-)
+if result.status == "PROCESSED":
+    print(result.output)
+else:
+    print(f"Failed: {result.failure_message}")
 ```
 
-### Custom Polling Options
+This works across all run types:
+
+```python
+parse_run     = client.parse_runs.create_and_poll(file={"url": "..."})
+extract_run   = client.extract_runs.create_and_poll(file={"url": "..."}, extractor={"id": "..."})
+classify_run  = client.classify_runs.create_and_poll(file={"url": "..."}, classifier={"id": "..."})
+split_run     = client.split_runs.create_and_poll(file={"url": "..."}, splitter={"id": "..."})
+workflow_run  = client.workflow_runs.create_and_poll(file={"url": "..."}, workflow={"id": "..."})
+edit_run      = client.edit_runs.create_and_poll(file={"url": "..."})
+```
+
+### Custom polling options
 
 ```python
 from extend_ai import Extend, PollingOptions
 
-client = Extend(token="YOUR_TOKEN")
-
-# With custom timeout
 result = client.extract_runs.create_and_poll(
-    file={"url": "https://example.com/doc.pdf"},
-    extractor={"id": "extractor_123"},
+    file={"url": "https://example.com/invoice.pdf"},
+    extractor={"id": "ext_abc123"},
     polling_options=PollingOptions(
-        max_wait_ms=300_000,      # 5 minute timeout (default: no timeout)
-        initial_delay_ms=1_000,   # Start with 1s delay (default)
-        max_delay_ms=60_000,      # Cap at 60s delay (default)
+        max_wait_ms=300_000,       # 5 minute timeout (default: no timeout)
+        initial_delay_ms=1_000,    # start with 1s delay (default)
+        max_delay_ms=60_000,       # cap at 60s delay (default: 30s)
     ),
 )
 ```
 
-## Webhook Verification
+## Webhook verification
 
-The SDK includes utilities for verifying webhook signatures:
+Verify and parse incoming webhook events using the built-in utilities:
 
 ```python
 from extend_ai import Extend
 
-client = Extend(token="YOUR_TOKEN")
+client = Extend(token="YOUR_API_KEY")
 
-# In your webhook handler
 def handle_webhook(request):
-    body = request.body.decode()
-    headers = dict(request.headers)
-
-    # Verify and parse the webhook
     event = client.webhooks.verify_and_parse(
-        body=body,
-        headers=headers,
+        body=request.body.decode(),
+        headers=dict(request.headers),
         signing_secret="wss_your_signing_secret",
     )
 
-    if event.get("eventType") == "workflow_run.completed":
-        print("Workflow completed!")
-        print(f"Run ID: {event['data']['id']}")
+    match event.get("eventType"):
+        case "extract_run.processed":
+            print(f"Extraction complete: {event['data']['id']}")
+        case "workflow_run.completed":
+            print(f"Workflow complete: {event['data']['id']}")
+        case _:
+            print(f"Received event: {event['eventType']}")
 ```
 
-### Manual Verification
+### Manual verification & parsing
 
 ```python
-# Just verify without parsing
+# Verify signature without parsing
 is_valid = client.webhooks.verify(body, headers, signing_secret)
 
-# Just parse without verification (not recommended for production)
+# Parse without verification (not recommended for production)
 event = client.webhooks.parse(body)
 ```
 
-## Async Client
+### Signed URL payloads
 
-The SDK also exports an async client for non-blocking operations:
+For large payloads, Extend may send a signed URL instead of the full payload. The SDK handles this transparently:
+
+```python
+event = client.webhooks.verify_and_parse(
+    body=body,
+    headers=headers,
+    signing_secret=signing_secret,
+    allow_signed_url=True,
+)
+
+if client.webhooks.is_signed_url_event(event):
+    full_payload = client.webhooks.fetch_signed_payload_sync(event)
+```
+
+## Async support
+
+Every method has an async counterpart via `AsyncExtend`:
 
 ```python
 import asyncio
 from extend_ai import AsyncExtend
 
-client = AsyncExtend(token="YOUR_TOKEN")
+client = AsyncExtend(token="YOUR_API_KEY")
 
 async def main():
-    result = await client.extract_runs.create_and_poll(
-        file={"url": "https://example.com/doc.pdf"},
-        extractor={"id": "extractor_123"},
-    )
-    print(f"Status: {result.extract_run.status}")
+    result = await client.parse(file={"url": "https://example.com/invoice.pdf"})
+
+    for chunk in result.output.chunks:
+        print(chunk.content)
 
 asyncio.run(main())
 ```
 
-## Exception Handling
+Async polling works the same way:
 
-When the API returns a non-success status code (4xx or 5xx response), a subclass of the following error will be thrown:
+```python
+result = await client.extract_runs.create_and_poll(
+    file={"url": "https://example.com/invoice.pdf"},
+    extractor={"id": "ext_abc123"},
+)
+```
+
+## Exception handling
+
+The SDK raises typed exceptions for API errors:
 
 ```python
 from extend_ai.core.api_error import ApiError
 
 try:
-    result = client.extract_runs.create(...)
+    result = client.parse(file={"url": "https://example.com/invoice.pdf"})
 except ApiError as e:
-    print(e.status_code)
+    print(e.status_code)  # 400, 401, 404, 429, etc.
     print(e.body)
 ```
 
-### Polling Timeout
+Specific error classes are available for fine-grained handling:
+
+```python
+from extend_ai.errors import (
+    BadRequestError,         # 400
+    UnauthorizedError,       # 401
+    PaymentRequiredError,    # 402
+    ForbiddenError,          # 403
+    NotFoundError,           # 404
+    UnprocessableEntityError,# 422
+    TooManyRequestsError,    # 429
+    InternalServerError,     # 500
+)
+```
+
+### Polling timeout
 
 When `create_and_poll()` exceeds its timeout, a `PollingTimeoutError` is raised:
 
 ```python
-from extend_ai import Extend, PollingTimeoutError
-
-client = Extend(token="YOUR_TOKEN")
+from extend_ai import PollingTimeoutError
 
 try:
-    result = client.extract_runs.create_and_poll(...)
+    result = client.extract_runs.create_and_poll(
+        file={"url": "..."},
+        extractor={"id": "..."},
+        polling_options=PollingOptions(max_wait_ms=60_000),
+    )
 except PollingTimeoutError as e:
-    print(f"Polling timed out after {e.elapsed_ms}ms")
+    print(f"Timed out after {e.elapsed_ms}ms (limit: {e.max_wait_ms}ms)")
+```
+
+## Pagination
+
+List endpoints return paginated results using `next_page_token`:
+
+```python
+# First page
+response = client.extract_runs.list(max_page_size=10)
+
+for run in response.data:
+    print(f"{run.id}: {run.status}")
+
+# Next page
+if response.next_page_token:
+    next_page = client.extract_runs.list(
+        max_page_size=10,
+        next_page_token=response.next_page_token,
+    )
+```
+
+## Environments
+
+The SDK defaults to the US production environment. Other regions are available:
+
+```python
+from extend_ai import Extend, ExtendEnvironment
+
+# US (default)
+client = Extend(token="YOUR_API_KEY")
+
+# US2 (HIPAA)
+client = Extend(token="YOUR_API_KEY", environment=ExtendEnvironment.PRODUCTION_US2)
+
+# EU
+client = Extend(token="YOUR_API_KEY", environment=ExtendEnvironment.PRODUCTION_EU1)
+
+# Custom base URL
+client = Extend(token="YOUR_API_KEY", base_url="https://custom-api.example.com")
 ```
 
 ## Advanced
 
-### Additional Headers
-
-If you would like to send additional headers as part of the request, use the `headers` parameter:
-
-```python
-client = Extend(
-    token="YOUR_TOKEN",
-    headers={"X-Custom-Header": "custom value"},
-)
-```
-
 ### Retries
 
-The SDK is instrumented with automatic retries with exponential backoff. A request will be retried as long as the request is deemed retryable and the number of retry attempts has not grown larger than the configured retry limit (default: 2).
+The SDK automatically retries failed requests with exponential backoff. Retries are triggered for:
 
-A request is deemed retryable when any of the following HTTP status codes is returned:
-
-- [408](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/408) (Timeout)
-- [429](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429) (Too Many Requests)
-- [5XX](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500) (Internal Server Errors)
-
-Use the `max_retries` request option to configure this behavior:
+- `408` Timeout
+- `429` Too Many Requests
+- `5xx` Server Errors
 
 ```python
-client.extract_runs.create(..., request_options={
-    "max_retries": 1
-})
+# Override retries for a single request
+client.extract_runs.create(..., request_options={"max_retries": 0})
 ```
 
 ### Timeouts
 
-The SDK defaults to a 300 second timeout. Use the `timeout` option to configure this behavior:
+The default timeout is 300 seconds. Override globally or per-request:
+
+```python
+# Global timeout
+client = Extend(token="YOUR_API_KEY", timeout=30.0)
+
+# Per-request timeout
+client.extract_runs.create(..., request_options={"timeout_in_seconds": 60})
+```
+
+### Custom headers
 
 ```python
 client = Extend(
-    token="YOUR_TOKEN",
-    timeout=30.0,
+    token="YOUR_API_KEY",
+    headers={"X-Custom-Header": "value"},
 )
-
-# Override timeout for a specific method
-client.extract_runs.create(..., request_options={
-    "timeout_in_seconds": 60
-})
 ```
 
-### Custom HTTP Client
+### Custom HTTP client
 
-You can override the `httpx` client to customize it for your use-case:
+Pass a pre-configured `httpx.Client` for full control over transport:
 
 ```python
 import httpx
 from extend_ai import Extend
 
 client = Extend(
-    token="YOUR_TOKEN",
+    token="YOUR_API_KEY",
     httpx_client=httpx.Client(
         proxy="http://my.test.proxy.example.com",
         transport=httpx.HTTPTransport(local_address="0.0.0.0"),
     ),
 )
 ```
+
+### API versioning
+
+The SDK targets a specific API version by default. Override it if needed:
+
+```python
+client = Extend(token="YOUR_API_KEY", extend_api_version="2026-02-09")
+```
+
+### Raw responses
+
+Access the underlying HTTP response for any request:
+
+```python
+raw_response = client.with_raw_response.parse(file={"url": "https://example.com/invoice.pdf"})
+
+print(raw_response.status_code)
+print(raw_response.headers)
+print(raw_response.data)  # ParseRun
+```
+
+## Documentation
+
+Full API reference documentation is available at [docs.extend.ai](https://docs.extend.ai/2026-02-09/developers).
+
+A complete SDK reference is available in [reference.md](./reference.md).
 
 ## Contributing
 

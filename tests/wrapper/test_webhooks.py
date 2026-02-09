@@ -473,6 +473,7 @@ class TestFetchSignedPayload:
 
         mock_response = MagicMock()
         mock_response.status_code = 200
+        mock_response.is_success = True
         mock_response.json.return_value = full_payload
 
         with patch("httpx.AsyncClient") as mock_client_class:
@@ -492,6 +493,7 @@ class TestFetchSignedPayload:
         """Should throw WebhookPayloadFetchError on HTTP error."""
         mock_response = MagicMock()
         mock_response.status_code = 403
+        mock_response.is_success = False
         mock_response.reason_phrase = "Forbidden"
 
         with patch("httpx.AsyncClient") as mock_client_class:
@@ -544,6 +546,7 @@ class TestFetchSignedPayloadSync:
 
         mock_response = MagicMock()
         mock_response.status_code = 200
+        mock_response.is_success = True
         mock_response.json.return_value = full_payload
 
         with patch("httpx.Client") as mock_client_class:
