@@ -25,6 +25,7 @@ from .client import AsyncExtend, Extend
 from .errors import (
     PollingTimeoutError,
     SignedUrlNotAllowedError,
+    WebhookParseError,
     WebhookPayloadFetchError,
     WebhookSignatureVerificationError,
 )
@@ -48,6 +49,7 @@ __all__ = [
     # Errors
     "PollingTimeoutError",
     "WebhookSignatureVerificationError",
+    "WebhookParseError",
     "WebhookPayloadFetchError",
     "SignedUrlNotAllowedError",
 ]

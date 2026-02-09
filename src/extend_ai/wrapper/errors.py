@@ -24,6 +24,12 @@ class WebhookPayloadFetchError(Exception):
     pass
 
 
+class WebhookParseError(Exception):
+    """Error thrown when webhook body cannot be parsed."""
+
+    pass
+
+
 class SignedUrlNotAllowedError(Exception):
     """Error thrown when a signed URL payload is received but not allowed."""
 

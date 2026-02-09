@@ -26,13 +26,22 @@ Example:
 import hashlib
 import hmac
 import json
+import logging
 import time
 from dataclasses import dataclass
-from typing import Any, Dict, Optional, Union
+from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 
 import httpx
 
-from .errors import SignedUrlNotAllowedError, WebhookPayloadFetchError, WebhookSignatureVerificationError
+from .errors import SignedUrlNotAllowedError, WebhookParseError, WebhookPayloadFetchError, WebhookSignatureVerificationError
+
+if TYPE_CHECKING:
+    from ..types.webhook_event import WebhookEvent
+
+logger = logging.getLogger(__name__)
+
+# Default timeout for HTTP requests when fetching signed URL payloads (in seconds)
+_DEFAULT_FETCH_TIMEOUT = 30.0
 
 
 @dataclass
@@ -54,8 +63,10 @@ class WebhookEventWithSignedUrl:
     payload: SignedDataUrlPayload  # The signed URL payload - use fetch_signed_payload() to get the full data
 
 
-# Union type representing either a normal webhook event or one with a signed URL payload
-RawWebhookEvent = Union[Any, WebhookEventWithSignedUrl]  # Any represents the generated WebhookEvent types
+# Union type representing either a normal webhook event or one with a signed URL payload.
+# When parsing succeeds, you get a typed WebhookEvent; when it's a signed URL, you get
+# WebhookEventWithSignedUrl; for unknown event types, you get a raw dict fallback.
+RawWebhookEvent = Union["WebhookEvent", WebhookEventWithSignedUrl, Dict[str, Any]]
 
 
 def _is_signed_data_url_payload(payload: Any) -> bool:
@@ -63,6 +74,27 @@ def _is_signed_data_url_payload(payload: Any) -> bool:
     if not isinstance(payload, dict):
         return False
     return payload.get("object") == "signed_data_url" and isinstance(payload.get("data"), str)
+
+
+def _build_signed_url_event(event_data: Dict[str, Any], payload: Dict[str, Any]) -> WebhookEventWithSignedUrl:
+    """Build a WebhookEventWithSignedUrl from raw event data and its signed URL payload."""
+    return WebhookEventWithSignedUrl(
+        event_id=event_data.get("eventId", ""),
+        event_type=event_data.get("eventType", ""),
+        payload=SignedDataUrlPayload(
+            data=payload.get("data", ""),
+            id=payload.get("id", ""),
+            object=payload.get("object", ""),
+            metadata=payload.get("metadata"),
+        ),
+    )
+
+
+def _normalize_body(body: Union[str, bytes]) -> str:
+    """Normalize body to a string, decoding bytes if necessary."""
+    if isinstance(body, bytes):
+        return body.decode("utf-8")
+    return body
 
 
 class Webhooks:
@@ -83,7 +115,7 @@ class Webhooks:
 
     def verify_and_parse(
         self,
-        body: str,
+        body: Union[str, bytes],
         headers: Dict[str, Any],
         signing_secret: str,
         max_age_seconds: int = 300,
@@ -100,7 +132,7 @@ class Webhooks:
         full payload.
 
         Args:
-            body: The raw request body as a string
+            body: The raw request body as a string or bytes
             headers: The request headers (must include x-extend-request-timestamp and
                     x-extend-request-signature)
             signing_secret: Your webhook signing secret (starts with wss_)
@@ -116,6 +148,7 @@ class Webhooks:
 
         Raises:
             WebhookSignatureVerificationError: If signature verification fails
+            WebhookParseError: If the body cannot be parsed as JSON
             SignedUrlNotAllowedError: If a signed URL payload is received without
                                      allow_signed_url=True
 
@@ -128,45 +161,39 @@ class Webhooks:
             if client.webhooks.is_signed_url_event(event):
                 # Check metadata before fetching (e.g., environment check)
                 if event.payload.metadata.get("env") == "production":
-                    full_event = await client.webhooks.fetch_signed_payload(event)
+                    # Use the async version in async contexts:
+                    #   full_event = await client.webhooks.fetch_signed_payload(event)
+                    # Or use the sync version:
+                    full_event = client.webhooks.fetch_signed_payload_sync(event)
                     # handle full_event
             else:
                 # Normal inline payload
                 # handle event
         """
+        body_str = _normalize_body(body)
+
         # Verify the signature
-        self._verify_signature(body, headers, signing_secret, max_age_seconds)
+        self._verify_signature(body_str, headers, signing_secret, max_age_seconds)
 
         # Parse the event
         try:
-            event_data = json.loads(body)
+            event_data = json.loads(body_str)
         except json.JSONDecodeError as e:
-            raise WebhookSignatureVerificationError(f"Failed to parse webhook body as JSON: {e}")
+            raise WebhookParseError(f"Failed to parse webhook body as JSON: {e}")
 
         # Check if it's a signed URL payload
         payload = event_data.get("payload", {})
         if _is_signed_data_url_payload(payload):
             if not allow_signed_url:
                 raise SignedUrlNotAllowedError()
-
-            # Return as WebhookEventWithSignedUrl
-            return WebhookEventWithSignedUrl(
-                event_id=event_data.get("eventId", ""),
-                event_type=event_data.get("eventType", ""),
-                payload=SignedDataUrlPayload(
-                    data=payload.get("data", ""),
-                    id=payload.get("id", ""),
-                    object=payload.get("object", ""),
-                    metadata=payload.get("metadata"),
-                ),
-            )
+            return _build_signed_url_event(event_data, payload)
 
         # Return typed event when possible, fall back to raw dict for unknown event types
         return self._try_parse_webhook_event(event_data)
 
     def verify(
         self,
-        body: str,
+        body: Union[str, bytes],
         headers: Dict[str, Any],
         signing_secret: str,
         max_age_seconds: int = 300,
@@ -175,7 +202,7 @@ class Webhooks:
         Verifies a webhook signature without parsing the body.
 
         Args:
-            body: The raw request body as a string
+            body: The raw request body as a string or bytes
             headers: The request headers
             signing_secret: Your webhook signing secret
             max_age_seconds: Maximum age of the request in seconds (default: 300)
@@ -190,43 +217,43 @@ class Webhooks:
                 # handle event
         """
         try:
-            self._verify_signature(body, headers, signing_secret, max_age_seconds)
+            body_str = _normalize_body(body)
+            self._verify_signature(body_str, headers, signing_secret, max_age_seconds)
             return True
-        except Exception:
+        except WebhookSignatureVerificationError:
             return False
 
-    def parse(self, body: str) -> RawWebhookEvent:
+    def parse(self, body: Union[str, bytes]) -> RawWebhookEvent:
         """
         Parses a webhook event from a raw body without verification.
         Use this only if you've already verified the signature using verify().
 
         Args:
-            body: The raw request body as a string
+            body: The raw request body as a string or bytes
 
         Returns:
             The parsed webhook event (may be a signed URL event)
+
+        Raises:
+            WebhookParseError: If the body cannot be parsed as JSON
 
         Example:
             if client.webhooks.verify(body, headers, secret):
                 event = client.webhooks.parse(body)
                 if client.webhooks.is_signed_url_event(event):
-                    full_event = await client.webhooks.fetch_signed_payload(event)
+                    full_event = client.webhooks.fetch_signed_payload_sync(event)
         """
-        event_data = json.loads(body)
+        body_str = _normalize_body(body)
+
+        try:
+            event_data = json.loads(body_str)
+        except json.JSONDecodeError as e:
+            raise WebhookParseError(f"Failed to parse webhook body as JSON: {e}")
 
         # Check if it's a signed URL payload
         payload = event_data.get("payload", {})
         if _is_signed_data_url_payload(payload):
-            return WebhookEventWithSignedUrl(
-                event_id=event_data.get("eventId", ""),
-                event_type=event_data.get("eventType", ""),
-                payload=SignedDataUrlPayload(
-                    data=payload.get("data", ""),
-                    id=payload.get("id", ""),
-                    object=payload.get("object", ""),
-                    metadata=payload.get("metadata"),
-                ),
-            )
+            return _build_signed_url_event(event_data, payload)
 
         return self._try_parse_webhook_event(event_data)
 
@@ -257,7 +284,7 @@ class Webhooks:
         url = event.payload.data
 
         try:
-            async with httpx.AsyncClient() as client:
+            async with httpx.AsyncClient(timeout=_DEFAULT_FETCH_TIMEOUT) as client:
                 response = await client.get(url)
 
                 if not response.is_success:
@@ -294,7 +321,7 @@ class Webhooks:
         url = event.payload.data
 
         try:
-            with httpx.Client() as client:
+            with httpx.Client(timeout=_DEFAULT_FETCH_TIMEOUT) as client:
                 response = client.get(url)
 
                 if not response.is_success:
@@ -359,7 +386,10 @@ class Webhooks:
                 import pydantic
 
                 return pydantic.parse_obj_as(WebhookEvent, event_data)  # type: ignore[arg-type]
+        except (ImportError, pydantic.ValidationError):  # type: ignore[union-attr]
+            return event_data
         except Exception:
+            logger.debug("Unexpected error parsing webhook event, falling back to raw dict", exc_info=True)
             return event_data
 
     def _verify_signature(
@@ -414,10 +444,10 @@ class Webhooks:
 
     def _get_header(self, headers: Dict[str, Any], name: str) -> Optional[str]:
         """Get a header value (case-insensitive)."""
-        # Try exact match first
-        value = headers.get(name) or headers.get(name.lower())
-
-        if isinstance(value, list):
-            return value[0] if value else None
-
-        return value
+        lower_name = name.lower()
+        for key, value in headers.items():
+            if key.lower() == lower_name:
+                if isinstance(value, list):
+                    return value[0] if value else None
+                return value
+        return None
