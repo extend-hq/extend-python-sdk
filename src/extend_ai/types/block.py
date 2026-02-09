@@ -9,15 +9,15 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .block_bounding_box import BlockBoundingBox
 from .block_details import BlockDetails
 from .block_metadata import BlockMetadata
 from .block_polygon_item import BlockPolygonItem
 from .block_type import BlockType
+from .bounding_box import BoundingBox
 
 
 class Block(UncheckedBaseModel):
-    object: str = pydantic.Field()
+    object: typing.Literal["block"] = pydantic.Field(default="block")
     """
     The type of object. In this case, it will always be `"block"`.
     """
@@ -66,7 +66,7 @@ class Block(UncheckedBaseModel):
     An array of points defining the polygon that bounds the block.
     """
 
-    bounding_box: typing_extensions.Annotated[BlockBoundingBox, FieldMetadata(alias="boundingBox")] = pydantic.Field(
+    bounding_box: typing_extensions.Annotated[BoundingBox, FieldMetadata(alias="boundingBox")] = pydantic.Field(
         alias="boundingBox"
     )
     """

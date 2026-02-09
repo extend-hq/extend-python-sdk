@@ -6,126 +6,277 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
+    from .api_error import ApiError
     from .api_version_enum import ApiVersionEnum
     from .array_strategy import ArrayStrategy
     from .array_strategy_type import ArrayStrategyType
-    from .bad_request_error_body import BadRequestErrorBody
-    from .bad_request_error_body_code import BadRequestErrorBodyCode
-    from .base_metrics import BaseMetrics
     from .batch_processor_run import BatchProcessorRun
     from .batch_processor_run_metrics import BatchProcessorRunMetrics
     from .batch_processor_run_options import BatchProcessorRunOptions
     from .batch_processor_run_source import BatchProcessorRunSource
     from .batch_processor_run_status import BatchProcessorRunStatus
-    from .batch_workflow_run_file_input import BatchWorkflowRunFileInput
+    from .batch_run import BatchRun
+    from .batch_run_entity import (
+        BatchRunEntity,
+        BatchRunEntity_Classifier,
+        BatchRunEntity_Extractor,
+        BatchRunEntity_Splitter,
+    )
+    from .batch_run_entity_version import (
+        BatchRunEntityVersion,
+        BatchRunEntityVersion_ClassifierVersion,
+        BatchRunEntityVersion_ExtractorVersion,
+        BatchRunEntityVersion_SplitterVersion,
+    )
+    from .batch_run_metrics import BatchRunMetrics
+    from .batch_run_status import BatchRunStatus
     from .block import Block
-    from .block_bounding_box import BlockBoundingBox
     from .block_details import BlockDetails
     from .block_metadata import BlockMetadata
     from .block_metadata_page import BlockMetadataPage
     from .block_polygon_item import BlockPolygonItem
     from .block_type import BlockType
+    from .bounding_box import BoundingBox
     from .chunk import Chunk
     from .chunk_metadata import ChunkMetadata
     from .chunk_metadata_page_range import ChunkMetadataPageRange
     from .chunk_type import ChunkType
     from .citation import Citation
+    from .citation_page import CitationPage
     from .classification import Classification
-    from .classification_advanced_options import ClassificationAdvancedOptions
-    from .classification_advanced_options_context import ClassificationAdvancedOptionsContext
-    from .classification_config import ClassificationConfig
-    from .classification_config_base_processor import ClassificationConfigBaseProcessor
-    from .classification_field_metrics import ClassificationFieldMetrics
-    from .classifier_output import ClassifierOutput
-    from .classify_metrics import ClassifyMetrics
-    from .classify_optimizer_options import ClassifyOptimizerOptions
-    from .document_processor_run_credits import DocumentProcessorRunCredits
+    from .classifications import Classifications
+    from .classifier import Classifier
+    from .classifier_created_webhook_event import ClassifierCreatedWebhookEvent
+    from .classifier_deleted_webhook_event import ClassifierDeletedWebhookEvent
+    from .classifier_draft_updated_webhook_event import ClassifierDraftUpdatedWebhookEvent
+    from .classifier_summary import ClassifierSummary
+    from .classifier_updated_webhook_event import ClassifierUpdatedWebhookEvent
+    from .classifier_version import ClassifierVersion
+    from .classifier_version_published_webhook_event import ClassifierVersionPublishedWebhookEvent
+    from .classifier_version_summary import ClassifierVersionSummary
+    from .classify_advanced_options import ClassifyAdvancedOptions
+    from .classify_advanced_options_context import ClassifyAdvancedOptionsContext
+    from .classify_config import ClassifyConfig
+    from .classify_config_base_processor import ClassifyConfigBaseProcessor
+    from .classify_output import ClassifyOutput
+    from .classify_request_classifier import ClassifyRequestClassifier
+    from .classify_request_file import ClassifyRequestFile
+    from .classify_result import ClassifyResult
+    from .classify_run import ClassifyRun
+    from .classify_run_failed_webhook_event import ClassifyRunFailedWebhookEvent
+    from .classify_run_processed_webhook_event import ClassifyRunProcessedWebhookEvent
+    from .classify_run_summary import ClassifyRunSummary
+    from .classify_step_run import ClassifyStepRun
+    from .classify_step_run_step import ClassifyStepRunStep
+    from .conditional_extract_result import ConditionalExtractResult
+    from .conditional_extract_step_run import ConditionalExtractStepRun
+    from .conditional_extract_step_run_step import ConditionalExtractStepRunStep
+    from .created_at import CreatedAt
     from .edit_bounding_box import EditBoundingBox
-    from .edit_error import EditError
-    from .edit_error_code import EditErrorCode
-    from .edit_json_schema import EditJsonSchema
-    from .edit_json_schema_extend_edit_field_type import EditJsonSchemaExtendEditFieldType
-    from .edit_object_json_schema import EditObjectJsonSchema
-    from .edit_root_json_schema import EditRootJsonSchema
+    from .edit_config import EditConfig
+    from .edit_config_advanced_options import EditConfigAdvancedOptions
+    from .edit_json import EditJson
+    from .edit_json_extend_edit_field_type import EditJsonExtendEditFieldType
+    from .edit_object_json import EditObjectJson
+    from .edit_request_file import EditRequestFile
+    from .edit_root_json import EditRootJson
     from .edit_run import EditRun
-    from .edit_run_config import EditRunConfig
-    from .edit_run_config_advanced_options import EditRunConfigAdvancedOptions
-    from .edit_run_edited_file import EditRunEditedFile
+    from .edit_run_failed_webhook_event import EditRunFailedWebhookEvent
     from .edit_run_metrics import EditRunMetrics
+    from .edit_run_output import EditRunOutput
+    from .edit_run_output_edited_file import EditRunOutputEditedFile
+    from .edit_run_processed_webhook_event import EditRunProcessedWebhookEvent
     from .edit_run_status import EditRunStatus
-    from .edit_run_status_status import EditRunStatusStatus
-    from .edit_run_usage import EditRunUsage
     from .edit_text_options import EditTextOptions
     from .empty_block_details import EmptyBlockDetails
     from .enum import Enum
     from .enum_option import EnumOption
-    from .error import Error
     from .evaluation_set import EvaluationSet
+    from .evaluation_set_entity import (
+        EvaluationSetEntity,
+        EvaluationSetEntity_Classifier,
+        EvaluationSetEntity_Extractor,
+        EvaluationSetEntity_Splitter,
+    )
     from .evaluation_set_item import EvaluationSetItem
+    from .evaluation_set_item_summary import EvaluationSetItemSummary
+    from .evaluation_set_run import EvaluationSetRun
+    from .evaluation_set_run_entity import (
+        EvaluationSetRunEntity,
+        EvaluationSetRunEntity_Classifier,
+        EvaluationSetRunEntity_Extractor,
+        EvaluationSetRunEntity_Splitter,
+    )
+    from .evaluation_set_run_entity_version import (
+        EvaluationSetRunEntityVersion,
+        EvaluationSetRunEntityVersion_ClassifierVersion,
+        EvaluationSetRunEntityVersion_ExtractorVersion,
+        EvaluationSetRunEntityVersion_SplitterVersion,
+    )
+    from .evaluation_set_run_metrics import EvaluationSetRunMetrics
+    from .evaluation_set_run_options import EvaluationSetRunOptions
     from .excel_sheet_range import ExcelSheetRange
-    from .extend_error import ExtendError
+    from .external_data_validation_result import ExternalDataValidationResult
+    from .external_data_validation_result_response import ExternalDataValidationResultResponse
+    from .external_data_validation_step_run import ExternalDataValidationStepRun
+    from .external_data_validation_step_run_step import ExternalDataValidationStepRunStep
+    from .extract_advanced_options import ExtractAdvancedOptions
+    from .extract_advanced_options_array_citation_strategy import ExtractAdvancedOptionsArrayCitationStrategy
+    from .extract_advanced_options_excel_sheet_selection_strategy import (
+        ExtractAdvancedOptionsExcelSheetSelectionStrategy,
+    )
+    from .extract_advanced_options_review_agent import ExtractAdvancedOptionsReviewAgent
     from .extract_chunking_options import ExtractChunkingOptions
     from .extract_chunking_options_chunk_selection_strategy import ExtractChunkingOptionsChunkSelectionStrategy
     from .extract_chunking_options_chunking_strategy import ExtractChunkingOptionsChunkingStrategy
-    from .extract_metrics import ExtractMetrics
-    from .extract_metrics_field_metrics import ExtractMetricsFieldMetrics
-    from .extract_optimizer_options import ExtractOptimizerOptions
-    from .extraction_advanced_options import ExtractionAdvancedOptions
-    from .extraction_advanced_options_array_citation_strategy import ExtractionAdvancedOptionsArrayCitationStrategy
-    from .extraction_advanced_options_excel_sheet_selection_strategy import (
-        ExtractionAdvancedOptionsExcelSheetSelectionStrategy,
-    )
-    from .extraction_advanced_options_review_agent import ExtractionAdvancedOptionsReviewAgent
-    from .extraction_config import ExtractionConfig
-    from .extraction_config_base_processor import ExtractionConfigBaseProcessor
+    from .extract_config import ExtractConfig
+    from .extract_config_json import ExtractConfigJson
+    from .extract_config_json_base_processor import ExtractConfigJsonBaseProcessor
+    from .extract_config_legacy import ExtractConfigLegacy
+    from .extract_config_legacy_base_processor import ExtractConfigLegacyBaseProcessor
+    from .extract_output import ExtractOutput
+    from .extract_output_edits import ExtractOutputEdits
+    from .extract_output_json import ExtractOutputJson
+    from .extract_output_legacy import ExtractOutputLegacy
+    from .extract_output_metadata import ExtractOutputMetadata
+    from .extract_output_metadata_value import ExtractOutputMetadataValue
+    from .extract_request_extractor import ExtractRequestExtractor
+    from .extract_request_file import ExtractRequestFile
+    from .extract_result import ExtractResult
+    from .extract_run import ExtractRun
+    from .extract_run_failed_webhook_event import ExtractRunFailedWebhookEvent
+    from .extract_run_processed_webhook_event import ExtractRunProcessedWebhookEvent
+    from .extract_run_summary import ExtractRunSummary
+    from .extract_step_run import ExtractStepRun
+    from .extract_step_run_step import ExtractStepRunStep
     from .extraction_field import ExtractionField
-    from .extraction_field_metrics import ExtractionFieldMetrics
     from .extraction_field_result import ExtractionFieldResult
     from .extraction_field_result_reference import ExtractionFieldResultReference
     from .extraction_field_result_reference_bounding_boxes_item import ExtractionFieldResultReferenceBoundingBoxesItem
     from .extraction_field_result_type import ExtractionFieldResultType
     from .extraction_field_type import ExtractionFieldType
-    from .extraction_output import ExtractionOutput
-    from .extraction_output_edits import ExtractionOutputEdits
-    from .fields_array_output import FieldsArrayOutput
+    from .extractor import Extractor
+    from .extractor_created_webhook_event import ExtractorCreatedWebhookEvent
+    from .extractor_deleted_webhook_event import ExtractorDeletedWebhookEvent
+    from .extractor_draft_updated_webhook_event import ExtractorDraftUpdatedWebhookEvent
+    from .extractor_summary import ExtractorSummary
+    from .extractor_updated_webhook_event import ExtractorUpdatedWebhookEvent
+    from .extractor_version import ExtractorVersion
+    from .extractor_version_published_webhook_event import ExtractorVersionPublishedWebhookEvent
+    from .extractor_version_summary import ExtractorVersionSummary
     from .figure_details import FigureDetails
     from .figure_details_figure_type import FigureDetailsFigureType
     from .file import File
     from .file_contents import FileContents
     from .file_contents_pages_item import FileContentsPagesItem
+    from .file_contents_sections_item import FileContentsSectionsItem
     from .file_contents_sheets_item import FileContentsSheetsItem
-    from .file_credits import FileCredits
+    from .file_from_id import FileFromId
+    from .file_from_text import FileFromText
+    from .file_from_url import FileFromUrl
     from .file_metadata import FileMetadata
-    from .file_metadata_parent_split import FileMetadataParentSplit
+    from .file_summary import FileSummary
     from .file_type import FileType
     from .insight import Insight
-    from .insight_type import InsightType
     from .json_object import JsonObject
-    from .json_output import JsonOutput
-    from .json_output_metadata_value import JsonOutputMetadataValue
-    from .json_output_metadata_value_citations_item import JsonOutputMetadataValueCitationsItem
-    from .json_output_metadata_value_citations_item_polygon_item import JsonOutputMetadataValueCitationsItemPolygonItem
-    from .list_processors_processor import ListProcessorsProcessor
-    from .list_processors_processor_version import ListProcessorsProcessorVersion
-    from .list_processors_response import ListProcessorsResponse
-    from .max_page_size import MaxPageSize
-    from .next_page_token import NextPageToken
-    from .optimizer_batch_processor_run_result import OptimizerBatchProcessorRunResult
-    from .optimizer_batch_processor_run_result_processor_config import (
-        OptimizerBatchProcessorRunResultProcessorConfig,
-        OptimizerBatchProcessorRunResultProcessorConfig_Classify,
-        OptimizerBatchProcessorRunResultProcessorConfig_Extract,
+    from .legacy_batch_processor_run import LegacyBatchProcessorRun
+    from .legacy_batch_processor_run_metrics import LegacyBatchProcessorRunMetrics
+    from .legacy_batch_processor_run_options import LegacyBatchProcessorRunOptions
+    from .legacy_batch_processor_run_source import LegacyBatchProcessorRunSource
+    from .legacy_batch_processor_run_status import LegacyBatchProcessorRunStatus
+    from .legacy_classification import LegacyClassification
+    from .legacy_classification_advanced_options import LegacyClassificationAdvancedOptions
+    from .legacy_classification_advanced_options_context import LegacyClassificationAdvancedOptionsContext
+    from .legacy_classification_config import LegacyClassificationConfig
+    from .legacy_classification_config_base_processor import LegacyClassificationConfigBaseProcessor
+    from .legacy_classifier_output import LegacyClassifierOutput
+    from .legacy_document_processor_run_credits import LegacyDocumentProcessorRunCredits
+    from .legacy_error import LegacyError
+    from .legacy_extend_error import LegacyExtendError
+    from .legacy_extract_chunking_options import LegacyExtractChunkingOptions
+    from .legacy_extract_chunking_options_chunk_selection_strategy import (
+        LegacyExtractChunkingOptionsChunkSelectionStrategy,
     )
-    from .optimizer_run import OptimizerRun
-    from .optimizer_run_agent_type import OptimizerRunAgentType
-    from .optimizer_run_metrics import OptimizerRunMetrics
-    from .optimizer_run_metrics_fields_item import OptimizerRunMetricsFieldsItem
-    from .optimizer_run_status import OptimizerRunStatus
-    from .output_metadata import OutputMetadata
-    from .output_metadata_value import OutputMetadataValue
+    from .legacy_extract_chunking_options_chunking_strategy import LegacyExtractChunkingOptionsChunkingStrategy
+    from .legacy_extraction_advanced_options import LegacyExtractionAdvancedOptions
+    from .legacy_extraction_advanced_options_array_citation_strategy import (
+        LegacyExtractionAdvancedOptionsArrayCitationStrategy,
+    )
+    from .legacy_extraction_advanced_options_excel_sheet_selection_strategy import (
+        LegacyExtractionAdvancedOptionsExcelSheetSelectionStrategy,
+    )
+    from .legacy_extraction_advanced_options_review_agent import LegacyExtractionAdvancedOptionsReviewAgent
+    from .legacy_extraction_config import LegacyExtractionConfig
+    from .legacy_extraction_config_base_processor import LegacyExtractionConfigBaseProcessor
+    from .legacy_extraction_field import LegacyExtractionField
+    from .legacy_extraction_field_result import LegacyExtractionFieldResult
+    from .legacy_extraction_field_result_type import LegacyExtractionFieldResultType
+    from .legacy_extraction_field_type import LegacyExtractionFieldType
+    from .legacy_extraction_output import LegacyExtractionOutput
+    from .legacy_extraction_output_edits import LegacyExtractionOutputEdits
+    from .legacy_fields_array_output import LegacyFieldsArrayOutput
+    from .legacy_json_object import LegacyJsonObject
+    from .legacy_json_output import LegacyJsonOutput
+    from .legacy_json_output_metadata_value import LegacyJsonOutputMetadataValue
+    from .legacy_json_output_metadata_value_citations_item import LegacyJsonOutputMetadataValueCitationsItem
+    from .legacy_json_output_metadata_value_citations_item_polygon_item import (
+        LegacyJsonOutputMetadataValueCitationsItemPolygonItem,
+    )
+    from .legacy_list_processors_processor import LegacyListProcessorsProcessor
+    from .legacy_list_processors_processor_version import LegacyListProcessorsProcessorVersion
+    from .legacy_list_processors_response import LegacyListProcessorsResponse
+    from .legacy_max_page_size import LegacyMaxPageSize
+    from .legacy_next_page_token import LegacyNextPageToken
+    from .legacy_processor import LegacyProcessor
+    from .legacy_processor_id import LegacyProcessorId
+    from .legacy_processor_output import LegacyProcessorOutput
+    from .legacy_processor_run import LegacyProcessorRun
+    from .legacy_processor_run_config import (
+        LegacyProcessorRunConfig,
+        LegacyProcessorRunConfig_Classify,
+        LegacyProcessorRunConfig_Extract,
+        LegacyProcessorRunConfig_Splitter,
+    )
+    from .legacy_processor_run_file_input import LegacyProcessorRunFileInput
+    from .legacy_processor_run_merged_processors_item import LegacyProcessorRunMergedProcessorsItem
+    from .legacy_processor_run_summary import LegacyProcessorRunSummary
+    from .legacy_processor_run_summary_type import LegacyProcessorRunSummaryType
+    from .legacy_processor_run_type import LegacyProcessorRunType
+    from .legacy_processor_status import LegacyProcessorStatus
+    from .legacy_processor_type import LegacyProcessorType
+    from .legacy_processor_version import LegacyProcessorVersion
+    from .legacy_processor_version_config import (
+        LegacyProcessorVersionConfig,
+        LegacyProcessorVersionConfig_Classify,
+        LegacyProcessorVersionConfig_Extract,
+        LegacyProcessorVersionConfig_Splitter,
+    )
+    from .legacy_provided_classifier_output import LegacyProvidedClassifierOutput
+    from .legacy_provided_extraction_field_result import LegacyProvidedExtractionFieldResult
+    from .legacy_provided_extraction_field_result_type import LegacyProvidedExtractionFieldResultType
+    from .legacy_provided_extraction_output import LegacyProvidedExtractionOutput
+    from .legacy_provided_fields_array_output import LegacyProvidedFieldsArrayOutput
+    from .legacy_provided_json_output import LegacyProvidedJsonOutput
+    from .legacy_provided_processor_output import LegacyProvidedProcessorOutput
+    from .legacy_provided_splitter_output import LegacyProvidedSplitterOutput
+    from .legacy_provided_splitter_output_splits_item import LegacyProvidedSplitterOutputSplitsItem
+    from .legacy_sort_by_enum import LegacySortByEnum
+    from .legacy_sort_dir_enum import LegacySortDirEnum
+    from .legacy_splitter_advanced_options import LegacySplitterAdvancedOptions
+    from .legacy_splitter_advanced_options_split_method import LegacySplitterAdvancedOptionsSplitMethod
+    from .legacy_splitter_config import LegacySplitterConfig
+    from .legacy_splitter_config_base_processor import LegacySplitterConfigBaseProcessor
+    from .legacy_splitter_output import LegacySplitterOutput
+    from .legacy_splitter_output_splits_item import LegacySplitterOutputSplitsItem
+    from .max_page_size import MaxPageSize
+    from .merge_extract_result import MergeExtractResult
+    from .merge_extract_result_merged_extractors_item import MergeExtractResultMergedExtractorsItem
+    from .merge_extract_step_run import MergeExtractStepRun
+    from .merge_extract_step_run_step import MergeExtractStepRunStep
+    from .next_page_token import NextPageToken
     from .page_ranges import PageRanges
     from .page_ranges_item import PageRangesItem
-    from .parse_async_request_file import ParseAsyncRequestFile
+    from .parent_split import ParentSplit
     from .parse_config import ParseConfig
     from .parse_config_advanced_options import ParseConfigAdvancedOptions
     from .parse_config_advanced_options_return_ocr import ParseConfigAdvancedOptionsReturnOcr
@@ -141,208 +292,378 @@ if typing.TYPE_CHECKING:
     from .parse_config_chunking_strategy_type import ParseConfigChunkingStrategyType
     from .parse_config_engine import ParseConfigEngine
     from .parse_config_target import ParseConfigTarget
-    from .parse_error import ParseError
-    from .parse_error_code import ParseErrorCode
     from .parse_request_file import ParseRequestFile
     from .parse_request_response_type import ParseRequestResponseType
-    from .parser_run import ParserRun
-    from .parser_run_credits import ParserRunCredits
-    from .parser_run_metrics import ParserRunMetrics
-    from .parser_run_ocr import ParserRunOcr
-    from .parser_run_ocr_words_item import ParserRunOcrWordsItem
-    from .parser_run_ocr_words_item_bounding_box import ParserRunOcrWordsItemBoundingBox
-    from .parser_run_status import ParserRunStatus
-    from .parser_run_status_enum import ParserRunStatusEnum
-    from .parser_run_status_status import ParserRunStatusStatus
+    from .parse_result import ParseResult
+    from .parse_run import ParseRun
+    from .parse_run_failed_webhook_event import ParseRunFailedWebhookEvent
+    from .parse_run_metrics import ParseRunMetrics
+    from .parse_run_output import ParseRunOutput
+    from .parse_run_output_ocr import ParseRunOutputOcr
+    from .parse_run_output_ocr_words_item import ParseRunOutputOcrWordsItem
+    from .parse_run_processed_webhook_event import ParseRunProcessedWebhookEvent
+    from .parse_run_status import ParseRunStatus
+    from .parse_run_status_enum import ParseRunStatusEnum
+    from .parse_run_status_status import ParseRunStatusStatus
+    from .parse_step_run import ParseStepRun
+    from .parse_step_run_step import ParseStepRunStep
     from .polygon import Polygon
-    from .processor import Processor
-    from .processor_id import ProcessorId
-    from .processor_output import ProcessorOutput
-    from .processor_run import ProcessorRun
-    from .processor_run_config import (
-        ProcessorRunConfig,
-        ProcessorRunConfig_Classify,
-        ProcessorRunConfig_Extract,
-        ProcessorRunConfig_Splitter,
-    )
-    from .processor_run_file_input import ProcessorRunFileInput
-    from .processor_run_merged_processors_item import ProcessorRunMergedProcessorsItem
-    from .processor_run_summary import ProcessorRunSummary
-    from .processor_run_summary_type import ProcessorRunSummaryType
-    from .processor_run_type import ProcessorRunType
-    from .processor_status import ProcessorStatus
-    from .processor_type import ProcessorType
-    from .processor_version import ProcessorVersion
-    from .processor_version_config import (
-        ProcessorVersionConfig,
-        ProcessorVersionConfig_Classify,
-        ProcessorVersionConfig_Extract,
-        ProcessorVersionConfig_Splitter,
-    )
-    from .provided_classifier_output import ProvidedClassifierOutput
-    from .provided_extraction_field_result import ProvidedExtractionFieldResult
-    from .provided_extraction_field_result_type import ProvidedExtractionFieldResultType
-    from .provided_extraction_output import ProvidedExtractionOutput
-    from .provided_fields_array_output import ProvidedFieldsArrayOutput
-    from .provided_json_output import ProvidedJsonOutput
+    from .processor_run_status import ProcessorRunStatus
+    from .processor_version_string import ProcessorVersionString
+    from .provided_classify_output import ProvidedClassifyOutput
+    from .provided_extract_output import ProvidedExtractOutput
     from .provided_processor_output import ProvidedProcessorOutput
-    from .provided_splitter_output import ProvidedSplitterOutput
-    from .provided_splitter_output_splits_item import ProvidedSplitterOutputSplitsItem
-    from .sort_by_enum import SortByEnum
-    from .sort_dir_enum import SortDirEnum
-    from .splitter_advanced_options import SplitterAdvancedOptions
-    from .splitter_advanced_options_split_method import SplitterAdvancedOptionsSplitMethod
-    from .splitter_config import SplitterConfig
-    from .splitter_config_base_processor import SplitterConfigBaseProcessor
-    from .splitter_metrics import SplitterMetrics
-    from .splitter_output import SplitterOutput
-    from .splitter_output_splits_item import SplitterOutputSplitsItem
+    from .provided_split_output import ProvidedSplitOutput
+    from .provided_split_output_splits_item import ProvidedSplitOutputSplitsItem
+    from .release_type import ReleaseType
+    from .rule_validation_result import RuleValidationResult
+    from .rule_validation_result_rules_item import RuleValidationResultRulesItem
+    from .rule_validation_result_rules_item_failure_reason import RuleValidationResultRulesItemFailureReason
+    from .rule_validation_step_run import RuleValidationStepRun
+    from .rule_validation_step_run_step import RuleValidationStepRunStep
+    from .run_metadata import RunMetadata
+    from .run_priority import RunPriority
+    from .run_secrets import RunSecrets
+    from .run_source import RunSource
+    from .run_source_id import RunSourceId
+    from .run_usage import RunUsage
+    from .sort_by import SortBy
+    from .sort_dir import SortDir
+    from .split_advanced_options import SplitAdvancedOptions
+    from .split_advanced_options_split_method import SplitAdvancedOptionsSplitMethod
+    from .split_config import SplitConfig
+    from .split_config_base_processor import SplitConfigBaseProcessor
+    from .split_output import SplitOutput
+    from .split_output_splits_item import SplitOutputSplitsItem
+    from .split_request_file import SplitRequestFile
+    from .split_request_splitter import SplitRequestSplitter
+    from .split_result import SplitResult
+    from .split_run import SplitRun
+    from .split_run_failed_webhook_event import SplitRunFailedWebhookEvent
+    from .split_run_processed_webhook_event import SplitRunProcessedWebhookEvent
+    from .split_run_summary import SplitRunSummary
+    from .split_step_run import SplitStepRun
+    from .split_step_run_step import SplitStepRunStep
+    from .splitter import Splitter
+    from .splitter_created_webhook_event import SplitterCreatedWebhookEvent
+    from .splitter_deleted_webhook_event import SplitterDeletedWebhookEvent
+    from .splitter_draft_updated_webhook_event import SplitterDraftUpdatedWebhookEvent
+    from .splitter_summary import SplitterSummary
+    from .splitter_updated_webhook_event import SplitterUpdatedWebhookEvent
+    from .splitter_version import SplitterVersion
+    from .splitter_version_published_webhook_event import SplitterVersionPublishedWebhookEvent
+    from .splitter_version_summary import SplitterVersionSummary
     from .step_run import StepRun
-    from .step_run_output import StepRunOutput
-    from .step_run_output_rules_item import StepRunOutputRulesItem
-    from .step_run_output_rules_item_failure_reason import StepRunOutputRulesItemFailureReason
-    from .step_run_status import StepRunStatus
-    from .step_run_step import StepRunStep
-    from .step_run_step_type import StepRunStepType
+    from .step_run_base import StepRunBase
+    from .step_run_base_status import StepRunBaseStatus
     from .table_cell_details import TableCellDetails
     from .table_details import TableDetails
     from .too_many_requests_error_body import TooManyRequestsErrorBody
-    from .webhook_event import WebhookEvent
-    from .webhook_event_event_type import WebhookEventEventType
-    from .webhook_event_payload import WebhookEventPayload
-    from .webhook_event_processor import WebhookEventProcessor
-    from .webhook_event_processor_event_type import WebhookEventProcessorEventType
-    from .webhook_event_processor_run import WebhookEventProcessorRun
-    from .webhook_event_processor_run_event_type import WebhookEventProcessorRunEventType
-    from .webhook_event_processor_version import WebhookEventProcessorVersion
-    from .webhook_event_workflow import WebhookEventWorkflow
-    from .webhook_event_workflow_event_type import WebhookEventWorkflowEventType
-    from .webhook_event_workflow_run import WebhookEventWorkflowRun
-    from .webhook_event_workflow_run_event_type import WebhookEventWorkflowRunEventType
+    from .updated_at import UpdatedAt
+    from .version_description import VersionDescription
+    from .webhook_event import (
+        WebhookEvent,
+        WebhookEvent_ClassifierCreated,
+        WebhookEvent_ClassifierDeleted,
+        WebhookEvent_ClassifierDraftUpdated,
+        WebhookEvent_ClassifierUpdated,
+        WebhookEvent_ClassifierVersionPublished,
+        WebhookEvent_ClassifyRunFailed,
+        WebhookEvent_ClassifyRunProcessed,
+        WebhookEvent_EditRunFailed,
+        WebhookEvent_EditRunProcessed,
+        WebhookEvent_ExtractRunFailed,
+        WebhookEvent_ExtractRunProcessed,
+        WebhookEvent_ExtractorCreated,
+        WebhookEvent_ExtractorDeleted,
+        WebhookEvent_ExtractorDraftUpdated,
+        WebhookEvent_ExtractorUpdated,
+        WebhookEvent_ExtractorVersionPublished,
+        WebhookEvent_ParseRunFailed,
+        WebhookEvent_ParseRunProcessed,
+        WebhookEvent_SplitRunFailed,
+        WebhookEvent_SplitRunProcessed,
+        WebhookEvent_SplitterCreated,
+        WebhookEvent_SplitterDeleted,
+        WebhookEvent_SplitterDraftUpdated,
+        WebhookEvent_SplitterUpdated,
+        WebhookEvent_SplitterVersionPublished,
+        WebhookEvent_WorkflowCreated,
+        WebhookEvent_WorkflowDeleted,
+        WebhookEvent_WorkflowDeployed,
+        WebhookEvent_WorkflowRunCancelled,
+        WebhookEvent_WorkflowRunCompleted,
+        WebhookEvent_WorkflowRunFailed,
+        WebhookEvent_WorkflowRunNeedsReview,
+        WebhookEvent_WorkflowRunRejected,
+        WebhookEvent_WorkflowRunStepRunProcessed,
+    )
     from .workflow import Workflow
+    from .workflow_created_webhook_event import WorkflowCreatedWebhookEvent
+    from .workflow_deleted_webhook_event import WorkflowDeletedWebhookEvent
+    from .workflow_deployed_webhook_event import WorkflowDeployedWebhookEvent
+    from .workflow_reference import WorkflowReference
     from .workflow_run import WorkflowRun
-    from .workflow_run_credits import WorkflowRunCredits
-    from .workflow_run_file_input import WorkflowRunFileInput
-    from .workflow_run_file_input_outputs_item import WorkflowRunFileInputOutputsItem
+    from .workflow_run_cancelled_webhook_event import WorkflowRunCancelledWebhookEvent
+    from .workflow_run_completed_webhook_event import WorkflowRunCompletedWebhookEvent
+    from .workflow_run_failed_webhook_event import WorkflowRunFailedWebhookEvent
+    from .workflow_run_needs_review_webhook_event import WorkflowRunNeedsReviewWebhookEvent
+    from .workflow_run_rejected_webhook_event import WorkflowRunRejectedWebhookEvent
+    from .workflow_run_status import WorkflowRunStatus
+    from .workflow_run_step_run_processed_webhook_event import WorkflowRunStepRunProcessedWebhookEvent
     from .workflow_run_summary import WorkflowRunSummary
-    from .workflow_status import WorkflowStatus
+    from .workflow_step_base import WorkflowStepBase
+    from .workflow_summary import WorkflowSummary
+    from .workflow_version import WorkflowVersion
+    from .workflow_version_summary import WorkflowVersionSummary
 _dynamic_imports: typing.Dict[str, str] = {
+    "ApiError": ".api_error",
     "ApiVersionEnum": ".api_version_enum",
     "ArrayStrategy": ".array_strategy",
     "ArrayStrategyType": ".array_strategy_type",
-    "BadRequestErrorBody": ".bad_request_error_body",
-    "BadRequestErrorBodyCode": ".bad_request_error_body_code",
-    "BaseMetrics": ".base_metrics",
     "BatchProcessorRun": ".batch_processor_run",
     "BatchProcessorRunMetrics": ".batch_processor_run_metrics",
     "BatchProcessorRunOptions": ".batch_processor_run_options",
     "BatchProcessorRunSource": ".batch_processor_run_source",
     "BatchProcessorRunStatus": ".batch_processor_run_status",
-    "BatchWorkflowRunFileInput": ".batch_workflow_run_file_input",
+    "BatchRun": ".batch_run",
+    "BatchRunEntity": ".batch_run_entity",
+    "BatchRunEntityVersion": ".batch_run_entity_version",
+    "BatchRunEntityVersion_ClassifierVersion": ".batch_run_entity_version",
+    "BatchRunEntityVersion_ExtractorVersion": ".batch_run_entity_version",
+    "BatchRunEntityVersion_SplitterVersion": ".batch_run_entity_version",
+    "BatchRunEntity_Classifier": ".batch_run_entity",
+    "BatchRunEntity_Extractor": ".batch_run_entity",
+    "BatchRunEntity_Splitter": ".batch_run_entity",
+    "BatchRunMetrics": ".batch_run_metrics",
+    "BatchRunStatus": ".batch_run_status",
     "Block": ".block",
-    "BlockBoundingBox": ".block_bounding_box",
     "BlockDetails": ".block_details",
     "BlockMetadata": ".block_metadata",
     "BlockMetadataPage": ".block_metadata_page",
     "BlockPolygonItem": ".block_polygon_item",
     "BlockType": ".block_type",
+    "BoundingBox": ".bounding_box",
     "Chunk": ".chunk",
     "ChunkMetadata": ".chunk_metadata",
     "ChunkMetadataPageRange": ".chunk_metadata_page_range",
     "ChunkType": ".chunk_type",
     "Citation": ".citation",
+    "CitationPage": ".citation_page",
     "Classification": ".classification",
-    "ClassificationAdvancedOptions": ".classification_advanced_options",
-    "ClassificationAdvancedOptionsContext": ".classification_advanced_options_context",
-    "ClassificationConfig": ".classification_config",
-    "ClassificationConfigBaseProcessor": ".classification_config_base_processor",
-    "ClassificationFieldMetrics": ".classification_field_metrics",
-    "ClassifierOutput": ".classifier_output",
-    "ClassifyMetrics": ".classify_metrics",
-    "ClassifyOptimizerOptions": ".classify_optimizer_options",
-    "DocumentProcessorRunCredits": ".document_processor_run_credits",
+    "Classifications": ".classifications",
+    "Classifier": ".classifier",
+    "ClassifierCreatedWebhookEvent": ".classifier_created_webhook_event",
+    "ClassifierDeletedWebhookEvent": ".classifier_deleted_webhook_event",
+    "ClassifierDraftUpdatedWebhookEvent": ".classifier_draft_updated_webhook_event",
+    "ClassifierSummary": ".classifier_summary",
+    "ClassifierUpdatedWebhookEvent": ".classifier_updated_webhook_event",
+    "ClassifierVersion": ".classifier_version",
+    "ClassifierVersionPublishedWebhookEvent": ".classifier_version_published_webhook_event",
+    "ClassifierVersionSummary": ".classifier_version_summary",
+    "ClassifyAdvancedOptions": ".classify_advanced_options",
+    "ClassifyAdvancedOptionsContext": ".classify_advanced_options_context",
+    "ClassifyConfig": ".classify_config",
+    "ClassifyConfigBaseProcessor": ".classify_config_base_processor",
+    "ClassifyOutput": ".classify_output",
+    "ClassifyRequestClassifier": ".classify_request_classifier",
+    "ClassifyRequestFile": ".classify_request_file",
+    "ClassifyResult": ".classify_result",
+    "ClassifyRun": ".classify_run",
+    "ClassifyRunFailedWebhookEvent": ".classify_run_failed_webhook_event",
+    "ClassifyRunProcessedWebhookEvent": ".classify_run_processed_webhook_event",
+    "ClassifyRunSummary": ".classify_run_summary",
+    "ClassifyStepRun": ".classify_step_run",
+    "ClassifyStepRunStep": ".classify_step_run_step",
+    "ConditionalExtractResult": ".conditional_extract_result",
+    "ConditionalExtractStepRun": ".conditional_extract_step_run",
+    "ConditionalExtractStepRunStep": ".conditional_extract_step_run_step",
+    "CreatedAt": ".created_at",
     "EditBoundingBox": ".edit_bounding_box",
-    "EditError": ".edit_error",
-    "EditErrorCode": ".edit_error_code",
-    "EditJsonSchema": ".edit_json_schema",
-    "EditJsonSchemaExtendEditFieldType": ".edit_json_schema_extend_edit_field_type",
-    "EditObjectJsonSchema": ".edit_object_json_schema",
-    "EditRootJsonSchema": ".edit_root_json_schema",
+    "EditConfig": ".edit_config",
+    "EditConfigAdvancedOptions": ".edit_config_advanced_options",
+    "EditJson": ".edit_json",
+    "EditJsonExtendEditFieldType": ".edit_json_extend_edit_field_type",
+    "EditObjectJson": ".edit_object_json",
+    "EditRequestFile": ".edit_request_file",
+    "EditRootJson": ".edit_root_json",
     "EditRun": ".edit_run",
-    "EditRunConfig": ".edit_run_config",
-    "EditRunConfigAdvancedOptions": ".edit_run_config_advanced_options",
-    "EditRunEditedFile": ".edit_run_edited_file",
+    "EditRunFailedWebhookEvent": ".edit_run_failed_webhook_event",
     "EditRunMetrics": ".edit_run_metrics",
+    "EditRunOutput": ".edit_run_output",
+    "EditRunOutputEditedFile": ".edit_run_output_edited_file",
+    "EditRunProcessedWebhookEvent": ".edit_run_processed_webhook_event",
     "EditRunStatus": ".edit_run_status",
-    "EditRunStatusStatus": ".edit_run_status_status",
-    "EditRunUsage": ".edit_run_usage",
     "EditTextOptions": ".edit_text_options",
     "EmptyBlockDetails": ".empty_block_details",
     "Enum": ".enum",
     "EnumOption": ".enum_option",
-    "Error": ".error",
     "EvaluationSet": ".evaluation_set",
+    "EvaluationSetEntity": ".evaluation_set_entity",
+    "EvaluationSetEntity_Classifier": ".evaluation_set_entity",
+    "EvaluationSetEntity_Extractor": ".evaluation_set_entity",
+    "EvaluationSetEntity_Splitter": ".evaluation_set_entity",
     "EvaluationSetItem": ".evaluation_set_item",
+    "EvaluationSetItemSummary": ".evaluation_set_item_summary",
+    "EvaluationSetRun": ".evaluation_set_run",
+    "EvaluationSetRunEntity": ".evaluation_set_run_entity",
+    "EvaluationSetRunEntityVersion": ".evaluation_set_run_entity_version",
+    "EvaluationSetRunEntityVersion_ClassifierVersion": ".evaluation_set_run_entity_version",
+    "EvaluationSetRunEntityVersion_ExtractorVersion": ".evaluation_set_run_entity_version",
+    "EvaluationSetRunEntityVersion_SplitterVersion": ".evaluation_set_run_entity_version",
+    "EvaluationSetRunEntity_Classifier": ".evaluation_set_run_entity",
+    "EvaluationSetRunEntity_Extractor": ".evaluation_set_run_entity",
+    "EvaluationSetRunEntity_Splitter": ".evaluation_set_run_entity",
+    "EvaluationSetRunMetrics": ".evaluation_set_run_metrics",
+    "EvaluationSetRunOptions": ".evaluation_set_run_options",
     "ExcelSheetRange": ".excel_sheet_range",
-    "ExtendError": ".extend_error",
+    "ExternalDataValidationResult": ".external_data_validation_result",
+    "ExternalDataValidationResultResponse": ".external_data_validation_result_response",
+    "ExternalDataValidationStepRun": ".external_data_validation_step_run",
+    "ExternalDataValidationStepRunStep": ".external_data_validation_step_run_step",
+    "ExtractAdvancedOptions": ".extract_advanced_options",
+    "ExtractAdvancedOptionsArrayCitationStrategy": ".extract_advanced_options_array_citation_strategy",
+    "ExtractAdvancedOptionsExcelSheetSelectionStrategy": ".extract_advanced_options_excel_sheet_selection_strategy",
+    "ExtractAdvancedOptionsReviewAgent": ".extract_advanced_options_review_agent",
     "ExtractChunkingOptions": ".extract_chunking_options",
     "ExtractChunkingOptionsChunkSelectionStrategy": ".extract_chunking_options_chunk_selection_strategy",
     "ExtractChunkingOptionsChunkingStrategy": ".extract_chunking_options_chunking_strategy",
-    "ExtractMetrics": ".extract_metrics",
-    "ExtractMetricsFieldMetrics": ".extract_metrics_field_metrics",
-    "ExtractOptimizerOptions": ".extract_optimizer_options",
-    "ExtractionAdvancedOptions": ".extraction_advanced_options",
-    "ExtractionAdvancedOptionsArrayCitationStrategy": ".extraction_advanced_options_array_citation_strategy",
-    "ExtractionAdvancedOptionsExcelSheetSelectionStrategy": ".extraction_advanced_options_excel_sheet_selection_strategy",
-    "ExtractionAdvancedOptionsReviewAgent": ".extraction_advanced_options_review_agent",
-    "ExtractionConfig": ".extraction_config",
-    "ExtractionConfigBaseProcessor": ".extraction_config_base_processor",
+    "ExtractConfig": ".extract_config",
+    "ExtractConfigJson": ".extract_config_json",
+    "ExtractConfigJsonBaseProcessor": ".extract_config_json_base_processor",
+    "ExtractConfigLegacy": ".extract_config_legacy",
+    "ExtractConfigLegacyBaseProcessor": ".extract_config_legacy_base_processor",
+    "ExtractOutput": ".extract_output",
+    "ExtractOutputEdits": ".extract_output_edits",
+    "ExtractOutputJson": ".extract_output_json",
+    "ExtractOutputLegacy": ".extract_output_legacy",
+    "ExtractOutputMetadata": ".extract_output_metadata",
+    "ExtractOutputMetadataValue": ".extract_output_metadata_value",
+    "ExtractRequestExtractor": ".extract_request_extractor",
+    "ExtractRequestFile": ".extract_request_file",
+    "ExtractResult": ".extract_result",
+    "ExtractRun": ".extract_run",
+    "ExtractRunFailedWebhookEvent": ".extract_run_failed_webhook_event",
+    "ExtractRunProcessedWebhookEvent": ".extract_run_processed_webhook_event",
+    "ExtractRunSummary": ".extract_run_summary",
+    "ExtractStepRun": ".extract_step_run",
+    "ExtractStepRunStep": ".extract_step_run_step",
     "ExtractionField": ".extraction_field",
-    "ExtractionFieldMetrics": ".extraction_field_metrics",
     "ExtractionFieldResult": ".extraction_field_result",
     "ExtractionFieldResultReference": ".extraction_field_result_reference",
     "ExtractionFieldResultReferenceBoundingBoxesItem": ".extraction_field_result_reference_bounding_boxes_item",
     "ExtractionFieldResultType": ".extraction_field_result_type",
     "ExtractionFieldType": ".extraction_field_type",
-    "ExtractionOutput": ".extraction_output",
-    "ExtractionOutputEdits": ".extraction_output_edits",
-    "FieldsArrayOutput": ".fields_array_output",
+    "Extractor": ".extractor",
+    "ExtractorCreatedWebhookEvent": ".extractor_created_webhook_event",
+    "ExtractorDeletedWebhookEvent": ".extractor_deleted_webhook_event",
+    "ExtractorDraftUpdatedWebhookEvent": ".extractor_draft_updated_webhook_event",
+    "ExtractorSummary": ".extractor_summary",
+    "ExtractorUpdatedWebhookEvent": ".extractor_updated_webhook_event",
+    "ExtractorVersion": ".extractor_version",
+    "ExtractorVersionPublishedWebhookEvent": ".extractor_version_published_webhook_event",
+    "ExtractorVersionSummary": ".extractor_version_summary",
     "FigureDetails": ".figure_details",
     "FigureDetailsFigureType": ".figure_details_figure_type",
     "File": ".file",
     "FileContents": ".file_contents",
     "FileContentsPagesItem": ".file_contents_pages_item",
+    "FileContentsSectionsItem": ".file_contents_sections_item",
     "FileContentsSheetsItem": ".file_contents_sheets_item",
-    "FileCredits": ".file_credits",
+    "FileFromId": ".file_from_id",
+    "FileFromText": ".file_from_text",
+    "FileFromUrl": ".file_from_url",
     "FileMetadata": ".file_metadata",
-    "FileMetadataParentSplit": ".file_metadata_parent_split",
+    "FileSummary": ".file_summary",
     "FileType": ".file_type",
     "Insight": ".insight",
-    "InsightType": ".insight_type",
     "JsonObject": ".json_object",
-    "JsonOutput": ".json_output",
-    "JsonOutputMetadataValue": ".json_output_metadata_value",
-    "JsonOutputMetadataValueCitationsItem": ".json_output_metadata_value_citations_item",
-    "JsonOutputMetadataValueCitationsItemPolygonItem": ".json_output_metadata_value_citations_item_polygon_item",
-    "ListProcessorsProcessor": ".list_processors_processor",
-    "ListProcessorsProcessorVersion": ".list_processors_processor_version",
-    "ListProcessorsResponse": ".list_processors_response",
+    "LegacyBatchProcessorRun": ".legacy_batch_processor_run",
+    "LegacyBatchProcessorRunMetrics": ".legacy_batch_processor_run_metrics",
+    "LegacyBatchProcessorRunOptions": ".legacy_batch_processor_run_options",
+    "LegacyBatchProcessorRunSource": ".legacy_batch_processor_run_source",
+    "LegacyBatchProcessorRunStatus": ".legacy_batch_processor_run_status",
+    "LegacyClassification": ".legacy_classification",
+    "LegacyClassificationAdvancedOptions": ".legacy_classification_advanced_options",
+    "LegacyClassificationAdvancedOptionsContext": ".legacy_classification_advanced_options_context",
+    "LegacyClassificationConfig": ".legacy_classification_config",
+    "LegacyClassificationConfigBaseProcessor": ".legacy_classification_config_base_processor",
+    "LegacyClassifierOutput": ".legacy_classifier_output",
+    "LegacyDocumentProcessorRunCredits": ".legacy_document_processor_run_credits",
+    "LegacyError": ".legacy_error",
+    "LegacyExtendError": ".legacy_extend_error",
+    "LegacyExtractChunkingOptions": ".legacy_extract_chunking_options",
+    "LegacyExtractChunkingOptionsChunkSelectionStrategy": ".legacy_extract_chunking_options_chunk_selection_strategy",
+    "LegacyExtractChunkingOptionsChunkingStrategy": ".legacy_extract_chunking_options_chunking_strategy",
+    "LegacyExtractionAdvancedOptions": ".legacy_extraction_advanced_options",
+    "LegacyExtractionAdvancedOptionsArrayCitationStrategy": ".legacy_extraction_advanced_options_array_citation_strategy",
+    "LegacyExtractionAdvancedOptionsExcelSheetSelectionStrategy": ".legacy_extraction_advanced_options_excel_sheet_selection_strategy",
+    "LegacyExtractionAdvancedOptionsReviewAgent": ".legacy_extraction_advanced_options_review_agent",
+    "LegacyExtractionConfig": ".legacy_extraction_config",
+    "LegacyExtractionConfigBaseProcessor": ".legacy_extraction_config_base_processor",
+    "LegacyExtractionField": ".legacy_extraction_field",
+    "LegacyExtractionFieldResult": ".legacy_extraction_field_result",
+    "LegacyExtractionFieldResultType": ".legacy_extraction_field_result_type",
+    "LegacyExtractionFieldType": ".legacy_extraction_field_type",
+    "LegacyExtractionOutput": ".legacy_extraction_output",
+    "LegacyExtractionOutputEdits": ".legacy_extraction_output_edits",
+    "LegacyFieldsArrayOutput": ".legacy_fields_array_output",
+    "LegacyJsonObject": ".legacy_json_object",
+    "LegacyJsonOutput": ".legacy_json_output",
+    "LegacyJsonOutputMetadataValue": ".legacy_json_output_metadata_value",
+    "LegacyJsonOutputMetadataValueCitationsItem": ".legacy_json_output_metadata_value_citations_item",
+    "LegacyJsonOutputMetadataValueCitationsItemPolygonItem": ".legacy_json_output_metadata_value_citations_item_polygon_item",
+    "LegacyListProcessorsProcessor": ".legacy_list_processors_processor",
+    "LegacyListProcessorsProcessorVersion": ".legacy_list_processors_processor_version",
+    "LegacyListProcessorsResponse": ".legacy_list_processors_response",
+    "LegacyMaxPageSize": ".legacy_max_page_size",
+    "LegacyNextPageToken": ".legacy_next_page_token",
+    "LegacyProcessor": ".legacy_processor",
+    "LegacyProcessorId": ".legacy_processor_id",
+    "LegacyProcessorOutput": ".legacy_processor_output",
+    "LegacyProcessorRun": ".legacy_processor_run",
+    "LegacyProcessorRunConfig": ".legacy_processor_run_config",
+    "LegacyProcessorRunConfig_Classify": ".legacy_processor_run_config",
+    "LegacyProcessorRunConfig_Extract": ".legacy_processor_run_config",
+    "LegacyProcessorRunConfig_Splitter": ".legacy_processor_run_config",
+    "LegacyProcessorRunFileInput": ".legacy_processor_run_file_input",
+    "LegacyProcessorRunMergedProcessorsItem": ".legacy_processor_run_merged_processors_item",
+    "LegacyProcessorRunSummary": ".legacy_processor_run_summary",
+    "LegacyProcessorRunSummaryType": ".legacy_processor_run_summary_type",
+    "LegacyProcessorRunType": ".legacy_processor_run_type",
+    "LegacyProcessorStatus": ".legacy_processor_status",
+    "LegacyProcessorType": ".legacy_processor_type",
+    "LegacyProcessorVersion": ".legacy_processor_version",
+    "LegacyProcessorVersionConfig": ".legacy_processor_version_config",
+    "LegacyProcessorVersionConfig_Classify": ".legacy_processor_version_config",
+    "LegacyProcessorVersionConfig_Extract": ".legacy_processor_version_config",
+    "LegacyProcessorVersionConfig_Splitter": ".legacy_processor_version_config",
+    "LegacyProvidedClassifierOutput": ".legacy_provided_classifier_output",
+    "LegacyProvidedExtractionFieldResult": ".legacy_provided_extraction_field_result",
+    "LegacyProvidedExtractionFieldResultType": ".legacy_provided_extraction_field_result_type",
+    "LegacyProvidedExtractionOutput": ".legacy_provided_extraction_output",
+    "LegacyProvidedFieldsArrayOutput": ".legacy_provided_fields_array_output",
+    "LegacyProvidedJsonOutput": ".legacy_provided_json_output",
+    "LegacyProvidedProcessorOutput": ".legacy_provided_processor_output",
+    "LegacyProvidedSplitterOutput": ".legacy_provided_splitter_output",
+    "LegacyProvidedSplitterOutputSplitsItem": ".legacy_provided_splitter_output_splits_item",
+    "LegacySortByEnum": ".legacy_sort_by_enum",
+    "LegacySortDirEnum": ".legacy_sort_dir_enum",
+    "LegacySplitterAdvancedOptions": ".legacy_splitter_advanced_options",
+    "LegacySplitterAdvancedOptionsSplitMethod": ".legacy_splitter_advanced_options_split_method",
+    "LegacySplitterConfig": ".legacy_splitter_config",
+    "LegacySplitterConfigBaseProcessor": ".legacy_splitter_config_base_processor",
+    "LegacySplitterOutput": ".legacy_splitter_output",
+    "LegacySplitterOutputSplitsItem": ".legacy_splitter_output_splits_item",
     "MaxPageSize": ".max_page_size",
+    "MergeExtractResult": ".merge_extract_result",
+    "MergeExtractResultMergedExtractorsItem": ".merge_extract_result_merged_extractors_item",
+    "MergeExtractStepRun": ".merge_extract_step_run",
+    "MergeExtractStepRunStep": ".merge_extract_step_run_step",
     "NextPageToken": ".next_page_token",
-    "OptimizerBatchProcessorRunResult": ".optimizer_batch_processor_run_result",
-    "OptimizerBatchProcessorRunResultProcessorConfig": ".optimizer_batch_processor_run_result_processor_config",
-    "OptimizerBatchProcessorRunResultProcessorConfig_Classify": ".optimizer_batch_processor_run_result_processor_config",
-    "OptimizerBatchProcessorRunResultProcessorConfig_Extract": ".optimizer_batch_processor_run_result_processor_config",
-    "OptimizerRun": ".optimizer_run",
-    "OptimizerRunAgentType": ".optimizer_run_agent_type",
-    "OptimizerRunMetrics": ".optimizer_run_metrics",
-    "OptimizerRunMetricsFieldsItem": ".optimizer_run_metrics_fields_item",
-    "OptimizerRunStatus": ".optimizer_run_status",
-    "OutputMetadata": ".output_metadata",
-    "OutputMetadataValue": ".output_metadata_value",
     "PageRanges": ".page_ranges",
     "PageRangesItem": ".page_ranges_item",
-    "ParseAsyncRequestFile": ".parse_async_request_file",
+    "ParentSplit": ".parent_split",
     "ParseConfig": ".parse_config",
     "ParseConfigAdvancedOptions": ".parse_config_advanced_options",
     "ParseConfigAdvancedOptionsReturnOcr": ".parse_config_advanced_options_return_ocr",
@@ -358,87 +679,128 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ParseConfigChunkingStrategyType": ".parse_config_chunking_strategy_type",
     "ParseConfigEngine": ".parse_config_engine",
     "ParseConfigTarget": ".parse_config_target",
-    "ParseError": ".parse_error",
-    "ParseErrorCode": ".parse_error_code",
     "ParseRequestFile": ".parse_request_file",
     "ParseRequestResponseType": ".parse_request_response_type",
-    "ParserRun": ".parser_run",
-    "ParserRunCredits": ".parser_run_credits",
-    "ParserRunMetrics": ".parser_run_metrics",
-    "ParserRunOcr": ".parser_run_ocr",
-    "ParserRunOcrWordsItem": ".parser_run_ocr_words_item",
-    "ParserRunOcrWordsItemBoundingBox": ".parser_run_ocr_words_item_bounding_box",
-    "ParserRunStatus": ".parser_run_status",
-    "ParserRunStatusEnum": ".parser_run_status_enum",
-    "ParserRunStatusStatus": ".parser_run_status_status",
+    "ParseResult": ".parse_result",
+    "ParseRun": ".parse_run",
+    "ParseRunFailedWebhookEvent": ".parse_run_failed_webhook_event",
+    "ParseRunMetrics": ".parse_run_metrics",
+    "ParseRunOutput": ".parse_run_output",
+    "ParseRunOutputOcr": ".parse_run_output_ocr",
+    "ParseRunOutputOcrWordsItem": ".parse_run_output_ocr_words_item",
+    "ParseRunProcessedWebhookEvent": ".parse_run_processed_webhook_event",
+    "ParseRunStatus": ".parse_run_status",
+    "ParseRunStatusEnum": ".parse_run_status_enum",
+    "ParseRunStatusStatus": ".parse_run_status_status",
+    "ParseStepRun": ".parse_step_run",
+    "ParseStepRunStep": ".parse_step_run_step",
     "Polygon": ".polygon",
-    "Processor": ".processor",
-    "ProcessorId": ".processor_id",
-    "ProcessorOutput": ".processor_output",
-    "ProcessorRun": ".processor_run",
-    "ProcessorRunConfig": ".processor_run_config",
-    "ProcessorRunConfig_Classify": ".processor_run_config",
-    "ProcessorRunConfig_Extract": ".processor_run_config",
-    "ProcessorRunConfig_Splitter": ".processor_run_config",
-    "ProcessorRunFileInput": ".processor_run_file_input",
-    "ProcessorRunMergedProcessorsItem": ".processor_run_merged_processors_item",
-    "ProcessorRunSummary": ".processor_run_summary",
-    "ProcessorRunSummaryType": ".processor_run_summary_type",
-    "ProcessorRunType": ".processor_run_type",
-    "ProcessorStatus": ".processor_status",
-    "ProcessorType": ".processor_type",
-    "ProcessorVersion": ".processor_version",
-    "ProcessorVersionConfig": ".processor_version_config",
-    "ProcessorVersionConfig_Classify": ".processor_version_config",
-    "ProcessorVersionConfig_Extract": ".processor_version_config",
-    "ProcessorVersionConfig_Splitter": ".processor_version_config",
-    "ProvidedClassifierOutput": ".provided_classifier_output",
-    "ProvidedExtractionFieldResult": ".provided_extraction_field_result",
-    "ProvidedExtractionFieldResultType": ".provided_extraction_field_result_type",
-    "ProvidedExtractionOutput": ".provided_extraction_output",
-    "ProvidedFieldsArrayOutput": ".provided_fields_array_output",
-    "ProvidedJsonOutput": ".provided_json_output",
+    "ProcessorRunStatus": ".processor_run_status",
+    "ProcessorVersionString": ".processor_version_string",
+    "ProvidedClassifyOutput": ".provided_classify_output",
+    "ProvidedExtractOutput": ".provided_extract_output",
     "ProvidedProcessorOutput": ".provided_processor_output",
-    "ProvidedSplitterOutput": ".provided_splitter_output",
-    "ProvidedSplitterOutputSplitsItem": ".provided_splitter_output_splits_item",
-    "SortByEnum": ".sort_by_enum",
-    "SortDirEnum": ".sort_dir_enum",
-    "SplitterAdvancedOptions": ".splitter_advanced_options",
-    "SplitterAdvancedOptionsSplitMethod": ".splitter_advanced_options_split_method",
-    "SplitterConfig": ".splitter_config",
-    "SplitterConfigBaseProcessor": ".splitter_config_base_processor",
-    "SplitterMetrics": ".splitter_metrics",
-    "SplitterOutput": ".splitter_output",
-    "SplitterOutputSplitsItem": ".splitter_output_splits_item",
+    "ProvidedSplitOutput": ".provided_split_output",
+    "ProvidedSplitOutputSplitsItem": ".provided_split_output_splits_item",
+    "ReleaseType": ".release_type",
+    "RuleValidationResult": ".rule_validation_result",
+    "RuleValidationResultRulesItem": ".rule_validation_result_rules_item",
+    "RuleValidationResultRulesItemFailureReason": ".rule_validation_result_rules_item_failure_reason",
+    "RuleValidationStepRun": ".rule_validation_step_run",
+    "RuleValidationStepRunStep": ".rule_validation_step_run_step",
+    "RunMetadata": ".run_metadata",
+    "RunPriority": ".run_priority",
+    "RunSecrets": ".run_secrets",
+    "RunSource": ".run_source",
+    "RunSourceId": ".run_source_id",
+    "RunUsage": ".run_usage",
+    "SortBy": ".sort_by",
+    "SortDir": ".sort_dir",
+    "SplitAdvancedOptions": ".split_advanced_options",
+    "SplitAdvancedOptionsSplitMethod": ".split_advanced_options_split_method",
+    "SplitConfig": ".split_config",
+    "SplitConfigBaseProcessor": ".split_config_base_processor",
+    "SplitOutput": ".split_output",
+    "SplitOutputSplitsItem": ".split_output_splits_item",
+    "SplitRequestFile": ".split_request_file",
+    "SplitRequestSplitter": ".split_request_splitter",
+    "SplitResult": ".split_result",
+    "SplitRun": ".split_run",
+    "SplitRunFailedWebhookEvent": ".split_run_failed_webhook_event",
+    "SplitRunProcessedWebhookEvent": ".split_run_processed_webhook_event",
+    "SplitRunSummary": ".split_run_summary",
+    "SplitStepRun": ".split_step_run",
+    "SplitStepRunStep": ".split_step_run_step",
+    "Splitter": ".splitter",
+    "SplitterCreatedWebhookEvent": ".splitter_created_webhook_event",
+    "SplitterDeletedWebhookEvent": ".splitter_deleted_webhook_event",
+    "SplitterDraftUpdatedWebhookEvent": ".splitter_draft_updated_webhook_event",
+    "SplitterSummary": ".splitter_summary",
+    "SplitterUpdatedWebhookEvent": ".splitter_updated_webhook_event",
+    "SplitterVersion": ".splitter_version",
+    "SplitterVersionPublishedWebhookEvent": ".splitter_version_published_webhook_event",
+    "SplitterVersionSummary": ".splitter_version_summary",
     "StepRun": ".step_run",
-    "StepRunOutput": ".step_run_output",
-    "StepRunOutputRulesItem": ".step_run_output_rules_item",
-    "StepRunOutputRulesItemFailureReason": ".step_run_output_rules_item_failure_reason",
-    "StepRunStatus": ".step_run_status",
-    "StepRunStep": ".step_run_step",
-    "StepRunStepType": ".step_run_step_type",
+    "StepRunBase": ".step_run_base",
+    "StepRunBaseStatus": ".step_run_base_status",
     "TableCellDetails": ".table_cell_details",
     "TableDetails": ".table_details",
     "TooManyRequestsErrorBody": ".too_many_requests_error_body",
+    "UpdatedAt": ".updated_at",
+    "VersionDescription": ".version_description",
     "WebhookEvent": ".webhook_event",
-    "WebhookEventEventType": ".webhook_event_event_type",
-    "WebhookEventPayload": ".webhook_event_payload",
-    "WebhookEventProcessor": ".webhook_event_processor",
-    "WebhookEventProcessorEventType": ".webhook_event_processor_event_type",
-    "WebhookEventProcessorRun": ".webhook_event_processor_run",
-    "WebhookEventProcessorRunEventType": ".webhook_event_processor_run_event_type",
-    "WebhookEventProcessorVersion": ".webhook_event_processor_version",
-    "WebhookEventWorkflow": ".webhook_event_workflow",
-    "WebhookEventWorkflowEventType": ".webhook_event_workflow_event_type",
-    "WebhookEventWorkflowRun": ".webhook_event_workflow_run",
-    "WebhookEventWorkflowRunEventType": ".webhook_event_workflow_run_event_type",
+    "WebhookEvent_ClassifierCreated": ".webhook_event",
+    "WebhookEvent_ClassifierDeleted": ".webhook_event",
+    "WebhookEvent_ClassifierDraftUpdated": ".webhook_event",
+    "WebhookEvent_ClassifierUpdated": ".webhook_event",
+    "WebhookEvent_ClassifierVersionPublished": ".webhook_event",
+    "WebhookEvent_ClassifyRunFailed": ".webhook_event",
+    "WebhookEvent_ClassifyRunProcessed": ".webhook_event",
+    "WebhookEvent_EditRunFailed": ".webhook_event",
+    "WebhookEvent_EditRunProcessed": ".webhook_event",
+    "WebhookEvent_ExtractRunFailed": ".webhook_event",
+    "WebhookEvent_ExtractRunProcessed": ".webhook_event",
+    "WebhookEvent_ExtractorCreated": ".webhook_event",
+    "WebhookEvent_ExtractorDeleted": ".webhook_event",
+    "WebhookEvent_ExtractorDraftUpdated": ".webhook_event",
+    "WebhookEvent_ExtractorUpdated": ".webhook_event",
+    "WebhookEvent_ExtractorVersionPublished": ".webhook_event",
+    "WebhookEvent_ParseRunFailed": ".webhook_event",
+    "WebhookEvent_ParseRunProcessed": ".webhook_event",
+    "WebhookEvent_SplitRunFailed": ".webhook_event",
+    "WebhookEvent_SplitRunProcessed": ".webhook_event",
+    "WebhookEvent_SplitterCreated": ".webhook_event",
+    "WebhookEvent_SplitterDeleted": ".webhook_event",
+    "WebhookEvent_SplitterDraftUpdated": ".webhook_event",
+    "WebhookEvent_SplitterUpdated": ".webhook_event",
+    "WebhookEvent_SplitterVersionPublished": ".webhook_event",
+    "WebhookEvent_WorkflowCreated": ".webhook_event",
+    "WebhookEvent_WorkflowDeleted": ".webhook_event",
+    "WebhookEvent_WorkflowDeployed": ".webhook_event",
+    "WebhookEvent_WorkflowRunCancelled": ".webhook_event",
+    "WebhookEvent_WorkflowRunCompleted": ".webhook_event",
+    "WebhookEvent_WorkflowRunFailed": ".webhook_event",
+    "WebhookEvent_WorkflowRunNeedsReview": ".webhook_event",
+    "WebhookEvent_WorkflowRunRejected": ".webhook_event",
+    "WebhookEvent_WorkflowRunStepRunProcessed": ".webhook_event",
     "Workflow": ".workflow",
+    "WorkflowCreatedWebhookEvent": ".workflow_created_webhook_event",
+    "WorkflowDeletedWebhookEvent": ".workflow_deleted_webhook_event",
+    "WorkflowDeployedWebhookEvent": ".workflow_deployed_webhook_event",
+    "WorkflowReference": ".workflow_reference",
     "WorkflowRun": ".workflow_run",
-    "WorkflowRunCredits": ".workflow_run_credits",
-    "WorkflowRunFileInput": ".workflow_run_file_input",
-    "WorkflowRunFileInputOutputsItem": ".workflow_run_file_input_outputs_item",
+    "WorkflowRunCancelledWebhookEvent": ".workflow_run_cancelled_webhook_event",
+    "WorkflowRunCompletedWebhookEvent": ".workflow_run_completed_webhook_event",
+    "WorkflowRunFailedWebhookEvent": ".workflow_run_failed_webhook_event",
+    "WorkflowRunNeedsReviewWebhookEvent": ".workflow_run_needs_review_webhook_event",
+    "WorkflowRunRejectedWebhookEvent": ".workflow_run_rejected_webhook_event",
+    "WorkflowRunStatus": ".workflow_run_status",
+    "WorkflowRunStepRunProcessedWebhookEvent": ".workflow_run_step_run_processed_webhook_event",
     "WorkflowRunSummary": ".workflow_run_summary",
-    "WorkflowStatus": ".workflow_status",
+    "WorkflowStepBase": ".workflow_step_base",
+    "WorkflowSummary": ".workflow_summary",
+    "WorkflowVersion": ".workflow_version",
+    "WorkflowVersionSummary": ".workflow_version_summary",
 }
 
 
@@ -464,122 +826,253 @@ def __dir__():
 
 
 __all__ = [
+    "ApiError",
     "ApiVersionEnum",
     "ArrayStrategy",
     "ArrayStrategyType",
-    "BadRequestErrorBody",
-    "BadRequestErrorBodyCode",
-    "BaseMetrics",
     "BatchProcessorRun",
     "BatchProcessorRunMetrics",
     "BatchProcessorRunOptions",
     "BatchProcessorRunSource",
     "BatchProcessorRunStatus",
-    "BatchWorkflowRunFileInput",
+    "BatchRun",
+    "BatchRunEntity",
+    "BatchRunEntityVersion",
+    "BatchRunEntityVersion_ClassifierVersion",
+    "BatchRunEntityVersion_ExtractorVersion",
+    "BatchRunEntityVersion_SplitterVersion",
+    "BatchRunEntity_Classifier",
+    "BatchRunEntity_Extractor",
+    "BatchRunEntity_Splitter",
+    "BatchRunMetrics",
+    "BatchRunStatus",
     "Block",
-    "BlockBoundingBox",
     "BlockDetails",
     "BlockMetadata",
     "BlockMetadataPage",
     "BlockPolygonItem",
     "BlockType",
+    "BoundingBox",
     "Chunk",
     "ChunkMetadata",
     "ChunkMetadataPageRange",
     "ChunkType",
     "Citation",
+    "CitationPage",
     "Classification",
-    "ClassificationAdvancedOptions",
-    "ClassificationAdvancedOptionsContext",
-    "ClassificationConfig",
-    "ClassificationConfigBaseProcessor",
-    "ClassificationFieldMetrics",
-    "ClassifierOutput",
-    "ClassifyMetrics",
-    "ClassifyOptimizerOptions",
-    "DocumentProcessorRunCredits",
+    "Classifications",
+    "Classifier",
+    "ClassifierCreatedWebhookEvent",
+    "ClassifierDeletedWebhookEvent",
+    "ClassifierDraftUpdatedWebhookEvent",
+    "ClassifierSummary",
+    "ClassifierUpdatedWebhookEvent",
+    "ClassifierVersion",
+    "ClassifierVersionPublishedWebhookEvent",
+    "ClassifierVersionSummary",
+    "ClassifyAdvancedOptions",
+    "ClassifyAdvancedOptionsContext",
+    "ClassifyConfig",
+    "ClassifyConfigBaseProcessor",
+    "ClassifyOutput",
+    "ClassifyRequestClassifier",
+    "ClassifyRequestFile",
+    "ClassifyResult",
+    "ClassifyRun",
+    "ClassifyRunFailedWebhookEvent",
+    "ClassifyRunProcessedWebhookEvent",
+    "ClassifyRunSummary",
+    "ClassifyStepRun",
+    "ClassifyStepRunStep",
+    "ConditionalExtractResult",
+    "ConditionalExtractStepRun",
+    "ConditionalExtractStepRunStep",
+    "CreatedAt",
     "EditBoundingBox",
-    "EditError",
-    "EditErrorCode",
-    "EditJsonSchema",
-    "EditJsonSchemaExtendEditFieldType",
-    "EditObjectJsonSchema",
-    "EditRootJsonSchema",
+    "EditConfig",
+    "EditConfigAdvancedOptions",
+    "EditJson",
+    "EditJsonExtendEditFieldType",
+    "EditObjectJson",
+    "EditRequestFile",
+    "EditRootJson",
     "EditRun",
-    "EditRunConfig",
-    "EditRunConfigAdvancedOptions",
-    "EditRunEditedFile",
+    "EditRunFailedWebhookEvent",
     "EditRunMetrics",
+    "EditRunOutput",
+    "EditRunOutputEditedFile",
+    "EditRunProcessedWebhookEvent",
     "EditRunStatus",
-    "EditRunStatusStatus",
-    "EditRunUsage",
     "EditTextOptions",
     "EmptyBlockDetails",
     "Enum",
     "EnumOption",
-    "Error",
     "EvaluationSet",
+    "EvaluationSetEntity",
+    "EvaluationSetEntity_Classifier",
+    "EvaluationSetEntity_Extractor",
+    "EvaluationSetEntity_Splitter",
     "EvaluationSetItem",
+    "EvaluationSetItemSummary",
+    "EvaluationSetRun",
+    "EvaluationSetRunEntity",
+    "EvaluationSetRunEntityVersion",
+    "EvaluationSetRunEntityVersion_ClassifierVersion",
+    "EvaluationSetRunEntityVersion_ExtractorVersion",
+    "EvaluationSetRunEntityVersion_SplitterVersion",
+    "EvaluationSetRunEntity_Classifier",
+    "EvaluationSetRunEntity_Extractor",
+    "EvaluationSetRunEntity_Splitter",
+    "EvaluationSetRunMetrics",
+    "EvaluationSetRunOptions",
     "ExcelSheetRange",
-    "ExtendError",
+    "ExternalDataValidationResult",
+    "ExternalDataValidationResultResponse",
+    "ExternalDataValidationStepRun",
+    "ExternalDataValidationStepRunStep",
+    "ExtractAdvancedOptions",
+    "ExtractAdvancedOptionsArrayCitationStrategy",
+    "ExtractAdvancedOptionsExcelSheetSelectionStrategy",
+    "ExtractAdvancedOptionsReviewAgent",
     "ExtractChunkingOptions",
     "ExtractChunkingOptionsChunkSelectionStrategy",
     "ExtractChunkingOptionsChunkingStrategy",
-    "ExtractMetrics",
-    "ExtractMetricsFieldMetrics",
-    "ExtractOptimizerOptions",
-    "ExtractionAdvancedOptions",
-    "ExtractionAdvancedOptionsArrayCitationStrategy",
-    "ExtractionAdvancedOptionsExcelSheetSelectionStrategy",
-    "ExtractionAdvancedOptionsReviewAgent",
-    "ExtractionConfig",
-    "ExtractionConfigBaseProcessor",
+    "ExtractConfig",
+    "ExtractConfigJson",
+    "ExtractConfigJsonBaseProcessor",
+    "ExtractConfigLegacy",
+    "ExtractConfigLegacyBaseProcessor",
+    "ExtractOutput",
+    "ExtractOutputEdits",
+    "ExtractOutputJson",
+    "ExtractOutputLegacy",
+    "ExtractOutputMetadata",
+    "ExtractOutputMetadataValue",
+    "ExtractRequestExtractor",
+    "ExtractRequestFile",
+    "ExtractResult",
+    "ExtractRun",
+    "ExtractRunFailedWebhookEvent",
+    "ExtractRunProcessedWebhookEvent",
+    "ExtractRunSummary",
+    "ExtractStepRun",
+    "ExtractStepRunStep",
     "ExtractionField",
-    "ExtractionFieldMetrics",
     "ExtractionFieldResult",
     "ExtractionFieldResultReference",
     "ExtractionFieldResultReferenceBoundingBoxesItem",
     "ExtractionFieldResultType",
     "ExtractionFieldType",
-    "ExtractionOutput",
-    "ExtractionOutputEdits",
-    "FieldsArrayOutput",
+    "Extractor",
+    "ExtractorCreatedWebhookEvent",
+    "ExtractorDeletedWebhookEvent",
+    "ExtractorDraftUpdatedWebhookEvent",
+    "ExtractorSummary",
+    "ExtractorUpdatedWebhookEvent",
+    "ExtractorVersion",
+    "ExtractorVersionPublishedWebhookEvent",
+    "ExtractorVersionSummary",
     "FigureDetails",
     "FigureDetailsFigureType",
     "File",
     "FileContents",
     "FileContentsPagesItem",
+    "FileContentsSectionsItem",
     "FileContentsSheetsItem",
-    "FileCredits",
+    "FileFromId",
+    "FileFromText",
+    "FileFromUrl",
     "FileMetadata",
-    "FileMetadataParentSplit",
+    "FileSummary",
     "FileType",
     "Insight",
-    "InsightType",
     "JsonObject",
-    "JsonOutput",
-    "JsonOutputMetadataValue",
-    "JsonOutputMetadataValueCitationsItem",
-    "JsonOutputMetadataValueCitationsItemPolygonItem",
-    "ListProcessorsProcessor",
-    "ListProcessorsProcessorVersion",
-    "ListProcessorsResponse",
+    "LegacyBatchProcessorRun",
+    "LegacyBatchProcessorRunMetrics",
+    "LegacyBatchProcessorRunOptions",
+    "LegacyBatchProcessorRunSource",
+    "LegacyBatchProcessorRunStatus",
+    "LegacyClassification",
+    "LegacyClassificationAdvancedOptions",
+    "LegacyClassificationAdvancedOptionsContext",
+    "LegacyClassificationConfig",
+    "LegacyClassificationConfigBaseProcessor",
+    "LegacyClassifierOutput",
+    "LegacyDocumentProcessorRunCredits",
+    "LegacyError",
+    "LegacyExtendError",
+    "LegacyExtractChunkingOptions",
+    "LegacyExtractChunkingOptionsChunkSelectionStrategy",
+    "LegacyExtractChunkingOptionsChunkingStrategy",
+    "LegacyExtractionAdvancedOptions",
+    "LegacyExtractionAdvancedOptionsArrayCitationStrategy",
+    "LegacyExtractionAdvancedOptionsExcelSheetSelectionStrategy",
+    "LegacyExtractionAdvancedOptionsReviewAgent",
+    "LegacyExtractionConfig",
+    "LegacyExtractionConfigBaseProcessor",
+    "LegacyExtractionField",
+    "LegacyExtractionFieldResult",
+    "LegacyExtractionFieldResultType",
+    "LegacyExtractionFieldType",
+    "LegacyExtractionOutput",
+    "LegacyExtractionOutputEdits",
+    "LegacyFieldsArrayOutput",
+    "LegacyJsonObject",
+    "LegacyJsonOutput",
+    "LegacyJsonOutputMetadataValue",
+    "LegacyJsonOutputMetadataValueCitationsItem",
+    "LegacyJsonOutputMetadataValueCitationsItemPolygonItem",
+    "LegacyListProcessorsProcessor",
+    "LegacyListProcessorsProcessorVersion",
+    "LegacyListProcessorsResponse",
+    "LegacyMaxPageSize",
+    "LegacyNextPageToken",
+    "LegacyProcessor",
+    "LegacyProcessorId",
+    "LegacyProcessorOutput",
+    "LegacyProcessorRun",
+    "LegacyProcessorRunConfig",
+    "LegacyProcessorRunConfig_Classify",
+    "LegacyProcessorRunConfig_Extract",
+    "LegacyProcessorRunConfig_Splitter",
+    "LegacyProcessorRunFileInput",
+    "LegacyProcessorRunMergedProcessorsItem",
+    "LegacyProcessorRunSummary",
+    "LegacyProcessorRunSummaryType",
+    "LegacyProcessorRunType",
+    "LegacyProcessorStatus",
+    "LegacyProcessorType",
+    "LegacyProcessorVersion",
+    "LegacyProcessorVersionConfig",
+    "LegacyProcessorVersionConfig_Classify",
+    "LegacyProcessorVersionConfig_Extract",
+    "LegacyProcessorVersionConfig_Splitter",
+    "LegacyProvidedClassifierOutput",
+    "LegacyProvidedExtractionFieldResult",
+    "LegacyProvidedExtractionFieldResultType",
+    "LegacyProvidedExtractionOutput",
+    "LegacyProvidedFieldsArrayOutput",
+    "LegacyProvidedJsonOutput",
+    "LegacyProvidedProcessorOutput",
+    "LegacyProvidedSplitterOutput",
+    "LegacyProvidedSplitterOutputSplitsItem",
+    "LegacySortByEnum",
+    "LegacySortDirEnum",
+    "LegacySplitterAdvancedOptions",
+    "LegacySplitterAdvancedOptionsSplitMethod",
+    "LegacySplitterConfig",
+    "LegacySplitterConfigBaseProcessor",
+    "LegacySplitterOutput",
+    "LegacySplitterOutputSplitsItem",
     "MaxPageSize",
+    "MergeExtractResult",
+    "MergeExtractResultMergedExtractorsItem",
+    "MergeExtractStepRun",
+    "MergeExtractStepRunStep",
     "NextPageToken",
-    "OptimizerBatchProcessorRunResult",
-    "OptimizerBatchProcessorRunResultProcessorConfig",
-    "OptimizerBatchProcessorRunResultProcessorConfig_Classify",
-    "OptimizerBatchProcessorRunResultProcessorConfig_Extract",
-    "OptimizerRun",
-    "OptimizerRunAgentType",
-    "OptimizerRunMetrics",
-    "OptimizerRunMetricsFieldsItem",
-    "OptimizerRunStatus",
-    "OutputMetadata",
-    "OutputMetadataValue",
     "PageRanges",
     "PageRangesItem",
-    "ParseAsyncRequestFile",
+    "ParentSplit",
     "ParseConfig",
     "ParseConfigAdvancedOptions",
     "ParseConfigAdvancedOptionsReturnOcr",
@@ -595,85 +1088,126 @@ __all__ = [
     "ParseConfigChunkingStrategyType",
     "ParseConfigEngine",
     "ParseConfigTarget",
-    "ParseError",
-    "ParseErrorCode",
     "ParseRequestFile",
     "ParseRequestResponseType",
-    "ParserRun",
-    "ParserRunCredits",
-    "ParserRunMetrics",
-    "ParserRunOcr",
-    "ParserRunOcrWordsItem",
-    "ParserRunOcrWordsItemBoundingBox",
-    "ParserRunStatus",
-    "ParserRunStatusEnum",
-    "ParserRunStatusStatus",
+    "ParseResult",
+    "ParseRun",
+    "ParseRunFailedWebhookEvent",
+    "ParseRunMetrics",
+    "ParseRunOutput",
+    "ParseRunOutputOcr",
+    "ParseRunOutputOcrWordsItem",
+    "ParseRunProcessedWebhookEvent",
+    "ParseRunStatus",
+    "ParseRunStatusEnum",
+    "ParseRunStatusStatus",
+    "ParseStepRun",
+    "ParseStepRunStep",
     "Polygon",
-    "Processor",
-    "ProcessorId",
-    "ProcessorOutput",
-    "ProcessorRun",
-    "ProcessorRunConfig",
-    "ProcessorRunConfig_Classify",
-    "ProcessorRunConfig_Extract",
-    "ProcessorRunConfig_Splitter",
-    "ProcessorRunFileInput",
-    "ProcessorRunMergedProcessorsItem",
-    "ProcessorRunSummary",
-    "ProcessorRunSummaryType",
-    "ProcessorRunType",
-    "ProcessorStatus",
-    "ProcessorType",
-    "ProcessorVersion",
-    "ProcessorVersionConfig",
-    "ProcessorVersionConfig_Classify",
-    "ProcessorVersionConfig_Extract",
-    "ProcessorVersionConfig_Splitter",
-    "ProvidedClassifierOutput",
-    "ProvidedExtractionFieldResult",
-    "ProvidedExtractionFieldResultType",
-    "ProvidedExtractionOutput",
-    "ProvidedFieldsArrayOutput",
-    "ProvidedJsonOutput",
+    "ProcessorRunStatus",
+    "ProcessorVersionString",
+    "ProvidedClassifyOutput",
+    "ProvidedExtractOutput",
     "ProvidedProcessorOutput",
-    "ProvidedSplitterOutput",
-    "ProvidedSplitterOutputSplitsItem",
-    "SortByEnum",
-    "SortDirEnum",
-    "SplitterAdvancedOptions",
-    "SplitterAdvancedOptionsSplitMethod",
-    "SplitterConfig",
-    "SplitterConfigBaseProcessor",
-    "SplitterMetrics",
-    "SplitterOutput",
-    "SplitterOutputSplitsItem",
+    "ProvidedSplitOutput",
+    "ProvidedSplitOutputSplitsItem",
+    "ReleaseType",
+    "RuleValidationResult",
+    "RuleValidationResultRulesItem",
+    "RuleValidationResultRulesItemFailureReason",
+    "RuleValidationStepRun",
+    "RuleValidationStepRunStep",
+    "RunMetadata",
+    "RunPriority",
+    "RunSecrets",
+    "RunSource",
+    "RunSourceId",
+    "RunUsage",
+    "SortBy",
+    "SortDir",
+    "SplitAdvancedOptions",
+    "SplitAdvancedOptionsSplitMethod",
+    "SplitConfig",
+    "SplitConfigBaseProcessor",
+    "SplitOutput",
+    "SplitOutputSplitsItem",
+    "SplitRequestFile",
+    "SplitRequestSplitter",
+    "SplitResult",
+    "SplitRun",
+    "SplitRunFailedWebhookEvent",
+    "SplitRunProcessedWebhookEvent",
+    "SplitRunSummary",
+    "SplitStepRun",
+    "SplitStepRunStep",
+    "Splitter",
+    "SplitterCreatedWebhookEvent",
+    "SplitterDeletedWebhookEvent",
+    "SplitterDraftUpdatedWebhookEvent",
+    "SplitterSummary",
+    "SplitterUpdatedWebhookEvent",
+    "SplitterVersion",
+    "SplitterVersionPublishedWebhookEvent",
+    "SplitterVersionSummary",
     "StepRun",
-    "StepRunOutput",
-    "StepRunOutputRulesItem",
-    "StepRunOutputRulesItemFailureReason",
-    "StepRunStatus",
-    "StepRunStep",
-    "StepRunStepType",
+    "StepRunBase",
+    "StepRunBaseStatus",
     "TableCellDetails",
     "TableDetails",
     "TooManyRequestsErrorBody",
+    "UpdatedAt",
+    "VersionDescription",
     "WebhookEvent",
-    "WebhookEventEventType",
-    "WebhookEventPayload",
-    "WebhookEventProcessor",
-    "WebhookEventProcessorEventType",
-    "WebhookEventProcessorRun",
-    "WebhookEventProcessorRunEventType",
-    "WebhookEventProcessorVersion",
-    "WebhookEventWorkflow",
-    "WebhookEventWorkflowEventType",
-    "WebhookEventWorkflowRun",
-    "WebhookEventWorkflowRunEventType",
+    "WebhookEvent_ClassifierCreated",
+    "WebhookEvent_ClassifierDeleted",
+    "WebhookEvent_ClassifierDraftUpdated",
+    "WebhookEvent_ClassifierUpdated",
+    "WebhookEvent_ClassifierVersionPublished",
+    "WebhookEvent_ClassifyRunFailed",
+    "WebhookEvent_ClassifyRunProcessed",
+    "WebhookEvent_EditRunFailed",
+    "WebhookEvent_EditRunProcessed",
+    "WebhookEvent_ExtractRunFailed",
+    "WebhookEvent_ExtractRunProcessed",
+    "WebhookEvent_ExtractorCreated",
+    "WebhookEvent_ExtractorDeleted",
+    "WebhookEvent_ExtractorDraftUpdated",
+    "WebhookEvent_ExtractorUpdated",
+    "WebhookEvent_ExtractorVersionPublished",
+    "WebhookEvent_ParseRunFailed",
+    "WebhookEvent_ParseRunProcessed",
+    "WebhookEvent_SplitRunFailed",
+    "WebhookEvent_SplitRunProcessed",
+    "WebhookEvent_SplitterCreated",
+    "WebhookEvent_SplitterDeleted",
+    "WebhookEvent_SplitterDraftUpdated",
+    "WebhookEvent_SplitterUpdated",
+    "WebhookEvent_SplitterVersionPublished",
+    "WebhookEvent_WorkflowCreated",
+    "WebhookEvent_WorkflowDeleted",
+    "WebhookEvent_WorkflowDeployed",
+    "WebhookEvent_WorkflowRunCancelled",
+    "WebhookEvent_WorkflowRunCompleted",
+    "WebhookEvent_WorkflowRunFailed",
+    "WebhookEvent_WorkflowRunNeedsReview",
+    "WebhookEvent_WorkflowRunRejected",
+    "WebhookEvent_WorkflowRunStepRunProcessed",
     "Workflow",
+    "WorkflowCreatedWebhookEvent",
+    "WorkflowDeletedWebhookEvent",
+    "WorkflowDeployedWebhookEvent",
+    "WorkflowReference",
     "WorkflowRun",
-    "WorkflowRunCredits",
-    "WorkflowRunFileInput",
-    "WorkflowRunFileInputOutputsItem",
+    "WorkflowRunCancelledWebhookEvent",
+    "WorkflowRunCompletedWebhookEvent",
+    "WorkflowRunFailedWebhookEvent",
+    "WorkflowRunNeedsReviewWebhookEvent",
+    "WorkflowRunRejectedWebhookEvent",
+    "WorkflowRunStatus",
+    "WorkflowRunStepRunProcessedWebhookEvent",
     "WorkflowRunSummary",
-    "WorkflowStatus",
+    "WorkflowStepBase",
+    "WorkflowSummary",
+    "WorkflowVersion",
+    "WorkflowVersionSummary",
 ]

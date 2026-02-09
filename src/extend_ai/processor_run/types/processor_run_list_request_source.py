@@ -2,9 +2,53 @@
 
 import typing
 
-ProcessorRunListRequestSource = typing.Union[
-    typing.Literal[
-        "ADMIN", "BATCH_PROCESSOR_RUN", "PLAYGROUND", "WORKFLOW_CONFIGURATION", "WORKFLOW_RUN", "STUDIO", "API"
-    ],
-    typing.Any,
-]
+from ...core import enum
+
+T_Result = typing.TypeVar("T_Result")
+
+
+class ProcessorRunListRequestSource(enum.StrEnum):
+    ADMIN = "ADMIN"
+    BATCH_PROCESSOR_RUN = "BATCH_PROCESSOR_RUN"
+    PLAYGROUND = "PLAYGROUND"
+    WORKFLOW_CONFIGURATION = "WORKFLOW_CONFIGURATION"
+    WORKFLOW_RUN = "WORKFLOW_RUN"
+    STUDIO = "STUDIO"
+    API = "API"
+    _UNKNOWN = "__PROCESSORRUNLISTREQUESTSOURCE_UNKNOWN__"
+    """
+    This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
+    """
+
+    @classmethod
+    def _missing_(cls, value: typing.Any) -> "ProcessorRunListRequestSource":
+        unknown = cls._UNKNOWN
+        unknown._value_ = value
+        return unknown
+
+    def visit(
+        self,
+        admin: typing.Callable[[], T_Result],
+        batch_processor_run: typing.Callable[[], T_Result],
+        playground: typing.Callable[[], T_Result],
+        workflow_configuration: typing.Callable[[], T_Result],
+        workflow_run: typing.Callable[[], T_Result],
+        studio: typing.Callable[[], T_Result],
+        api: typing.Callable[[], T_Result],
+        _unknown_member: typing.Callable[[str], T_Result],
+    ) -> T_Result:
+        if self is ProcessorRunListRequestSource.ADMIN:
+            return admin()
+        if self is ProcessorRunListRequestSource.BATCH_PROCESSOR_RUN:
+            return batch_processor_run()
+        if self is ProcessorRunListRequestSource.PLAYGROUND:
+            return playground()
+        if self is ProcessorRunListRequestSource.WORKFLOW_CONFIGURATION:
+            return workflow_configuration()
+        if self is ProcessorRunListRequestSource.WORKFLOW_RUN:
+            return workflow_run()
+        if self is ProcessorRunListRequestSource.STUDIO:
+            return studio()
+        if self is ProcessorRunListRequestSource.API:
+            return api()
+        return _unknown_member(self._value_)

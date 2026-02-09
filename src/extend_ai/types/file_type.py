@@ -2,4 +2,61 @@
 
 import typing
 
-FileType = typing.Union[typing.Literal["PDF", "CSV", "IMG", "TXT", "DOCX", "EXCEL", "XML", "HTML"], typing.Any]
+from ..core import enum
+
+T_Result = typing.TypeVar("T_Result")
+
+
+class FileType(enum.StrEnum):
+    """
+    The type of the file based on the file extension or content type.
+    """
+
+    PDF = "PDF"
+    CSV = "CSV"
+    IMG = "IMG"
+    TXT = "TXT"
+    DOCX = "DOCX"
+    EXCEL = "EXCEL"
+    XML = "XML"
+    HTML = "HTML"
+    _UNKNOWN = "__FILETYPE_UNKNOWN__"
+    """
+    This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
+    """
+
+    @classmethod
+    def _missing_(cls, value: typing.Any) -> "FileType":
+        unknown = cls._UNKNOWN
+        unknown._value_ = value
+        return unknown
+
+    def visit(
+        self,
+        pdf: typing.Callable[[], T_Result],
+        csv: typing.Callable[[], T_Result],
+        img: typing.Callable[[], T_Result],
+        txt: typing.Callable[[], T_Result],
+        docx: typing.Callable[[], T_Result],
+        excel: typing.Callable[[], T_Result],
+        xml: typing.Callable[[], T_Result],
+        html: typing.Callable[[], T_Result],
+        _unknown_member: typing.Callable[[str], T_Result],
+    ) -> T_Result:
+        if self is FileType.PDF:
+            return pdf()
+        if self is FileType.CSV:
+            return csv()
+        if self is FileType.IMG:
+            return img()
+        if self is FileType.TXT:
+            return txt()
+        if self is FileType.DOCX:
+            return docx()
+        if self is FileType.EXCEL:
+            return excel()
+        if self is FileType.XML:
+            return xml()
+        if self is FileType.HTML:
+            return html()
+        return _unknown_member(self._value_)

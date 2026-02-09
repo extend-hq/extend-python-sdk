@@ -19,7 +19,7 @@ class FileContentsSheetsItem(UncheckedBaseModel):
         alias="rawText", default=None
     )
     """
-    The raw text content of the sheet.
+    The raw text content of the sheet in CSV format.
     """
 
     if IS_PYDANTIC_V2:

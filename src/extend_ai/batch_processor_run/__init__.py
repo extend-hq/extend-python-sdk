@@ -7,7 +7,11 @@ from importlib import import_module
 
 if typing.TYPE_CHECKING:
     from .types import BatchProcessorRunGetResponse
-_dynamic_imports: typing.Dict[str, str] = {"BatchProcessorRunGetResponse": ".types"}
+    from .requests import BatchProcessorRunGetResponseParams
+_dynamic_imports: typing.Dict[str, str] = {
+    "BatchProcessorRunGetResponse": ".types",
+    "BatchProcessorRunGetResponseParams": ".requests",
+}
 
 
 def __getattr__(attr_name: str) -> typing.Any:
@@ -31,4 +35,4 @@ def __dir__():
     return sorted(lazy_attrs)
 
 
-__all__ = ["BatchProcessorRunGetResponse"]
+__all__ = ["BatchProcessorRunGetResponse", "BatchProcessorRunGetResponseParams"]

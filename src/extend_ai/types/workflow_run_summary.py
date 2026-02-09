@@ -8,11 +8,20 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .workflow_run_credits import WorkflowRunCredits
-from .workflow_status import WorkflowStatus
+from .created_at import CreatedAt
+from .run_usage import RunUsage
+from .updated_at import UpdatedAt
+from .workflow_run_status import WorkflowRunStatus
+from .workflow_summary import WorkflowSummary
+from .workflow_version_summary import WorkflowVersionSummary
 
 
 class WorkflowRunSummary(UncheckedBaseModel):
+    object: typing.Literal["workflow_run"] = pydantic.Field(default="workflow_run")
+    """
+    The type of object. In this case, it will always be `"workflow_run"`.
+    """
+
     id: str = pydantic.Field()
     """
     The ID of the workflow run.
@@ -20,21 +29,25 @@ class WorkflowRunSummary(UncheckedBaseModel):
     Example: `"workflow_run_Zk9mNP12Qw4-yTv8BdR3H"`
     """
 
-    status: WorkflowStatus
-    initial_run_at: typing_extensions.Annotated[typing.Optional[dt.datetime], FieldMetadata(alias="initialRunAt")] = (
-        pydantic.Field(alias="initialRunAt", default=None)
+    status: WorkflowRunStatus
+    workflow: WorkflowSummary
+    workflow_version: typing_extensions.Annotated[WorkflowVersionSummary, FieldMetadata(alias="workflowVersion")] = (
+        pydantic.Field(alias="workflowVersion")
+    )
+    dashboard_url: typing_extensions.Annotated[str, FieldMetadata(alias="dashboardUrl")] = pydantic.Field(
+        alias="dashboardUrl"
     )
     """
-    The time (in UTC) at which the workflow was initially created. Will follow the RFC 3339 format.
+    A URL to view this workflow run in the Extend dashboard.
     
-    Example: `"2024-03-21T15:30:00Z"`
+    Example: `"https://dashboard.extend.ai/workflows/workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
     """
 
     reviewed_by_user: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="reviewedByUser")] = (
         pydantic.Field(alias="reviewedByUser", default=None)
     )
     """
-    The user of the person who reviewed the workflow run. Will not be included if the workflow run has not been reviewed.
+    The user of the person who reviewed the workflow run. Will be null if the workflow run has not been reviewed.
     
     Example: `"jane.doe@example.com"`
     """
@@ -43,16 +56,25 @@ class WorkflowRunSummary(UncheckedBaseModel):
         pydantic.Field(alias="reviewedAt", default=None)
     )
     """
-    The time (in UTC) at which the workflow run was reviewed. Will follow the RFC 3339 format.
+    The time (in UTC) at which the workflow run was reviewed. Will follow the RFC 3339 format. Will be null if the workflow run has not been reviewed.
     
     Example: `"2024-03-21T16:45:00Z"`
+    """
+
+    initial_run_at: typing_extensions.Annotated[typing.Optional[dt.datetime], FieldMetadata(alias="initialRunAt")] = (
+        pydantic.Field(alias="initialRunAt", default=None)
+    )
+    """
+    The time (in UTC) at which the workflow was initially created. Will follow the RFC 3339 format. Will be null if the run hasn't started yet.
+    
+    Example: `"2024-03-21T15:30:00Z"`
     """
 
     start_time: typing_extensions.Annotated[typing.Optional[dt.datetime], FieldMetadata(alias="startTime")] = (
         pydantic.Field(alias="startTime", default=None)
     )
     """
-    The start time (in UTC) that the workflow actually started executing. This occurs after the `initialRunAt` time. Will follow the RFC 3339 format.
+    The start time (in UTC) that the workflow actually started executing. This occurs after the `initialRunAt` time. Will follow the RFC 3339 format. Will be null if not started.
     
     Example: `"2024-03-21T15:30:00Z"`
     """
@@ -61,43 +83,16 @@ class WorkflowRunSummary(UncheckedBaseModel):
         pydantic.Field(alias="endTime", default=None)
     )
     """
-    The end time (in UTC) that the workflow finished. Will follow the RFC 3339 format.
+    The end time (in UTC) that the workflow finished. Will follow the RFC 3339 format. Will be null if not finished.
     
     Example: `"2024-03-21T15:35:00Z"`
-    """
-
-    workflow_id: typing_extensions.Annotated[str, FieldMetadata(alias="workflowId")] = pydantic.Field(
-        alias="workflowId"
-    )
-    """
-    The ID of the workflow that was run. Will always start with "workflow".
-    
-    Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
-    """
-
-    workflow_name: typing_extensions.Annotated[str, FieldMetadata(alias="workflowName")] = pydantic.Field(
-        alias="workflowName"
-    )
-    """
-    The name of the workflow that was run.
-    
-    Example: `"Invoice Processing"`
-    """
-
-    workflow_version_id: typing_extensions.Annotated[str, FieldMetadata(alias="workflowVersionId")] = pydantic.Field(
-        alias="workflowVersionId"
-    )
-    """
-    The ID of the workflow version that was run. Will always start with "workflow_version".
-    
-    Example: `"workflow_version_Zk9mNP12Qw4-yTv8BdR3H"`
     """
 
     batch_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="batchId")] = pydantic.Field(
         alias="batchId", default=None
     )
     """
-    The batch ID of the WorkflowRun. If that WorkflowRun was created from a batch of files, all runs in that batch will have the same batch ID.
+    The batch ID of the workflow run. If that workflow run was created from a batch of files, all runs in that batch will have the same batch ID.
     
     Example: `"batch_7Ws31-F5"`
     """
@@ -111,25 +106,13 @@ class WorkflowRunSummary(UncheckedBaseModel):
     Example: `"Invalid invoice format"`
     """
 
-    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field(
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
         alias="createdAt"
     )
-    """
-    The time (in UTC) at which the workflow run was created. Will follow the RFC 3339 format.
-    
-    Example: `"2024-03-21T15:29:55Z"`
-    """
-
-    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")] = pydantic.Field(
         alias="updatedAt"
     )
-    """
-    The time (in UTC) at which the workflow run was last updated. Will follow the RFC 3339 format.
-    
-    Example: `"2024-03-21T16:45:00Z"`
-    """
-
-    usage: typing.Optional[WorkflowRunCredits] = None
+    usage: typing.Optional[RunUsage] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
