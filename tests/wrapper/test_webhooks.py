@@ -94,25 +94,32 @@ class TestVerifyAndParse:
         self.webhooks = Webhooks()
 
     def test_returns_event_for_valid_signature(self):
-        """Should return WebhookEvent for normal payload with valid signature."""
+        """Should return typed WebhookEvent or dict for normal payload with valid signature."""
         body = json.dumps(SAMPLE_WORKFLOW_RUN_EVENT)
         headers = create_valid_headers(body, SECRET)
 
         event = self.webhooks.verify_and_parse(body, headers, SECRET)
 
-        assert event["eventId"] == "evt_123"
-        assert event["eventType"] == "workflow_run.completed"
-        assert event["payload"] == SAMPLE_WORKFLOW_RUN_EVENT["payload"]
+        event_id = getattr(event, "event_id", None) or (event.get("eventId") if isinstance(event, dict) else None)
+        event_type = getattr(event, "event_type", None) or (event.get("eventType") if isinstance(event, dict) else None)
+        payload = getattr(event, "payload", None) or (event.get("payload") if isinstance(event, dict) else None)
+        assert event_id == "evt_123"
+        assert event_type == "workflow_run.completed"
+        assert payload is not None
+        payload_id = getattr(payload, "id", None) or (payload.get("id") if isinstance(payload, dict) else None)
+        assert payload_id == SAMPLE_WORKFLOW_RUN_EVENT["payload"]["id"]
 
     def test_returns_event_for_extract_run_processed(self):
-        """Should return WebhookEvent for extract_run.processed."""
+        """Should return typed WebhookEvent or dict for extract_run.processed."""
         body = json.dumps(SAMPLE_EXTRACT_RUN_EVENT)
         headers = create_valid_headers(body, SECRET)
 
         event = self.webhooks.verify_and_parse(body, headers, SECRET)
 
-        assert event["eventId"] == "evt_456"
-        assert event["eventType"] == "extract_run.processed"
+        event_id = getattr(event, "event_id", None) or (event.get("eventId") if isinstance(event, dict) else None)
+        event_type = getattr(event, "event_type", None) or (event.get("eventType") if isinstance(event, dict) else None)
+        assert event_id == "evt_456"
+        assert event_type == "extract_run.processed"
 
     def test_throws_signed_url_not_allowed_error_without_opt_in(self):
         """Should throw SignedUrlNotAllowedError for signed URL payload without opt-in."""
@@ -144,7 +151,24 @@ class TestVerifyAndParse:
         event = self.webhooks.verify_and_parse(body, headers, SECRET, allow_signed_url=True)
 
         assert not self.webhooks.is_signed_url_event(event)
-        assert event["eventType"] == "workflow_run.completed"
+        assert (event.event_type if hasattr(event, "event_type") else event["eventType"]) == "workflow_run.completed"
+
+    def test_returns_raw_dict_for_unknown_event_type(self):
+        """Should fall back to raw dict for unknown event types (forwards-compatible)."""
+        unknown_event = {
+            "eventId": "evt_unknown",
+            "eventType": "unknown.future.event",
+            "payload": {"object": "unknown", "id": "xyz"},
+        }
+        body = json.dumps(unknown_event)
+        headers = create_valid_headers(body, SECRET)
+
+        event = self.webhooks.verify_and_parse(body, headers, SECRET)
+
+        assert isinstance(event, dict)
+        assert event["eventId"] == "evt_unknown"
+        assert event["eventType"] == "unknown.future.event"
+        assert event["payload"]["id"] == "xyz"
 
 
 class TestVerifyAndParseInvalidSignature:
@@ -236,7 +260,7 @@ class TestTimestampValidation:
         headers = create_valid_headers(body, SECRET, recent_timestamp)
 
         event = self.webhooks.verify_and_parse(body, headers, SECRET)
-        assert event["eventId"] == "evt_123"
+        assert (event.event_id if hasattr(event, "event_id") else event["eventId"]) == "evt_123"
 
     def test_allows_custom_max_age_seconds(self):
         """Should allow custom max_age_seconds."""
@@ -250,7 +274,7 @@ class TestTimestampValidation:
 
         # Should succeed with 900s
         event = self.webhooks.verify_and_parse(body, headers, SECRET, max_age_seconds=900)
-        assert event["eventId"] == "evt_123"
+        assert (event.event_id if hasattr(event, "event_id") else event["eventId"]) == "evt_123"
 
     def test_disables_timestamp_validation_when_zero(self):
         """Should disable timestamp validation when max_age_seconds is 0."""
@@ -259,7 +283,7 @@ class TestTimestampValidation:
         headers = create_valid_headers(body, SECRET, very_old_timestamp)
 
         event = self.webhooks.verify_and_parse(body, headers, SECRET, max_age_seconds=0)
-        assert event["eventId"] == "evt_123"
+        assert (event.event_id if hasattr(event, "event_id") else event["eventId"]) == "evt_123"
 
     def test_rejects_future_timestamps(self):
         """Should reject timestamps too far in the future."""
@@ -279,7 +303,7 @@ class TestTimestampValidation:
         headers = create_valid_headers(body, SECRET, slightly_future)
 
         event = self.webhooks.verify_and_parse(body, headers, SECRET)
-        assert event["eventId"] == "evt_123"
+        assert (event.event_id if hasattr(event, "event_id") else event["eventId"]) == "evt_123"
 
     def test_throws_for_invalid_timestamp_format(self):
         """Should throw for invalid timestamp format."""
@@ -328,7 +352,7 @@ class TestCaseInsensitiveHeaders:
         }
 
         event = self.webhooks.verify_and_parse(body, headers, SECRET)
-        assert event["eventId"] == "evt_123"
+        assert (event.event_id if hasattr(event, "event_id") else event["eventId"]) == "evt_123"
 
     def test_works_with_array_header_values(self):
         """Should work with array header values."""
@@ -340,7 +364,7 @@ class TestCaseInsensitiveHeaders:
         }
 
         event = self.webhooks.verify_and_parse(body, headers, SECRET)
-        assert event["eventId"] == "evt_123"
+        assert (event.event_id if hasattr(event, "event_id") else event["eventId"]) == "evt_123"
 
 
 class TestVerify:
@@ -396,13 +420,15 @@ class TestParse:
         self.webhooks = Webhooks()
 
     def test_parses_normal_webhook_event(self):
-        """Should parse a normal webhook event."""
+        """Should parse a normal webhook event as typed model or dict."""
         body = json.dumps(SAMPLE_WORKFLOW_RUN_EVENT)
 
         event = self.webhooks.parse(body)
 
-        assert event["eventId"] == "evt_123"
-        assert event["eventType"] == "workflow_run.completed"
+        event_id = getattr(event, "event_id", None) or (event.get("eventId") if isinstance(event, dict) else None)
+        event_type = getattr(event, "event_type", None) or (event.get("eventType") if isinstance(event, dict) else None)
+        assert event_id == "evt_123"
+        assert event_type == "workflow_run.completed"
 
     def test_parses_signed_url_webhook_event(self):
         """Should parse a signed URL webhook event."""
@@ -484,9 +510,14 @@ class TestFetchSignedPayload:
             result = await self.webhooks.fetch_signed_payload(self.signed_event)
 
             mock_client.get.assert_called_once_with(self.signed_event.payload.data)
-            assert result["eventId"] == "evt_789"
-            assert result["eventType"] == "workflow_run.completed"
-            assert result["payload"] == full_payload
+            assert (result.event_id if hasattr(result, "event_id") else result["eventId"]) == "evt_789"
+            assert (result.event_type if hasattr(result, "event_type") else result["eventType"]) == "workflow_run.completed"
+            payload = result.payload if hasattr(result, "payload") else result["payload"]
+            if hasattr(payload, "id"):
+                assert payload.id == full_payload["id"]
+                assert payload.status == full_payload["status"]
+            else:
+                assert payload == full_payload
 
     @pytest.mark.asyncio
     async def test_throws_on_http_error(self):
@@ -557,8 +588,13 @@ class TestFetchSignedPayloadSync:
             result = self.webhooks.fetch_signed_payload_sync(self.signed_event)
 
             mock_client.get.assert_called_once_with(self.signed_event.payload.data)
-            assert result["eventId"] == "evt_789"
-            assert result["payload"] == full_payload
+            assert (result.event_id if hasattr(result, "event_id") else result["eventId"]) == "evt_789"
+            payload = result.payload if hasattr(result, "payload") else result["payload"]
+            if hasattr(payload, "id"):
+                assert payload.id == full_payload["id"]
+                assert payload.status == full_payload["status"]
+            else:
+                assert payload == full_payload
 
 
 class TestErrorClasses:

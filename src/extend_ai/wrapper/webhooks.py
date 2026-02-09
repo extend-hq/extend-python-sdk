@@ -161,8 +161,8 @@ class Webhooks:
                 ),
             )
 
-        # Return normal event data (let the caller handle typing)
-        return event_data
+        # Return typed event when possible, fall back to raw dict for unknown event types
+        return self._try_parse_webhook_event(event_data)
 
     def verify(
         self,
@@ -228,9 +228,9 @@ class Webhooks:
                 ),
             )
 
-        return event_data
+        return self._try_parse_webhook_event(event_data)
 
-    async def fetch_signed_payload(self, event: WebhookEventWithSignedUrl) -> Dict[str, Any]:
+    async def fetch_signed_payload(self, event: WebhookEventWithSignedUrl) -> Any:
         """
         Fetches the full payload from a signed URL webhook event.
 
@@ -267,17 +267,18 @@ class Webhooks:
 
                 full_payload = response.json()
 
-                return {
+                full_event = {
                     "eventId": event.event_id,
                     "eventType": event.event_type,
                     "payload": full_payload,
                 }
+                return self._try_parse_webhook_event(full_event)
         except WebhookPayloadFetchError:
             raise
         except Exception as e:
             raise WebhookPayloadFetchError(f"Failed to fetch signed payload: {e}")
 
-    def fetch_signed_payload_sync(self, event: WebhookEventWithSignedUrl) -> Dict[str, Any]:
+    def fetch_signed_payload_sync(self, event: WebhookEventWithSignedUrl) -> Any:
         """
         Fetches the full payload from a signed URL webhook event (synchronous version).
 
@@ -303,11 +304,12 @@ class Webhooks:
 
                 full_payload = response.json()
 
-                return {
+                full_event = {
                     "eventId": event.event_id,
                     "eventType": event.event_type,
                     "payload": full_payload,
                 }
+                return self._try_parse_webhook_event(full_event)
         except WebhookPayloadFetchError:
             raise
         except Exception as e:
@@ -341,6 +343,15 @@ class Webhooks:
         if isinstance(event, dict):
             return _is_signed_data_url_payload(event.get("payload", {}))
         return False
+
+    def _try_parse_webhook_event(self, event_data: Dict[str, Any]) -> Any:
+        """Try to parse as typed WebhookEvent, fall back to raw dict for unknown event types."""
+        try:
+            from ..types.webhook_event import WebhookEvent
+            from ..core.unchecked_base_model import construct_type
+            return construct_type(type_=WebhookEvent, object_=event_data)
+        except Exception:
+            return event_data
 
     def _verify_signature(
         self,
