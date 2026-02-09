@@ -348,8 +348,17 @@ class Webhooks:
         """Try to parse as typed WebhookEvent, fall back to raw dict for unknown event types."""
         try:
             from ..types.webhook_event import WebhookEvent
-            from ..core.unchecked_base_model import construct_type
-            return construct_type(type_=WebhookEvent, object_=event_data)
+            from ..core.pydantic_utilities import IS_PYDANTIC_V2
+
+            if IS_PYDANTIC_V2:
+                import pydantic
+
+                adapter = pydantic.TypeAdapter(WebhookEvent)
+                return adapter.validate_python(event_data)
+            else:
+                import pydantic
+
+                return pydantic.parse_obj_as(WebhookEvent, event_data)  # type: ignore[arg-type]
         except Exception:
             return event_data
 
