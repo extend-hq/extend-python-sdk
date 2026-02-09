@@ -1,4 +1,4 @@
-"""Tests for EditRunsWrapper."""
+"""Tests for EditRunsClient."""
 
 from unittest.mock import MagicMock
 
@@ -35,19 +35,19 @@ def create_mock_retrieve_response(status: str = "PROCESSED"):
 # ============================================================================
 
 
-class TestEditRunsWrapperCreateAndPoll:
-    """Tests for EditRunsWrapper.create_and_poll method."""
+class TestEditRunsClientCreateAndPoll:
+    """Tests for EditRunsClient.create_and_poll method."""
 
     def setup_method(self):
         """Set up test fixtures."""
-        from extend_ai.wrapper.resources.edit_runs import EditRunsWrapper
+        from extend_ai.wrapper.resources.edit_runs import EditRunsClient
 
-        self.wrapper = MagicMock(spec=EditRunsWrapper)
+        self.wrapper = MagicMock(spec=EditRunsClient)
         self.wrapper.create = MagicMock()
         self.wrapper.retrieve = MagicMock()
 
-        self.wrapper.create_and_poll = EditRunsWrapper.create_and_poll.__get__(
-            self.wrapper, EditRunsWrapper
+        self.wrapper.create_and_poll = EditRunsClient.create_and_poll.__get__(
+            self.wrapper, EditRunsClient
         )
 
     def test_creates_and_polls_until_processed(self):

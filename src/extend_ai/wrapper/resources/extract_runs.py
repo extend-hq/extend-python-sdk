@@ -19,7 +19,8 @@ Example:
 from typing import Any, Dict, Optional
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
-from ...extract_runs.client import AsyncExtractRunsClient, ExtractRunsClient
+from ...extract_runs.client import AsyncExtractRunsClient as GeneratedAsyncExtractRunsClient
+from ...extract_runs.client import ExtractRunsClient as GeneratedExtractRunsClient
 from ...extract_runs.requests.extract_runs_create_request_extractor import ExtractRunsCreateRequestExtractorParams
 from ...extract_runs.requests.extract_runs_create_request_file import ExtractRunsCreateRequestFileParams
 from ...requests.extract_config_json import ExtractConfigJsonParams
@@ -31,7 +32,7 @@ from ..polling import PollingOptions, poll_until_done, poll_until_done_async
 # Re-export for convenience
 from ..polling import PollingTimeoutError
 
-__all__ = ["ExtractRunsWrapper", "AsyncExtractRunsWrapper", "PollingTimeoutError"]
+__all__ = ["ExtractRunsClient", "AsyncExtractRunsClient", "PollingTimeoutError"]
 
 
 def _is_terminal_status(status: str) -> bool:
@@ -43,7 +44,7 @@ def _is_terminal_status(status: str) -> bool:
     return status not in ("PROCESSING", "PENDING", "CANCELLING")
 
 
-class ExtractRunsWrapper(ExtractRunsClient):
+class ExtractRunsClient(GeneratedExtractRunsClient):
     """
     Extended ExtractRuns client with create_and_poll method.
 
@@ -118,7 +119,7 @@ class ExtractRunsWrapper(ExtractRunsClient):
         )
 
 
-class AsyncExtractRunsWrapper(AsyncExtractRunsClient):
+class AsyncExtractRunsClient(GeneratedAsyncExtractRunsClient):
     """
     Extended AsyncExtractRuns client with create_and_poll method.
     """

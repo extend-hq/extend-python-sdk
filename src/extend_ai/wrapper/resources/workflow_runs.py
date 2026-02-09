@@ -24,7 +24,8 @@ from ...types.run_metadata import RunMetadata
 from ...types.run_priority import RunPriority
 from ...types.run_secrets import RunSecrets
 from ...types.workflow_run import WorkflowRun
-from ...workflow_runs.client import AsyncWorkflowRunsClient, WorkflowRunsClient
+from ...workflow_runs.client import AsyncWorkflowRunsClient as GeneratedAsyncWorkflowRunsClient
+from ...workflow_runs.client import WorkflowRunsClient as GeneratedWorkflowRunsClient
 from ...workflow_runs.requests.workflow_runs_create_request_file import WorkflowRunsCreateRequestFileParams
 from ...workflow_runs.requests.workflow_runs_create_request_outputs_item import WorkflowRunsCreateRequestOutputsItemParams
 from ..polling import PollingOptions, poll_until_done, poll_until_done_async
@@ -32,7 +33,7 @@ from ..polling import PollingOptions, poll_until_done, poll_until_done_async
 # Re-export for convenience
 from ..polling import PollingTimeoutError
 
-__all__ = ["WorkflowRunsWrapper", "AsyncWorkflowRunsWrapper", "PollingTimeoutError"]
+__all__ = ["WorkflowRunsClient", "AsyncWorkflowRunsClient", "PollingTimeoutError"]
 
 
 def _is_terminal_status(status: str) -> bool:
@@ -47,7 +48,7 @@ def _is_terminal_status(status: str) -> bool:
     return status not in ("PROCESSING", "PENDING", "CANCELLING")
 
 
-class WorkflowRunsWrapper(WorkflowRunsClient):
+class WorkflowRunsClient(GeneratedWorkflowRunsClient):
     """
     Extended WorkflowRuns client with create_and_poll method.
 
@@ -129,7 +130,7 @@ class WorkflowRunsWrapper(WorkflowRunsClient):
         )
 
 
-class AsyncWorkflowRunsWrapper(AsyncWorkflowRunsClient):
+class AsyncWorkflowRunsClient(GeneratedAsyncWorkflowRunsClient):
     """
     Extended AsyncWorkflowRuns client with create_and_poll method.
     """

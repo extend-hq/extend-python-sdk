@@ -1,4 +1,4 @@
-"""Tests for ParseRunsWrapper."""
+"""Tests for ParseRunsClient."""
 
 from unittest.mock import MagicMock
 
@@ -35,19 +35,19 @@ def create_mock_retrieve_response(status: str = "PROCESSED"):
 # ============================================================================
 
 
-class TestParseRunsWrapperCreateAndPoll:
-    """Tests for ParseRunsWrapper.create_and_poll method."""
+class TestParseRunsClientCreateAndPoll:
+    """Tests for ParseRunsClient.create_and_poll method."""
 
     def setup_method(self):
         """Set up test fixtures."""
-        from extend_ai.wrapper.resources.parse_runs import ParseRunsWrapper
+        from extend_ai.wrapper.resources.parse_runs import ParseRunsClient
 
-        self.wrapper = MagicMock(spec=ParseRunsWrapper)
+        self.wrapper = MagicMock(spec=ParseRunsClient)
         self.wrapper.create = MagicMock()
         self.wrapper.retrieve = MagicMock()
 
-        self.wrapper.create_and_poll = ParseRunsWrapper.create_and_poll.__get__(
-            self.wrapper, ParseRunsWrapper
+        self.wrapper.create_and_poll = ParseRunsClient.create_and_poll.__get__(
+            self.wrapper, ParseRunsClient
         )
 
     def test_creates_and_polls_until_processed(self):

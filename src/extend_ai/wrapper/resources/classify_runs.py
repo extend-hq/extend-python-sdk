@@ -18,7 +18,8 @@ Example:
 
 from typing import Any, Dict, Optional
 
-from ...classify_runs.client import AsyncClassifyRunsClient, ClassifyRunsClient
+from ...classify_runs.client import AsyncClassifyRunsClient as GeneratedAsyncClassifyRunsClient
+from ...classify_runs.client import ClassifyRunsClient as GeneratedClassifyRunsClient
 from ...classify_runs.requests.classify_runs_create_request_classifier import ClassifyRunsCreateRequestClassifierParams
 from ...classify_runs.requests.classify_runs_create_request_file import ClassifyRunsCreateRequestFileParams
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
@@ -31,7 +32,7 @@ from ..polling import PollingOptions, poll_until_done, poll_until_done_async
 # Re-export for convenience
 from ..polling import PollingTimeoutError
 
-__all__ = ["ClassifyRunsWrapper", "AsyncClassifyRunsWrapper", "PollingTimeoutError"]
+__all__ = ["ClassifyRunsClient", "AsyncClassifyRunsClient", "PollingTimeoutError"]
 
 
 def _is_terminal_status(status: str) -> bool:
@@ -43,7 +44,7 @@ def _is_terminal_status(status: str) -> bool:
     return status not in ("PROCESSING", "PENDING", "CANCELLING")
 
 
-class ClassifyRunsWrapper(ClassifyRunsClient):
+class ClassifyRunsClient(GeneratedClassifyRunsClient):
     """
     Extended ClassifyRuns client with create_and_poll method.
 
@@ -118,7 +119,7 @@ class ClassifyRunsWrapper(ClassifyRunsClient):
         )
 
 
-class AsyncClassifyRunsWrapper(AsyncClassifyRunsClient):
+class AsyncClassifyRunsClient(GeneratedAsyncClassifyRunsClient):
     """
     Extended AsyncClassifyRuns client with create_and_poll method.
     """

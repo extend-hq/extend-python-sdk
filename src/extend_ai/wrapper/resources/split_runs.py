@@ -20,7 +20,8 @@ from typing import Any, Dict, Optional
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...requests.split_config import SplitConfigParams
-from ...split_runs.client import AsyncSplitRunsClient, SplitRunsClient
+from ...split_runs.client import AsyncSplitRunsClient as GeneratedAsyncSplitRunsClient
+from ...split_runs.client import SplitRunsClient as GeneratedSplitRunsClient
 from ...split_runs.requests.split_runs_create_request_file import SplitRunsCreateRequestFileParams
 from ...split_runs.requests.split_runs_create_request_splitter import SplitRunsCreateRequestSplitterParams
 from ...types.run_metadata import RunMetadata
@@ -31,7 +32,7 @@ from ..polling import PollingOptions, poll_until_done, poll_until_done_async
 # Re-export for convenience
 from ..polling import PollingTimeoutError
 
-__all__ = ["SplitRunsWrapper", "AsyncSplitRunsWrapper", "PollingTimeoutError"]
+__all__ = ["SplitRunsClient", "AsyncSplitRunsClient", "PollingTimeoutError"]
 
 
 def _is_terminal_status(status: str) -> bool:
@@ -43,7 +44,7 @@ def _is_terminal_status(status: str) -> bool:
     return status not in ("PROCESSING", "PENDING", "CANCELLING")
 
 
-class SplitRunsWrapper(SplitRunsClient):
+class SplitRunsClient(GeneratedSplitRunsClient):
     """
     Extended SplitRuns client with create_and_poll method.
 
@@ -115,7 +116,7 @@ class SplitRunsWrapper(SplitRunsClient):
         )
 
 
-class AsyncSplitRunsWrapper(AsyncSplitRunsClient):
+class AsyncSplitRunsClient(GeneratedAsyncSplitRunsClient):
     """
     Extended AsyncSplitRuns client with create_and_poll method.
     """

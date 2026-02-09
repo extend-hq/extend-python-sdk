@@ -1,23 +1,23 @@
-"""Resource wrappers with polling utilities."""
+"""Resource clients with polling utilities."""
 
-from .classify_runs import AsyncClassifyRunsWrapper, ClassifyRunsWrapper
-from .edit_runs import AsyncEditRunsWrapper, EditRunsWrapper
-from .extract_runs import AsyncExtractRunsWrapper, ExtractRunsWrapper
-from .parse_runs import AsyncParseRunsWrapper, ParseRunsWrapper
-from .split_runs import AsyncSplitRunsWrapper, SplitRunsWrapper
-from .workflow_runs import AsyncWorkflowRunsWrapper, WorkflowRunsWrapper
+from .classify_runs import AsyncClassifyRunsClient, ClassifyRunsClient
+from .edit_runs import AsyncEditRunsClient, EditRunsClient
+from .extract_runs import AsyncExtractRunsClient, ExtractRunsClient
+from .parse_runs import AsyncParseRunsClient, ParseRunsClient
+from .split_runs import AsyncSplitRunsClient, SplitRunsClient
+from .workflow_runs import AsyncWorkflowRunsClient, WorkflowRunsClient
 
 __all__ = [
-    "ExtractRunsWrapper",
-    "AsyncExtractRunsWrapper",
-    "ClassifyRunsWrapper",
-    "AsyncClassifyRunsWrapper",
-    "SplitRunsWrapper",
-    "AsyncSplitRunsWrapper",
-    "WorkflowRunsWrapper",
-    "AsyncWorkflowRunsWrapper",
-    "EditRunsWrapper",
-    "AsyncEditRunsWrapper",
-    "ParseRunsWrapper",
-    "AsyncParseRunsWrapper",
+    "ExtractRunsClient",
+    "AsyncExtractRunsClient",
+    "ClassifyRunsClient",
+    "AsyncClassifyRunsClient",
+    "SplitRunsClient",
+    "AsyncSplitRunsClient",
+    "WorkflowRunsClient",
+    "AsyncWorkflowRunsClient",
+    "EditRunsClient",
+    "AsyncEditRunsClient",
+    "ParseRunsClient",
+    "AsyncParseRunsClient",
 ]

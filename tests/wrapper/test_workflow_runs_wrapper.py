@@ -1,4 +1,4 @@
-"""Tests for WorkflowRunsWrapper."""
+"""Tests for WorkflowRunsClient."""
 
 from unittest.mock import MagicMock
 
@@ -35,19 +35,19 @@ def create_mock_retrieve_response(status: str = "PROCESSED"):
 # ============================================================================
 
 
-class TestWorkflowRunsWrapperCreateAndPoll:
-    """Tests for WorkflowRunsWrapper.create_and_poll method."""
+class TestWorkflowRunsClientCreateAndPoll:
+    """Tests for WorkflowRunsClient.create_and_poll method."""
 
     def setup_method(self):
         """Set up test fixtures."""
-        from extend_ai.wrapper.resources.workflow_runs import WorkflowRunsWrapper
+        from extend_ai.wrapper.resources.workflow_runs import WorkflowRunsClient
 
-        self.wrapper = MagicMock(spec=WorkflowRunsWrapper)
+        self.wrapper = MagicMock(spec=WorkflowRunsClient)
         self.wrapper.create = MagicMock()
         self.wrapper.retrieve = MagicMock()
 
-        self.wrapper.create_and_poll = WorkflowRunsWrapper.create_and_poll.__get__(
-            self.wrapper, WorkflowRunsWrapper
+        self.wrapper.create_and_poll = WorkflowRunsClient.create_and_poll.__get__(
+            self.wrapper, WorkflowRunsClient
         )
 
     def test_creates_and_polls_until_processed(self):

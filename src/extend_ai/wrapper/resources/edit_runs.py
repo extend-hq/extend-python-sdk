@@ -19,7 +19,8 @@ Example:
 from typing import Any, Dict, Optional
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
-from ...edit_runs.client import AsyncEditRunsClient, EditRunsClient
+from ...edit_runs.client import AsyncEditRunsClient as GeneratedAsyncEditRunsClient
+from ...edit_runs.client import EditRunsClient as GeneratedEditRunsClient
 from ...edit_runs.requests.edit_runs_create_request_file import EditRunsCreateRequestFileParams
 from ...requests.edit_config import EditConfigParams
 from ...types.edit_run import EditRun
@@ -28,7 +29,7 @@ from ..polling import PollingOptions, poll_until_done, poll_until_done_async
 # Re-export for convenience
 from ..polling import PollingTimeoutError
 
-__all__ = ["EditRunsWrapper", "AsyncEditRunsWrapper", "PollingTimeoutError"]
+__all__ = ["EditRunsClient", "AsyncEditRunsClient", "PollingTimeoutError"]
 
 
 def _is_terminal_status(status: str) -> bool:
@@ -42,7 +43,7 @@ def _is_terminal_status(status: str) -> bool:
     return status not in ("PROCESSING", "PENDING", "CANCELLING")
 
 
-class EditRunsWrapper(EditRunsClient):
+class EditRunsClient(GeneratedEditRunsClient):
     """
     Extended EditRuns client with create_and_poll method.
 
@@ -102,7 +103,7 @@ class EditRunsWrapper(EditRunsClient):
         )
 
 
-class AsyncEditRunsWrapper(AsyncEditRunsClient):
+class AsyncEditRunsClient(GeneratedAsyncEditRunsClient):
     """
     Extended AsyncEditRuns client with create_and_poll method.
     """

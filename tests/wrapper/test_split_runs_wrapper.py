@@ -1,4 +1,4 @@
-"""Tests for SplitRunsWrapper."""
+"""Tests for SplitRunsClient."""
 
 from unittest.mock import MagicMock
 
@@ -35,19 +35,19 @@ def create_mock_retrieve_response(status: str = "PROCESSED"):
 # ============================================================================
 
 
-class TestSplitRunsWrapperCreateAndPoll:
-    """Tests for SplitRunsWrapper.create_and_poll method."""
+class TestSplitRunsClientCreateAndPoll:
+    """Tests for SplitRunsClient.create_and_poll method."""
 
     def setup_method(self):
         """Set up test fixtures."""
-        from extend_ai.wrapper.resources.split_runs import SplitRunsWrapper
+        from extend_ai.wrapper.resources.split_runs import SplitRunsClient
 
-        self.wrapper = MagicMock(spec=SplitRunsWrapper)
+        self.wrapper = MagicMock(spec=SplitRunsClient)
         self.wrapper.create = MagicMock()
         self.wrapper.retrieve = MagicMock()
 
-        self.wrapper.create_and_poll = SplitRunsWrapper.create_and_poll.__get__(
-            self.wrapper, SplitRunsWrapper
+        self.wrapper.create_and_poll = SplitRunsClient.create_and_poll.__get__(
+            self.wrapper, SplitRunsClient
         )
 
     def test_creates_and_polls_until_processed(self):

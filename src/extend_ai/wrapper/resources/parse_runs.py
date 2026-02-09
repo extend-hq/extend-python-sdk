@@ -18,7 +18,8 @@ Example:
 from typing import Any, Dict, Optional
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
-from ...parse_runs.client import AsyncParseRunsClient, ParseRunsClient
+from ...parse_runs.client import AsyncParseRunsClient as GeneratedAsyncParseRunsClient
+from ...parse_runs.client import ParseRunsClient as GeneratedParseRunsClient
 from ...parse_runs.requests.parse_runs_create_request_file import ParseRunsCreateRequestFileParams
 from ...requests.parse_config import ParseConfigParams
 from ...types.parse_run import ParseRun
@@ -27,7 +28,7 @@ from ..polling import PollingOptions, poll_until_done, poll_until_done_async
 # Re-export for convenience
 from ..polling import PollingTimeoutError
 
-__all__ = ["ParseRunsWrapper", "AsyncParseRunsWrapper", "PollingTimeoutError"]
+__all__ = ["ParseRunsClient", "AsyncParseRunsClient", "PollingTimeoutError"]
 
 
 def _is_terminal_status(status: str) -> bool:
@@ -41,7 +42,7 @@ def _is_terminal_status(status: str) -> bool:
     return status not in ("PROCESSING", "PENDING", "CANCELLING")
 
 
-class ParseRunsWrapper(ParseRunsClient):
+class ParseRunsClient(GeneratedParseRunsClient):
     """
     Extended ParseRuns client with create_and_poll method.
 
@@ -100,7 +101,7 @@ class ParseRunsWrapper(ParseRunsClient):
         )
 
 
-class AsyncParseRunsWrapper(AsyncParseRunsClient):
+class AsyncParseRunsClient(GeneratedAsyncParseRunsClient):
     """
     Extended AsyncParseRuns client with create_and_poll method.
     """

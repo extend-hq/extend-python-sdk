@@ -1,4 +1,4 @@
-"""Tests for ExtractRunsWrapper."""
+"""Tests for ExtractRunsClient."""
 
 from unittest.mock import MagicMock
 
@@ -35,22 +35,22 @@ def create_mock_retrieve_response(status: str = "PROCESSED"):
 # ============================================================================
 
 
-class TestExtractRunsWrapperCreateAndPoll:
-    """Tests for ExtractRunsWrapper.create_and_poll method."""
+class TestExtractRunsClientCreateAndPoll:
+    """Tests for ExtractRunsClient.create_and_poll method."""
 
     def setup_method(self):
         """Set up test fixtures."""
         # Import here to avoid import errors if SDK structure changes
-        from extend_ai.wrapper.resources.extract_runs import ExtractRunsWrapper
+        from extend_ai.wrapper.resources.extract_runs import ExtractRunsClient
 
         # Create a wrapper with mocked methods
-        self.wrapper = MagicMock(spec=ExtractRunsWrapper)
+        self.wrapper = MagicMock(spec=ExtractRunsClient)
         self.wrapper.create = MagicMock()
         self.wrapper.retrieve = MagicMock()
 
         # Bind the actual create_and_poll method
-        self.wrapper.create_and_poll = ExtractRunsWrapper.create_and_poll.__get__(
-            self.wrapper, ExtractRunsWrapper
+        self.wrapper.create_and_poll = ExtractRunsClient.create_and_poll.__get__(
+            self.wrapper, ExtractRunsClient
         )
 
     def test_creates_and_polls_until_processed(self):

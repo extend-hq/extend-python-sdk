@@ -54,18 +54,18 @@ from ..processor_version.client import ProcessorVersionClient, AsyncProcessorVer
 from ..batch_processor_run.client import BatchProcessorRunClient, AsyncBatchProcessorRunClient
 
 from .resources import (
-    AsyncClassifyRunsWrapper,
-    AsyncEditRunsWrapper,
-    AsyncExtractRunsWrapper,
-    AsyncParseRunsWrapper,
-    AsyncSplitRunsWrapper,
-    AsyncWorkflowRunsWrapper,
-    ClassifyRunsWrapper,
-    EditRunsWrapper,
-    ExtractRunsWrapper,
-    ParseRunsWrapper,
-    SplitRunsWrapper,
-    WorkflowRunsWrapper,
+    AsyncClassifyRunsClient,
+    AsyncEditRunsClient,
+    AsyncExtractRunsClient,
+    AsyncParseRunsClient,
+    AsyncSplitRunsClient,
+    AsyncWorkflowRunsClient,
+    ClassifyRunsClient,
+    EditRunsClient,
+    ExtractRunsClient,
+    ParseRunsClient,
+    SplitRunsClient,
+    WorkflowRunsClient,
 )
 from .webhooks import Webhooks
 
@@ -148,13 +148,13 @@ class Extend(GeneratedExtend):
         # Webhook utilities
         self._webhooks = Webhooks()
 
-        # Wrapper instances (lazy initialization)
-        self._extract_runs_wrapper: typing.Optional[ExtractRunsWrapper] = None
-        self._classify_runs_wrapper: typing.Optional[ClassifyRunsWrapper] = None
-        self._split_runs_wrapper: typing.Optional[SplitRunsWrapper] = None
-        self._workflow_runs_wrapper: typing.Optional[WorkflowRunsWrapper] = None
-        self._edit_runs_wrapper: typing.Optional[EditRunsWrapper] = None
-        self._parse_runs_wrapper: typing.Optional[ParseRunsWrapper] = None
+        # Client instances (lazy initialization)
+        self._extract_runs_client: typing.Optional[ExtractRunsClient] = None
+        self._classify_runs_client: typing.Optional[ClassifyRunsClient] = None
+        self._split_runs_client: typing.Optional[SplitRunsClient] = None
+        self._workflow_runs_client: typing.Optional[WorkflowRunsClient] = None
+        self._edit_runs_client: typing.Optional[EditRunsClient] = None
+        self._parse_runs_client: typing.Optional[ParseRunsClient] = None
 
     @property
     def webhooks(self) -> Webhooks:
@@ -163,46 +163,46 @@ class Extend(GeneratedExtend):
 
     # Run resources with create_and_poll support
     @property
-    def extract_runs(self) -> ExtractRunsWrapper:
+    def extract_runs(self) -> ExtractRunsClient:
         """ExtractRuns client with create_and_poll method."""
-        if self._extract_runs_wrapper is None:
-            self._extract_runs_wrapper = ExtractRunsWrapper(client_wrapper=self._client_wrapper)
-        return self._extract_runs_wrapper
+        if self._extract_runs_client is None:
+            self._extract_runs_client = ExtractRunsClient(client_wrapper=self._client_wrapper)
+        return self._extract_runs_client
 
     @property
-    def classify_runs(self) -> ClassifyRunsWrapper:
+    def classify_runs(self) -> ClassifyRunsClient:
         """ClassifyRuns client with create_and_poll method."""
-        if self._classify_runs_wrapper is None:
-            self._classify_runs_wrapper = ClassifyRunsWrapper(client_wrapper=self._client_wrapper)
-        return self._classify_runs_wrapper
+        if self._classify_runs_client is None:
+            self._classify_runs_client = ClassifyRunsClient(client_wrapper=self._client_wrapper)
+        return self._classify_runs_client
 
     @property
-    def split_runs(self) -> SplitRunsWrapper:
+    def split_runs(self) -> SplitRunsClient:
         """SplitRuns client with create_and_poll method."""
-        if self._split_runs_wrapper is None:
-            self._split_runs_wrapper = SplitRunsWrapper(client_wrapper=self._client_wrapper)
-        return self._split_runs_wrapper
+        if self._split_runs_client is None:
+            self._split_runs_client = SplitRunsClient(client_wrapper=self._client_wrapper)
+        return self._split_runs_client
 
     @property
-    def workflow_runs(self) -> WorkflowRunsWrapper:
+    def workflow_runs(self) -> WorkflowRunsClient:
         """WorkflowRuns client with create_and_poll method."""
-        if self._workflow_runs_wrapper is None:
-            self._workflow_runs_wrapper = WorkflowRunsWrapper(client_wrapper=self._client_wrapper)
-        return self._workflow_runs_wrapper
+        if self._workflow_runs_client is None:
+            self._workflow_runs_client = WorkflowRunsClient(client_wrapper=self._client_wrapper)
+        return self._workflow_runs_client
 
     @property
-    def edit_runs(self) -> EditRunsWrapper:
+    def edit_runs(self) -> EditRunsClient:
         """EditRuns client with create_and_poll method."""
-        if self._edit_runs_wrapper is None:
-            self._edit_runs_wrapper = EditRunsWrapper(client_wrapper=self._client_wrapper)
-        return self._edit_runs_wrapper
+        if self._edit_runs_client is None:
+            self._edit_runs_client = EditRunsClient(client_wrapper=self._client_wrapper)
+        return self._edit_runs_client
 
     @property
-    def parse_runs(self) -> ParseRunsWrapper:
+    def parse_runs(self) -> ParseRunsClient:
         """ParseRuns client with create_and_poll method."""
-        if self._parse_runs_wrapper is None:
-            self._parse_runs_wrapper = ParseRunsWrapper(client_wrapper=self._client_wrapper)
-        return self._parse_runs_wrapper
+        if self._parse_runs_client is None:
+            self._parse_runs_client = ParseRunsClient(client_wrapper=self._client_wrapper)
+        return self._parse_runs_client
 
     # Type-annotated properties for IDE support (delegate to parent)
     @property
@@ -331,13 +331,13 @@ class AsyncExtend(GeneratedAsyncExtend):
         # Webhook utilities
         self._webhooks = Webhooks()
 
-        # Wrapper instances (lazy initialization)
-        self._extract_runs_wrapper: typing.Optional[AsyncExtractRunsWrapper] = None
-        self._classify_runs_wrapper: typing.Optional[AsyncClassifyRunsWrapper] = None
-        self._split_runs_wrapper: typing.Optional[AsyncSplitRunsWrapper] = None
-        self._workflow_runs_wrapper: typing.Optional[AsyncWorkflowRunsWrapper] = None
-        self._edit_runs_wrapper: typing.Optional[AsyncEditRunsWrapper] = None
-        self._parse_runs_wrapper: typing.Optional[AsyncParseRunsWrapper] = None
+        # Client instances (lazy initialization)
+        self._extract_runs_client: typing.Optional[AsyncExtractRunsClient] = None
+        self._classify_runs_client: typing.Optional[AsyncClassifyRunsClient] = None
+        self._split_runs_client: typing.Optional[AsyncSplitRunsClient] = None
+        self._workflow_runs_client: typing.Optional[AsyncWorkflowRunsClient] = None
+        self._edit_runs_client: typing.Optional[AsyncEditRunsClient] = None
+        self._parse_runs_client: typing.Optional[AsyncParseRunsClient] = None
 
     @property
     def webhooks(self) -> Webhooks:
@@ -346,46 +346,46 @@ class AsyncExtend(GeneratedAsyncExtend):
 
     # Run resources with create_and_poll support
     @property
-    def extract_runs(self) -> AsyncExtractRunsWrapper:
+    def extract_runs(self) -> AsyncExtractRunsClient:
         """ExtractRuns client with create_and_poll method."""
-        if self._extract_runs_wrapper is None:
-            self._extract_runs_wrapper = AsyncExtractRunsWrapper(client_wrapper=self._client_wrapper)
-        return self._extract_runs_wrapper
+        if self._extract_runs_client is None:
+            self._extract_runs_client = AsyncExtractRunsClient(client_wrapper=self._client_wrapper)
+        return self._extract_runs_client
 
     @property
-    def classify_runs(self) -> AsyncClassifyRunsWrapper:
+    def classify_runs(self) -> AsyncClassifyRunsClient:
         """ClassifyRuns client with create_and_poll method."""
-        if self._classify_runs_wrapper is None:
-            self._classify_runs_wrapper = AsyncClassifyRunsWrapper(client_wrapper=self._client_wrapper)
-        return self._classify_runs_wrapper
+        if self._classify_runs_client is None:
+            self._classify_runs_client = AsyncClassifyRunsClient(client_wrapper=self._client_wrapper)
+        return self._classify_runs_client
 
     @property
-    def split_runs(self) -> AsyncSplitRunsWrapper:
+    def split_runs(self) -> AsyncSplitRunsClient:
         """SplitRuns client with create_and_poll method."""
-        if self._split_runs_wrapper is None:
-            self._split_runs_wrapper = AsyncSplitRunsWrapper(client_wrapper=self._client_wrapper)
-        return self._split_runs_wrapper
+        if self._split_runs_client is None:
+            self._split_runs_client = AsyncSplitRunsClient(client_wrapper=self._client_wrapper)
+        return self._split_runs_client
 
     @property
-    def workflow_runs(self) -> AsyncWorkflowRunsWrapper:
+    def workflow_runs(self) -> AsyncWorkflowRunsClient:
         """WorkflowRuns client with create_and_poll method."""
-        if self._workflow_runs_wrapper is None:
-            self._workflow_runs_wrapper = AsyncWorkflowRunsWrapper(client_wrapper=self._client_wrapper)
-        return self._workflow_runs_wrapper
+        if self._workflow_runs_client is None:
+            self._workflow_runs_client = AsyncWorkflowRunsClient(client_wrapper=self._client_wrapper)
+        return self._workflow_runs_client
 
     @property
-    def edit_runs(self) -> AsyncEditRunsWrapper:
+    def edit_runs(self) -> AsyncEditRunsClient:
         """EditRuns client with create_and_poll method."""
-        if self._edit_runs_wrapper is None:
-            self._edit_runs_wrapper = AsyncEditRunsWrapper(client_wrapper=self._client_wrapper)
-        return self._edit_runs_wrapper
+        if self._edit_runs_client is None:
+            self._edit_runs_client = AsyncEditRunsClient(client_wrapper=self._client_wrapper)
+        return self._edit_runs_client
 
     @property
-    def parse_runs(self) -> AsyncParseRunsWrapper:
+    def parse_runs(self) -> AsyncParseRunsClient:
         """ParseRuns client with create_and_poll method."""
-        if self._parse_runs_wrapper is None:
-            self._parse_runs_wrapper = AsyncParseRunsWrapper(client_wrapper=self._client_wrapper)
-        return self._parse_runs_wrapper
+        if self._parse_runs_client is None:
+            self._parse_runs_client = AsyncParseRunsClient(client_wrapper=self._client_wrapper)
+        return self._parse_runs_client
 
     # Type-annotated properties for IDE support (delegate to parent)
     @property
