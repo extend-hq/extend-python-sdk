@@ -16,6 +16,7 @@ from extend_ai.wrapper.webhooks import (
 )
 from extend_ai.wrapper.errors import (
     WebhookSignatureVerificationError,
+    WebhookParseError,
     SignedUrlNotAllowedError,
     WebhookPayloadFetchError,
 )
@@ -330,7 +331,7 @@ class TestJsonParsing:
         body = "not valid json"
         headers = create_valid_headers(body, SECRET)
 
-        with pytest.raises(WebhookSignatureVerificationError) as exc_info:
+        with pytest.raises(WebhookParseError) as exc_info:
             self.webhooks.verify_and_parse(body, headers, SECRET)
 
         assert "json" in str(exc_info.value).lower()
@@ -442,7 +443,7 @@ class TestParse:
 
     def test_throws_for_invalid_json(self):
         """Should throw for invalid JSON."""
-        with pytest.raises(json.JSONDecodeError):
+        with pytest.raises(WebhookParseError):
             self.webhooks.parse("not json")
 
 
