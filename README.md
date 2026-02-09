@@ -107,7 +107,7 @@ result = client.extract_runs.create_and_poll(
 
 ## Webhook verification
 
-Verify and parse incoming webhook events using the built-in utilities:
+Verify and parse incoming webhook events using the built-in utilities. Known event types are returned as typed Pydantic models; unknown or future event types fall back to a plain dict so your handler keeps working without SDK updates.
 
 ```python
 from extend_ai import Extend
@@ -121,13 +121,19 @@ def handle_webhook(request):
         signing_secret="wss_your_signing_secret",
     )
 
-    match event.get("eventType"):
+    # Works for both typed model and dict fallback
+    event_type = getattr(event, "event_type", None) or event.get("eventType")
+    payload = getattr(event, "payload", None) or event.get("payload")
+
+    match event_type:
         case "extract_run.processed":
-            print(f"Extraction complete: {event['data']['id']}")
+            run_id = getattr(payload, "id", None) or payload.get("id")
+            print(f"Extraction complete: {run_id}")
         case "workflow_run.completed":
-            print(f"Workflow complete: {event['data']['id']}")
+            run_id = getattr(payload, "id", None) or payload.get("id")
+            print(f"Workflow complete: {run_id}")
         case _:
-            print(f"Received event: {event['eventType']}")
+            print(f"Received event: {event_type}")
 ```
 
 ### Manual verification & parsing
@@ -142,7 +148,7 @@ event = client.webhooks.parse(body)
 
 ### Signed URL payloads
 
-For large payloads, Extend may send a signed URL instead of the full payload. The SDK handles this transparently:
+For large payloads, Extend may send a signed URL instead of the full payload. Use `allow_signed_url=True`, then check and fetch when needed:
 
 ```python
 event = client.webhooks.verify_and_parse(
@@ -153,7 +159,11 @@ event = client.webhooks.verify_and_parse(
 )
 
 if client.webhooks.is_signed_url_event(event):
-    full_payload = client.webhooks.fetch_signed_payload_sync(event)
+    full_event = client.webhooks.fetch_signed_payload_sync(event)
+    # full_event is typed or dict; use getattr(..., None) or .get() as in the example above
+else:
+    # Normal inline payload — handle event directly
+    ...
 ```
 
 ## Async support
