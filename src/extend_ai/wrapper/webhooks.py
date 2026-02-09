@@ -192,7 +192,7 @@ class Webhooks:
         try:
             self._verify_signature(body, headers, signing_secret, max_age_seconds)
             return True
-        except WebhookSignatureVerificationError:
+        except Exception:
             return False
 
     def parse(self, body: str) -> RawWebhookEvent:
@@ -260,7 +260,7 @@ class Webhooks:
             async with httpx.AsyncClient() as client:
                 response = await client.get(url)
 
-                if response.status_code != 200:
+                if not response.is_success:
                     raise WebhookPayloadFetchError(
                         f"Failed to fetch signed payload: {response.status_code} {response.reason_phrase}"
                     )
@@ -296,7 +296,7 @@ class Webhooks:
             with httpx.Client() as client:
                 response = client.get(url)
 
-                if response.status_code != 200:
+                if not response.is_success:
                     raise WebhookPayloadFetchError(
                         f"Failed to fetch signed payload: {response.status_code} {response.reason_phrase}"
                     )
@@ -336,7 +336,11 @@ class Webhooks:
                 # event is WebhookEvent
                 print("Full payload:", event.get("payload"))
         """
-        return isinstance(event, WebhookEventWithSignedUrl)
+        if isinstance(event, WebhookEventWithSignedUrl):
+            return True
+        if isinstance(event, dict):
+            return _is_signed_data_url_payload(event.get("payload", {}))
+        return False
 
     def _verify_signature(
         self,
