@@ -380,7 +380,7 @@ class Webhooks:
             if IS_PYDANTIC_V2:
                 import pydantic
 
-                adapter = pydantic.TypeAdapter(WebhookEvent)
+                adapter: pydantic.TypeAdapter[Any] = pydantic.TypeAdapter(WebhookEvent)
                 return adapter.validate_python(event_data)
             else:
                 import pydantic
