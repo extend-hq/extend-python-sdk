@@ -2,6 +2,49 @@
 
 import typing
 
-ApiVersionEnum = typing.Union[
-    typing.Literal["2025-04-21", "2024-12-23", "2024-11-14", "2024-07-30", "2024-02-01"], typing.Any
-]
+from ..core import enum
+
+T_Result = typing.TypeVar("T_Result")
+
+
+class ApiVersionEnum(enum.StrEnum):
+    TWO_THOUSAND_TWENTY_SIX0209 = "2026-02-09"
+    TWO_THOUSAND_TWENTY_FIVE0421 = "2025-04-21"
+    TWO_THOUSAND_TWENTY_FOUR1223 = "2024-12-23"
+    TWO_THOUSAND_TWENTY_FOUR1114 = "2024-11-14"
+    TWO_THOUSAND_TWENTY_FOUR0730 = "2024-07-30"
+    TWO_THOUSAND_TWENTY_FOUR0201 = "2024-02-01"
+    _UNKNOWN = "__APIVERSIONENUM_UNKNOWN__"
+    """
+    This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
+    """
+
+    @classmethod
+    def _missing_(cls, value: typing.Any) -> "ApiVersionEnum":
+        unknown = cls._UNKNOWN
+        unknown._value_ = value
+        return unknown
+
+    def visit(
+        self,
+        two_thousand_twenty_six0209: typing.Callable[[], T_Result],
+        two_thousand_twenty_five0421: typing.Callable[[], T_Result],
+        two_thousand_twenty_four1223: typing.Callable[[], T_Result],
+        two_thousand_twenty_four1114: typing.Callable[[], T_Result],
+        two_thousand_twenty_four0730: typing.Callable[[], T_Result],
+        two_thousand_twenty_four0201: typing.Callable[[], T_Result],
+        _unknown_member: typing.Callable[[str], T_Result],
+    ) -> T_Result:
+        if self is ApiVersionEnum.TWO_THOUSAND_TWENTY_SIX0209:
+            return two_thousand_twenty_six0209()
+        if self is ApiVersionEnum.TWO_THOUSAND_TWENTY_FIVE0421:
+            return two_thousand_twenty_five0421()
+        if self is ApiVersionEnum.TWO_THOUSAND_TWENTY_FOUR1223:
+            return two_thousand_twenty_four1223()
+        if self is ApiVersionEnum.TWO_THOUSAND_TWENTY_FOUR1114:
+            return two_thousand_twenty_four1114()
+        if self is ApiVersionEnum.TWO_THOUSAND_TWENTY_FOUR0730:
+            return two_thousand_twenty_four0730()
+        if self is ApiVersionEnum.TWO_THOUSAND_TWENTY_FOUR0201:
+            return two_thousand_twenty_four0201()
+        return _unknown_member(self._value_)

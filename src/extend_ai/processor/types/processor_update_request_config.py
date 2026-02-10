@@ -9,15 +9,15 @@ import typing_extensions
 from ...core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ...core.serialization import FieldMetadata
 from ...core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
-from ...types.classification import Classification
-from ...types.classification_advanced_options import ClassificationAdvancedOptions
-from ...types.classification_config_base_processor import ClassificationConfigBaseProcessor
-from ...types.extraction_advanced_options import ExtractionAdvancedOptions
-from ...types.extraction_config_base_processor import ExtractionConfigBaseProcessor
 from ...types.json_object import JsonObject
+from ...types.legacy_classification import LegacyClassification
+from ...types.legacy_classification_advanced_options import LegacyClassificationAdvancedOptions
+from ...types.legacy_classification_config_base_processor import LegacyClassificationConfigBaseProcessor
+from ...types.legacy_extraction_advanced_options import LegacyExtractionAdvancedOptions
+from ...types.legacy_extraction_config_base_processor import LegacyExtractionConfigBaseProcessor
+from ...types.legacy_splitter_advanced_options import LegacySplitterAdvancedOptions
+from ...types.legacy_splitter_config_base_processor import LegacySplitterConfigBaseProcessor
 from ...types.parse_config import ParseConfig
-from ...types.splitter_advanced_options import SplitterAdvancedOptions
-from ...types.splitter_config_base_processor import SplitterConfigBaseProcessor
 
 
 class ProcessorUpdateRequestConfig_Classify(UncheckedBaseModel):
@@ -30,17 +30,17 @@ class ProcessorUpdateRequestConfig_Classify(UncheckedBaseModel):
 
     type: typing.Literal["CLASSIFY"] = "CLASSIFY"
     base_processor: typing_extensions.Annotated[
-        typing.Optional[ClassificationConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
+        typing.Optional[LegacyClassificationConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
     ] = pydantic.Field(alias="baseProcessor", default=None)
     base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
         pydantic.Field(alias="baseVersion", default=None)
     )
-    classifications: typing.List[Classification]
+    classifications: typing.List[LegacyClassification]
     classification_rules: typing_extensions.Annotated[
         typing.Optional[str], FieldMetadata(alias="classificationRules")
     ] = pydantic.Field(alias="classificationRules", default=None)
     advanced_options: typing_extensions.Annotated[
-        typing.Optional[ClassificationAdvancedOptions], FieldMetadata(alias="advancedOptions")
+        typing.Optional[LegacyClassificationAdvancedOptions], FieldMetadata(alias="advancedOptions")
     ] = pydantic.Field(alias="advancedOptions", default=None)
     parser: typing.Optional[ParseConfig] = None
 
@@ -64,7 +64,7 @@ class ProcessorUpdateRequestConfig_Extract(UncheckedBaseModel):
 
     type: typing.Literal["EXTRACT"] = "EXTRACT"
     base_processor: typing_extensions.Annotated[
-        typing.Optional[ExtractionConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
+        typing.Optional[LegacyExtractionConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
     ] = pydantic.Field(alias="baseProcessor", default=None)
     base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
         pydantic.Field(alias="baseVersion", default=None)
@@ -75,9 +75,9 @@ class ProcessorUpdateRequestConfig_Extract(UncheckedBaseModel):
     schema_: typing_extensions.Annotated[typing.Optional[JsonObject], FieldMetadata(alias="schema")] = pydantic.Field(
         alias="schema", default=None
     )
-    fields: typing.Optional[typing.List["ExtractionField"]] = None
+    fields: typing.Optional[typing.List["LegacyExtractionField"]] = None
     advanced_options: typing_extensions.Annotated[
-        typing.Optional[ExtractionAdvancedOptions], FieldMetadata(alias="advancedOptions")
+        typing.Optional[LegacyExtractionAdvancedOptions], FieldMetadata(alias="advancedOptions")
     ] = pydantic.Field(alias="advancedOptions", default=None)
     parser: typing.Optional[ParseConfig] = None
 
@@ -101,19 +101,19 @@ class ProcessorUpdateRequestConfig_Splitter(UncheckedBaseModel):
 
     type: typing.Literal["SPLITTER"] = "SPLITTER"
     base_processor: typing_extensions.Annotated[
-        typing.Optional[SplitterConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
+        typing.Optional[LegacySplitterConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
     ] = pydantic.Field(alias="baseProcessor", default=None)
     base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
         pydantic.Field(alias="baseVersion", default=None)
     )
     split_classifications: typing_extensions.Annotated[
-        typing.List[Classification], FieldMetadata(alias="splitClassifications")
+        typing.List[LegacyClassification], FieldMetadata(alias="splitClassifications")
     ] = pydantic.Field(alias="splitClassifications")
     split_rules: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="splitRules")] = pydantic.Field(
         alias="splitRules", default=None
     )
     advanced_options: typing_extensions.Annotated[
-        typing.Optional[SplitterAdvancedOptions], FieldMetadata(alias="advancedOptions")
+        typing.Optional[LegacySplitterAdvancedOptions], FieldMetadata(alias="advancedOptions")
     ] = pydantic.Field(alias="advancedOptions", default=None)
     parser: typing.Optional[ParseConfig] = None
 
@@ -135,6 +135,6 @@ ProcessorUpdateRequestConfig = typing_extensions.Annotated[
     ],
     UnionMetadata(discriminant="type"),
 ]
-from ...types.extraction_field import ExtractionField  # noqa: E402, I001
+from ...types.legacy_extraction_field import LegacyExtractionField  # noqa: E402, I001
 
-update_forward_refs(ProcessorUpdateRequestConfig_Extract, ExtractionField=ExtractionField)
+update_forward_refs(ProcessorUpdateRequestConfig_Extract, LegacyExtractionField=LegacyExtractionField)

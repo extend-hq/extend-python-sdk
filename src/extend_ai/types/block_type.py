@@ -2,6 +2,64 @@
 
 import typing
 
-BlockType = typing.Union[
-    typing.Literal["text", "heading", "section_heading", "table", "figure", "table_head", "table_cell"], typing.Any
-]
+from ..core import enum
+
+T_Result = typing.TypeVar("T_Result")
+
+
+class BlockType(enum.StrEnum):
+    """
+    The type of block:
+    * `"text"` - Regular text content
+    * `"heading"` - Section or document headings
+    * `"section_heading"` - Subsection headings
+    * `"table"` - Tabular data with rows and columns
+    * `"table_head"` - Table header cells
+    * `"table_cell"` - Table body cells
+    * `"figure"` - Images, charts, diagrams, or logos
+    """
+
+    TEXT = "text"
+    HEADING = "heading"
+    SECTION_HEADING = "section_heading"
+    TABLE = "table"
+    FIGURE = "figure"
+    TABLE_HEAD = "table_head"
+    TABLE_CELL = "table_cell"
+    _UNKNOWN = "__BLOCKTYPE_UNKNOWN__"
+    """
+    This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
+    """
+
+    @classmethod
+    def _missing_(cls, value: typing.Any) -> "BlockType":
+        unknown = cls._UNKNOWN
+        unknown._value_ = value
+        return unknown
+
+    def visit(
+        self,
+        text: typing.Callable[[], T_Result],
+        heading: typing.Callable[[], T_Result],
+        section_heading: typing.Callable[[], T_Result],
+        table: typing.Callable[[], T_Result],
+        figure: typing.Callable[[], T_Result],
+        table_head: typing.Callable[[], T_Result],
+        table_cell: typing.Callable[[], T_Result],
+        _unknown_member: typing.Callable[[str], T_Result],
+    ) -> T_Result:
+        if self is BlockType.TEXT:
+            return text()
+        if self is BlockType.HEADING:
+            return heading()
+        if self is BlockType.SECTION_HEADING:
+            return section_heading()
+        if self is BlockType.TABLE:
+            return table()
+        if self is BlockType.FIGURE:
+            return figure()
+        if self is BlockType.TABLE_HEAD:
+            return table_head()
+        if self is BlockType.TABLE_CELL:
+            return table_cell()
+        return _unknown_member(self._value_)

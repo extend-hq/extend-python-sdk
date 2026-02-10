@@ -7,15 +7,12 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .citation_page import CitationPage
 from .polygon import Polygon
 
 
 class Citation(UncheckedBaseModel):
-    page: typing.Optional[float] = pydantic.Field(default=None)
-    """
-    Page number where the citation was found
-    """
-
+    page: typing.Optional[CitationPage] = None
     reference_text: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="referenceText")] = (
         pydantic.Field(alias="referenceText", default=None)
     )
@@ -25,21 +22,7 @@ class Citation(UncheckedBaseModel):
 
     polygon: typing.Optional[typing.List[Polygon]] = pydantic.Field(default=None)
     """
-    Array of points defining the polygon
-    """
-
-    page_width: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageWidth")] = pydantic.Field(
-        alias="pageWidth", default=None
-    )
-    """
-    Width of the page in points
-    """
-
-    page_height: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageHeight")] = (
-        pydantic.Field(alias="pageHeight", default=None)
-    )
-    """
-    Height of the page in points
+    Array of points defining the polygon around the referenced text
     """
 
     if IS_PYDANTIC_V2:

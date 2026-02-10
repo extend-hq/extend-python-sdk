@@ -5,7 +5,7 @@ import typing
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
 from .raw_client import AsyncRawProcessorVersionClient, RawProcessorVersionClient
-from .types.processor_version_create_request_config import ProcessorVersionCreateRequestConfig
+from .requests.processor_version_create_request_config import ProcessorVersionCreateRequestConfigParams
 from .types.processor_version_create_request_release_type import ProcessorVersionCreateRequestReleaseType
 from .types.processor_version_create_response import ProcessorVersionCreateResponse
 from .types.processor_version_get_response import ProcessorVersionGetResponse
@@ -30,47 +30,6 @@ class ProcessorVersionClient:
         """
         return self._raw_client
 
-    def get(
-        self, processor_id: str, processor_version_id: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> ProcessorVersionGetResponse:
-        """
-        Retrieve a specific version of a processor in Extend
-
-        Parameters
-        ----------
-        processor_id : str
-            The ID of the processor.
-
-            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
-
-        processor_version_id : str
-            The ID of the specific processor version to retrieve.
-
-            Example: `"dpv_QYk6jgHA_8CsO8rVWhyNC"`
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        ProcessorVersionGetResponse
-            Successfully retrieved processor version
-
-        Examples
-        --------
-        from extend_ai import Extend
-
-        client = Extend(
-            token="YOUR_TOKEN",
-        )
-        client.processor_version.get(
-            processor_id="processor_id_here",
-            processor_version_id="processor_version_id_here",
-        )
-        """
-        _response = self._raw_client.get(processor_id, processor_version_id, request_options=request_options)
-        return _response.data
-
     def list(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> ProcessorVersionListResponse:
         """
         This endpoint allows you to fetch all versions of a given processor, including the current `draft` version.
@@ -83,7 +42,7 @@ class ProcessorVersionClient:
         id : str
             The ID of the processor to retrieve versions for.
 
-            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -113,7 +72,7 @@ class ProcessorVersionClient:
         *,
         release_type: ProcessorVersionCreateRequestReleaseType,
         description: typing.Optional[str] = OMIT,
-        config: typing.Optional[ProcessorVersionCreateRequestConfig] = OMIT,
+        config: typing.Optional[ProcessorVersionCreateRequestConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ProcessorVersionCreateResponse:
         """
@@ -126,7 +85,7 @@ class ProcessorVersionClient:
         id : str
             The ID of the processor to publish a new version for.
 
-            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         release_type : ProcessorVersionCreateRequestReleaseType
             The type of release for this version. The two options are "major" and "minor", which will increment the version number accordingly.
@@ -134,7 +93,7 @@ class ProcessorVersionClient:
         description : typing.Optional[str]
             A description of the changes in this version. This helps track the evolution of the processor over time.
 
-        config : typing.Optional[ProcessorVersionCreateRequestConfig]
+        config : typing.Optional[ProcessorVersionCreateRequestConfigParams]
             The configuration for this version of the processor. The type of configuration must match the processor type.
 
         request_options : typing.Optional[RequestOptions]
@@ -148,18 +107,60 @@ class ProcessorVersionClient:
         Examples
         --------
         from extend_ai import Extend
+        from extend_ai.processor_version import ProcessorVersionCreateRequestReleaseType
 
         client = Extend(
             token="YOUR_TOKEN",
         )
         client.processor_version.create(
             id="processor_id_here",
-            release_type="major",
+            release_type=ProcessorVersionCreateRequestReleaseType.MAJOR,
         )
         """
         _response = self._raw_client.create(
             id, release_type=release_type, description=description, config=config, request_options=request_options
         )
+        return _response.data
+
+    def get(
+        self, processor_id: str, processor_version_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> ProcessorVersionGetResponse:
+        """
+        Retrieve a specific version of a processor in Extend
+
+        Parameters
+        ----------
+        processor_id : str
+            The ID of the processor.
+
+            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        processor_version_id : str
+            The ID of the specific processor version to retrieve.
+
+            Example: `"exv_QYk6jgHA_8CsO8rVWhyNC"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ProcessorVersionGetResponse
+            Successfully retrieved processor version
+
+        Examples
+        --------
+        from extend_ai import Extend
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.processor_version.get(
+            processor_id="processor_id_here",
+            processor_version_id="processor_version_id_here",
+        )
+        """
+        _response = self._raw_client.get(processor_id, processor_version_id, request_options=request_options)
         return _response.data
 
 
@@ -178,55 +179,6 @@ class AsyncProcessorVersionClient:
         """
         return self._raw_client
 
-    async def get(
-        self, processor_id: str, processor_version_id: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> ProcessorVersionGetResponse:
-        """
-        Retrieve a specific version of a processor in Extend
-
-        Parameters
-        ----------
-        processor_id : str
-            The ID of the processor.
-
-            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
-
-        processor_version_id : str
-            The ID of the specific processor version to retrieve.
-
-            Example: `"dpv_QYk6jgHA_8CsO8rVWhyNC"`
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        ProcessorVersionGetResponse
-            Successfully retrieved processor version
-
-        Examples
-        --------
-        import asyncio
-
-        from extend_ai import AsyncExtend
-
-        client = AsyncExtend(
-            token="YOUR_TOKEN",
-        )
-
-
-        async def main() -> None:
-            await client.processor_version.get(
-                processor_id="processor_id_here",
-                processor_version_id="processor_version_id_here",
-            )
-
-
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.get(processor_id, processor_version_id, request_options=request_options)
-        return _response.data
-
     async def list(
         self, id: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> ProcessorVersionListResponse:
@@ -241,7 +193,7 @@ class AsyncProcessorVersionClient:
         id : str
             The ID of the processor to retrieve versions for.
 
-            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -279,7 +231,7 @@ class AsyncProcessorVersionClient:
         *,
         release_type: ProcessorVersionCreateRequestReleaseType,
         description: typing.Optional[str] = OMIT,
-        config: typing.Optional[ProcessorVersionCreateRequestConfig] = OMIT,
+        config: typing.Optional[ProcessorVersionCreateRequestConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ProcessorVersionCreateResponse:
         """
@@ -292,7 +244,7 @@ class AsyncProcessorVersionClient:
         id : str
             The ID of the processor to publish a new version for.
 
-            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         release_type : ProcessorVersionCreateRequestReleaseType
             The type of release for this version. The two options are "major" and "minor", which will increment the version number accordingly.
@@ -300,7 +252,7 @@ class AsyncProcessorVersionClient:
         description : typing.Optional[str]
             A description of the changes in this version. This helps track the evolution of the processor over time.
 
-        config : typing.Optional[ProcessorVersionCreateRequestConfig]
+        config : typing.Optional[ProcessorVersionCreateRequestConfigParams]
             The configuration for this version of the processor. The type of configuration must match the processor type.
 
         request_options : typing.Optional[RequestOptions]
@@ -316,6 +268,7 @@ class AsyncProcessorVersionClient:
         import asyncio
 
         from extend_ai import AsyncExtend
+        from extend_ai.processor_version import ProcessorVersionCreateRequestReleaseType
 
         client = AsyncExtend(
             token="YOUR_TOKEN",
@@ -325,7 +278,7 @@ class AsyncProcessorVersionClient:
         async def main() -> None:
             await client.processor_version.create(
                 id="processor_id_here",
-                release_type="major",
+                release_type=ProcessorVersionCreateRequestReleaseType.MAJOR,
             )
 
 
@@ -334,4 +287,53 @@ class AsyncProcessorVersionClient:
         _response = await self._raw_client.create(
             id, release_type=release_type, description=description, config=config, request_options=request_options
         )
+        return _response.data
+
+    async def get(
+        self, processor_id: str, processor_version_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> ProcessorVersionGetResponse:
+        """
+        Retrieve a specific version of a processor in Extend
+
+        Parameters
+        ----------
+        processor_id : str
+            The ID of the processor.
+
+            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        processor_version_id : str
+            The ID of the specific processor version to retrieve.
+
+            Example: `"exv_QYk6jgHA_8CsO8rVWhyNC"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ProcessorVersionGetResponse
+            Successfully retrieved processor version
+
+        Examples
+        --------
+        import asyncio
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.processor_version.get(
+                processor_id="processor_id_here",
+                processor_version_id="processor_version_id_here",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get(processor_id, processor_version_id, request_options=request_options)
         return _response.data

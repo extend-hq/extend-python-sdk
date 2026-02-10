@@ -2,4 +2,49 @@
 
 import typing
 
-ParseConfigTarget = typing.Union[typing.Literal["markdown", "spatial"], typing.Any]
+from ..core import enum
+
+T_Result = typing.TypeVar("T_Result")
+
+
+class ParseConfigTarget(enum.StrEnum):
+    """
+    The target format for the parsed content.
+
+    Supported values:
+
+    * `markdown`: True markdown with logical reading order (headings, lists, tables, checkboxes). Best default for LLMs/RAG and enables section-based chunking.
+    * `spatial`: Layout/position-preserving text that uses markdown elements for block types but is not strictly markdown due to whitespace/tabs used to maintain placement. Only page-based chunking is supported.
+
+    Guidance:
+
+    * Prefer `markdown` for most documents, multi-column reading order, and retrieval use cases
+    * Prefer `spatial` for messy/scanned/handwritten or skewed documents, when you need near 1:1 layout fidelity, or for BOL-like logistics docs
+
+    See “Markdown vs Spatial” in the [Parse guide](https://docs.extend.ai/2026-02-09/developers/guides/parse#markdown-vs-spatial) for details.
+    """
+
+    MARKDOWN = "markdown"
+    SPATIAL = "spatial"
+    _UNKNOWN = "__PARSECONFIGTARGET_UNKNOWN__"
+    """
+    This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
+    """
+
+    @classmethod
+    def _missing_(cls, value: typing.Any) -> "ParseConfigTarget":
+        unknown = cls._UNKNOWN
+        unknown._value_ = value
+        return unknown
+
+    def visit(
+        self,
+        markdown: typing.Callable[[], T_Result],
+        spatial: typing.Callable[[], T_Result],
+        _unknown_member: typing.Callable[[str], T_Result],
+    ) -> T_Result:
+        if self is ParseConfigTarget.MARKDOWN:
+            return markdown()
+        if self is ParseConfigTarget.SPATIAL:
+            return spatial()
+        return _unknown_member(self._value_)

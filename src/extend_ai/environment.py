@@ -5,3 +5,5 @@ import enum
 
 class ExtendEnvironment(enum.Enum):
     PRODUCTION = "https://api.extend.ai"
+    PRODUCTION_US2 = "https://api.us2.extend.app"
+    PRODUCTION_EU1 = "https://api.eu1.extend.ai"
