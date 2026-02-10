@@ -14,13 +14,6 @@ class ParseConfigAdvancedOptionsParams(typing_extensions.TypedDict):
     Whether to automatically detect and correct page rotation.
     """
 
-    agentic_ocr_enabled: typing_extensions.NotRequired[
-        typing_extensions.Annotated[bool, FieldMetadata(alias="agenticOcrEnabled")]
-    ]
-    """
-    Whether to enable agentic OCR corrections using VLM-based review and correction of OCR errors for messy handwriting and poorly scanned text. Deprecated - use `blockOptions.text.agentic` or `blockOptions.tables.agentic` instead for more granular control.
-    """
-
     page_ranges: typing_extensions.NotRequired[
         typing_extensions.Annotated[PageRangesParams, FieldMetadata(alias="pageRanges")]
     ]
