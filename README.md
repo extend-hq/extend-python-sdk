@@ -349,14 +349,6 @@ client = Extend(
 )
 ```
 
-### API versioning
-
-The SDK targets a specific API version by default. Override it if needed:
-
-```python
-client = Extend(token="YOUR_API_KEY", extend_api_version="2026-02-09")
-```
-
 ### Raw responses
 
 Access the underlying HTTP response for any request:
