@@ -163,9 +163,24 @@ def _convert_mapping(
     try:
         annotations = typing_extensions.get_type_hints(expected_type, include_extras=True)
     except NameError:
-        # The TypedDict contains a circular reference, so
-        # we use the __annotations__ attribute directly.
+        # When get_type_hints fails (e.g., circular TypedDict references with
+        # `from __future__ import annotations` on Python 3.10+), retry with
+        # unresolvable names stubbed as Any so we can still extract FieldMetadata
+        # aliases for all resolvable fields.
+        localns: typing.Dict[str, typing.Any] = {}
         annotations = getattr(expected_type, "__annotations__", {})
+        for _ in range(20):
+            try:
+                annotations = typing_extensions.get_type_hints(
+                    expected_type, localns=localns, include_extras=True
+                )
+                break
+            except NameError as inner_e:
+                missing = str(inner_e).split("'")[1] if "'" in str(inner_e) else None
+                if missing and missing not in localns:
+                    localns[missing] = typing.Any
+                else:
+                    break
     aliases_to_field_names = _get_alias_to_field_name(annotations)
     for key, value in object_.items():
         if direction == "read" and key in aliases_to_field_names:
