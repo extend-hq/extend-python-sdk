@@ -34,7 +34,7 @@ for chunk in result.output.chunks:
 # Extract structured data
 extract_run = client.extract(
     file={"url": "https://example.com/invoice.pdf"},
-    extractor={"id": "ext_abc123"},
+    extractor={"id": "ex_abc123"},
 )
 
 # Classify a document
@@ -69,7 +69,7 @@ client = Extend(token="YOUR_API_KEY")
 
 result = client.extract_runs.create_and_poll(
     file={"url": "https://example.com/invoice.pdf"},
-    extractor={"id": "ext_abc123"},
+    extractor={"id": "ex_abc123"},
 )
 
 if result.status == "PROCESSED":
@@ -96,13 +96,30 @@ from extend_ai import Extend, PollingOptions
 
 result = client.extract_runs.create_and_poll(
     file={"url": "https://example.com/invoice.pdf"},
-    extractor={"id": "ext_abc123"},
+    extractor={"id": "ex_abc123"},
     polling_options=PollingOptions(
         max_wait_ms=300_000,       # 5 minute timeout (default: no timeout)
         initial_delay_ms=1_000,    # start with 1s delay (default)
         max_delay_ms=60_000,       # cap at 60s delay (default: 30s)
     ),
 )
+```
+
+## Running workflows
+
+Workflows chain multiple processing steps (extraction, classification, splitting, etc.) into a single pipeline. Run a workflow by passing a workflow ID and a file:
+
+```python
+result = client.workflow_runs.create_and_poll(
+    file={"url": "https://example.com/invoice.pdf"},
+    workflow={"id": "workflow_abc123"},
+)
+
+print(result.status)  # "PROCESSED"
+
+for step_run in result.step_runs or []:
+    print(step_run.step.type)   # "EXTRACT", "CLASSIFY", etc.
+    print(step_run.result)
 ```
 
 ## Webhook verification
@@ -190,7 +207,7 @@ Async polling works the same way:
 ```python
 result = await client.extract_runs.create_and_poll(
     file={"url": "https://example.com/invoice.pdf"},
-    extractor={"id": "ext_abc123"},
+    extractor={"id": "ex_abc123"},
 )
 ```
 
