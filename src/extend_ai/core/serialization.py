@@ -176,7 +176,7 @@ def _convert_mapping(
                 )
                 break
             except NameError as inner_e:
-                missing = str(inner_e).split("'")[1] if "'" in str(inner_e) else None
+                missing = getattr(inner_e, 'name', None) or (str(inner_e).split("'")[1] if "'" in str(inner_e) else None)
                 if missing and missing not in localns:
                     localns[missing] = typing.Any
                 else:
