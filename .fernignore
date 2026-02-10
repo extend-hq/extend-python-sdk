@@ -3,10 +3,14 @@
 README.md
 uv.lock
 
+# Protect patched core files
+src/extend_ai/core/serialization.py
+
 # Protect custom wrapper code
 src/extend_ai/wrapper/
 src/extend_ai/__init__.py
 src/extend_ai/py.typed
 
-# Protect custom wrapper tests
+# Protect custom tests
+tests/custom/
 tests/wrapper/
