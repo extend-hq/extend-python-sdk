@@ -4,14 +4,14 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..types.legacy_list_processors_response import LegacyListProcessorsResponse
-from ..types.legacy_processor_type import LegacyProcessorType
+from ..types.list_processors_response import ListProcessorsResponse
+from ..types.processor_type import ProcessorType
 from .raw_client import AsyncRawProcessorClient, RawProcessorClient
-from .requests.processor_create_request_config import ProcessorCreateRequestConfigParams
-from .requests.processor_update_request_config import ProcessorUpdateRequestConfigParams
+from .types.processor_create_request_config import ProcessorCreateRequestConfig
 from .types.processor_create_response import ProcessorCreateResponse
 from .types.processor_list_request_sort_by import ProcessorListRequestSortBy
 from .types.processor_list_request_sort_dir import ProcessorListRequestSortDir
+from .types.processor_update_request_config import ProcessorUpdateRequestConfig
 from .types.processor_update_response import ProcessorUpdateResponse
 
 # this is used as the default value for optional parameters
@@ -36,19 +36,19 @@ class ProcessorClient:
     def list(
         self,
         *,
-        type: typing.Optional[LegacyProcessorType] = None,
+        type: typing.Optional[ProcessorType] = None,
         next_page_token: typing.Optional[str] = None,
         max_page_size: typing.Optional[int] = None,
         sort_by: typing.Optional[ProcessorListRequestSortBy] = None,
         sort_dir: typing.Optional[ProcessorListRequestSortDir] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> LegacyListProcessorsResponse:
+    ) -> ListProcessorsResponse:
         """
         List all processors in your organization
 
         Parameters
         ----------
-        type : typing.Optional[LegacyProcessorType]
+        type : typing.Optional[ProcessorType]
             Filter processors by type
 
         next_page_token : typing.Optional[str]
@@ -68,7 +68,7 @@ class ProcessorClient:
 
         Returns
         -------
-        LegacyListProcessorsResponse
+        ListProcessorsResponse
             Successfully retrieved processors
 
         Examples
@@ -78,7 +78,13 @@ class ProcessorClient:
         client = Extend(
             token="YOUR_TOKEN",
         )
-        client.processor.list()
+        client.processor.list(
+            type="EXTRACT",
+            next_page_token="nextPageToken",
+            max_page_size=1,
+            sort_by="createdAt",
+            sort_dir="asc",
+        )
         """
         _response = self._raw_client.list(
             type=type,
@@ -94,9 +100,9 @@ class ProcessorClient:
         self,
         *,
         name: str,
-        type: LegacyProcessorType,
+        type: ProcessorType,
         clone_processor_id: typing.Optional[str] = OMIT,
-        config: typing.Optional[ProcessorCreateRequestConfigParams] = OMIT,
+        config: typing.Optional[ProcessorCreateRequestConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ProcessorCreateResponse:
         """
@@ -107,14 +113,14 @@ class ProcessorClient:
         name : str
             The name of the new processor
 
-        type : LegacyProcessorType
+        type : ProcessorType
 
         clone_processor_id : typing.Optional[str]
             The ID of an existing processor to clone. One of `cloneProcessorId` or `config` must be provided.
 
-            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
-        config : typing.Optional[ProcessorCreateRequestConfigParams]
+        config : typing.Optional[ProcessorCreateRequestConfig]
             The configuration for the processor. The type of configuration must match the processor type. One of `cloneProcessorId` or `config` must be provided.
 
         request_options : typing.Optional[RequestOptions]
@@ -127,14 +133,14 @@ class ProcessorClient:
 
         Examples
         --------
-        from extend_ai import Extend, LegacyProcessorType
+        from extend_ai import Extend
 
         client = Extend(
             token="YOUR_TOKEN",
         )
         client.processor.create(
             name="My Processor Name",
-            type=LegacyProcessorType.EXTRACT,
+            type="EXTRACT",
         )
         """
         _response = self._raw_client.create(
@@ -147,7 +153,7 @@ class ProcessorClient:
         id: str,
         *,
         name: typing.Optional[str] = OMIT,
-        config: typing.Optional[ProcessorUpdateRequestConfigParams] = OMIT,
+        config: typing.Optional[ProcessorUpdateRequestConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ProcessorUpdateResponse:
         """
@@ -158,12 +164,12 @@ class ProcessorClient:
         id : str
             The ID of the processor to update.
 
-            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
         name : typing.Optional[str]
             The new name for the processor
 
-        config : typing.Optional[ProcessorUpdateRequestConfigParams]
+        config : typing.Optional[ProcessorUpdateRequestConfig]
             The new configuration for the processor. The type of configuration must match the processor type:
             * For classification processors, use `ClassificationConfig`
             * For extraction processors, use `ExtractionConfig`
@@ -210,19 +216,19 @@ class AsyncProcessorClient:
     async def list(
         self,
         *,
-        type: typing.Optional[LegacyProcessorType] = None,
+        type: typing.Optional[ProcessorType] = None,
         next_page_token: typing.Optional[str] = None,
         max_page_size: typing.Optional[int] = None,
         sort_by: typing.Optional[ProcessorListRequestSortBy] = None,
         sort_dir: typing.Optional[ProcessorListRequestSortDir] = None,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> LegacyListProcessorsResponse:
+    ) -> ListProcessorsResponse:
         """
         List all processors in your organization
 
         Parameters
         ----------
-        type : typing.Optional[LegacyProcessorType]
+        type : typing.Optional[ProcessorType]
             Filter processors by type
 
         next_page_token : typing.Optional[str]
@@ -242,7 +248,7 @@ class AsyncProcessorClient:
 
         Returns
         -------
-        LegacyListProcessorsResponse
+        ListProcessorsResponse
             Successfully retrieved processors
 
         Examples
@@ -257,7 +263,13 @@ class AsyncProcessorClient:
 
 
         async def main() -> None:
-            await client.processor.list()
+            await client.processor.list(
+                type="EXTRACT",
+                next_page_token="nextPageToken",
+                max_page_size=1,
+                sort_by="createdAt",
+                sort_dir="asc",
+            )
 
 
         asyncio.run(main())
@@ -276,9 +288,9 @@ class AsyncProcessorClient:
         self,
         *,
         name: str,
-        type: LegacyProcessorType,
+        type: ProcessorType,
         clone_processor_id: typing.Optional[str] = OMIT,
-        config: typing.Optional[ProcessorCreateRequestConfigParams] = OMIT,
+        config: typing.Optional[ProcessorCreateRequestConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ProcessorCreateResponse:
         """
@@ -289,14 +301,14 @@ class AsyncProcessorClient:
         name : str
             The name of the new processor
 
-        type : LegacyProcessorType
+        type : ProcessorType
 
         clone_processor_id : typing.Optional[str]
             The ID of an existing processor to clone. One of `cloneProcessorId` or `config` must be provided.
 
-            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
-        config : typing.Optional[ProcessorCreateRequestConfigParams]
+        config : typing.Optional[ProcessorCreateRequestConfig]
             The configuration for the processor. The type of configuration must match the processor type. One of `cloneProcessorId` or `config` must be provided.
 
         request_options : typing.Optional[RequestOptions]
@@ -311,7 +323,7 @@ class AsyncProcessorClient:
         --------
         import asyncio
 
-        from extend_ai import AsyncExtend, LegacyProcessorType
+        from extend_ai import AsyncExtend
 
         client = AsyncExtend(
             token="YOUR_TOKEN",
@@ -321,7 +333,7 @@ class AsyncProcessorClient:
         async def main() -> None:
             await client.processor.create(
                 name="My Processor Name",
-                type=LegacyProcessorType.EXTRACT,
+                type="EXTRACT",
             )
 
 
@@ -337,7 +349,7 @@ class AsyncProcessorClient:
         id: str,
         *,
         name: typing.Optional[str] = OMIT,
-        config: typing.Optional[ProcessorUpdateRequestConfigParams] = OMIT,
+        config: typing.Optional[ProcessorUpdateRequestConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ProcessorUpdateResponse:
         """
@@ -348,12 +360,12 @@ class AsyncProcessorClient:
         id : str
             The ID of the processor to update.
 
-            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
         name : typing.Optional[str]
             The new name for the processor
 
-        config : typing.Optional[ProcessorUpdateRequestConfigParams]
+        config : typing.Optional[ProcessorUpdateRequestConfig]
             The new configuration for the processor. The type of configuration must match the processor type:
             * For classification processors, use `ClassificationConfig`
             * For extraction processors, use `ExtractionConfig`

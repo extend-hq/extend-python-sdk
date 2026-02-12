@@ -12,7 +12,7 @@ from .chunk_type import ChunkType
 
 
 class Chunk(UncheckedBaseModel):
-    object: typing.Literal["chunk"] = pydantic.Field(default="chunk")
+    object: str = pydantic.Field()
     """
     The type of object. In this case, it will always be `"chunk"`.
     """

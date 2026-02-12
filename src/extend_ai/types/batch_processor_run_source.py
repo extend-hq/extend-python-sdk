@@ -2,44 +2,4 @@
 
 import typing
 
-from ..core import enum
-
-T_Result = typing.TypeVar("T_Result")
-
-
-class BatchProcessorRunSource(enum.StrEnum):
-    """
-    The source of the batch processor run:
-    * `"EVAL_SET"` - The batch processor run was made from an evaluation set. The `sourceId` will be the ID of the evaluation set (e.g., `"ev_1234"`)
-    * `"PLAYGROUND"` - The batch processor run was made from the playground. The `sourceId` will not be set
-    * `"STUDIO"` - The batch processor run was made for a processor in Studio. The `sourceId` will be the ID of the processor (e.g., `"ex_1234"`)
-    """
-
-    EVAL_SET = "EVAL_SET"
-    PLAYGROUND = "PLAYGROUND"
-    STUDIO = "STUDIO"
-    _UNKNOWN = "__BATCHPROCESSORRUNSOURCE_UNKNOWN__"
-    """
-    This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
-    """
-
-    @classmethod
-    def _missing_(cls, value: typing.Any) -> "BatchProcessorRunSource":
-        unknown = cls._UNKNOWN
-        unknown._value_ = value
-        return unknown
-
-    def visit(
-        self,
-        eval_set: typing.Callable[[], T_Result],
-        playground: typing.Callable[[], T_Result],
-        studio: typing.Callable[[], T_Result],
-        _unknown_member: typing.Callable[[str], T_Result],
-    ) -> T_Result:
-        if self is BatchProcessorRunSource.EVAL_SET:
-            return eval_set()
-        if self is BatchProcessorRunSource.PLAYGROUND:
-            return playground()
-        if self is BatchProcessorRunSource.STUDIO:
-            return studio()
-        return _unknown_member(self._value_)
+BatchProcessorRunSource = typing.Union[typing.Literal["EVAL_SET", "PLAYGROUND", "STUDIO"], typing.Any]

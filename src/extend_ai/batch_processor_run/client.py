@@ -25,14 +25,12 @@ class BatchProcessorRunClient:
 
     def get(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> BatchProcessorRunGetResponse:
         """
-        Retrieve details about a batch processor run, including evaluation runs.
-
-        **Deprecated:** This endpoint is maintained for backwards compatibility only and will be replaced in a future API version. Use [Get Evaluation Set Run](/2026-02-09/developers/api-reference/endpoints/evaluation/get-evaluation-set-run) for interacting with evaluation set runs.
+        Retrieve details about a batch processor run, including evaluation runs
 
         Parameters
         ----------
         id : str
-            The unique identifier of the batch processor run to retrieve.
+            The unique identifier of the batch processor run to retrieve. The ID will always start with "bpr_".
 
             Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
@@ -52,7 +50,7 @@ class BatchProcessorRunClient:
             token="YOUR_TOKEN",
         )
         client.batch_processor_run.get(
-            id="bpr_id_here",
+            id="batch_processor_run_id_here",
         )
         """
         _response = self._raw_client.get(id, request_options=request_options)
@@ -78,14 +76,12 @@ class AsyncBatchProcessorRunClient:
         self, id: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> BatchProcessorRunGetResponse:
         """
-        Retrieve details about a batch processor run, including evaluation runs.
-
-        **Deprecated:** This endpoint is maintained for backwards compatibility only and will be replaced in a future API version. Use [Get Evaluation Set Run](/2026-02-09/developers/api-reference/endpoints/evaluation/get-evaluation-set-run) for interacting with evaluation set runs.
+        Retrieve details about a batch processor run, including evaluation runs
 
         Parameters
         ----------
         id : str
-            The unique identifier of the batch processor run to retrieve.
+            The unique identifier of the batch processor run to retrieve. The ID will always start with "bpr_".
 
             Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
@@ -110,7 +106,7 @@ class AsyncBatchProcessorRunClient:
 
         async def main() -> None:
             await client.batch_processor_run.get(
-                id="bpr_id_here",
+                id="batch_processor_run_id_here",
             )
 
 

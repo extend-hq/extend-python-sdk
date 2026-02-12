@@ -2,65 +2,7 @@
 
 import typing
 
-from ..core import enum
-
-T_Result = typing.TypeVar("T_Result")
-
-
-class ExtractionFieldType(enum.StrEnum):
-    """
-    The type of the field.
-    """
-
-    STRING = "string"
-    NUMBER = "number"
-    CURRENCY = "currency"
-    BOOLEAN = "boolean"
-    DATE = "date"
-    ARRAY = "array"
-    ENUM = "enum"
-    OBJECT = "object"
-    SIGNATURE = "signature"
-    _UNKNOWN = "__EXTRACTIONFIELDTYPE_UNKNOWN__"
-    """
-    This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
-    """
-
-    @classmethod
-    def _missing_(cls, value: typing.Any) -> "ExtractionFieldType":
-        unknown = cls._UNKNOWN
-        unknown._value_ = value
-        return unknown
-
-    def visit(
-        self,
-        string: typing.Callable[[], T_Result],
-        number: typing.Callable[[], T_Result],
-        currency: typing.Callable[[], T_Result],
-        boolean: typing.Callable[[], T_Result],
-        date: typing.Callable[[], T_Result],
-        array: typing.Callable[[], T_Result],
-        enum: typing.Callable[[], T_Result],
-        object: typing.Callable[[], T_Result],
-        signature: typing.Callable[[], T_Result],
-        _unknown_member: typing.Callable[[str], T_Result],
-    ) -> T_Result:
-        if self is ExtractionFieldType.STRING:
-            return string()
-        if self is ExtractionFieldType.NUMBER:
-            return number()
-        if self is ExtractionFieldType.CURRENCY:
-            return currency()
-        if self is ExtractionFieldType.BOOLEAN:
-            return boolean()
-        if self is ExtractionFieldType.DATE:
-            return date()
-        if self is ExtractionFieldType.ARRAY:
-            return array()
-        if self is ExtractionFieldType.ENUM:
-            return enum()
-        if self is ExtractionFieldType.OBJECT:
-            return object()
-        if self is ExtractionFieldType.SIGNATURE:
-            return signature()
-        return _unknown_member(self._value_)
+ExtractionFieldType = typing.Union[
+    typing.Literal["string", "number", "currency", "boolean", "date", "array", "enum", "object", "signature"],
+    typing.Any,
+]

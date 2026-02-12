@@ -2,45 +2,6 @@
 
 import typing
 
-from ..core import enum
-
-T_Result = typing.TypeVar("T_Result")
-
-
-class ExtractChunkingOptionsChunkSelectionStrategy(enum.StrEnum):
-    """
-    The strategy to use for selecting chunks.
-    """
-
-    INTELLIGENT = "intelligent"
-    CONFIDENCE = "confidence"
-    TAKE_FIRST = "take_first"
-    TAKE_LAST = "take_last"
-    _UNKNOWN = "__EXTRACTCHUNKINGOPTIONSCHUNKSELECTIONSTRATEGY_UNKNOWN__"
-    """
-    This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
-    """
-
-    @classmethod
-    def _missing_(cls, value: typing.Any) -> "ExtractChunkingOptionsChunkSelectionStrategy":
-        unknown = cls._UNKNOWN
-        unknown._value_ = value
-        return unknown
-
-    def visit(
-        self,
-        intelligent: typing.Callable[[], T_Result],
-        confidence: typing.Callable[[], T_Result],
-        take_first: typing.Callable[[], T_Result],
-        take_last: typing.Callable[[], T_Result],
-        _unknown_member: typing.Callable[[str], T_Result],
-    ) -> T_Result:
-        if self is ExtractChunkingOptionsChunkSelectionStrategy.INTELLIGENT:
-            return intelligent()
-        if self is ExtractChunkingOptionsChunkSelectionStrategy.CONFIDENCE:
-            return confidence()
-        if self is ExtractChunkingOptionsChunkSelectionStrategy.TAKE_FIRST:
-            return take_first()
-        if self is ExtractChunkingOptionsChunkSelectionStrategy.TAKE_LAST:
-            return take_last()
-        return _unknown_member(self._value_)
+ExtractChunkingOptionsChunkSelectionStrategy = typing.Union[
+    typing.Literal["intelligent", "confidence", "take_first", "take_last"], typing.Any
+]

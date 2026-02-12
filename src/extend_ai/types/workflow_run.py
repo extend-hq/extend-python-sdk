@@ -10,23 +10,19 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .file_summary import FileSummary
-from .run_metadata import RunMetadata
-from .run_usage import RunUsage
+from .file import File
+from .json_object import JsonObject
+from .processor_run import ProcessorRun
 from .step_run import StepRun
-from .workflow_run_status import WorkflowRunStatus
-from .workflow_summary import WorkflowSummary
-from .workflow_version_summary import WorkflowVersionSummary
+from .workflow import Workflow
+from .workflow_run_credits import WorkflowRunCredits
+from .workflow_status import WorkflowStatus
 
 
 class WorkflowRun(UncheckedBaseModel):
+    object: str = pydantic.Field()
     """
-    Workflow run object.
-    """
-
-    object: typing.Literal["workflow_run"] = pydantic.Field(default="workflow_run")
-    """
-    The type of object. In this case, it will always be `"workflow_run"`.
+    The type of response. In this case, it will always be `"workflow_run"`.
     """
 
     id: str = pydantic.Field()
@@ -36,27 +32,28 @@ class WorkflowRun(UncheckedBaseModel):
     Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
     """
 
-    workflow: WorkflowSummary
-    workflow_version: typing_extensions.Annotated[WorkflowVersionSummary, FieldMetadata(alias="workflowVersion")] = (
-        pydantic.Field(alias="workflowVersion")
-    )
-    dashboard_url: typing_extensions.Annotated[str, FieldMetadata(alias="dashboardUrl")] = pydantic.Field(
-        alias="dashboardUrl"
-    )
+    name: str = pydantic.Field()
     """
-    A URL to view this workflow run in the Extend dashboard.
+    The name of the workflow run.
     
-    Example: `"https://dashboard.extend.ai/workflows/workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+    Example: `"myFirstFile.pdf"`
     """
 
-    status: WorkflowRunStatus
-    metadata: RunMetadata = pydantic.Field()
+    url: str = pydantic.Field()
+    """
+    A URL to view this workflow run in the Extend UI.
+    
+    Example: `"https://dashboard.extend.ai/workflows/workflow_Bk9mNp2qWs5_xL8vR4tYh?workflowRunId=workflow_run_Zj3nMx7ZPd9f4c2WQ_kAg"`
+    """
+
+    status: WorkflowStatus
+    metadata: JsonObject = pydantic.Field()
     """
     The metadata that was passed in when running the Workflow.
     """
 
     batch_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="batchId")] = pydantic.Field(
-        alias="batchId", default=None
+        default=None
     )
     """
     The batch ID of the WorkflowRun. If this WorkflowRun was created as part of a batch of files, all runs in that batch will have the same batch ID.
@@ -64,35 +61,33 @@ class WorkflowRun(UncheckedBaseModel):
     Example: `"batch_7Ws31-F5"`
     """
 
-    files: typing.List[FileSummary]
+    files: typing.List[File]
     failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
-        pydantic.Field(alias="failureReason", default=None)
+        pydantic.Field(default=None)
     )
     """
     The reason why the workflow run failed. Will only be included if the workflow run status is "FAILED".
     """
 
     failure_message: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureMessage")] = (
-        pydantic.Field(alias="failureMessage", default=None)
+        pydantic.Field(default=None)
     )
     """
     A more detailed message about the failure. Will only be included if the workflow run status is "FAILED".
     """
 
-    initial_run_at: typing_extensions.Annotated[typing.Optional[dt.datetime], FieldMetadata(alias="initialRunAt")] = (
-        pydantic.Field(alias="initialRunAt", default=None)
-    )
+    initial_run_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="initialRunAt")] = pydantic.Field()
     """
-    The time (in UTC) at which the workflow run was created. Will follow the RFC 3339 format. Will be null if the run hasn't started yet.
+    The time (in UTC) at which the workflow run was created. Will follow the RFC 3339 format.
     
     Example: `"2025-04-28T17:01:39.285Z"`
     """
 
-    reviewed_by_user: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="reviewedByUser")] = (
-        pydantic.Field(alias="reviewedByUser", default=None)
+    reviewed_by: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="reviewedBy")] = pydantic.Field(
+        default=None
     )
     """
-    The email address of the person who reviewed the workflow run. Will be null if the workflow run has not been reviewed.
+    The email address of the person who reviewed the workflow run. Will not be included if the workflow run has not been reviewed.
     
     Example: `"jane.doe@example.com"`
     """
@@ -103,7 +98,7 @@ class WorkflowRun(UncheckedBaseModel):
     """
 
     rejection_note: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="rejectionNote")] = (
-        pydantic.Field(alias="rejectionNote", default=None)
+        pydantic.Field(default=None)
     )
     """
     A note that is added if a workflow run is rejected.
@@ -112,40 +107,42 @@ class WorkflowRun(UncheckedBaseModel):
     """
 
     reviewed_at: typing_extensions.Annotated[typing.Optional[dt.datetime], FieldMetadata(alias="reviewedAt")] = (
-        pydantic.Field(alias="reviewedAt", default=None)
+        pydantic.Field(default=None)
     )
     """
-    The time (in UTC) at which the workflow run was reviewed. Will follow the RFC 3339 format. Will be null if the workflow run has not been reviewed.
+    The time (in UTC) at which the workflow run was reviewed. Will follow the RFC 3339 format. Will not be included if the workflow run has not been reviewed.
     
     Example: `"2024-03-21T16:45:00Z"`
     """
 
     start_time: typing_extensions.Annotated[typing.Optional[dt.datetime], FieldMetadata(alias="startTime")] = (
-        pydantic.Field(alias="startTime", default=None)
+        pydantic.Field(default=None)
     )
     """
-    The time (in UTC) at which the workflow run started executing. This will always be after the `initialRunAt` time. Will follow the RFC 3339 format. Will be null if the workflow run has not started executing.
+    The time (in UTC) at which the workflow run started executing. This will always be after the `initialRunAt` time. Will follow the RFC 3339 format. Will not be included if the workflow run has not started executing.
     
     Example: `"2024-03-21T15:30:00Z"`
     """
 
     end_time: typing_extensions.Annotated[typing.Optional[dt.datetime], FieldMetadata(alias="endTime")] = (
-        pydantic.Field(alias="endTime", default=None)
+        pydantic.Field(default=None)
     )
     """
-    The time (in UTC) that the workflow finished executing. Will follow the RFC 3339 format. Will be null if the workflow run has not finished executing.
+    The time (in UTC) that the workflow finished executing. Will follow the RFC 3339 format. Will not be included if the workflow run has not finished executing.
     
     Example: `"2024-03-21T15:35:00Z"`
     """
 
-    step_runs: typing_extensions.Annotated[typing.List[StepRun], FieldMetadata(alias="stepRuns")] = pydantic.Field(
-        alias="stepRuns"
-    )
+    outputs: typing.List[ProcessorRun]
+    step_runs: typing_extensions.Annotated[typing.List[StepRun], FieldMetadata(alias="stepRuns")] = pydantic.Field()
     """
-    An array of WorkflowStepRun objects. Each WorkflowStepRun represents a single run of a WorkflowStep and contains details about the step's execution and result.
+    An array of WorkflowStepRun objects. Each WorkflowStepRun represents a single run of a WorkflowStep and contains details about the step and the run's output.
+    
+    Note: This field currently supports External Data Validation and Rule Validation step types. Document processor run outputs are included in the outputs field.
     """
 
-    usage: typing.Optional[RunUsage] = None
+    workflow: Workflow
+    usage: typing.Optional[WorkflowRunCredits] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -3,41 +3,27 @@
 import typing
 from json.decoder import JSONDecodeError
 
-from .core.api_error import ApiError as core_api_error_ApiError
+from .core.api_error import ApiError
 from .core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from .core.http_response import AsyncHttpResponse, HttpResponse
 from .core.request_options import RequestOptions
 from .core.serialization import convert_and_respect_annotation_metadata
 from .core.unchecked_base_model import construct_type
 from .errors.bad_request_error import BadRequestError
-from .errors.forbidden_error import ForbiddenError
 from .errors.internal_server_error import InternalServerError
 from .errors.not_found_error import NotFoundError
 from .errors.payment_required_error import PaymentRequiredError
-from .errors.too_many_requests_error import TooManyRequestsError
 from .errors.unauthorized_error import UnauthorizedError
 from .errors.unprocessable_entity_error import UnprocessableEntityError
-from .requests.classify_config import ClassifyConfigParams
-from .requests.classify_request_classifier import ClassifyRequestClassifierParams
-from .requests.classify_request_file import ClassifyRequestFileParams
-from .requests.edit_config import EditConfigParams
-from .requests.edit_request_file import EditRequestFileParams
-from .requests.extract_config_json import ExtractConfigJsonParams
-from .requests.extract_request_extractor import ExtractRequestExtractorParams
-from .requests.extract_request_file import ExtractRequestFileParams
-from .requests.parse_config import ParseConfigParams
-from .requests.parse_request_file import ParseRequestFileParams
-from .requests.split_config import SplitConfigParams
-from .requests.split_request_file import SplitRequestFileParams
-from .requests.split_request_splitter import SplitRequestSplitterParams
-from .types.api_error import ApiError as types_api_error_ApiError
-from .types.classify_run import ClassifyRun
-from .types.edit_run import EditRun
-from .types.extract_run import ExtractRun
+from .types.error import Error
+from .types.extend_error import ExtendError
+from .types.parse_async_request_file import ParseAsyncRequestFile
+from .types.parse_config import ParseConfig
+from .types.parse_request_file import ParseRequestFile
 from .types.parse_request_response_type import ParseRequestResponseType
-from .types.parse_run import ParseRun
-from .types.run_metadata import RunMetadata
-from .types.split_run import SplitRun
+from .types.parser_run import ParserRun
+from .types.parser_run_status import ParserRunStatus
+from .types.post_files_response import PostFilesResponse
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -47,44 +33,125 @@ class RawExtend:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def parse(
+    def create_file(
         self,
         *,
-        file: ParseRequestFileParams,
-        response_type: typing.Optional[ParseRequestResponseType] = None,
-        config: typing.Optional[ParseConfigParams] = OMIT,
-        metadata: typing.Optional[RunMetadata] = OMIT,
+        name: str,
+        url: typing.Optional[str] = OMIT,
+        raw_text: typing.Optional[str] = OMIT,
+        media_type: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[ParseRun]:
+    ) -> HttpResponse[PostFilesResponse]:
         """
-        Parse a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /parse_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-        The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
-
-        For more details, see the [Parse File guide](https://docs.extend.ai/2026-02-09/product/parsing/parse).
+        Create a new file in Extend for use in an evaluation set. This endpoint is deprecated, use /files/upload instead.
 
         Parameters
         ----------
-        file : ParseRequestFileParams
-            The file to be parsed. Files can be provided as a URL or an Extend file ID.
+        name : str
+            The name of the file
 
-        response_type : typing.Optional[ParseRequestResponseType]
-            Controls the format of the response chunks. Defaults to `json` if not specified.
-            * `json` - Returns parsed outputs in the response body
-            * `url` - Return a presigned URL to the parsed content in the response body
+        url : typing.Optional[str]
+            A pre signed URL for the file
 
-        config : typing.Optional[ParseConfigParams]
+        raw_text : typing.Optional[str]
+            The raw text content of the file
 
-        metadata : typing.Optional[RunMetadata]
+        media_type : typing.Optional[str]
+            The media type of the file (e.g. application/pdf)
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[ParseRun]
+        HttpResponse[PostFilesResponse]
+            Successfully created file
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "files",
+            method="POST",
+            json={
+                "name": name,
+                "url": url,
+                "rawText": raw_text,
+                "mediaType": media_type,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PostFilesResponse,
+                    construct_type(
+                        type_=PostFilesResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        construct_type(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def parse(
+        self,
+        *,
+        file: ParseRequestFile,
+        response_type: typing.Optional[ParseRequestResponseType] = None,
+        config: typing.Optional[ParseConfig] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[ParserRun]:
+        """
+        Parse files to get cleaned, chunked target content (e.g. markdown).
+
+        The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
+
+        For more details, see the [Parse File guide](/product/parsing/parse).
+
+        Parameters
+        ----------
+        file : ParseRequestFile
+            A file object containing either a URL or a fileId.
+
+        response_type : typing.Optional[ParseRequestResponseType]
+            Controls the format of the response chunks. Defaults to `json` if not specified.
+            * `json` - Returns parsed outputs in the response body
+            * `url` - Return a presigned URL to the parsed content in the response body
+
+        config : typing.Optional[ParseConfig]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ParserRun]
             Successfully parsed file
         """
         _response = self._client_wrapper.httpx_client.request(
@@ -95,12 +162,11 @@ class RawExtend:
             },
             json={
                 "file": convert_and_respect_annotation_metadata(
-                    object_=file, annotation=ParseRequestFileParams, direction="write"
+                    object_=file, annotation=ParseRequestFile, direction="write"
                 ),
                 "config": convert_and_respect_annotation_metadata(
-                    object_=config, annotation=ParseConfigParams, direction="write"
+                    object_=config, annotation=ParseConfig, direction="write"
                 ),
-                "metadata": metadata,
             },
             headers={
                 "content-type": "application/json",
@@ -111,9 +177,9 @@ class RawExtend:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    ParseRun,
+                    ParserRun,
                     construct_type(
-                        type_=ParseRun,  # type: ignore
+                        type_=ParserRun,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -133,9 +199,9 @@ class RawExtend:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        Error,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=Error,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -144,20 +210,9 @@ class RawExtend:
                 raise PaymentRequiredError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        types_api_error_ApiError,
+                        typing.Any,
                         construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 403:
-                raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -177,20 +232,9 @@ class RawExtend:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        types_api_error_ApiError,
+                        ExtendError,
                         construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 429:
-                raise TooManyRequestsError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=ExtendError,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -208,53 +252,53 @@ class RawExtend:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise core_api_error_ApiError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
-            )
-        raise core_api_error_ApiError(
-            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
-        )
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    def edit(
+    def parse_async(
         self,
         *,
-        file: EditRequestFileParams,
-        config: typing.Optional[EditConfigParams] = OMIT,
+        file: ParseAsyncRequestFile,
+        config: typing.Optional[ParseConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[EditRun]:
+    ) -> HttpResponse[ParserRunStatus]:
         """
-        Edit a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
+        Parse files **asynchronously** to get cleaned, chunked target content (e.g. markdown).
 
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /edit_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
+        The Parse Async endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
 
-        The Edit endpoint allows you to detect and fill form fields in PDF documents.
+        Parse files asynchronously and get a parser run ID that can be used to check status and retrieve results with the [Get Parser Run](https://docs.extend.ai/2025-04-21/developers/api-reference/parse-endpoints/get-parser-run) endpoint.
 
-        For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/product/editing/edit).
+        This is useful for:
+        * Large files that may take longer to process
+        * Avoiding timeout issues with synchronous parsing.
+
+        For more details, see the [Parse File guide](/product/parsing/parse).
 
         Parameters
         ----------
-        file : EditRequestFileParams
-            The file to be edited. Files can be provided as a URL or an Extend file ID.
+        file : ParseAsyncRequestFile
+            A file object containing either a URL or a fileId.
 
-        config : typing.Optional[EditConfigParams]
+        config : typing.Optional[ParseConfig]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[EditRun]
-            Successfully edited file
+        HttpResponse[ParserRunStatus]
+            Successfully initiated parser run
         """
         _response = self._client_wrapper.httpx_client.request(
-            "edit",
+            "parse/async",
             method="POST",
             json={
                 "file": convert_and_respect_annotation_metadata(
-                    object_=file, annotation=EditRequestFileParams, direction="write"
+                    object_=file, annotation=ParseAsyncRequestFile, direction="write"
                 ),
                 "config": convert_and_respect_annotation_metadata(
-                    object_=config, annotation=EditConfigParams, direction="write"
+                    object_=config, annotation=ParseConfig, direction="write"
                 ),
             },
             headers={
@@ -266,9 +310,9 @@ class RawExtend:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    EditRun,
+                    ParserRunStatus,
                     construct_type(
-                        type_=EditRun,  # type: ignore
+                        type_=ParserRunStatus,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -288,632 +332,142 @@ class RawExtend:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        Error,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 402:
-                raise PaymentRequiredError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 403:
-                raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 429:
-                raise TooManyRequestsError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=Error,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise core_api_error_ApiError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
-            )
-        raise core_api_error_ApiError(
-            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
-        )
-
-    def extract(
-        self,
-        *,
-        file: ExtractRequestFileParams,
-        extractor: typing.Optional[ExtractRequestExtractorParams] = OMIT,
-        config: typing.Optional[ExtractConfigJsonParams] = OMIT,
-        metadata: typing.Optional[RunMetadata] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[ExtractRun]:
-        """
-        Extract structured data from a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /extract_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-        The Extract endpoint allows you to extract structured data from files using an existing extractor or an inline configuration.
-
-        For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/product/extracting/extract).
-
-        Parameters
-        ----------
-        file : ExtractRequestFileParams
-            The file to be extracted from. Files can be provided as a URL, Extend file ID, or raw text.
-
-        extractor : typing.Optional[ExtractRequestExtractorParams]
-            Reference to an existing extractor. One of `extractor` or `config` must be provided.
-
-        config : typing.Optional[ExtractConfigJsonParams]
-            Inline extract configuration. One of `extractor` or `config` must be provided.
-
-        metadata : typing.Optional[RunMetadata]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        HttpResponse[ExtractRun]
-            Successfully extracted data from file
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "extract",
-            method="POST",
-            json={
-                "extractor": convert_and_respect_annotation_metadata(
-                    object_=extractor, annotation=ExtractRequestExtractorParams, direction="write"
-                ),
-                "config": convert_and_respect_annotation_metadata(
-                    object_=config, annotation=ExtractConfigJsonParams, direction="write"
-                ),
-                "file": convert_and_respect_annotation_metadata(
-                    object_=file, annotation=ExtractRequestFileParams, direction="write"
-                ),
-                "metadata": metadata,
-            },
-            headers={
-                "content-type": "application/json",
-            },
-            request_options=request_options,
-            omit=OMIT,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    ExtractRun,
-                    construct_type(
-                        type_=ExtractRun,  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 401:
-                raise UnauthorizedError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 402:
-                raise PaymentRequiredError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 403:
-                raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 429:
-                raise TooManyRequestsError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise core_api_error_ApiError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
-            )
-        raise core_api_error_ApiError(
-            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
-        )
-
-    def classify(
-        self,
-        *,
-        file: ClassifyRequestFileParams,
-        classifier: typing.Optional[ClassifyRequestClassifierParams] = OMIT,
-        config: typing.Optional[ClassifyConfigParams] = OMIT,
-        metadata: typing.Optional[RunMetadata] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[ClassifyRun]:
-        """
-        Classify a document synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /classify_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-        The Classify endpoint allows you to classify documents using an existing classifier or an inline configuration.
-
-        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/product/classifying/classify).
-
-        Parameters
-        ----------
-        file : ClassifyRequestFileParams
-            The file to be classified. Files can be provided as a URL, an Extend file ID, or raw text.
-
-        classifier : typing.Optional[ClassifyRequestClassifierParams]
-            Reference to an existing classifier. One of `classifier` or `config` must be provided.
-
-        config : typing.Optional[ClassifyConfigParams]
-            Inline classify configuration. One of `classifier` or `config` must be provided.
-
-        metadata : typing.Optional[RunMetadata]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        HttpResponse[ClassifyRun]
-            Successfully classified file
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "classify",
-            method="POST",
-            json={
-                "classifier": convert_and_respect_annotation_metadata(
-                    object_=classifier, annotation=ClassifyRequestClassifierParams, direction="write"
-                ),
-                "config": convert_and_respect_annotation_metadata(
-                    object_=config, annotation=ClassifyConfigParams, direction="write"
-                ),
-                "file": convert_and_respect_annotation_metadata(
-                    object_=file, annotation=ClassifyRequestFileParams, direction="write"
-                ),
-                "metadata": metadata,
-            },
-            headers={
-                "content-type": "application/json",
-            },
-            request_options=request_options,
-            omit=OMIT,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    ClassifyRun,
-                    construct_type(
-                        type_=ClassifyRun,  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 401:
-                raise UnauthorizedError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 402:
-                raise PaymentRequiredError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 403:
-                raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 429:
-                raise TooManyRequestsError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise core_api_error_ApiError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
-            )
-        raise core_api_error_ApiError(
-            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
-        )
-
-    def split(
-        self,
-        *,
-        file: SplitRequestFileParams,
-        splitter: typing.Optional[SplitRequestSplitterParams] = OMIT,
-        config: typing.Optional[SplitConfigParams] = OMIT,
-        metadata: typing.Optional[RunMetadata] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[SplitRun]:
-        """
-        Split a document synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /split_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-        The Split endpoint allows you to split documents into multiple parts using an existing splitter or an inline configuration.
-
-        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/product/splitting/split).
-
-        Parameters
-        ----------
-        file : SplitRequestFileParams
-            The file to be split. Files can be provided as a URL or an Extend file ID.
-
-        splitter : typing.Optional[SplitRequestSplitterParams]
-            Reference to an existing splitter. One of `splitter` or `config` must be provided.
-
-        config : typing.Optional[SplitConfigParams]
-            Inline splitter configuration. One of `splitter` or `config` must be provided.
-
-        metadata : typing.Optional[RunMetadata]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        HttpResponse[SplitRun]
-            Successfully split file
-        """
-        _response = self._client_wrapper.httpx_client.request(
-            "split",
-            method="POST",
-            json={
-                "splitter": convert_and_respect_annotation_metadata(
-                    object_=splitter, annotation=SplitRequestSplitterParams, direction="write"
-                ),
-                "config": convert_and_respect_annotation_metadata(
-                    object_=config, annotation=SplitConfigParams, direction="write"
-                ),
-                "file": convert_and_respect_annotation_metadata(
-                    object_=file, annotation=SplitRequestFileParams, direction="write"
-                ),
-                "metadata": metadata,
-            },
-            headers={
-                "content-type": "application/json",
-            },
-            request_options=request_options,
-            omit=OMIT,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    SplitRun,
-                    construct_type(
-                        type_=SplitRun,  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return HttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 401:
-                raise UnauthorizedError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 402:
-                raise PaymentRequiredError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 403:
-                raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 429:
-                raise TooManyRequestsError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise core_api_error_ApiError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
-            )
-        raise core_api_error_ApiError(
-            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
-        )
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
 
 class AsyncRawExtend:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def parse(
+    async def create_file(
         self,
         *,
-        file: ParseRequestFileParams,
-        response_type: typing.Optional[ParseRequestResponseType] = None,
-        config: typing.Optional[ParseConfigParams] = OMIT,
-        metadata: typing.Optional[RunMetadata] = OMIT,
+        name: str,
+        url: typing.Optional[str] = OMIT,
+        raw_text: typing.Optional[str] = OMIT,
+        media_type: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[ParseRun]:
+    ) -> AsyncHttpResponse[PostFilesResponse]:
         """
-        Parse a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /parse_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-        The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
-
-        For more details, see the [Parse File guide](https://docs.extend.ai/2026-02-09/product/parsing/parse).
+        Create a new file in Extend for use in an evaluation set. This endpoint is deprecated, use /files/upload instead.
 
         Parameters
         ----------
-        file : ParseRequestFileParams
-            The file to be parsed. Files can be provided as a URL or an Extend file ID.
+        name : str
+            The name of the file
 
-        response_type : typing.Optional[ParseRequestResponseType]
-            Controls the format of the response chunks. Defaults to `json` if not specified.
-            * `json` - Returns parsed outputs in the response body
-            * `url` - Return a presigned URL to the parsed content in the response body
+        url : typing.Optional[str]
+            A pre signed URL for the file
 
-        config : typing.Optional[ParseConfigParams]
+        raw_text : typing.Optional[str]
+            The raw text content of the file
 
-        metadata : typing.Optional[RunMetadata]
+        media_type : typing.Optional[str]
+            The media type of the file (e.g. application/pdf)
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[ParseRun]
+        AsyncHttpResponse[PostFilesResponse]
+            Successfully created file
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "files",
+            method="POST",
+            json={
+                "name": name,
+                "url": url,
+                "rawText": raw_text,
+                "mediaType": media_type,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PostFilesResponse,
+                    construct_type(
+                        type_=PostFilesResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        Error,
+                        construct_type(
+                            type_=Error,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def parse(
+        self,
+        *,
+        file: ParseRequestFile,
+        response_type: typing.Optional[ParseRequestResponseType] = None,
+        config: typing.Optional[ParseConfig] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[ParserRun]:
+        """
+        Parse files to get cleaned, chunked target content (e.g. markdown).
+
+        The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
+
+        For more details, see the [Parse File guide](/product/parsing/parse).
+
+        Parameters
+        ----------
+        file : ParseRequestFile
+            A file object containing either a URL or a fileId.
+
+        response_type : typing.Optional[ParseRequestResponseType]
+            Controls the format of the response chunks. Defaults to `json` if not specified.
+            * `json` - Returns parsed outputs in the response body
+            * `url` - Return a presigned URL to the parsed content in the response body
+
+        config : typing.Optional[ParseConfig]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ParserRun]
             Successfully parsed file
         """
         _response = await self._client_wrapper.httpx_client.request(
@@ -924,12 +478,11 @@ class AsyncRawExtend:
             },
             json={
                 "file": convert_and_respect_annotation_metadata(
-                    object_=file, annotation=ParseRequestFileParams, direction="write"
+                    object_=file, annotation=ParseRequestFile, direction="write"
                 ),
                 "config": convert_and_respect_annotation_metadata(
-                    object_=config, annotation=ParseConfigParams, direction="write"
+                    object_=config, annotation=ParseConfig, direction="write"
                 ),
-                "metadata": metadata,
             },
             headers={
                 "content-type": "application/json",
@@ -940,9 +493,9 @@ class AsyncRawExtend:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    ParseRun,
+                    ParserRun,
                     construct_type(
-                        type_=ParseRun,  # type: ignore
+                        type_=ParserRun,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -962,9 +515,9 @@ class AsyncRawExtend:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        Error,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=Error,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -973,20 +526,9 @@ class AsyncRawExtend:
                 raise PaymentRequiredError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        types_api_error_ApiError,
+                        typing.Any,
                         construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 403:
-                raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
+                            type_=typing.Any,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1006,20 +548,9 @@ class AsyncRawExtend:
                 raise UnprocessableEntityError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        types_api_error_ApiError,
+                        ExtendError,
                         construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 429:
-                raise TooManyRequestsError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=ExtendError,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -1037,53 +568,53 @@ class AsyncRawExtend:
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise core_api_error_ApiError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
-            )
-        raise core_api_error_ApiError(
-            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
-        )
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
-    async def edit(
+    async def parse_async(
         self,
         *,
-        file: EditRequestFileParams,
-        config: typing.Optional[EditConfigParams] = OMIT,
+        file: ParseAsyncRequestFile,
+        config: typing.Optional[ParseConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[EditRun]:
+    ) -> AsyncHttpResponse[ParserRunStatus]:
         """
-        Edit a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
+        Parse files **asynchronously** to get cleaned, chunked target content (e.g. markdown).
 
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /edit_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
+        The Parse Async endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
 
-        The Edit endpoint allows you to detect and fill form fields in PDF documents.
+        Parse files asynchronously and get a parser run ID that can be used to check status and retrieve results with the [Get Parser Run](https://docs.extend.ai/2025-04-21/developers/api-reference/parse-endpoints/get-parser-run) endpoint.
 
-        For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/product/editing/edit).
+        This is useful for:
+        * Large files that may take longer to process
+        * Avoiding timeout issues with synchronous parsing.
+
+        For more details, see the [Parse File guide](/product/parsing/parse).
 
         Parameters
         ----------
-        file : EditRequestFileParams
-            The file to be edited. Files can be provided as a URL or an Extend file ID.
+        file : ParseAsyncRequestFile
+            A file object containing either a URL or a fileId.
 
-        config : typing.Optional[EditConfigParams]
+        config : typing.Optional[ParseConfig]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[EditRun]
-            Successfully edited file
+        AsyncHttpResponse[ParserRunStatus]
+            Successfully initiated parser run
         """
         _response = await self._client_wrapper.httpx_client.request(
-            "edit",
+            "parse/async",
             method="POST",
             json={
                 "file": convert_and_respect_annotation_metadata(
-                    object_=file, annotation=EditRequestFileParams, direction="write"
+                    object_=file, annotation=ParseAsyncRequestFile, direction="write"
                 ),
                 "config": convert_and_respect_annotation_metadata(
-                    object_=config, annotation=EditConfigParams, direction="write"
+                    object_=config, annotation=ParseConfig, direction="write"
                 ),
             },
             headers={
@@ -1095,9 +626,9 @@ class AsyncRawExtend:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    EditRun,
+                    ParserRunStatus,
                     construct_type(
-                        type_=EditRun,  # type: ignore
+                        type_=ParserRunStatus,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -1117,585 +648,14 @@ class AsyncRawExtend:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        Error,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 402:
-                raise PaymentRequiredError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 403:
-                raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 429:
-                raise TooManyRequestsError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=Error,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
                 )
             _response_json = _response.json()
         except JSONDecodeError:
-            raise core_api_error_ApiError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
-            )
-        raise core_api_error_ApiError(
-            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
-        )
-
-    async def extract(
-        self,
-        *,
-        file: ExtractRequestFileParams,
-        extractor: typing.Optional[ExtractRequestExtractorParams] = OMIT,
-        config: typing.Optional[ExtractConfigJsonParams] = OMIT,
-        metadata: typing.Optional[RunMetadata] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[ExtractRun]:
-        """
-        Extract structured data from a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /extract_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-        The Extract endpoint allows you to extract structured data from files using an existing extractor or an inline configuration.
-
-        For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/product/extracting/extract).
-
-        Parameters
-        ----------
-        file : ExtractRequestFileParams
-            The file to be extracted from. Files can be provided as a URL, Extend file ID, or raw text.
-
-        extractor : typing.Optional[ExtractRequestExtractorParams]
-            Reference to an existing extractor. One of `extractor` or `config` must be provided.
-
-        config : typing.Optional[ExtractConfigJsonParams]
-            Inline extract configuration. One of `extractor` or `config` must be provided.
-
-        metadata : typing.Optional[RunMetadata]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        AsyncHttpResponse[ExtractRun]
-            Successfully extracted data from file
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "extract",
-            method="POST",
-            json={
-                "extractor": convert_and_respect_annotation_metadata(
-                    object_=extractor, annotation=ExtractRequestExtractorParams, direction="write"
-                ),
-                "config": convert_and_respect_annotation_metadata(
-                    object_=config, annotation=ExtractConfigJsonParams, direction="write"
-                ),
-                "file": convert_and_respect_annotation_metadata(
-                    object_=file, annotation=ExtractRequestFileParams, direction="write"
-                ),
-                "metadata": metadata,
-            },
-            headers={
-                "content-type": "application/json",
-            },
-            request_options=request_options,
-            omit=OMIT,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    ExtractRun,
-                    construct_type(
-                        type_=ExtractRun,  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 401:
-                raise UnauthorizedError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 402:
-                raise PaymentRequiredError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 403:
-                raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 429:
-                raise TooManyRequestsError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise core_api_error_ApiError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
-            )
-        raise core_api_error_ApiError(
-            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
-        )
-
-    async def classify(
-        self,
-        *,
-        file: ClassifyRequestFileParams,
-        classifier: typing.Optional[ClassifyRequestClassifierParams] = OMIT,
-        config: typing.Optional[ClassifyConfigParams] = OMIT,
-        metadata: typing.Optional[RunMetadata] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[ClassifyRun]:
-        """
-        Classify a document synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /classify_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-        The Classify endpoint allows you to classify documents using an existing classifier or an inline configuration.
-
-        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/product/classifying/classify).
-
-        Parameters
-        ----------
-        file : ClassifyRequestFileParams
-            The file to be classified. Files can be provided as a URL, an Extend file ID, or raw text.
-
-        classifier : typing.Optional[ClassifyRequestClassifierParams]
-            Reference to an existing classifier. One of `classifier` or `config` must be provided.
-
-        config : typing.Optional[ClassifyConfigParams]
-            Inline classify configuration. One of `classifier` or `config` must be provided.
-
-        metadata : typing.Optional[RunMetadata]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        AsyncHttpResponse[ClassifyRun]
-            Successfully classified file
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "classify",
-            method="POST",
-            json={
-                "classifier": convert_and_respect_annotation_metadata(
-                    object_=classifier, annotation=ClassifyRequestClassifierParams, direction="write"
-                ),
-                "config": convert_and_respect_annotation_metadata(
-                    object_=config, annotation=ClassifyConfigParams, direction="write"
-                ),
-                "file": convert_and_respect_annotation_metadata(
-                    object_=file, annotation=ClassifyRequestFileParams, direction="write"
-                ),
-                "metadata": metadata,
-            },
-            headers={
-                "content-type": "application/json",
-            },
-            request_options=request_options,
-            omit=OMIT,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    ClassifyRun,
-                    construct_type(
-                        type_=ClassifyRun,  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 401:
-                raise UnauthorizedError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 402:
-                raise PaymentRequiredError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 403:
-                raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 429:
-                raise TooManyRequestsError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise core_api_error_ApiError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
-            )
-        raise core_api_error_ApiError(
-            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
-        )
-
-    async def split(
-        self,
-        *,
-        file: SplitRequestFileParams,
-        splitter: typing.Optional[SplitRequestSplitterParams] = OMIT,
-        config: typing.Optional[SplitConfigParams] = OMIT,
-        metadata: typing.Optional[RunMetadata] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[SplitRun]:
-        """
-        Split a document synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /split_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-        The Split endpoint allows you to split documents into multiple parts using an existing splitter or an inline configuration.
-
-        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/product/splitting/split).
-
-        Parameters
-        ----------
-        file : SplitRequestFileParams
-            The file to be split. Files can be provided as a URL or an Extend file ID.
-
-        splitter : typing.Optional[SplitRequestSplitterParams]
-            Reference to an existing splitter. One of `splitter` or `config` must be provided.
-
-        config : typing.Optional[SplitConfigParams]
-            Inline splitter configuration. One of `splitter` or `config` must be provided.
-
-        metadata : typing.Optional[RunMetadata]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        AsyncHttpResponse[SplitRun]
-            Successfully split file
-        """
-        _response = await self._client_wrapper.httpx_client.request(
-            "split",
-            method="POST",
-            json={
-                "splitter": convert_and_respect_annotation_metadata(
-                    object_=splitter, annotation=SplitRequestSplitterParams, direction="write"
-                ),
-                "config": convert_and_respect_annotation_metadata(
-                    object_=config, annotation=SplitConfigParams, direction="write"
-                ),
-                "file": convert_and_respect_annotation_metadata(
-                    object_=file, annotation=SplitRequestFileParams, direction="write"
-                ),
-                "metadata": metadata,
-            },
-            headers={
-                "content-type": "application/json",
-            },
-            request_options=request_options,
-            omit=OMIT,
-        )
-        try:
-            if 200 <= _response.status_code < 300:
-                _data = typing.cast(
-                    SplitRun,
-                    construct_type(
-                        type_=SplitRun,  # type: ignore
-                        object_=_response.json(),
-                    ),
-                )
-                return AsyncHttpResponse(response=_response, data=_data)
-            if _response.status_code == 400:
-                raise BadRequestError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 401:
-                raise UnauthorizedError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 402:
-                raise PaymentRequiredError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 403:
-                raise ForbiddenError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 404:
-                raise NotFoundError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 422:
-                raise UnprocessableEntityError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        types_api_error_ApiError,
-                        construct_type(
-                            type_=types_api_error_ApiError,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 429:
-                raise TooManyRequestsError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            if _response.status_code == 500:
-                raise InternalServerError(
-                    headers=dict(_response.headers),
-                    body=typing.cast(
-                        typing.Any,
-                        construct_type(
-                            type_=typing.Any,  # type: ignore
-                            object_=_response.json(),
-                        ),
-                    ),
-                )
-            _response_json = _response.json()
-        except JSONDecodeError:
-            raise core_api_error_ApiError(
-                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
-            )
-        raise core_api_error_ApiError(
-            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
-        )
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)

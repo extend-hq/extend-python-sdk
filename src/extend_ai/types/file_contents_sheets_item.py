@@ -10,16 +10,16 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 
 
 class FileContentsSheetsItem(UncheckedBaseModel):
-    sheet_name: typing_extensions.Annotated[str, FieldMetadata(alias="sheetName")] = pydantic.Field(alias="sheetName")
+    sheet_name: typing_extensions.Annotated[str, FieldMetadata(alias="sheetName")] = pydantic.Field()
     """
     The name of the sheet.
     """
 
     raw_text: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="rawText")] = pydantic.Field(
-        alias="rawText", default=None
+        default=None
     )
     """
-    The raw text content of the sheet in CSV format.
+    The raw text content of the sheet.
     """
 
     if IS_PYDANTIC_V2:

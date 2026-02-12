@@ -21,7 +21,7 @@ class ParseConfigBlockOptionsFigures(UncheckedBaseModel):
 
     figure_image_clipping_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="figureImageClippingEnabled")
-    ] = pydantic.Field(alias="figureImageClippingEnabled", default=None)
+    ] = pydantic.Field(default=None)
     """
     Whether to clip and extract images from figures.
     """

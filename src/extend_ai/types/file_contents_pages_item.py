@@ -10,35 +10,28 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 
 
 class FileContentsPagesItem(UncheckedBaseModel):
-    page_number: typing_extensions.Annotated[int, FieldMetadata(alias="pageNumber")] = pydantic.Field(
-        alias="pageNumber"
-    )
+    page_number: typing_extensions.Annotated[int, FieldMetadata(alias="pageNumber")] = pydantic.Field()
     """
     The page number of this page in the document.
     """
 
-    page_height: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageHeight")] = (
-        pydantic.Field(alias="pageHeight", default=None)
+    page_height: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageHeight")] = None
+    page_width: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageWidth")] = None
+    raw_text: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="rawText")] = pydantic.Field(
+        default=None
     )
     """
-    The height of the page in points. Available for PDF and IMG file types.
-    """
-
-    page_width: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageWidth")] = pydantic.Field(
-        alias="pageWidth", default=None
-    )
-    """
-    The width of the page in points. Available for PDF and IMG file types.
+    The raw text content extracted from this page.
     """
 
     markdown: typing.Optional[str] = pydantic.Field(default=None)
     """
-    Cleaned and structured markdown content of this page. Available for PDF and IMG file types when the `markdown` query parameter is set to true.
+    Cleaned and structured markdown content of this page.
     """
 
     html: typing.Optional[str] = pydantic.Field(default=None)
     """
-    HTML content of the page. Available for DOCX file types when the `html` query parameter is set to true.
+    Cleaned and structured html content of the page. Available for DOCX file types (that were not auto-converted to PDFs). Only included if the `html` query parameter is set to true in the endpoint request.
     """
 
     if IS_PYDANTIC_V2:

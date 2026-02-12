@@ -4,18 +4,18 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
-from ..requests.legacy_processor_run_file_input import LegacyProcessorRunFileInputParams
-from ..types.legacy_json_object import LegacyJsonObject
-from ..types.legacy_max_page_size import LegacyMaxPageSize
-from ..types.legacy_next_page_token import LegacyNextPageToken
-from ..types.legacy_processor_id import LegacyProcessorId
-from ..types.legacy_processor_status import LegacyProcessorStatus
-from ..types.legacy_processor_type import LegacyProcessorType
-from ..types.legacy_sort_by_enum import LegacySortByEnum
-from ..types.legacy_sort_dir_enum import LegacySortDirEnum
+from ..types.json_object import JsonObject
+from ..types.max_page_size import MaxPageSize
+from ..types.next_page_token import NextPageToken
+from ..types.processor_id import ProcessorId
+from ..types.processor_run_file_input import ProcessorRunFileInput
+from ..types.processor_status import ProcessorStatus
+from ..types.processor_type import ProcessorType
+from ..types.sort_by_enum import SortByEnum
+from ..types.sort_dir_enum import SortDirEnum
 from .raw_client import AsyncRawProcessorRunClient, RawProcessorRunClient
-from .requests.processor_run_create_request_config import ProcessorRunCreateRequestConfigParams
 from .types.processor_run_cancel_response import ProcessorRunCancelResponse
+from .types.processor_run_create_request_config import ProcessorRunCreateRequestConfig
 from .types.processor_run_create_response import ProcessorRunCreateResponse
 from .types.processor_run_delete_response import ProcessorRunDeleteResponse
 from .types.processor_run_get_response import ProcessorRunGetResponse
@@ -44,16 +44,16 @@ class ProcessorRunClient:
     def list(
         self,
         *,
-        status: typing.Optional[LegacyProcessorStatus] = None,
+        status: typing.Optional[ProcessorStatus] = None,
         processor_id: typing.Optional[str] = None,
-        processor_type: typing.Optional[LegacyProcessorType] = None,
+        processor_type: typing.Optional[ProcessorType] = None,
         source_id: typing.Optional[str] = None,
         source: typing.Optional[ProcessorRunListRequestSource] = None,
         file_name_contains: typing.Optional[str] = None,
-        sort_by: typing.Optional[LegacySortByEnum] = None,
-        sort_dir: typing.Optional[LegacySortDirEnum] = None,
-        next_page_token: typing.Optional[LegacyNextPageToken] = None,
-        max_page_size: typing.Optional[LegacyMaxPageSize] = None,
+        sort_by: typing.Optional[SortByEnum] = None,
+        sort_dir: typing.Optional[SortDirEnum] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ProcessorRunListResponse:
         """
@@ -61,7 +61,7 @@ class ProcessorRunClient:
 
         Parameters
         ----------
-        status : typing.Optional[LegacyProcessorStatus]
+        status : typing.Optional[ProcessorStatus]
             Filters processor runs by their status. If not provided, no filter is applied.
 
              The status of a processor run:
@@ -74,9 +74,9 @@ class ProcessorRunClient:
         processor_id : typing.Optional[str]
             Filters processor runs by the processor ID. If not provided, runs for all processors are returned.
 
-            Example: `"ex_BMdfq_yWM3sT-ZzvCnA3f"`
+            Example: `"dp_BMdfq_yWM3sT-ZzvCnA3f"`
 
-        processor_type : typing.Optional[LegacyProcessorType]
+        processor_type : typing.Optional[ProcessorType]
             Filters processor runs by the processor type. If not provided, runs for all processor types are returned.
 
             Example: `"EXTRACT"`
@@ -103,15 +103,15 @@ class ProcessorRunClient:
 
             Example: `"invoice"`
 
-        sort_by : typing.Optional[LegacySortByEnum]
+        sort_by : typing.Optional[SortByEnum]
             Sorts the processor runs by the given field.
 
-        sort_dir : typing.Optional[LegacySortDirEnum]
+        sort_dir : typing.Optional[SortDirEnum]
             Sorts the processor runs in ascending or descending order. Ascending order means the earliest processor run is returned first.
 
-        next_page_token : typing.Optional[LegacyNextPageToken]
+        next_page_token : typing.Optional[NextPageToken]
 
-        max_page_size : typing.Optional[LegacyMaxPageSize]
+        max_page_size : typing.Optional[MaxPageSize]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -131,7 +131,16 @@ class ProcessorRunClient:
             token="YOUR_TOKEN",
         )
         client.processor_run.list(
+            status="PENDING",
+            processor_id="processorId",
+            processor_type="EXTRACT",
+            source_id="sourceId",
+            source="ADMIN",
+            file_name_contains="fileNameContains",
+            sort_by="updatedAt",
+            sort_dir="asc",
             next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+            max_page_size=1,
         )
         """
         _response = self._raw_client.list(
@@ -152,14 +161,14 @@ class ProcessorRunClient:
     def create(
         self,
         *,
-        processor_id: LegacyProcessorId,
+        processor_id: ProcessorId,
         version: typing.Optional[str] = OMIT,
-        file: typing.Optional[LegacyProcessorRunFileInputParams] = OMIT,
+        file: typing.Optional[ProcessorRunFileInput] = OMIT,
         raw_text: typing.Optional[str] = OMIT,
         sync: typing.Optional[bool] = OMIT,
         priority: typing.Optional[int] = OMIT,
-        metadata: typing.Optional[LegacyJsonObject] = OMIT,
-        config: typing.Optional[ProcessorRunCreateRequestConfigParams] = OMIT,
+        metadata: typing.Optional[JsonObject] = OMIT,
+        config: typing.Optional[ProcessorRunCreateRequestConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ProcessorRunCreateResponse:
         """
@@ -175,7 +184,7 @@ class ProcessorRunClient:
 
         Parameters
         ----------
-        processor_id : LegacyProcessorId
+        processor_id : ProcessorId
 
         version : typing.Optional[str]
             An optional version of the processor to use. When not supplied, the most recent published version of the processor will be used. Special values include:
@@ -183,7 +192,7 @@ class ProcessorRunClient:
             - `"draft"` for the draft version.
             - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
 
-        file : typing.Optional[LegacyProcessorRunFileInputParams]
+        file : typing.Optional[ProcessorRunFileInput]
             The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/general/supported-file-types).
 
         raw_text : typing.Optional[str]
@@ -197,12 +206,12 @@ class ProcessorRunClient:
         priority : typing.Optional[int]
             An optional value used to determine the relative order of ProcessorRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
 
-        metadata : typing.Optional[LegacyJsonObject]
+        metadata : typing.Optional[JsonObject]
             An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
 
             To categorize processor runs for billing and usage tracking, include `extend:usage_tags` with an array of string values (e.g., `{"extend:usage_tags": ["production", "team-eng", "customer-123"]}`). Tags must contain only alphanumeric characters, hyphens, and underscores; any special characters will be automatically removed.
 
-        config : typing.Optional[ProcessorRunCreateRequestConfigParams]
+        config : typing.Optional[ProcessorRunCreateRequestConfig]
             The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
 
         request_options : typing.Optional[RequestOptions]
@@ -248,7 +257,7 @@ class ProcessorRunClient:
         id : str
             The unique identifier for this processor run.
 
-            Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -283,7 +292,7 @@ class ProcessorRunClient:
         id : str
             The ID of the processor run to delete.
 
-            Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -318,7 +327,7 @@ class ProcessorRunClient:
         id : str
             The unique identifier for the processor run to cancel.
 
-            Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -361,16 +370,16 @@ class AsyncProcessorRunClient:
     async def list(
         self,
         *,
-        status: typing.Optional[LegacyProcessorStatus] = None,
+        status: typing.Optional[ProcessorStatus] = None,
         processor_id: typing.Optional[str] = None,
-        processor_type: typing.Optional[LegacyProcessorType] = None,
+        processor_type: typing.Optional[ProcessorType] = None,
         source_id: typing.Optional[str] = None,
         source: typing.Optional[ProcessorRunListRequestSource] = None,
         file_name_contains: typing.Optional[str] = None,
-        sort_by: typing.Optional[LegacySortByEnum] = None,
-        sort_dir: typing.Optional[LegacySortDirEnum] = None,
-        next_page_token: typing.Optional[LegacyNextPageToken] = None,
-        max_page_size: typing.Optional[LegacyMaxPageSize] = None,
+        sort_by: typing.Optional[SortByEnum] = None,
+        sort_dir: typing.Optional[SortDirEnum] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ProcessorRunListResponse:
         """
@@ -378,7 +387,7 @@ class AsyncProcessorRunClient:
 
         Parameters
         ----------
-        status : typing.Optional[LegacyProcessorStatus]
+        status : typing.Optional[ProcessorStatus]
             Filters processor runs by their status. If not provided, no filter is applied.
 
              The status of a processor run:
@@ -391,9 +400,9 @@ class AsyncProcessorRunClient:
         processor_id : typing.Optional[str]
             Filters processor runs by the processor ID. If not provided, runs for all processors are returned.
 
-            Example: `"ex_BMdfq_yWM3sT-ZzvCnA3f"`
+            Example: `"dp_BMdfq_yWM3sT-ZzvCnA3f"`
 
-        processor_type : typing.Optional[LegacyProcessorType]
+        processor_type : typing.Optional[ProcessorType]
             Filters processor runs by the processor type. If not provided, runs for all processor types are returned.
 
             Example: `"EXTRACT"`
@@ -420,15 +429,15 @@ class AsyncProcessorRunClient:
 
             Example: `"invoice"`
 
-        sort_by : typing.Optional[LegacySortByEnum]
+        sort_by : typing.Optional[SortByEnum]
             Sorts the processor runs by the given field.
 
-        sort_dir : typing.Optional[LegacySortDirEnum]
+        sort_dir : typing.Optional[SortDirEnum]
             Sorts the processor runs in ascending or descending order. Ascending order means the earliest processor run is returned first.
 
-        next_page_token : typing.Optional[LegacyNextPageToken]
+        next_page_token : typing.Optional[NextPageToken]
 
-        max_page_size : typing.Optional[LegacyMaxPageSize]
+        max_page_size : typing.Optional[MaxPageSize]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -453,7 +462,16 @@ class AsyncProcessorRunClient:
 
         async def main() -> None:
             await client.processor_run.list(
+                status="PENDING",
+                processor_id="processorId",
+                processor_type="EXTRACT",
+                source_id="sourceId",
+                source="ADMIN",
+                file_name_contains="fileNameContains",
+                sort_by="updatedAt",
+                sort_dir="asc",
                 next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+                max_page_size=1,
             )
 
 
@@ -477,14 +495,14 @@ class AsyncProcessorRunClient:
     async def create(
         self,
         *,
-        processor_id: LegacyProcessorId,
+        processor_id: ProcessorId,
         version: typing.Optional[str] = OMIT,
-        file: typing.Optional[LegacyProcessorRunFileInputParams] = OMIT,
+        file: typing.Optional[ProcessorRunFileInput] = OMIT,
         raw_text: typing.Optional[str] = OMIT,
         sync: typing.Optional[bool] = OMIT,
         priority: typing.Optional[int] = OMIT,
-        metadata: typing.Optional[LegacyJsonObject] = OMIT,
-        config: typing.Optional[ProcessorRunCreateRequestConfigParams] = OMIT,
+        metadata: typing.Optional[JsonObject] = OMIT,
+        config: typing.Optional[ProcessorRunCreateRequestConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ProcessorRunCreateResponse:
         """
@@ -500,7 +518,7 @@ class AsyncProcessorRunClient:
 
         Parameters
         ----------
-        processor_id : LegacyProcessorId
+        processor_id : ProcessorId
 
         version : typing.Optional[str]
             An optional version of the processor to use. When not supplied, the most recent published version of the processor will be used. Special values include:
@@ -508,7 +526,7 @@ class AsyncProcessorRunClient:
             - `"draft"` for the draft version.
             - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
 
-        file : typing.Optional[LegacyProcessorRunFileInputParams]
+        file : typing.Optional[ProcessorRunFileInput]
             The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/general/supported-file-types).
 
         raw_text : typing.Optional[str]
@@ -522,12 +540,12 @@ class AsyncProcessorRunClient:
         priority : typing.Optional[int]
             An optional value used to determine the relative order of ProcessorRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
 
-        metadata : typing.Optional[LegacyJsonObject]
+        metadata : typing.Optional[JsonObject]
             An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
 
             To categorize processor runs for billing and usage tracking, include `extend:usage_tags` with an array of string values (e.g., `{"extend:usage_tags": ["production", "team-eng", "customer-123"]}`). Tags must contain only alphanumeric characters, hyphens, and underscores; any special characters will be automatically removed.
 
-        config : typing.Optional[ProcessorRunCreateRequestConfigParams]
+        config : typing.Optional[ProcessorRunCreateRequestConfig]
             The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
 
         request_options : typing.Optional[RequestOptions]
@@ -581,7 +599,7 @@ class AsyncProcessorRunClient:
         id : str
             The unique identifier for this processor run.
 
-            Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -626,7 +644,7 @@ class AsyncProcessorRunClient:
         id : str
             The ID of the processor run to delete.
 
-            Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -671,7 +689,7 @@ class AsyncProcessorRunClient:
         id : str
             The unique identifier for the processor run to cancel.
 
-            Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.

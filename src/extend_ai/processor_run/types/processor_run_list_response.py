@@ -7,18 +7,16 @@ import typing_extensions
 from ...core.pydantic_utilities import IS_PYDANTIC_V2
 from ...core.serialization import FieldMetadata
 from ...core.unchecked_base_model import UncheckedBaseModel
-from ...types.legacy_next_page_token import LegacyNextPageToken
-from ...types.legacy_processor_run_summary import LegacyProcessorRunSummary
+from ...types.next_page_token import NextPageToken
+from ...types.processor_run_summary import ProcessorRunSummary
 
 
 class ProcessorRunListResponse(UncheckedBaseModel):
     success: bool
-    processor_runs: typing_extensions.Annotated[
-        typing.List[LegacyProcessorRunSummary], FieldMetadata(alias="processorRuns")
-    ] = pydantic.Field(alias="processorRuns")
+    processor_runs: typing_extensions.Annotated[typing.List[ProcessorRunSummary], FieldMetadata(alias="processorRuns")]
     next_page_token: typing_extensions.Annotated[
-        typing.Optional[LegacyNextPageToken], FieldMetadata(alias="nextPageToken")
-    ] = pydantic.Field(alias="nextPageToken", default=None)
+        typing.Optional[NextPageToken], FieldMetadata(alias="nextPageToken")
+    ] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -12,6 +12,7 @@ from ..core.unchecked_base_model import construct_type
 from ..errors.bad_request_error import BadRequestError
 from ..errors.not_found_error import NotFoundError
 from ..errors.unauthorized_error import UnauthorizedError
+from ..types.error import Error
 from .types.batch_processor_run_get_response import BatchProcessorRunGetResponse
 
 
@@ -23,14 +24,12 @@ class RawBatchProcessorRunClient:
         self, id: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> HttpResponse[BatchProcessorRunGetResponse]:
         """
-        Retrieve details about a batch processor run, including evaluation runs.
-
-        **Deprecated:** This endpoint is maintained for backwards compatibility only and will be replaced in a future API version. Use [Get Evaluation Set Run](/2026-02-09/developers/api-reference/endpoints/evaluation/get-evaluation-set-run) for interacting with evaluation set runs.
+        Retrieve details about a batch processor run, including evaluation runs
 
         Parameters
         ----------
         id : str
-            The unique identifier of the batch processor run to retrieve.
+            The unique identifier of the batch processor run to retrieve. The ID will always start with "bpr_".
 
             Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
@@ -72,9 +71,9 @@ class RawBatchProcessorRunClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        Error,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=Error,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -104,14 +103,12 @@ class AsyncRawBatchProcessorRunClient:
         self, id: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> AsyncHttpResponse[BatchProcessorRunGetResponse]:
         """
-        Retrieve details about a batch processor run, including evaluation runs.
-
-        **Deprecated:** This endpoint is maintained for backwards compatibility only and will be replaced in a future API version. Use [Get Evaluation Set Run](/2026-02-09/developers/api-reference/endpoints/evaluation/get-evaluation-set-run) for interacting with evaluation set runs.
+        Retrieve details about a batch processor run, including evaluation runs
 
         Parameters
         ----------
         id : str
-            The unique identifier of the batch processor run to retrieve.
+            The unique identifier of the batch processor run to retrieve. The ID will always start with "bpr_".
 
             Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
@@ -153,9 +150,9 @@ class AsyncRawBatchProcessorRunClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        Error,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=Error,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

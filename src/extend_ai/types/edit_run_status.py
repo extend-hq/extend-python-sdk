@@ -2,44 +2,48 @@
 
 import typing
 
-from ..core import enum
+import pydantic
+import typing_extensions
+from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.serialization import FieldMetadata
+from ..core.unchecked_base_model import UncheckedBaseModel
+from .edit_run_status_status import EditRunStatusStatus
 
-T_Result = typing.TypeVar("T_Result")
 
-
-class EditRunStatus(enum.StrEnum):
+class EditRunStatus(UncheckedBaseModel):
     """
-    The status of the edit run:
-    * `"PROCESSING"` - The file is still being processed
-    * `"PROCESSED"` - The file was successfully edited
-    * `"FAILED"` - The editing failed (see `failureReason` for details)
-    """
-
-    PROCESSING = "PROCESSING"
-    PROCESSED = "PROCESSED"
-    FAILED = "FAILED"
-    _UNKNOWN = "__EDITRUNSTATUS_UNKNOWN__"
-    """
-    This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
+    Minimal edit run status object without edit results.
     """
 
-    @classmethod
-    def _missing_(cls, value: typing.Any) -> "EditRunStatus":
-        unknown = cls._UNKNOWN
-        unknown._value_ = value
-        return unknown
+    object: typing.Literal["edit_run_status"] = pydantic.Field(default="edit_run_status")
+    """
+    The type of object. Will always be `"edit_run_status"`.
+    """
 
-    def visit(
-        self,
-        processing: typing.Callable[[], T_Result],
-        processed: typing.Callable[[], T_Result],
-        failed: typing.Callable[[], T_Result],
-        _unknown_member: typing.Callable[[str], T_Result],
-    ) -> T_Result:
-        if self is EditRunStatus.PROCESSING:
-            return processing()
-        if self is EditRunStatus.PROCESSED:
-            return processed()
-        if self is EditRunStatus.FAILED:
-            return failed()
-        return _unknown_member(self._value_)
+    id: str = pydantic.Field()
+    """
+    A unique identifier for the edit run. Will always start with `"edit_run_"`
+    
+    Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
+    """
+
+    status: EditRunStatusStatus = pydantic.Field()
+    """
+    The status of the edit run.
+    """
+
+    failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
+        pydantic.Field(default=None)
+    )
+    """
+    The reason for failure if status is "FAILED".
+    """
+
+    if IS_PYDANTIC_V2:
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+    else:
+
+        class Config:
+            frozen = True
+            smart_union = True
+            extra = pydantic.Extra.allow

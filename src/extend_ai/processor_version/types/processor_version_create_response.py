@@ -9,14 +9,12 @@ import typing_extensions
 from ...core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ...core.serialization import FieldMetadata
 from ...core.unchecked_base_model import UncheckedBaseModel
-from ...types.legacy_processor_version import LegacyProcessorVersion
+from ...types.processor_version import ProcessorVersion
 
 
 class ProcessorVersionCreateResponse(UncheckedBaseModel):
     success: bool
-    processor_version: typing_extensions.Annotated[LegacyProcessorVersion, FieldMetadata(alias="processorVersion")] = (
-        pydantic.Field(alias="processorVersion")
-    )
+    processor_version: typing_extensions.Annotated[ProcessorVersion, FieldMetadata(alias="processorVersion")]
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

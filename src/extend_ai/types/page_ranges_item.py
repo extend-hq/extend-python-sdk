@@ -8,12 +8,12 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 
 
 class PageRangesItem(UncheckedBaseModel):
-    start: int = pydantic.Field()
+    start: typing.Optional[int] = pydantic.Field(default=None)
     """
     The start page of the range.
     """
 
-    end: int = pydantic.Field()
+    end: typing.Optional[int] = pydantic.Field(default=None)
     """
     The end page of the range.
     """

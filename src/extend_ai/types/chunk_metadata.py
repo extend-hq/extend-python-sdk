@@ -15,9 +15,7 @@ class ChunkMetadata(UncheckedBaseModel):
     Metadata about the chunk.
     """
 
-    page_range: typing_extensions.Annotated[ChunkMetadataPageRange, FieldMetadata(alias="pageRange")] = pydantic.Field(
-        alias="pageRange"
-    )
+    page_range: typing_extensions.Annotated[ChunkMetadataPageRange, FieldMetadata(alias="pageRange")] = pydantic.Field()
     """
     The page range this chunk covers. Often will just be a partial page, in which cases `start` and `end` will be the same.
     """

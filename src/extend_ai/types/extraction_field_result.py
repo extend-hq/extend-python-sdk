@@ -34,7 +34,7 @@ class ExtractionFieldResult(UncheckedBaseModel):
 
     schema_: typing_extensions.Annotated[
         typing.Optional[typing.List["ExtractionField"]], FieldMetadata(alias="schema")
-    ] = pydantic.Field(alias="schema", default=None)
+    ] = pydantic.Field(default=None)
     """
     The field schema of nested fields
     """

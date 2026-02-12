@@ -36,7 +36,7 @@ class ExtractionField(UncheckedBaseModel):
 
     schema_: typing_extensions.Annotated[
         typing.Optional[typing.List["ExtractionField"]], FieldMetadata(alias="schema")
-    ] = pydantic.Field(alias="schema", default=None)
+    ] = pydantic.Field(default=None)
     """
     Required when type is "array" or "object". Contains nested field definitions.
     """

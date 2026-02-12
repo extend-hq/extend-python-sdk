@@ -17,7 +17,7 @@ class ParseConfigBlockOptionsText(UncheckedBaseModel):
 
     signature_detection_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="signatureDetectionEnabled")
-    ] = pydantic.Field(alias="signatureDetectionEnabled", default=None)
+    ] = pydantic.Field(default=None)
     """
     Whether an additional vision model will be utilized for advanced signature detection. Recommended for most use cases, but should be disabled if signature detection is not necessary and latency is a concern.
     """

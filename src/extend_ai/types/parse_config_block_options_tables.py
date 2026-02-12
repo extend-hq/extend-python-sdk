@@ -23,7 +23,7 @@ class ParseConfigBlockOptionsTables(UncheckedBaseModel):
 
     target_format: typing_extensions.Annotated[
         typing.Optional[ParseConfigBlockOptionsTablesTargetFormat], FieldMetadata(alias="targetFormat")
-    ] = pydantic.Field(alias="targetFormat", default=None)
+    ] = pydantic.Field(default=None)
     """
     The target format for the table blocks. Supported values:
     * `markdown`: Convert table to Markdown format
@@ -32,14 +32,14 @@ class ParseConfigBlockOptionsTables(UncheckedBaseModel):
 
     table_header_continuation_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="tableHeaderContinuationEnabled")
-    ] = pydantic.Field(alias="tableHeaderContinuationEnabled", default=None)
+    ] = pydantic.Field(default=None)
     """
     Whether to automatically copy table headers to headerless tables on subsequent pages when they have matching column counts. Useful for multi-page tables.
     """
 
     cell_blocks_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="cellBlocksEnabled")
-    ] = pydantic.Field(alias="cellBlocksEnabled", default=None)
+    ] = pydantic.Field(default=None)
     """
     Whether to include individual table cell blocks in the output. When enabled, each cell in a table will be represented as a separate block with its own bounding box and content and will be `children` of the table block.
     """

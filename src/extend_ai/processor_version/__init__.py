@@ -16,31 +16,15 @@ if typing.TYPE_CHECKING:
         ProcessorVersionGetResponse,
         ProcessorVersionListResponse,
     )
-    from .requests import (
-        ProcessorVersionCreateRequestConfigParams,
-        ProcessorVersionCreateRequestConfig_ClassifyParams,
-        ProcessorVersionCreateRequestConfig_ExtractParams,
-        ProcessorVersionCreateRequestConfig_SplitterParams,
-        ProcessorVersionCreateResponseParams,
-        ProcessorVersionGetResponseParams,
-        ProcessorVersionListResponseParams,
-    )
 _dynamic_imports: typing.Dict[str, str] = {
     "ProcessorVersionCreateRequestConfig": ".types",
-    "ProcessorVersionCreateRequestConfigParams": ".requests",
     "ProcessorVersionCreateRequestConfig_Classify": ".types",
-    "ProcessorVersionCreateRequestConfig_ClassifyParams": ".requests",
     "ProcessorVersionCreateRequestConfig_Extract": ".types",
-    "ProcessorVersionCreateRequestConfig_ExtractParams": ".requests",
     "ProcessorVersionCreateRequestConfig_Splitter": ".types",
-    "ProcessorVersionCreateRequestConfig_SplitterParams": ".requests",
     "ProcessorVersionCreateRequestReleaseType": ".types",
     "ProcessorVersionCreateResponse": ".types",
-    "ProcessorVersionCreateResponseParams": ".requests",
     "ProcessorVersionGetResponse": ".types",
-    "ProcessorVersionGetResponseParams": ".requests",
     "ProcessorVersionListResponse": ".types",
-    "ProcessorVersionListResponseParams": ".requests",
 }
 
 
@@ -67,18 +51,11 @@ def __dir__():
 
 __all__ = [
     "ProcessorVersionCreateRequestConfig",
-    "ProcessorVersionCreateRequestConfigParams",
     "ProcessorVersionCreateRequestConfig_Classify",
-    "ProcessorVersionCreateRequestConfig_ClassifyParams",
     "ProcessorVersionCreateRequestConfig_Extract",
-    "ProcessorVersionCreateRequestConfig_ExtractParams",
     "ProcessorVersionCreateRequestConfig_Splitter",
-    "ProcessorVersionCreateRequestConfig_SplitterParams",
     "ProcessorVersionCreateRequestReleaseType",
     "ProcessorVersionCreateResponse",
-    "ProcessorVersionCreateResponseParams",
     "ProcessorVersionGetResponse",
-    "ProcessorVersionGetResponseParams",
     "ProcessorVersionListResponse",
-    "ProcessorVersionListResponseParams",
 ]

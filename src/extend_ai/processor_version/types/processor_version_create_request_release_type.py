@@ -2,37 +2,4 @@
 
 import typing
 
-from ...core import enum
-
-T_Result = typing.TypeVar("T_Result")
-
-
-class ProcessorVersionCreateRequestReleaseType(enum.StrEnum):
-    """
-    The type of release for this version. The two options are "major" and "minor", which will increment the version number accordingly.
-    """
-
-    MAJOR = "major"
-    MINOR = "minor"
-    _UNKNOWN = "__PROCESSORVERSIONCREATEREQUESTRELEASETYPE_UNKNOWN__"
-    """
-    This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
-    """
-
-    @classmethod
-    def _missing_(cls, value: typing.Any) -> "ProcessorVersionCreateRequestReleaseType":
-        unknown = cls._UNKNOWN
-        unknown._value_ = value
-        return unknown
-
-    def visit(
-        self,
-        major: typing.Callable[[], T_Result],
-        minor: typing.Callable[[], T_Result],
-        _unknown_member: typing.Callable[[str], T_Result],
-    ) -> T_Result:
-        if self is ProcessorVersionCreateRequestReleaseType.MAJOR:
-            return major()
-        if self is ProcessorVersionCreateRequestReleaseType.MINOR:
-            return minor()
-        return _unknown_member(self._value_)
+ProcessorVersionCreateRequestReleaseType = typing.Union[typing.Literal["major", "minor"], typing.Any]

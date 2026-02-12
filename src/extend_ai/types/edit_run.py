@@ -9,17 +9,16 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .edit_config import EditConfig
+from .edit_run_config import EditRunConfig
+from .edit_run_edited_file import EditRunEditedFile
 from .edit_run_metrics import EditRunMetrics
-from .edit_run_output import EditRunOutput
 from .edit_run_status import EditRunStatus
-from .file_summary import FileSummary
-from .run_usage import RunUsage
+from .edit_run_usage import EditRunUsage
 
 
 class EditRun(UncheckedBaseModel):
     """
-    Edit run object.
+    Full edit run object with complete editing results
     """
 
     object: typing.Literal["edit_run"] = pydantic.Field(default="edit_run")
@@ -29,81 +28,49 @@ class EditRun(UncheckedBaseModel):
 
     id: str = pydantic.Field()
     """
-    A unique identifier for the edit run.
+    A unique identifier for the edit run. Will always start with `"edit_run_"`
     
-    Example: `"edr_xK9mLPqRtN3vS8wF5hB2cQ"`
+    Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
     """
 
-    file: FileSummary = pydantic.Field()
+    file_id: typing_extensions.Annotated[str, FieldMetadata(alias="fileId")] = pydantic.Field()
     """
-    The input file that was submitted for editing.
-    """
-
-    status: EditRunStatus = pydantic.Field()
-    """
-    The status of the edit run:
-    * `"PROCESSING"` - The file is still being processed
-    * `"PROCESSED"` - The file was successfully edited
-    * `"FAILED"` - The editing failed (see `failureReason` for details)
+    The identifier of the input file that was edited.
     """
 
+    edited_file: typing_extensions.Annotated[typing.Optional[EditRunEditedFile], FieldMetadata(alias="editedFile")] = (
+        pydantic.Field(default=None)
+    )
+    """
+    Information about the edited output file. Only present when status is "PROCESSED".
+    """
+
+    status: EditRunStatus
     failure_reason: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureReason")] = (
-        pydantic.Field(alias="failureReason", default=None)
+        pydantic.Field(default=None)
     )
     """
-    The reason for failure.
-    
-    **Availability:** Present when `status` is `"FAILED"`.
-    
-    Possible values include:
-    * `UNABLE_TO_DOWNLOAD_FILE` - Failed to load the requested file
-    * `FILE_TYPE_NOT_SUPPORTED` - File type not supported. Edit runs currently require a PDF
-    * `FILE_SIZE_TOO_LARGE` - The file exceeds the maximum allowed size
-    * `CORRUPT_FILE` - The file appears to be corrupted and cannot be edited
-    * `FIELD_DETECTION_ERROR` - An error occurred during field detection
-    * `PASSWORD_PROTECTED_FILE` - The file is password protected and cannot be edited
-    * `FAILED_TO_CONVERT_TO_PDF` - The file could not be converted to PDF for processing
-    * `INTERNAL_ERROR` - An unexpected internal error occurred
-    * `INVALID_OPTIONS` - The provided configuration options are invalid
-    * `EMPTY_SCHEMA` - No schema was provided and no fields could be detected
-    * `OUT_OF_CREDITS` - Insufficient credits to process the file
-    
-    **Note:** Additional failure reasons may be added in the future. Your integration should handle unknown values gracefully.
+    The reason for failure if status is "FAILED".
     """
 
-    failure_message: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="failureMessage")] = (
-        pydantic.Field(alias="failureMessage", default=None)
-    )
+    config: EditRunConfig = pydantic.Field()
     """
-    A human-readable description of the failure.
-    
-    **Availability:** Present when `status` is `"FAILED"`.
+    The configuration used for this edit run.
     """
 
-    config: EditConfig = pydantic.Field()
+    output: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
     """
-    The configuration used for this edit run, including any default values that were applied.
-    """
-
-    output: typing.Optional[EditRunOutput] = pydantic.Field(default=None)
-    """
-    The output of the edit run.
-    
-    **Availability:** Present when `status` is `"PROCESSED"`.
+    The extracted/detected field values from the edited document.
     """
 
-    metrics: typing.Optional[EditRunMetrics] = pydantic.Field(default=None)
+    metrics: EditRunMetrics = pydantic.Field()
     """
     Metrics about the editing process.
-    
-    **Availability:** Present when `status` is `"PROCESSED"`.
     """
 
-    usage: typing.Optional[RunUsage] = pydantic.Field(default=None)
+    usage: typing.Optional[EditRunUsage] = pydantic.Field(default=None)
     """
-    Usage credits consumed by this run.
-    
-    **Availability:** Present when `status` is `"PROCESSED"`, the run was created after October 7, 2025, and the customer is on the current billing system.
+    Usage credits consumed by this edit run.
     """
 
     if IS_PYDANTIC_V2:

@@ -16,7 +16,7 @@ from .parse_config_target import ParseConfigTarget
 
 class ParseConfig(UncheckedBaseModel):
     """
-    Configuration options for the parsing process. Defaults depend on the selected parser engine and version.
+    Configuration options for the parsing process.
     """
 
     target: typing.Optional[ParseConfigTarget] = pydantic.Field(default=None)
@@ -33,12 +33,12 @@ class ParseConfig(UncheckedBaseModel):
     * Prefer `markdown` for most documents, multi-column reading order, and retrieval use cases
     * Prefer `spatial` for messy/scanned/handwritten or skewed documents, when you need near 1:1 layout fidelity, or for BOL-like logistics docs
     
-    See “Markdown vs Spatial” in the [Parse guide](https://docs.extend.ai/2026-02-09/developers/guides/parse#markdown-vs-spatial) for details.
+    See “Markdown vs Spatial” in the Parse guide for details: /2025-04-21/developers/guides/parse#markdown-vs-spatial
     """
 
     chunking_strategy: typing_extensions.Annotated[
         typing.Optional[ParseConfigChunkingStrategy], FieldMetadata(alias="chunkingStrategy")
-    ] = pydantic.Field(alias="chunkingStrategy", default=None)
+    ] = pydantic.Field(default=None)
     """
     Strategy for dividing the document into chunks.
     """
@@ -52,14 +52,14 @@ class ParseConfig(UncheckedBaseModel):
 
     block_options: typing_extensions.Annotated[
         typing.Optional[ParseConfigBlockOptions], FieldMetadata(alias="blockOptions")
-    ] = pydantic.Field(alias="blockOptions", default=None)
+    ] = pydantic.Field(default=None)
     """
     Options for controlling how different block types are processed.
     """
 
     advanced_options: typing_extensions.Annotated[
         typing.Optional[ParseConfigAdvancedOptions], FieldMetadata(alias="advancedOptions")
-    ] = pydantic.Field(alias="advancedOptions", default=None)
+    ] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

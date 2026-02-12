@@ -2,33 +2,4 @@
 
 import typing
 
-from ..core import enum
-
-T_Result = typing.TypeVar("T_Result")
-
-
-class ParseRequestResponseType(enum.StrEnum):
-    JSON = "json"
-    URL = "url"
-    _UNKNOWN = "__PARSEREQUESTRESPONSETYPE_UNKNOWN__"
-    """
-    This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
-    """
-
-    @classmethod
-    def _missing_(cls, value: typing.Any) -> "ParseRequestResponseType":
-        unknown = cls._UNKNOWN
-        unknown._value_ = value
-        return unknown
-
-    def visit(
-        self,
-        json: typing.Callable[[], T_Result],
-        url: typing.Callable[[], T_Result],
-        _unknown_member: typing.Callable[[str], T_Result],
-    ) -> T_Result:
-        if self is ParseRequestResponseType.JSON:
-            return json()
-        if self is ParseRequestResponseType.URL:
-            return url()
-        return _unknown_member(self._value_)
+ParseRequestResponseType = typing.Union[typing.Literal["json", "url"], typing.Any]

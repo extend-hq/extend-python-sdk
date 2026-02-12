@@ -2,39 +2,4 @@
 
 import typing
 
-from ..core import enum
-
-T_Result = typing.TypeVar("T_Result")
-
-
-class ParseConfigBlockOptionsTablesTargetFormat(enum.StrEnum):
-    """
-    The target format for the table blocks. Supported values:
-    * `markdown`: Convert table to Markdown format
-    * `html`: Convert table to HTML format
-    """
-
-    MARKDOWN = "markdown"
-    HTML = "html"
-    _UNKNOWN = "__PARSECONFIGBLOCKOPTIONSTABLESTARGETFORMAT_UNKNOWN__"
-    """
-    This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
-    """
-
-    @classmethod
-    def _missing_(cls, value: typing.Any) -> "ParseConfigBlockOptionsTablesTargetFormat":
-        unknown = cls._UNKNOWN
-        unknown._value_ = value
-        return unknown
-
-    def visit(
-        self,
-        markdown: typing.Callable[[], T_Result],
-        html: typing.Callable[[], T_Result],
-        _unknown_member: typing.Callable[[str], T_Result],
-    ) -> T_Result:
-        if self is ParseConfigBlockOptionsTablesTargetFormat.MARKDOWN:
-            return markdown()
-        if self is ParseConfigBlockOptionsTablesTargetFormat.HTML:
-            return html()
-        return _unknown_member(self._value_)
+ParseConfigBlockOptionsTablesTargetFormat = typing.Union[typing.Literal["markdown", "html"], typing.Any]

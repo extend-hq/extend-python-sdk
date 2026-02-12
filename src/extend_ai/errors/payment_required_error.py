@@ -2,10 +2,9 @@
 
 import typing
 
-from ..core.api_error import ApiError as core_api_error_ApiError
-from ..types.api_error import ApiError as types_api_error_ApiError
+from ..core.api_error import ApiError
 
 
-class PaymentRequiredError(core_api_error_ApiError):
-    def __init__(self, body: types_api_error_ApiError, headers: typing.Optional[typing.Dict[str, str]] = None):
+class PaymentRequiredError(ApiError):
+    def __init__(self, body: typing.Any, headers: typing.Optional[typing.Dict[str, str]] = None):
         super().__init__(status_code=402, headers=headers, body=body)

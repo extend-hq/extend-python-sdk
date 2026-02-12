@@ -12,62 +12,48 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 class EditRunMetrics(UncheckedBaseModel):
     """
     Metrics about the editing process.
-
-    **Availability:** Present when `status` is `"PROCESSED"`.
     """
 
-    processing_time_ms: typing_extensions.Annotated[float, FieldMetadata(alias="processingTimeMs")] = pydantic.Field(
-        alias="processingTimeMs"
+    processing_time_ms: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="processingTimeMs")] = (
+        pydantic.Field(default=None)
     )
     """
-    Total processing time in milliseconds.
+    Total processing time in milliseconds
     """
 
-    page_count: typing_extensions.Annotated[int, FieldMetadata(alias="pageCount")] = pydantic.Field(alias="pageCount")
+    field_count: typing_extensions.Annotated[typing.Optional[int], FieldMetadata(alias="fieldCount")] = pydantic.Field(
+        default=None
+    )
+    """
+    The number of fields detected in the document.
+    """
+
+    page_count: typing_extensions.Annotated[typing.Optional[int], FieldMetadata(alias="pageCount")] = pydantic.Field(
+        default=None
+    )
     """
     The number of pages in the document.
     """
 
-    field_count: typing_extensions.Annotated[int, FieldMetadata(alias="fieldCount")] = pydantic.Field(
-        alias="fieldCount"
-    )
+    field_filling_time_ms: typing_extensions.Annotated[
+        typing.Optional[float], FieldMetadata(alias="fieldFillingTimeMs")
+    ] = pydantic.Field(default=None)
     """
-    The total number of fields in the schema.
-    """
-
-    fields_detected_count: typing_extensions.Annotated[int, FieldMetadata(alias="fieldsDetectedCount")] = (
-        pydantic.Field(alias="fieldsDetectedCount")
-    )
-    """
-    The number of fields that were automatically detected.
+    The time taken to fill the fields in the document.
     """
 
-    fields_annotated_count: typing_extensions.Annotated[int, FieldMetadata(alias="fieldsAnnotatedCount")] = (
-        pydantic.Field(alias="fieldsAnnotatedCount")
-    )
+    field_detection_time_ms: typing_extensions.Annotated[
+        typing.Optional[float], FieldMetadata(alias="fieldDetectionTimeMs")
+    ] = pydantic.Field(default=None)
     """
-    The number of fields that were annotated with bounding boxes.
-    """
-
-    field_detection_time_ms: typing_extensions.Annotated[float, FieldMetadata(alias="fieldDetectionTimeMs")] = (
-        pydantic.Field(alias="fieldDetectionTimeMs")
-    )
-    """
-    The time taken to detect fields in the document, in milliseconds.
+    The time taken to detect the fields in the document.
     """
 
-    field_annotation_time_ms: typing_extensions.Annotated[float, FieldMetadata(alias="fieldAnnotationTimeMs")] = (
-        pydantic.Field(alias="fieldAnnotationTimeMs")
-    )
+    field_annotation_time_ms: typing_extensions.Annotated[
+        typing.Optional[float], FieldMetadata(alias="fieldAnnotationTimeMs")
+    ] = pydantic.Field(default=None)
     """
-    The time taken to annotate field positions in the document, in milliseconds.
-    """
-
-    field_filling_time_ms: typing_extensions.Annotated[float, FieldMetadata(alias="fieldFillingTimeMs")] = (
-        pydantic.Field(alias="fieldFillingTimeMs")
-    )
-    """
-    The time taken to fill the fields in the document, in milliseconds.
+    The time taken to annotate the fields in the document.
     """
 
     if IS_PYDANTIC_V2:

@@ -27,27 +27,21 @@ class BatchProcessorRun(UncheckedBaseModel):
     Example: `"batch_processor_run_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
-    processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field(
-        alias="processorId"
-    )
+    processor_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorId")] = pydantic.Field()
     """
     The ID of the processor used for this run.
     
-    Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+    Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
-    processor_version_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorVersionId")] = pydantic.Field(
-        alias="processorVersionId"
-    )
+    processor_version_id: typing_extensions.Annotated[str, FieldMetadata(alias="processorVersionId")] = pydantic.Field()
     """
     The ID of the specific processor version used.
     
-    Example: `"exv_xK9mLPqRtN3vS8wF5hB2cQ"`
+    Example: `"dpv_xK9mLPqRtN3vS8wF5hB2cQ"`
     """
 
-    processor_name: typing_extensions.Annotated[str, FieldMetadata(alias="processorName")] = pydantic.Field(
-        alias="processorName"
-    )
+    processor_name: typing_extensions.Annotated[str, FieldMetadata(alias="processorName")] = pydantic.Field()
     """
     The name of the processor.
     
@@ -69,18 +63,18 @@ class BatchProcessorRun(UncheckedBaseModel):
     The source of the batch processor run:
     * `"EVAL_SET"` - The batch processor run was made from an evaluation set. The `sourceId` will be the ID of the evaluation set (e.g., `"ev_1234"`)
     * `"PLAYGROUND"` - The batch processor run was made from the playground. The `sourceId` will not be set
-    * `"STUDIO"` - The batch processor run was made for a processor in Studio. The `sourceId` will be the ID of the processor (e.g., `"ex_1234"`)
+    * `"STUDIO"` - The batch processor run was made for a processor in Studio. The `sourceId` will be the ID of the processor (e.g., `"dp_1234"`)
     """
 
     source_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="sourceId")] = pydantic.Field(
-        alias="sourceId", default=None
+        default=None
     )
     """
     The ID of the source of the batch processor run. See the `source` field for more details.
-    Example: `"ev_1234"` for EVAL_SET source, `"ex_1234"` for STUDIO source
+    Example: `"ev_1234"` for EVAL_SET source, `"dp_1234"` for STUDIO source
     """
 
-    run_count: typing_extensions.Annotated[int, FieldMetadata(alias="runCount")] = pydantic.Field(alias="runCount")
+    run_count: typing_extensions.Annotated[int, FieldMetadata(alias="runCount")] = pydantic.Field()
     """
     The number of runs that were made.
     """
@@ -90,18 +84,14 @@ class BatchProcessorRun(UncheckedBaseModel):
     The options for the batch processor run.
     """
 
-    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field(
-        alias="createdAt"
-    )
+    created_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="createdAt")] = pydantic.Field()
     """
     The time (in UTC) at which the batch processor run was created. Will follow the RFC 3339 format.
     
     Example: `"2024-03-21T15:30:00Z"`
     """
 
-    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field(
-        alias="updatedAt"
-    )
+    updated_at: typing_extensions.Annotated[dt.datetime, FieldMetadata(alias="updatedAt")] = pydantic.Field()
     """
     The time (in UTC) at which the batch processor run was last updated. Will follow the RFC 3339 format.
     

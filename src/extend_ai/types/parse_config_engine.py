@@ -2,39 +2,4 @@
 
 import typing
 
-from ..core import enum
-
-T_Result = typing.TypeVar("T_Result")
-
-
-class ParseConfigEngine(enum.StrEnum):
-    """
-    The parsing engine to use. Supported values:
-    * `parse_performance`: Full-featured parsing engine with highest accuracy (default)
-    * `parse_light`: Lightweight parsing engine optimized for speed. This does not have robust layout support and does not support markdown layout target.
-    """
-
-    PARSE_PERFORMANCE = "parse_performance"
-    PARSE_LIGHT = "parse_light"
-    _UNKNOWN = "__PARSECONFIGENGINE_UNKNOWN__"
-    """
-    This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
-    """
-
-    @classmethod
-    def _missing_(cls, value: typing.Any) -> "ParseConfigEngine":
-        unknown = cls._UNKNOWN
-        unknown._value_ = value
-        return unknown
-
-    def visit(
-        self,
-        parse_performance: typing.Callable[[], T_Result],
-        parse_light: typing.Callable[[], T_Result],
-        _unknown_member: typing.Callable[[str], T_Result],
-    ) -> T_Result:
-        if self is ParseConfigEngine.PARSE_PERFORMANCE:
-            return parse_performance()
-        if self is ParseConfigEngine.PARSE_LIGHT:
-            return parse_light()
-        return _unknown_member(self._value_)
+ParseConfigEngine = typing.Union[typing.Literal["parse_performance", "parse_light"], typing.Any]

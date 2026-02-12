@@ -2,52 +2,6 @@
 
 import typing
 
-from ..core import enum
-
-T_Result = typing.TypeVar("T_Result")
-
-
-class ArrayStrategyType(enum.StrEnum):
-    """
-    The strategy type for handling large array use cases. For most use cases this should be left null, or should be set to `large_array_heuristics`. If you're unsure of what your use case needs, reach out to the Extend team for help.
-    - `large_array_heuristics`: Optimized for documents with very large arrays, but where latency matters.
-
-      This strategy uses specialized heuristics around chunking, tables, and merging to handle large arrays efficiently over large documents.
-
-    - `large_array_max_context`: Optimizes for accuracy over latency in documents with very large arrays.
-
-      This strategy will do multiple passes through the entire document to ensure there is no context loss across any chunks/pages, maximizing accuracy for complex array extraction, but adding material latency.
-
-    - `large_array_overlap_context`: Balances accuracy and latency in documents with very large arrays.
-
-      This strategy will always maintain surrounding/overlapping page context for every chunk/page that is extracted, eliminating array failure modes from context loss across page boundaries.
-    """
-
-    LARGE_ARRAY_HEURISTICS = "large_array_heuristics"
-    LARGE_ARRAY_MAX_CONTEXT = "large_array_max_context"
-    LARGE_ARRAY_OVERLAP_CONTEXT = "large_array_overlap_context"
-    _UNKNOWN = "__ARRAYSTRATEGYTYPE_UNKNOWN__"
-    """
-    This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
-    """
-
-    @classmethod
-    def _missing_(cls, value: typing.Any) -> "ArrayStrategyType":
-        unknown = cls._UNKNOWN
-        unknown._value_ = value
-        return unknown
-
-    def visit(
-        self,
-        large_array_heuristics: typing.Callable[[], T_Result],
-        large_array_max_context: typing.Callable[[], T_Result],
-        large_array_overlap_context: typing.Callable[[], T_Result],
-        _unknown_member: typing.Callable[[str], T_Result],
-    ) -> T_Result:
-        if self is ArrayStrategyType.LARGE_ARRAY_HEURISTICS:
-            return large_array_heuristics()
-        if self is ArrayStrategyType.LARGE_ARRAY_MAX_CONTEXT:
-            return large_array_max_context()
-        if self is ArrayStrategyType.LARGE_ARRAY_OVERLAP_CONTEXT:
-            return large_array_overlap_context()
-        return _unknown_member(self._value_)
+ArrayStrategyType = typing.Union[
+    typing.Literal["large_array_heuristics", "large_array_max_context", "large_array_overlap_context"], typing.Any
+]

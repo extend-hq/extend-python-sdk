@@ -9,49 +9,28 @@ from .core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from .core.request_options import RequestOptions
 from .environment import ExtendEnvironment
 from .raw_client import AsyncRawExtend, RawExtend
-from .requests.classify_config import ClassifyConfigParams
-from .requests.classify_request_classifier import ClassifyRequestClassifierParams
-from .requests.classify_request_file import ClassifyRequestFileParams
-from .requests.edit_config import EditConfigParams
-from .requests.edit_request_file import EditRequestFileParams
-from .requests.extract_config_json import ExtractConfigJsonParams
-from .requests.extract_request_extractor import ExtractRequestExtractorParams
-from .requests.extract_request_file import ExtractRequestFileParams
-from .requests.parse_config import ParseConfigParams
-from .requests.parse_request_file import ParseRequestFileParams
-from .requests.split_config import SplitConfigParams
-from .requests.split_request_file import SplitRequestFileParams
-from .requests.split_request_splitter import SplitRequestSplitterParams
-from .types.classify_run import ClassifyRun
-from .types.edit_run import EditRun
-from .types.extract_run import ExtractRun
+from .types.parse_async_request_file import ParseAsyncRequestFile
+from .types.parse_config import ParseConfig
+from .types.parse_request_file import ParseRequestFile
 from .types.parse_request_response_type import ParseRequestResponseType
-from .types.parse_run import ParseRun
-from .types.run_metadata import RunMetadata
-from .types.split_run import SplitRun
+from .types.parser_run import ParserRun
+from .types.parser_run_status import ParserRunStatus
+from .types.post_files_response import PostFilesResponse
 
 if typing.TYPE_CHECKING:
     from .batch_processor_run.client import AsyncBatchProcessorRunClient, BatchProcessorRunClient
-    from .classifier_versions.client import AsyncClassifierVersionsClient, ClassifierVersionsClient
-    from .classifiers.client import AsyncClassifiersClient, ClassifiersClient
-    from .classify_runs.client import AsyncClassifyRunsClient, ClassifyRunsClient
-    from .edit_runs.client import AsyncEditRunsClient, EditRunsClient
-    from .evaluation_set_items.client import AsyncEvaluationSetItemsClient, EvaluationSetItemsClient
-    from .evaluation_set_runs.client import AsyncEvaluationSetRunsClient, EvaluationSetRunsClient
-    from .evaluation_sets.client import AsyncEvaluationSetsClient, EvaluationSetsClient
-    from .extract_runs.client import AsyncExtractRunsClient, ExtractRunsClient
-    from .extractor_versions.client import AsyncExtractorVersionsClient, ExtractorVersionsClient
-    from .extractors.client import AsyncExtractorsClient, ExtractorsClient
-    from .files.client import AsyncFilesClient, FilesClient
-    from .parse_runs.client import AsyncParseRunsClient, ParseRunsClient
+    from .batch_workflow_run.client import AsyncBatchWorkflowRunClient, BatchWorkflowRunClient
+    from .edit.client import AsyncEditClient, EditClient
+    from .evaluation_set.client import AsyncEvaluationSetClient, EvaluationSetClient
+    from .evaluation_set_item.client import AsyncEvaluationSetItemClient, EvaluationSetItemClient
+    from .file.client import AsyncFileClient, FileClient
+    from .parser_run.client import AsyncParserRunClient, ParserRunClient
     from .processor.client import AsyncProcessorClient, ProcessorClient
     from .processor_run.client import AsyncProcessorRunClient, ProcessorRunClient
     from .processor_version.client import AsyncProcessorVersionClient, ProcessorVersionClient
-    from .split_runs.client import AsyncSplitRunsClient, SplitRunsClient
-    from .splitter_versions.client import AsyncSplitterVersionsClient, SplitterVersionsClient
-    from .splitters.client import AsyncSplittersClient, SplittersClient
-    from .workflow_runs.client import AsyncWorkflowRunsClient, WorkflowRunsClient
-    from .workflows.client import AsyncWorkflowsClient, WorkflowsClient
+    from .workflow.client import AsyncWorkflowClient, WorkflowClient
+    from .workflow_run.client import AsyncWorkflowRunClient, WorkflowRunClient
+    from .workflow_run_output.client import AsyncWorkflowRunOutputClient, WorkflowRunOutputClient
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
@@ -125,27 +104,19 @@ class Extend:
             extend_api_version=extend_api_version,
         )
         self._raw_client = RawExtend(client_wrapper=self._client_wrapper)
-        self._files: typing.Optional[FilesClient] = None
-        self._parse_runs: typing.Optional[ParseRunsClient] = None
-        self._edit_runs: typing.Optional[EditRunsClient] = None
-        self._extract_runs: typing.Optional[ExtractRunsClient] = None
-        self._extractors: typing.Optional[ExtractorsClient] = None
-        self._extractor_versions: typing.Optional[ExtractorVersionsClient] = None
-        self._classify_runs: typing.Optional[ClassifyRunsClient] = None
-        self._classifiers: typing.Optional[ClassifiersClient] = None
-        self._classifier_versions: typing.Optional[ClassifierVersionsClient] = None
-        self._split_runs: typing.Optional[SplitRunsClient] = None
-        self._splitters: typing.Optional[SplittersClient] = None
-        self._splitter_versions: typing.Optional[SplitterVersionsClient] = None
-        self._workflows: typing.Optional[WorkflowsClient] = None
-        self._workflow_runs: typing.Optional[WorkflowRunsClient] = None
+        self._file: typing.Optional[FileClient] = None
+        self._parser_run: typing.Optional[ParserRunClient] = None
+        self._edit: typing.Optional[EditClient] = None
+        self._workflow: typing.Optional[WorkflowClient] = None
+        self._workflow_run: typing.Optional[WorkflowRunClient] = None
+        self._workflow_run_output: typing.Optional[WorkflowRunOutputClient] = None
+        self._batch_workflow_run: typing.Optional[BatchWorkflowRunClient] = None
+        self._batch_processor_run: typing.Optional[BatchProcessorRunClient] = None
+        self._evaluation_set: typing.Optional[EvaluationSetClient] = None
+        self._evaluation_set_item: typing.Optional[EvaluationSetItemClient] = None
         self._processor_run: typing.Optional[ProcessorRunClient] = None
         self._processor: typing.Optional[ProcessorClient] = None
         self._processor_version: typing.Optional[ProcessorVersionClient] = None
-        self._batch_processor_run: typing.Optional[BatchProcessorRunClient] = None
-        self._evaluation_sets: typing.Optional[EvaluationSetsClient] = None
-        self._evaluation_set_items: typing.Optional[EvaluationSetItemsClient] = None
-        self._evaluation_set_runs: typing.Optional[EvaluationSetRunsClient] = None
 
     @property
     def with_raw_response(self) -> RawExtend:
@@ -158,383 +129,236 @@ class Extend:
         """
         return self._raw_client
 
-    def parse(
+    def create_file(
         self,
         *,
-        file: ParseRequestFileParams,
-        response_type: typing.Optional[ParseRequestResponseType] = None,
-        config: typing.Optional[ParseConfigParams] = OMIT,
-        metadata: typing.Optional[RunMetadata] = OMIT,
+        name: str,
+        url: typing.Optional[str] = OMIT,
+        raw_text: typing.Optional[str] = OMIT,
+        media_type: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> ParseRun:
+    ) -> PostFilesResponse:
         """
-        Parse a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /parse_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-        The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
-
-        For more details, see the [Parse File guide](https://docs.extend.ai/2026-02-09/product/parsing/parse).
+        Create a new file in Extend for use in an evaluation set. This endpoint is deprecated, use /files/upload instead.
 
         Parameters
         ----------
-        file : ParseRequestFileParams
-            The file to be parsed. Files can be provided as a URL or an Extend file ID.
+        name : str
+            The name of the file
+
+        url : typing.Optional[str]
+            A pre signed URL for the file
+
+        raw_text : typing.Optional[str]
+            The raw text content of the file
+
+        media_type : typing.Optional[str]
+            The media type of the file (e.g. application/pdf)
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        PostFilesResponse
+            Successfully created file
+
+        Examples
+        --------
+        from extend_ai import Extend
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.create_file(
+            name="name",
+        )
+        """
+        _response = self._raw_client.create_file(
+            name=name, url=url, raw_text=raw_text, media_type=media_type, request_options=request_options
+        )
+        return _response.data
+
+    def parse(
+        self,
+        *,
+        file: ParseRequestFile,
+        response_type: typing.Optional[ParseRequestResponseType] = None,
+        config: typing.Optional[ParseConfig] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ParserRun:
+        """
+        Parse files to get cleaned, chunked target content (e.g. markdown).
+
+        The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
+
+        For more details, see the [Parse File guide](/product/parsing/parse).
+
+        Parameters
+        ----------
+        file : ParseRequestFile
+            A file object containing either a URL or a fileId.
 
         response_type : typing.Optional[ParseRequestResponseType]
             Controls the format of the response chunks. Defaults to `json` if not specified.
             * `json` - Returns parsed outputs in the response body
             * `url` - Return a presigned URL to the parsed content in the response body
 
-        config : typing.Optional[ParseConfigParams]
-
-        metadata : typing.Optional[RunMetadata]
+        config : typing.Optional[ParseConfig]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        ParseRun
+        ParserRun
             Successfully parsed file
 
         Examples
         --------
-        from extend_ai import Extend
+        from extend_ai import Extend, ParseRequestFile
 
         client = Extend(
             token="YOUR_TOKEN",
         )
         client.parse(
-            file={"url": "url"},
+            response_type="json",
+            file=ParseRequestFile(),
         )
         """
         _response = self._raw_client.parse(
-            file=file, response_type=response_type, config=config, metadata=metadata, request_options=request_options
+            file=file, response_type=response_type, config=config, request_options=request_options
         )
         return _response.data
 
-    def edit(
+    def parse_async(
         self,
         *,
-        file: EditRequestFileParams,
-        config: typing.Optional[EditConfigParams] = OMIT,
+        file: ParseAsyncRequestFile,
+        config: typing.Optional[ParseConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> EditRun:
+    ) -> ParserRunStatus:
         """
-        Edit a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
+        Parse files **asynchronously** to get cleaned, chunked target content (e.g. markdown).
 
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /edit_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
+        The Parse Async endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
 
-        The Edit endpoint allows you to detect and fill form fields in PDF documents.
+        Parse files asynchronously and get a parser run ID that can be used to check status and retrieve results with the [Get Parser Run](https://docs.extend.ai/2025-04-21/developers/api-reference/parse-endpoints/get-parser-run) endpoint.
 
-        For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/product/editing/edit).
+        This is useful for:
+        * Large files that may take longer to process
+        * Avoiding timeout issues with synchronous parsing.
+
+        For more details, see the [Parse File guide](/product/parsing/parse).
 
         Parameters
         ----------
-        file : EditRequestFileParams
-            The file to be edited. Files can be provided as a URL or an Extend file ID.
+        file : ParseAsyncRequestFile
+            A file object containing either a URL or a fileId.
 
-        config : typing.Optional[EditConfigParams]
+        config : typing.Optional[ParseConfig]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        EditRun
-            Successfully edited file
+        ParserRunStatus
+            Successfully initiated parser run
 
         Examples
         --------
-        from extend_ai import Extend
+        from extend_ai import Extend, ParseAsyncRequestFile
 
         client = Extend(
             token="YOUR_TOKEN",
         )
-        client.edit(
-            file={"url": "url"},
+        client.parse_async(
+            file=ParseAsyncRequestFile(),
         )
         """
-        _response = self._raw_client.edit(file=file, config=config, request_options=request_options)
-        return _response.data
-
-    def extract(
-        self,
-        *,
-        file: ExtractRequestFileParams,
-        extractor: typing.Optional[ExtractRequestExtractorParams] = OMIT,
-        config: typing.Optional[ExtractConfigJsonParams] = OMIT,
-        metadata: typing.Optional[RunMetadata] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> ExtractRun:
-        """
-        Extract structured data from a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /extract_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-        The Extract endpoint allows you to extract structured data from files using an existing extractor or an inline configuration.
-
-        For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/product/extracting/extract).
-
-        Parameters
-        ----------
-        file : ExtractRequestFileParams
-            The file to be extracted from. Files can be provided as a URL, Extend file ID, or raw text.
-
-        extractor : typing.Optional[ExtractRequestExtractorParams]
-            Reference to an existing extractor. One of `extractor` or `config` must be provided.
-
-        config : typing.Optional[ExtractConfigJsonParams]
-            Inline extract configuration. One of `extractor` or `config` must be provided.
-
-        metadata : typing.Optional[RunMetadata]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        ExtractRun
-            Successfully extracted data from file
-
-        Examples
-        --------
-        from extend_ai import Extend
-
-        client = Extend(
-            token="YOUR_TOKEN",
-        )
-        client.extract(
-            file={"url": "url"},
-        )
-        """
-        _response = self._raw_client.extract(
-            file=file, extractor=extractor, config=config, metadata=metadata, request_options=request_options
-        )
-        return _response.data
-
-    def classify(
-        self,
-        *,
-        file: ClassifyRequestFileParams,
-        classifier: typing.Optional[ClassifyRequestClassifierParams] = OMIT,
-        config: typing.Optional[ClassifyConfigParams] = OMIT,
-        metadata: typing.Optional[RunMetadata] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> ClassifyRun:
-        """
-        Classify a document synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /classify_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-        The Classify endpoint allows you to classify documents using an existing classifier or an inline configuration.
-
-        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/product/classifying/classify).
-
-        Parameters
-        ----------
-        file : ClassifyRequestFileParams
-            The file to be classified. Files can be provided as a URL, an Extend file ID, or raw text.
-
-        classifier : typing.Optional[ClassifyRequestClassifierParams]
-            Reference to an existing classifier. One of `classifier` or `config` must be provided.
-
-        config : typing.Optional[ClassifyConfigParams]
-            Inline classify configuration. One of `classifier` or `config` must be provided.
-
-        metadata : typing.Optional[RunMetadata]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        ClassifyRun
-            Successfully classified file
-
-        Examples
-        --------
-        from extend_ai import Extend
-
-        client = Extend(
-            token="YOUR_TOKEN",
-        )
-        client.classify(
-            file={"url": "url"},
-        )
-        """
-        _response = self._raw_client.classify(
-            file=file, classifier=classifier, config=config, metadata=metadata, request_options=request_options
-        )
-        return _response.data
-
-    def split(
-        self,
-        *,
-        file: SplitRequestFileParams,
-        splitter: typing.Optional[SplitRequestSplitterParams] = OMIT,
-        config: typing.Optional[SplitConfigParams] = OMIT,
-        metadata: typing.Optional[RunMetadata] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> SplitRun:
-        """
-        Split a document synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /split_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-        The Split endpoint allows you to split documents into multiple parts using an existing splitter or an inline configuration.
-
-        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/product/splitting/split).
-
-        Parameters
-        ----------
-        file : SplitRequestFileParams
-            The file to be split. Files can be provided as a URL or an Extend file ID.
-
-        splitter : typing.Optional[SplitRequestSplitterParams]
-            Reference to an existing splitter. One of `splitter` or `config` must be provided.
-
-        config : typing.Optional[SplitConfigParams]
-            Inline splitter configuration. One of `splitter` or `config` must be provided.
-
-        metadata : typing.Optional[RunMetadata]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        SplitRun
-            Successfully split file
-
-        Examples
-        --------
-        from extend_ai import Extend
-
-        client = Extend(
-            token="YOUR_TOKEN",
-        )
-        client.split(
-            file={"url": "url"},
-        )
-        """
-        _response = self._raw_client.split(
-            file=file, splitter=splitter, config=config, metadata=metadata, request_options=request_options
-        )
+        _response = self._raw_client.parse_async(file=file, config=config, request_options=request_options)
         return _response.data
 
     @property
-    def files(self):
-        if self._files is None:
-            from .files.client import FilesClient  # noqa: E402
+    def file(self):
+        if self._file is None:
+            from .file.client import FileClient  # noqa: E402
 
-            self._files = FilesClient(client_wrapper=self._client_wrapper)
-        return self._files
-
-    @property
-    def parse_runs(self):
-        if self._parse_runs is None:
-            from .parse_runs.client import ParseRunsClient  # noqa: E402
-
-            self._parse_runs = ParseRunsClient(client_wrapper=self._client_wrapper)
-        return self._parse_runs
+            self._file = FileClient(client_wrapper=self._client_wrapper)
+        return self._file
 
     @property
-    def edit_runs(self):
-        if self._edit_runs is None:
-            from .edit_runs.client import EditRunsClient  # noqa: E402
+    def parser_run(self):
+        if self._parser_run is None:
+            from .parser_run.client import ParserRunClient  # noqa: E402
 
-            self._edit_runs = EditRunsClient(client_wrapper=self._client_wrapper)
-        return self._edit_runs
-
-    @property
-    def extract_runs(self):
-        if self._extract_runs is None:
-            from .extract_runs.client import ExtractRunsClient  # noqa: E402
-
-            self._extract_runs = ExtractRunsClient(client_wrapper=self._client_wrapper)
-        return self._extract_runs
+            self._parser_run = ParserRunClient(client_wrapper=self._client_wrapper)
+        return self._parser_run
 
     @property
-    def extractors(self):
-        if self._extractors is None:
-            from .extractors.client import ExtractorsClient  # noqa: E402
+    def edit(self):
+        if self._edit is None:
+            from .edit.client import EditClient  # noqa: E402
 
-            self._extractors = ExtractorsClient(client_wrapper=self._client_wrapper)
-        return self._extractors
-
-    @property
-    def extractor_versions(self):
-        if self._extractor_versions is None:
-            from .extractor_versions.client import ExtractorVersionsClient  # noqa: E402
-
-            self._extractor_versions = ExtractorVersionsClient(client_wrapper=self._client_wrapper)
-        return self._extractor_versions
+            self._edit = EditClient(client_wrapper=self._client_wrapper)
+        return self._edit
 
     @property
-    def classify_runs(self):
-        if self._classify_runs is None:
-            from .classify_runs.client import ClassifyRunsClient  # noqa: E402
+    def workflow(self):
+        if self._workflow is None:
+            from .workflow.client import WorkflowClient  # noqa: E402
 
-            self._classify_runs = ClassifyRunsClient(client_wrapper=self._client_wrapper)
-        return self._classify_runs
-
-    @property
-    def classifiers(self):
-        if self._classifiers is None:
-            from .classifiers.client import ClassifiersClient  # noqa: E402
-
-            self._classifiers = ClassifiersClient(client_wrapper=self._client_wrapper)
-        return self._classifiers
+            self._workflow = WorkflowClient(client_wrapper=self._client_wrapper)
+        return self._workflow
 
     @property
-    def classifier_versions(self):
-        if self._classifier_versions is None:
-            from .classifier_versions.client import ClassifierVersionsClient  # noqa: E402
+    def workflow_run(self):
+        if self._workflow_run is None:
+            from .workflow_run.client import WorkflowRunClient  # noqa: E402
 
-            self._classifier_versions = ClassifierVersionsClient(client_wrapper=self._client_wrapper)
-        return self._classifier_versions
-
-    @property
-    def split_runs(self):
-        if self._split_runs is None:
-            from .split_runs.client import SplitRunsClient  # noqa: E402
-
-            self._split_runs = SplitRunsClient(client_wrapper=self._client_wrapper)
-        return self._split_runs
+            self._workflow_run = WorkflowRunClient(client_wrapper=self._client_wrapper)
+        return self._workflow_run
 
     @property
-    def splitters(self):
-        if self._splitters is None:
-            from .splitters.client import SplittersClient  # noqa: E402
+    def workflow_run_output(self):
+        if self._workflow_run_output is None:
+            from .workflow_run_output.client import WorkflowRunOutputClient  # noqa: E402
 
-            self._splitters = SplittersClient(client_wrapper=self._client_wrapper)
-        return self._splitters
-
-    @property
-    def splitter_versions(self):
-        if self._splitter_versions is None:
-            from .splitter_versions.client import SplitterVersionsClient  # noqa: E402
-
-            self._splitter_versions = SplitterVersionsClient(client_wrapper=self._client_wrapper)
-        return self._splitter_versions
+            self._workflow_run_output = WorkflowRunOutputClient(client_wrapper=self._client_wrapper)
+        return self._workflow_run_output
 
     @property
-    def workflows(self):
-        if self._workflows is None:
-            from .workflows.client import WorkflowsClient  # noqa: E402
+    def batch_workflow_run(self):
+        if self._batch_workflow_run is None:
+            from .batch_workflow_run.client import BatchWorkflowRunClient  # noqa: E402
 
-            self._workflows = WorkflowsClient(client_wrapper=self._client_wrapper)
-        return self._workflows
+            self._batch_workflow_run = BatchWorkflowRunClient(client_wrapper=self._client_wrapper)
+        return self._batch_workflow_run
 
     @property
-    def workflow_runs(self):
-        if self._workflow_runs is None:
-            from .workflow_runs.client import WorkflowRunsClient  # noqa: E402
+    def batch_processor_run(self):
+        if self._batch_processor_run is None:
+            from .batch_processor_run.client import BatchProcessorRunClient  # noqa: E402
 
-            self._workflow_runs = WorkflowRunsClient(client_wrapper=self._client_wrapper)
-        return self._workflow_runs
+            self._batch_processor_run = BatchProcessorRunClient(client_wrapper=self._client_wrapper)
+        return self._batch_processor_run
+
+    @property
+    def evaluation_set(self):
+        if self._evaluation_set is None:
+            from .evaluation_set.client import EvaluationSetClient  # noqa: E402
+
+            self._evaluation_set = EvaluationSetClient(client_wrapper=self._client_wrapper)
+        return self._evaluation_set
+
+    @property
+    def evaluation_set_item(self):
+        if self._evaluation_set_item is None:
+            from .evaluation_set_item.client import EvaluationSetItemClient  # noqa: E402
+
+            self._evaluation_set_item = EvaluationSetItemClient(client_wrapper=self._client_wrapper)
+        return self._evaluation_set_item
 
     @property
     def processor_run(self):
@@ -559,38 +383,6 @@ class Extend:
 
             self._processor_version = ProcessorVersionClient(client_wrapper=self._client_wrapper)
         return self._processor_version
-
-    @property
-    def batch_processor_run(self):
-        if self._batch_processor_run is None:
-            from .batch_processor_run.client import BatchProcessorRunClient  # noqa: E402
-
-            self._batch_processor_run = BatchProcessorRunClient(client_wrapper=self._client_wrapper)
-        return self._batch_processor_run
-
-    @property
-    def evaluation_sets(self):
-        if self._evaluation_sets is None:
-            from .evaluation_sets.client import EvaluationSetsClient  # noqa: E402
-
-            self._evaluation_sets = EvaluationSetsClient(client_wrapper=self._client_wrapper)
-        return self._evaluation_sets
-
-    @property
-    def evaluation_set_items(self):
-        if self._evaluation_set_items is None:
-            from .evaluation_set_items.client import EvaluationSetItemsClient  # noqa: E402
-
-            self._evaluation_set_items = EvaluationSetItemsClient(client_wrapper=self._client_wrapper)
-        return self._evaluation_set_items
-
-    @property
-    def evaluation_set_runs(self):
-        if self._evaluation_set_runs is None:
-            from .evaluation_set_runs.client import EvaluationSetRunsClient  # noqa: E402
-
-            self._evaluation_set_runs = EvaluationSetRunsClient(client_wrapper=self._client_wrapper)
-        return self._evaluation_set_runs
 
 
 class AsyncExtend:
@@ -662,27 +454,19 @@ class AsyncExtend:
             extend_api_version=extend_api_version,
         )
         self._raw_client = AsyncRawExtend(client_wrapper=self._client_wrapper)
-        self._files: typing.Optional[AsyncFilesClient] = None
-        self._parse_runs: typing.Optional[AsyncParseRunsClient] = None
-        self._edit_runs: typing.Optional[AsyncEditRunsClient] = None
-        self._extract_runs: typing.Optional[AsyncExtractRunsClient] = None
-        self._extractors: typing.Optional[AsyncExtractorsClient] = None
-        self._extractor_versions: typing.Optional[AsyncExtractorVersionsClient] = None
-        self._classify_runs: typing.Optional[AsyncClassifyRunsClient] = None
-        self._classifiers: typing.Optional[AsyncClassifiersClient] = None
-        self._classifier_versions: typing.Optional[AsyncClassifierVersionsClient] = None
-        self._split_runs: typing.Optional[AsyncSplitRunsClient] = None
-        self._splitters: typing.Optional[AsyncSplittersClient] = None
-        self._splitter_versions: typing.Optional[AsyncSplitterVersionsClient] = None
-        self._workflows: typing.Optional[AsyncWorkflowsClient] = None
-        self._workflow_runs: typing.Optional[AsyncWorkflowRunsClient] = None
+        self._file: typing.Optional[AsyncFileClient] = None
+        self._parser_run: typing.Optional[AsyncParserRunClient] = None
+        self._edit: typing.Optional[AsyncEditClient] = None
+        self._workflow: typing.Optional[AsyncWorkflowClient] = None
+        self._workflow_run: typing.Optional[AsyncWorkflowRunClient] = None
+        self._workflow_run_output: typing.Optional[AsyncWorkflowRunOutputClient] = None
+        self._batch_workflow_run: typing.Optional[AsyncBatchWorkflowRunClient] = None
+        self._batch_processor_run: typing.Optional[AsyncBatchProcessorRunClient] = None
+        self._evaluation_set: typing.Optional[AsyncEvaluationSetClient] = None
+        self._evaluation_set_item: typing.Optional[AsyncEvaluationSetItemClient] = None
         self._processor_run: typing.Optional[AsyncProcessorRunClient] = None
         self._processor: typing.Optional[AsyncProcessorClient] = None
         self._processor_version: typing.Optional[AsyncProcessorVersionClient] = None
-        self._batch_processor_run: typing.Optional[AsyncBatchProcessorRunClient] = None
-        self._evaluation_sets: typing.Optional[AsyncEvaluationSetsClient] = None
-        self._evaluation_set_items: typing.Optional[AsyncEvaluationSetItemsClient] = None
-        self._evaluation_set_runs: typing.Optional[AsyncEvaluationSetRunsClient] = None
 
     @property
     def with_raw_response(self) -> AsyncRawExtend:
@@ -695,51 +479,104 @@ class AsyncExtend:
         """
         return self._raw_client
 
-    async def parse(
+    async def create_file(
         self,
         *,
-        file: ParseRequestFileParams,
-        response_type: typing.Optional[ParseRequestResponseType] = None,
-        config: typing.Optional[ParseConfigParams] = OMIT,
-        metadata: typing.Optional[RunMetadata] = OMIT,
+        name: str,
+        url: typing.Optional[str] = OMIT,
+        raw_text: typing.Optional[str] = OMIT,
+        media_type: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> ParseRun:
+    ) -> PostFilesResponse:
         """
-        Parse a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /parse_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-        The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
-
-        For more details, see the [Parse File guide](https://docs.extend.ai/2026-02-09/product/parsing/parse).
+        Create a new file in Extend for use in an evaluation set. This endpoint is deprecated, use /files/upload instead.
 
         Parameters
         ----------
-        file : ParseRequestFileParams
-            The file to be parsed. Files can be provided as a URL or an Extend file ID.
+        name : str
+            The name of the file
 
-        response_type : typing.Optional[ParseRequestResponseType]
-            Controls the format of the response chunks. Defaults to `json` if not specified.
-            * `json` - Returns parsed outputs in the response body
-            * `url` - Return a presigned URL to the parsed content in the response body
+        url : typing.Optional[str]
+            A pre signed URL for the file
 
-        config : typing.Optional[ParseConfigParams]
+        raw_text : typing.Optional[str]
+            The raw text content of the file
 
-        metadata : typing.Optional[RunMetadata]
+        media_type : typing.Optional[str]
+            The media type of the file (e.g. application/pdf)
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        ParseRun
-            Successfully parsed file
+        PostFilesResponse
+            Successfully created file
 
         Examples
         --------
         import asyncio
 
         from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.create_file(
+                name="name",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.create_file(
+            name=name, url=url, raw_text=raw_text, media_type=media_type, request_options=request_options
+        )
+        return _response.data
+
+    async def parse(
+        self,
+        *,
+        file: ParseRequestFile,
+        response_type: typing.Optional[ParseRequestResponseType] = None,
+        config: typing.Optional[ParseConfig] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ParserRun:
+        """
+        Parse files to get cleaned, chunked target content (e.g. markdown).
+
+        The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
+
+        For more details, see the [Parse File guide](/product/parsing/parse).
+
+        Parameters
+        ----------
+        file : ParseRequestFile
+            A file object containing either a URL or a fileId.
+
+        response_type : typing.Optional[ParseRequestResponseType]
+            Controls the format of the response chunks. Defaults to `json` if not specified.
+            * `json` - Returns parsed outputs in the response body
+            * `url` - Return a presigned URL to the parsed content in the response body
+
+        config : typing.Optional[ParseConfig]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ParserRun
+            Successfully parsed file
+
+        Examples
+        --------
+        import asyncio
+
+        from extend_ai import AsyncExtend, ParseRequestFile
 
         client = AsyncExtend(
             token="YOUR_TOKEN",
@@ -748,53 +585,58 @@ class AsyncExtend:
 
         async def main() -> None:
             await client.parse(
-                file={"url": "url"},
+                response_type="json",
+                file=ParseRequestFile(),
             )
 
 
         asyncio.run(main())
         """
         _response = await self._raw_client.parse(
-            file=file, response_type=response_type, config=config, metadata=metadata, request_options=request_options
+            file=file, response_type=response_type, config=config, request_options=request_options
         )
         return _response.data
 
-    async def edit(
+    async def parse_async(
         self,
         *,
-        file: EditRequestFileParams,
-        config: typing.Optional[EditConfigParams] = OMIT,
+        file: ParseAsyncRequestFile,
+        config: typing.Optional[ParseConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> EditRun:
+    ) -> ParserRunStatus:
         """
-        Edit a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
+        Parse files **asynchronously** to get cleaned, chunked target content (e.g. markdown).
 
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /edit_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
+        The Parse Async endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
 
-        The Edit endpoint allows you to detect and fill form fields in PDF documents.
+        Parse files asynchronously and get a parser run ID that can be used to check status and retrieve results with the [Get Parser Run](https://docs.extend.ai/2025-04-21/developers/api-reference/parse-endpoints/get-parser-run) endpoint.
 
-        For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/product/editing/edit).
+        This is useful for:
+        * Large files that may take longer to process
+        * Avoiding timeout issues with synchronous parsing.
+
+        For more details, see the [Parse File guide](/product/parsing/parse).
 
         Parameters
         ----------
-        file : EditRequestFileParams
-            The file to be edited. Files can be provided as a URL or an Extend file ID.
+        file : ParseAsyncRequestFile
+            A file object containing either a URL or a fileId.
 
-        config : typing.Optional[EditConfigParams]
+        config : typing.Optional[ParseConfig]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        EditRun
-            Successfully edited file
+        ParserRunStatus
+            Successfully initiated parser run
 
         Examples
         --------
         import asyncio
 
-        from extend_ai import AsyncExtend
+        from extend_ai import AsyncExtend, ParseAsyncRequestFile
 
         client = AsyncExtend(
             token="YOUR_TOKEN",
@@ -802,316 +644,95 @@ class AsyncExtend:
 
 
         async def main() -> None:
-            await client.edit(
-                file={"url": "url"},
+            await client.parse_async(
+                file=ParseAsyncRequestFile(),
             )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.edit(file=file, config=config, request_options=request_options)
-        return _response.data
-
-    async def extract(
-        self,
-        *,
-        file: ExtractRequestFileParams,
-        extractor: typing.Optional[ExtractRequestExtractorParams] = OMIT,
-        config: typing.Optional[ExtractConfigJsonParams] = OMIT,
-        metadata: typing.Optional[RunMetadata] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> ExtractRun:
-        """
-        Extract structured data from a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /extract_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-        The Extract endpoint allows you to extract structured data from files using an existing extractor or an inline configuration.
-
-        For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/product/extracting/extract).
-
-        Parameters
-        ----------
-        file : ExtractRequestFileParams
-            The file to be extracted from. Files can be provided as a URL, Extend file ID, or raw text.
-
-        extractor : typing.Optional[ExtractRequestExtractorParams]
-            Reference to an existing extractor. One of `extractor` or `config` must be provided.
-
-        config : typing.Optional[ExtractConfigJsonParams]
-            Inline extract configuration. One of `extractor` or `config` must be provided.
-
-        metadata : typing.Optional[RunMetadata]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        ExtractRun
-            Successfully extracted data from file
-
-        Examples
-        --------
-        import asyncio
-
-        from extend_ai import AsyncExtend
-
-        client = AsyncExtend(
-            token="YOUR_TOKEN",
-        )
-
-
-        async def main() -> None:
-            await client.extract(
-                file={"url": "url"},
-            )
-
-
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.extract(
-            file=file, extractor=extractor, config=config, metadata=metadata, request_options=request_options
-        )
-        return _response.data
-
-    async def classify(
-        self,
-        *,
-        file: ClassifyRequestFileParams,
-        classifier: typing.Optional[ClassifyRequestClassifierParams] = OMIT,
-        config: typing.Optional[ClassifyConfigParams] = OMIT,
-        metadata: typing.Optional[RunMetadata] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> ClassifyRun:
-        """
-        Classify a document synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /classify_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-        The Classify endpoint allows you to classify documents using an existing classifier or an inline configuration.
-
-        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/product/classifying/classify).
-
-        Parameters
-        ----------
-        file : ClassifyRequestFileParams
-            The file to be classified. Files can be provided as a URL, an Extend file ID, or raw text.
-
-        classifier : typing.Optional[ClassifyRequestClassifierParams]
-            Reference to an existing classifier. One of `classifier` or `config` must be provided.
-
-        config : typing.Optional[ClassifyConfigParams]
-            Inline classify configuration. One of `classifier` or `config` must be provided.
-
-        metadata : typing.Optional[RunMetadata]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        ClassifyRun
-            Successfully classified file
-
-        Examples
-        --------
-        import asyncio
-
-        from extend_ai import AsyncExtend
-
-        client = AsyncExtend(
-            token="YOUR_TOKEN",
-        )
-
-
-        async def main() -> None:
-            await client.classify(
-                file={"url": "url"},
-            )
-
-
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.classify(
-            file=file, classifier=classifier, config=config, metadata=metadata, request_options=request_options
-        )
-        return _response.data
-
-    async def split(
-        self,
-        *,
-        file: SplitRequestFileParams,
-        splitter: typing.Optional[SplitRequestSplitterParams] = OMIT,
-        config: typing.Optional[SplitConfigParams] = OMIT,
-        metadata: typing.Optional[RunMetadata] = OMIT,
-        request_options: typing.Optional[RequestOptions] = None,
-    ) -> SplitRun:
-        """
-        Split a document synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /split_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-        The Split endpoint allows you to split documents into multiple parts using an existing splitter or an inline configuration.
-
-        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/product/splitting/split).
-
-        Parameters
-        ----------
-        file : SplitRequestFileParams
-            The file to be split. Files can be provided as a URL or an Extend file ID.
-
-        splitter : typing.Optional[SplitRequestSplitterParams]
-            Reference to an existing splitter. One of `splitter` or `config` must be provided.
-
-        config : typing.Optional[SplitConfigParams]
-            Inline splitter configuration. One of `splitter` or `config` must be provided.
-
-        metadata : typing.Optional[RunMetadata]
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        SplitRun
-            Successfully split file
-
-        Examples
-        --------
-        import asyncio
-
-        from extend_ai import AsyncExtend
-
-        client = AsyncExtend(
-            token="YOUR_TOKEN",
-        )
-
-
-        async def main() -> None:
-            await client.split(
-                file={"url": "url"},
-            )
-
-
-        asyncio.run(main())
-        """
-        _response = await self._raw_client.split(
-            file=file, splitter=splitter, config=config, metadata=metadata, request_options=request_options
-        )
+        _response = await self._raw_client.parse_async(file=file, config=config, request_options=request_options)
         return _response.data
 
     @property
-    def files(self):
-        if self._files is None:
-            from .files.client import AsyncFilesClient  # noqa: E402
+    def file(self):
+        if self._file is None:
+            from .file.client import AsyncFileClient  # noqa: E402
 
-            self._files = AsyncFilesClient(client_wrapper=self._client_wrapper)
-        return self._files
-
-    @property
-    def parse_runs(self):
-        if self._parse_runs is None:
-            from .parse_runs.client import AsyncParseRunsClient  # noqa: E402
-
-            self._parse_runs = AsyncParseRunsClient(client_wrapper=self._client_wrapper)
-        return self._parse_runs
+            self._file = AsyncFileClient(client_wrapper=self._client_wrapper)
+        return self._file
 
     @property
-    def edit_runs(self):
-        if self._edit_runs is None:
-            from .edit_runs.client import AsyncEditRunsClient  # noqa: E402
+    def parser_run(self):
+        if self._parser_run is None:
+            from .parser_run.client import AsyncParserRunClient  # noqa: E402
 
-            self._edit_runs = AsyncEditRunsClient(client_wrapper=self._client_wrapper)
-        return self._edit_runs
-
-    @property
-    def extract_runs(self):
-        if self._extract_runs is None:
-            from .extract_runs.client import AsyncExtractRunsClient  # noqa: E402
-
-            self._extract_runs = AsyncExtractRunsClient(client_wrapper=self._client_wrapper)
-        return self._extract_runs
+            self._parser_run = AsyncParserRunClient(client_wrapper=self._client_wrapper)
+        return self._parser_run
 
     @property
-    def extractors(self):
-        if self._extractors is None:
-            from .extractors.client import AsyncExtractorsClient  # noqa: E402
+    def edit(self):
+        if self._edit is None:
+            from .edit.client import AsyncEditClient  # noqa: E402
 
-            self._extractors = AsyncExtractorsClient(client_wrapper=self._client_wrapper)
-        return self._extractors
-
-    @property
-    def extractor_versions(self):
-        if self._extractor_versions is None:
-            from .extractor_versions.client import AsyncExtractorVersionsClient  # noqa: E402
-
-            self._extractor_versions = AsyncExtractorVersionsClient(client_wrapper=self._client_wrapper)
-        return self._extractor_versions
+            self._edit = AsyncEditClient(client_wrapper=self._client_wrapper)
+        return self._edit
 
     @property
-    def classify_runs(self):
-        if self._classify_runs is None:
-            from .classify_runs.client import AsyncClassifyRunsClient  # noqa: E402
+    def workflow(self):
+        if self._workflow is None:
+            from .workflow.client import AsyncWorkflowClient  # noqa: E402
 
-            self._classify_runs = AsyncClassifyRunsClient(client_wrapper=self._client_wrapper)
-        return self._classify_runs
-
-    @property
-    def classifiers(self):
-        if self._classifiers is None:
-            from .classifiers.client import AsyncClassifiersClient  # noqa: E402
-
-            self._classifiers = AsyncClassifiersClient(client_wrapper=self._client_wrapper)
-        return self._classifiers
+            self._workflow = AsyncWorkflowClient(client_wrapper=self._client_wrapper)
+        return self._workflow
 
     @property
-    def classifier_versions(self):
-        if self._classifier_versions is None:
-            from .classifier_versions.client import AsyncClassifierVersionsClient  # noqa: E402
+    def workflow_run(self):
+        if self._workflow_run is None:
+            from .workflow_run.client import AsyncWorkflowRunClient  # noqa: E402
 
-            self._classifier_versions = AsyncClassifierVersionsClient(client_wrapper=self._client_wrapper)
-        return self._classifier_versions
-
-    @property
-    def split_runs(self):
-        if self._split_runs is None:
-            from .split_runs.client import AsyncSplitRunsClient  # noqa: E402
-
-            self._split_runs = AsyncSplitRunsClient(client_wrapper=self._client_wrapper)
-        return self._split_runs
+            self._workflow_run = AsyncWorkflowRunClient(client_wrapper=self._client_wrapper)
+        return self._workflow_run
 
     @property
-    def splitters(self):
-        if self._splitters is None:
-            from .splitters.client import AsyncSplittersClient  # noqa: E402
+    def workflow_run_output(self):
+        if self._workflow_run_output is None:
+            from .workflow_run_output.client import AsyncWorkflowRunOutputClient  # noqa: E402
 
-            self._splitters = AsyncSplittersClient(client_wrapper=self._client_wrapper)
-        return self._splitters
-
-    @property
-    def splitter_versions(self):
-        if self._splitter_versions is None:
-            from .splitter_versions.client import AsyncSplitterVersionsClient  # noqa: E402
-
-            self._splitter_versions = AsyncSplitterVersionsClient(client_wrapper=self._client_wrapper)
-        return self._splitter_versions
+            self._workflow_run_output = AsyncWorkflowRunOutputClient(client_wrapper=self._client_wrapper)
+        return self._workflow_run_output
 
     @property
-    def workflows(self):
-        if self._workflows is None:
-            from .workflows.client import AsyncWorkflowsClient  # noqa: E402
+    def batch_workflow_run(self):
+        if self._batch_workflow_run is None:
+            from .batch_workflow_run.client import AsyncBatchWorkflowRunClient  # noqa: E402
 
-            self._workflows = AsyncWorkflowsClient(client_wrapper=self._client_wrapper)
-        return self._workflows
+            self._batch_workflow_run = AsyncBatchWorkflowRunClient(client_wrapper=self._client_wrapper)
+        return self._batch_workflow_run
 
     @property
-    def workflow_runs(self):
-        if self._workflow_runs is None:
-            from .workflow_runs.client import AsyncWorkflowRunsClient  # noqa: E402
+    def batch_processor_run(self):
+        if self._batch_processor_run is None:
+            from .batch_processor_run.client import AsyncBatchProcessorRunClient  # noqa: E402
 
-            self._workflow_runs = AsyncWorkflowRunsClient(client_wrapper=self._client_wrapper)
-        return self._workflow_runs
+            self._batch_processor_run = AsyncBatchProcessorRunClient(client_wrapper=self._client_wrapper)
+        return self._batch_processor_run
+
+    @property
+    def evaluation_set(self):
+        if self._evaluation_set is None:
+            from .evaluation_set.client import AsyncEvaluationSetClient  # noqa: E402
+
+            self._evaluation_set = AsyncEvaluationSetClient(client_wrapper=self._client_wrapper)
+        return self._evaluation_set
+
+    @property
+    def evaluation_set_item(self):
+        if self._evaluation_set_item is None:
+            from .evaluation_set_item.client import AsyncEvaluationSetItemClient  # noqa: E402
+
+            self._evaluation_set_item = AsyncEvaluationSetItemClient(client_wrapper=self._client_wrapper)
+        return self._evaluation_set_item
 
     @property
     def processor_run(self):
@@ -1136,38 +757,6 @@ class AsyncExtend:
 
             self._processor_version = AsyncProcessorVersionClient(client_wrapper=self._client_wrapper)
         return self._processor_version
-
-    @property
-    def batch_processor_run(self):
-        if self._batch_processor_run is None:
-            from .batch_processor_run.client import AsyncBatchProcessorRunClient  # noqa: E402
-
-            self._batch_processor_run = AsyncBatchProcessorRunClient(client_wrapper=self._client_wrapper)
-        return self._batch_processor_run
-
-    @property
-    def evaluation_sets(self):
-        if self._evaluation_sets is None:
-            from .evaluation_sets.client import AsyncEvaluationSetsClient  # noqa: E402
-
-            self._evaluation_sets = AsyncEvaluationSetsClient(client_wrapper=self._client_wrapper)
-        return self._evaluation_sets
-
-    @property
-    def evaluation_set_items(self):
-        if self._evaluation_set_items is None:
-            from .evaluation_set_items.client import AsyncEvaluationSetItemsClient  # noqa: E402
-
-            self._evaluation_set_items = AsyncEvaluationSetItemsClient(client_wrapper=self._client_wrapper)
-        return self._evaluation_set_items
-
-    @property
-    def evaluation_set_runs(self):
-        if self._evaluation_set_runs is None:
-            from .evaluation_set_runs.client import AsyncEvaluationSetRunsClient  # noqa: E402
-
-            self._evaluation_set_runs = AsyncEvaluationSetRunsClient(client_wrapper=self._client_wrapper)
-        return self._evaluation_set_runs
 
 
 def _get_base_url(*, base_url: typing.Optional[str] = None, environment: ExtendEnvironment) -> str:

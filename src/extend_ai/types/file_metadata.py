@@ -7,20 +7,23 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .parent_split import ParentSplit
+from .file_metadata_parent_split import FileMetadataParentSplit
 
 
 class FileMetadata(UncheckedBaseModel):
     page_count: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageCount")] = pydantic.Field(
-        alias="pageCount", default=None
+        default=None
     )
     """
     The number of pages in the file. This is only set for PDF/DOCX files.
     """
 
-    parent_split: typing_extensions.Annotated[typing.Optional[ParentSplit], FieldMetadata(alias="parentSplit")] = (
-        pydantic.Field(alias="parentSplit", default=None)
-    )
+    parent_split: typing_extensions.Annotated[
+        typing.Optional[FileMetadataParentSplit], FieldMetadata(alias="parentSplit")
+    ] = pydantic.Field(default=None)
+    """
+    The split metadata details. Only included if this file is a derivative of another file, for instance if it was created via a Splitter in a workflow.
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

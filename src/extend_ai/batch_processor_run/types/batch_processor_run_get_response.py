@@ -7,14 +7,12 @@ import typing_extensions
 from ...core.pydantic_utilities import IS_PYDANTIC_V2
 from ...core.serialization import FieldMetadata
 from ...core.unchecked_base_model import UncheckedBaseModel
-from ...types.legacy_batch_processor_run import LegacyBatchProcessorRun
+from ...types.batch_processor_run import BatchProcessorRun
 
 
 class BatchProcessorRunGetResponse(UncheckedBaseModel):
     success: bool
-    batch_processor_run: typing_extensions.Annotated[
-        LegacyBatchProcessorRun, FieldMetadata(alias="batchProcessorRun")
-    ] = pydantic.Field(alias="batchProcessorRun")
+    batch_processor_run: typing_extensions.Annotated[BatchProcessorRun, FieldMetadata(alias="batchProcessorRun")]
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

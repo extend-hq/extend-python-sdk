@@ -8,30 +8,55 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .page_ranges import PageRanges
+from .parse_config_advanced_options_excel_parsing_mode import ParseConfigAdvancedOptionsExcelParsingMode
 from .parse_config_advanced_options_return_ocr import ParseConfigAdvancedOptionsReturnOcr
 
 
 class ParseConfigAdvancedOptions(UncheckedBaseModel):
     page_rotation_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="pageRotationEnabled")
-    ] = pydantic.Field(alias="pageRotationEnabled", default=None)
+    ] = pydantic.Field(default=None)
     """
     Whether to automatically detect and correct page rotation.
     """
 
-    page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = (
-        pydantic.Field(alias="pageRanges", default=None)
-    )
+    agentic_ocr_enabled: typing_extensions.Annotated[
+        typing.Optional[bool], FieldMetadata(alias="agenticOcrEnabled")
+    ] = pydantic.Field(default=None)
+    """
+    Whether to enable agentic OCR corrections using VLM-based review and correction of OCR errors for messy handwriting and poorly scanned text. Deprecated - use `blockOptions.text.agentic` or `blockOptions.tables.agentic` instead for more granular control.
+    """
+
+    page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = None
+    excel_parsing_mode: typing_extensions.Annotated[
+        typing.Optional[ParseConfigAdvancedOptionsExcelParsingMode], FieldMetadata(alias="excelParsingMode")
+    ] = pydantic.Field(default=None)
+    """
+    Controls how Excel files are parsed.
+    
+    * `basic`: Fast, deterministic parsing.
+    * `advanced`: Enable layout block detection for complex spreadsheets.
+    
+    For `.xls` files, `basic` mode is always used.
+    """
+
+    excel_skip_hidden_content: typing_extensions.Annotated[
+        typing.Optional[bool], FieldMetadata(alias="excelSkipHiddenContent")
+    ] = pydantic.Field(default=None)
+    """
+    Whether to exclude hidden rows, columns, and sheets when parsing Excel files.
+    """
+
     vertical_grouping_threshold: typing_extensions.Annotated[
         typing.Optional[float], FieldMetadata(alias="verticalGroupingThreshold")
-    ] = pydantic.Field(alias="verticalGroupingThreshold", default=None)
+    ] = pydantic.Field(default=None)
     """
     Multiplier for the Y-axis threshold used to determine if text blocks should be placed on the same line or not (0.1-5.0, default 1.0). Higher values group elements that are further apart vertically. Only applies when the spatial target is set.
     """
 
     return_ocr: typing_extensions.Annotated[
         typing.Optional[ParseConfigAdvancedOptionsReturnOcr], FieldMetadata(alias="returnOcr")
-    ] = pydantic.Field(alias="returnOcr", default=None)
+    ] = pydantic.Field(default=None)
     """
     Options for returning raw OCR data in the response.
     """

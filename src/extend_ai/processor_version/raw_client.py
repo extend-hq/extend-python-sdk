@@ -13,7 +13,8 @@ from ..core.unchecked_base_model import construct_type
 from ..errors.bad_request_error import BadRequestError
 from ..errors.not_found_error import NotFoundError
 from ..errors.unauthorized_error import UnauthorizedError
-from .requests.processor_version_create_request_config import ProcessorVersionCreateRequestConfigParams
+from ..types.error import Error
+from .types.processor_version_create_request_config import ProcessorVersionCreateRequestConfig
 from .types.processor_version_create_request_release_type import ProcessorVersionCreateRequestReleaseType
 from .types.processor_version_create_response import ProcessorVersionCreateResponse
 from .types.processor_version_get_response import ProcessorVersionGetResponse
@@ -41,7 +42,7 @@ class RawProcessorVersionClient:
         id : str
             The ID of the processor to retrieve versions for.
 
-            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -81,9 +82,9 @@ class RawProcessorVersionClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        Error,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=Error,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -110,7 +111,7 @@ class RawProcessorVersionClient:
         *,
         release_type: ProcessorVersionCreateRequestReleaseType,
         description: typing.Optional[str] = OMIT,
-        config: typing.Optional[ProcessorVersionCreateRequestConfigParams] = OMIT,
+        config: typing.Optional[ProcessorVersionCreateRequestConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ProcessorVersionCreateResponse]:
         """
@@ -123,7 +124,7 @@ class RawProcessorVersionClient:
         id : str
             The ID of the processor to publish a new version for.
 
-            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
         release_type : ProcessorVersionCreateRequestReleaseType
             The type of release for this version. The two options are "major" and "minor", which will increment the version number accordingly.
@@ -131,7 +132,7 @@ class RawProcessorVersionClient:
         description : typing.Optional[str]
             A description of the changes in this version. This helps track the evolution of the processor over time.
 
-        config : typing.Optional[ProcessorVersionCreateRequestConfigParams]
+        config : typing.Optional[ProcessorVersionCreateRequestConfig]
             The configuration for this version of the processor. The type of configuration must match the processor type.
 
         request_options : typing.Optional[RequestOptions]
@@ -149,7 +150,7 @@ class RawProcessorVersionClient:
                 "releaseType": release_type,
                 "description": description,
                 "config": convert_and_respect_annotation_metadata(
-                    object_=config, annotation=ProcessorVersionCreateRequestConfigParams, direction="write"
+                    object_=config, annotation=ProcessorVersionCreateRequestConfig, direction="write"
                 ),
             },
             headers={
@@ -183,9 +184,9 @@ class RawProcessorVersionClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        Error,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=Error,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -206,12 +207,12 @@ class RawProcessorVersionClient:
         processor_id : str
             The ID of the processor.
 
-            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
         processor_version_id : str
             The ID of the specific processor version to retrieve.
 
-            Example: `"exv_QYk6jgHA_8CsO8rVWhyNC"`
+            Example: `"dpv_QYk6jgHA_8CsO8rVWhyNC"`
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -251,9 +252,9 @@ class RawProcessorVersionClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        Error,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=Error,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -293,7 +294,7 @@ class AsyncRawProcessorVersionClient:
         id : str
             The ID of the processor to retrieve versions for.
 
-            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -333,9 +334,9 @@ class AsyncRawProcessorVersionClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        Error,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=Error,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -362,7 +363,7 @@ class AsyncRawProcessorVersionClient:
         *,
         release_type: ProcessorVersionCreateRequestReleaseType,
         description: typing.Optional[str] = OMIT,
-        config: typing.Optional[ProcessorVersionCreateRequestConfigParams] = OMIT,
+        config: typing.Optional[ProcessorVersionCreateRequestConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ProcessorVersionCreateResponse]:
         """
@@ -375,7 +376,7 @@ class AsyncRawProcessorVersionClient:
         id : str
             The ID of the processor to publish a new version for.
 
-            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
         release_type : ProcessorVersionCreateRequestReleaseType
             The type of release for this version. The two options are "major" and "minor", which will increment the version number accordingly.
@@ -383,7 +384,7 @@ class AsyncRawProcessorVersionClient:
         description : typing.Optional[str]
             A description of the changes in this version. This helps track the evolution of the processor over time.
 
-        config : typing.Optional[ProcessorVersionCreateRequestConfigParams]
+        config : typing.Optional[ProcessorVersionCreateRequestConfig]
             The configuration for this version of the processor. The type of configuration must match the processor type.
 
         request_options : typing.Optional[RequestOptions]
@@ -401,7 +402,7 @@ class AsyncRawProcessorVersionClient:
                 "releaseType": release_type,
                 "description": description,
                 "config": convert_and_respect_annotation_metadata(
-                    object_=config, annotation=ProcessorVersionCreateRequestConfigParams, direction="write"
+                    object_=config, annotation=ProcessorVersionCreateRequestConfig, direction="write"
                 ),
             },
             headers={
@@ -435,9 +436,9 @@ class AsyncRawProcessorVersionClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        Error,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=Error,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),
@@ -458,12 +459,12 @@ class AsyncRawProcessorVersionClient:
         processor_id : str
             The ID of the processor.
 
-            Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 
         processor_version_id : str
             The ID of the specific processor version to retrieve.
 
-            Example: `"exv_QYk6jgHA_8CsO8rVWhyNC"`
+            Example: `"dpv_QYk6jgHA_8CsO8rVWhyNC"`
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -503,9 +504,9 @@ class AsyncRawProcessorVersionClient:
                 raise UnauthorizedError(
                     headers=dict(_response.headers),
                     body=typing.cast(
-                        typing.Any,
+                        Error,
                         construct_type(
-                            type_=typing.Any,  # type: ignore
+                            type_=Error,  # type: ignore
                             object_=_response.json(),
                         ),
                     ),

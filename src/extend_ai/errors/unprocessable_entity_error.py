@@ -2,10 +2,10 @@
 
 import typing
 
-from ..core.api_error import ApiError as core_api_error_ApiError
-from ..types.api_error import ApiError as types_api_error_ApiError
+from ..core.api_error import ApiError
+from ..types.extend_error import ExtendError
 
 
-class UnprocessableEntityError(core_api_error_ApiError):
-    def __init__(self, body: types_api_error_ApiError, headers: typing.Optional[typing.Dict[str, str]] = None):
+class UnprocessableEntityError(ApiError):
+    def __init__(self, body: ExtendError, headers: typing.Optional[typing.Dict[str, str]] = None):
         super().__init__(status_code=422, headers=headers, body=body)

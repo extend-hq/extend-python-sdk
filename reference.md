@@ -1,5 +1,5 @@
 # Reference
-<details><summary><code>client.<a href="src/extend_ai/client.py">parse</a>(...) -&gt; AsyncHttpResponse[ParseRun]</code></summary>
+<details><summary><code>client.<a href="src/extend_ai/client.py">create_file</a>(...) -&gt; AsyncHttpResponse[PostFilesResponse]</code></summary>
 <dl>
 <dd>
 
@@ -11,13 +11,7 @@
 <dl>
 <dd>
 
-Parse a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-**Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /parse_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
-
-For more details, see the [Parse File guide](https://docs.extend.ai/2026-02-09/product/parsing/parse).
+Create a new file in Extend for use in an evaluation set. This endpoint is deprecated, use /files/upload instead.
 </dd>
 </dl>
 </dd>
@@ -37,8 +31,8 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.parse(
-    file={"url": "url"},
+client.create_file(
+    name="name",
 )
 
 ```
@@ -55,7 +49,106 @@ client.parse(
 <dl>
 <dd>
 
-**file:** `ParseRequestFileParams` — The file to be parsed. Files can be provided as a URL or an Extend file ID.
+**name:** `str` — The name of the file
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**url:** `typing.Optional[str]` — A pre signed URL for the file
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**raw_text:** `typing.Optional[str]` — The raw text content of the file
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**media_type:** `typing.Optional[str]` — The media type of the file (e.g. application/pdf)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.<a href="src/extend_ai/client.py">parse</a>(...) -&gt; AsyncHttpResponse[ParserRun]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Parse files to get cleaned, chunked target content (e.g. markdown).
+
+The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
+
+For more details, see the [Parse File guide](/product/parsing/parse).
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend, ParseRequestFile
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.parse(
+    response_type="json",
+    file=ParseRequestFile(),
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**file:** `ParseRequestFile` — A file object containing either a URL or a fileId.
     
 </dd>
 </dl>
@@ -75,15 +168,7 @@ Controls the format of the response chunks. Defaults to `json` if not specified.
 <dl>
 <dd>
 
-**config:** `typing.Optional[ParseConfigParams]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**metadata:** `typing.Optional[RunMetadata]` 
+**config:** `typing.Optional[ParseConfig]` 
     
 </dd>
 </dl>
@@ -103,7 +188,7 @@ Controls the format of the response chunks. Defaults to `json` if not specified.
 </dl>
 </details>
 
-<details><summary><code>client.<a href="src/extend_ai/client.py">edit</a>(...) -&gt; AsyncHttpResponse[EditRun]</code></summary>
+<details><summary><code>client.<a href="src/extend_ai/client.py">parse_async</a>(...) -&gt; AsyncHttpResponse[ParserRunStatus]</code></summary>
 <dl>
 <dd>
 
@@ -115,13 +200,17 @@ Controls the format of the response chunks. Defaults to `json` if not specified.
 <dl>
 <dd>
 
-Edit a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
+Parse files **asynchronously** to get cleaned, chunked target content (e.g. markdown).
 
-**Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /edit_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
+The Parse Async endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
 
-The Edit endpoint allows you to detect and fill form fields in PDF documents.
+Parse files asynchronously and get a parser run ID that can be used to check status and retrieve results with the [Get Parser Run](https://docs.extend.ai/2025-04-21/developers/api-reference/parse-endpoints/get-parser-run) endpoint.
 
-For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/product/editing/edit).
+This is useful for:
+* Large files that may take longer to process
+* Avoiding timeout issues with synchronous parsing.
+
+For more details, see the [Parse File guide](/product/parsing/parse).
 </dd>
 </dl>
 </dd>
@@ -136,13 +225,13 @@ For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/pr
 <dd>
 
 ```python
-from extend_ai import Extend
+from extend_ai import Extend, ParseAsyncRequestFile
 
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.edit(
-    file={"url": "url"},
+client.parse_async(
+    file=ParseAsyncRequestFile(),
 )
 
 ```
@@ -159,7 +248,7 @@ client.edit(
 <dl>
 <dd>
 
-**file:** `EditRequestFileParams` — The file to be edited. Files can be provided as a URL or an Extend file ID.
+**file:** `ParseAsyncRequestFile` — A file object containing either a URL or a fileId.
     
 </dd>
 </dl>
@@ -167,107 +256,7 @@ client.edit(
 <dl>
 <dd>
 
-**config:** `typing.Optional[EditConfigParams]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.<a href="src/extend_ai/client.py">extract</a>(...) -&gt; AsyncHttpResponse[ExtractRun]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Extract structured data from a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-**Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /extract_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-The Extract endpoint allows you to extract structured data from files using an existing extractor or an inline configuration.
-
-For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/product/extracting/extract).
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.extract(
-    file={"url": "url"},
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**file:** `ExtractRequestFileParams` — The file to be extracted from. Files can be provided as a URL, Extend file ID, or raw text.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**extractor:** `typing.Optional[ExtractRequestExtractorParams]` — Reference to an existing extractor. One of `extractor` or `config` must be provided.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[ExtractConfigJsonParams]` — Inline extract configuration. One of `extractor` or `config` must be provided.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**metadata:** `typing.Optional[RunMetadata]` 
+**config:** `typing.Optional[ParseConfig]` 
     
 </dd>
 </dl>
@@ -287,7 +276,8 @@ client.extract(
 </dl>
 </details>
 
-<details><summary><code>client.<a href="src/extend_ai/client.py">classify</a>(...) -&gt; AsyncHttpResponse[ClassifyRun]</code></summary>
+## File
+<details><summary><code>client.file.<a href="src/extend_ai/file/client.py">list</a>(...) -&gt; AsyncHttpResponse[FileListResponse]</code></summary>
 <dl>
 <dd>
 
@@ -299,13 +289,7 @@ client.extract(
 <dl>
 <dd>
 
-Classify a document synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-**Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /classify_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-The Classify endpoint allows you to classify documents using an existing classifier or an inline configuration.
-
-For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/product/classifying/classify).
+List files in your account. Files represent documents that have been uploaded to Extend. This endpoint returns a paginated response. You can use the `nextPageToken` to fetch subsequent results.
 </dd>
 </dl>
 </dd>
@@ -325,203 +309,11 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.classify(
-    file={"url": "url"},
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**file:** `ClassifyRequestFileParams` — The file to be classified. Files can be provided as a URL, an Extend file ID, or raw text.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**classifier:** `typing.Optional[ClassifyRequestClassifierParams]` — Reference to an existing classifier. One of `classifier` or `config` must be provided.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[ClassifyConfigParams]` — Inline classify configuration. One of `classifier` or `config` must be provided.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**metadata:** `typing.Optional[RunMetadata]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.<a href="src/extend_ai/client.py">split</a>(...) -&gt; AsyncHttpResponse[SplitRun]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Split a document synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
-
-**Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /split_runs` with webhooks or polling instead, as it provides better reliability for large files and avoids timeout issues.
-
-The Split endpoint allows you to split documents into multiple parts using an existing splitter or an inline configuration.
-
-For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/product/splitting/split).
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.split(
-    file={"url": "url"},
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**file:** `SplitRequestFileParams` — The file to be split. Files can be provided as a URL or an Extend file ID.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**splitter:** `typing.Optional[SplitRequestSplitterParams]` — Reference to an existing splitter. One of `splitter` or `config` must be provided.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[SplitConfigParams]` — Inline splitter configuration. One of `splitter` or `config` must be provided.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**metadata:** `typing.Optional[RunMetadata]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Files
-<details><summary><code>client.files.<a href="src/extend_ai/files/client.py">list</a>(...) -&gt; AsyncHttpResponse[FilesListResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List files.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.files.list(
+client.file.list(
+    name_contains="nameContains",
+    sort_dir="asc",
     next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+    max_page_size=1,
 )
 
 ```
@@ -550,7 +342,7 @@ Example: `"invoice"`
 <dl>
 <dd>
 
-**sort_dir:** `typing.Optional[SortDir]` 
+**sort_dir:** `typing.Optional[SortDirEnum]` — Sorts the files in ascending or descending order. Ascending order means the earliest file is returned first.
     
 </dd>
 </dl>
@@ -586,7 +378,7 @@ Example: `"invoice"`
 </dl>
 </details>
 
-<details><summary><code>client.files.<a href="src/extend_ai/files/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[File]</code></summary>
+<details><summary><code>client.file.<a href="src/extend_ai/file/client.py">get</a>(...) -&gt; AsyncHttpResponse[FileGetResponse]</code></summary>
 <dl>
 <dd>
 
@@ -598,7 +390,7 @@ Example: `"invoice"`
 <dl>
 <dd>
 
-Fetch a file by its ID.
+Fetch a file by its ID to obtain additional details and the raw file content.
 </dd>
 </dl>
 </dd>
@@ -618,8 +410,11 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.files.retrieve(
+client.file.get(
     id="file_id_here",
+    raw_text=True,
+    markdown=True,
+    html=True,
 )
 
 ```
@@ -638,7 +433,7 @@ client.files.retrieve(
 
 **id:** `str` 
 
-ID for the file. It will always start with `"file_"`.
+Extend's ID for the file. It will always start with `"file_"`. This ID is returned when creating a new File, or the value on the `fileId` field in a WorkflowRun.
 
 Example: `"file_Xj8mK2pL9nR4vT7qY5wZ"`
     
@@ -648,11 +443,7 @@ Example: `"file_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**raw_text:** `typing.Optional[bool]` 
-
-**Deprecated:** Use `POST /parse_runs` instead to parse file contents.
-
-If set to true, the raw text content of the file will be included in the response.
+**raw_text:** `typing.Optional[bool]` — If set to true, the raw text content of the file will be included in the response. This is useful for indexing text-based files like PDFs, Word Documents, etc.
     
 </dd>
 </dl>
@@ -662,11 +453,9 @@ If set to true, the raw text content of the file will be included in the respons
 
 **markdown:** `typing.Optional[bool]` 
 
-**Deprecated:** Use `POST /parse_runs` instead to parse file contents.
+If set to true, the markdown content of the file will be included in the response. This is useful for indexing very clean content into RAG pipelines for files like PDFs, Word Documents, etc.
 
-If set to true, the markdown content of the file will be included in the response.
-
-Only available for files with a type of PDF, IMG, or DOCX files that were auto-converted to PDFs.
+Only available for files with a type of PDF, IMG, or .doc/.docx files that were auto-converted to PDFs.
     
 </dd>
 </dl>
@@ -676,9 +465,7 @@ Only available for files with a type of PDF, IMG, or DOCX files that were auto-c
 
 **html:** `typing.Optional[bool]` 
 
-**Deprecated:** Use `POST /parse_runs` instead to parse file contents.
-
-If set to true, the html content of the file will be included in the response.
+If set to true, the html content of the file will be included in the response. This is useful for indexing html content into RAG pipelines.
 
 Only available for files with a type of DOCX.
     
@@ -700,7 +487,7 @@ Only available for files with a type of DOCX.
 </dl>
 </details>
 
-<details><summary><code>client.files.<a href="src/extend_ai/files/client.py">delete</a>(...) -&gt; AsyncHttpResponse[FilesDeleteResponse]</code></summary>
+<details><summary><code>client.file.<a href="src/extend_ai/file/client.py">delete</a>(...) -&gt; AsyncHttpResponse[FileDeleteResponse]</code></summary>
 <dl>
 <dd>
 
@@ -734,7 +521,7 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.files.delete(
+client.file.delete(
     id="file_id_here",
 )
 
@@ -776,7 +563,7 @@ Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
 </dl>
 </details>
 
-<details><summary><code>client.files.<a href="src/extend_ai/files/client.py">upload</a>(...) -&gt; AsyncHttpResponse[File]</code></summary>
+<details><summary><code>client.file.<a href="src/extend_ai/file/client.py">upload</a>(...) -&gt; AsyncHttpResponse[FileUploadResponse]</code></summary>
 <dl>
 <dd>
 
@@ -790,11 +577,11 @@ Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
 
 Upload and create a new file in Extend.
 
-This endpoint accepts file contents and registers them as a File in Extend, which can be used for [running workflows](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/run-workflow), [creating evaluation set items](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/evaluation/bulk-create-evaluation-set-items), [parsing](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/parse/parse-file), etc.
+This endpoint accepts file contents and registers them as a File in Extend, which can be used for [running workflows](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow), [creating evaluation set items](https://docs.extend.ai/2025-04-21/developers/api-reference/evaluation-set-endpoints/bulk-create-evaluation-set-items), [parsing](https://docs.extend.ai/2025-04-21/developers/api-reference/parse-endpoints/parse-file), etc.
 
 If an uploaded file is detected as a Word or PowerPoint document, it will be automatically converted to a PDF.
 
-Supported file types can be found [here](https://docs.extend.ai/2026-02-09/product/general/supported-file-types).
+Supported file types can be found [here](/product/general/supported-file-types).
 
 This endpoint requires multipart form encoding. Most HTTP clients will handle this encoding automatically (see the examples).
 </dd>
@@ -816,7 +603,7 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.files.upload()
+client.file.upload()
 
 ```
 </dd>
@@ -854,8 +641,8 @@ core.File` — See core.File for more documentation
 </dl>
 </details>
 
-## ParseRuns
-<details><summary><code>client.parse_runs.<a href="src/extend_ai/parse_runs/client.py">create</a>(...) -&gt; AsyncHttpResponse[ParseRun]</code></summary>
+## ParserRun
+<details><summary><code>client.parser_run.<a href="src/extend_ai/parser_run/client.py">get</a>(...) -&gt; AsyncHttpResponse[ParserRunGetResponse]</code></summary>
 <dl>
 <dd>
 
@@ -867,11 +654,11 @@ core.File` — See core.File for more documentation
 <dl>
 <dd>
 
-Parse files to get cleaned, chunked target content (e.g. markdown).
+Retrieve the status and results of a parser run.
 
-The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
+Use this endpoint to get results for a parser run that has already completed, or to check on the status of an asynchronous parser run initiated via the [Parse File Asynchronously](https://docs.extend.ai/2025-04-21/developers/api-reference/parse-endpoints/parse-file-async) endpoint.
 
-For more details, see the [Parse File guide](https://docs.extend.ai/2026-02-09/product/parsing/parse).
+If parsing is still in progress, you'll receive a response with just the status. Once complete, you'll receive the full parsed content in the response.
 </dd>
 </dl>
 </dd>
@@ -891,96 +678,9 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.parse_runs.create(
-    file={"url": "url"},
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**file:** `ParseRunsCreateRequestFileParams` — The file to be parsed. Files can be provided as a URL or an Extend file ID.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[ParseConfigParams]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**metadata:** `typing.Optional[RunMetadata]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.parse_runs.<a href="src/extend_ai/parse_runs/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[ParseRun]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve the status and results of a parse run.
-
-Use this endpoint to get results for a parse run that has already completed, or to check on the status of a parse run initiated by the [Create Parse Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/parse/create-parse-run) endpoint.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.parse_runs.retrieve(
-    id="parse_run_id_here",
+client.parser_run.get(
+    id="parser_run_id_here",
+    response_type="json",
 )
 
 ```
@@ -999,9 +699,9 @@ client.parse_runs.retrieve(
 
 **id:** `str` 
 
-The unique identifier for the parse run.
+The unique identifier for the parser run.
 
-Example: `"pr_xK9mLPqRtN3vS8wF5hB2cQ"`
+Example: `"parser_run_xK9mLPqRtN3vS8wF5hB2cQ"`
     
 </dd>
 </dl>
@@ -1009,11 +709,11 @@ Example: `"pr_xK9mLPqRtN3vS8wF5hB2cQ"`
 <dl>
 <dd>
 
-**response_type:** `typing.Optional[ParseRunsRetrieveRequestResponseType]` 
+**response_type:** `typing.Optional[ParserRunGetRequestResponseType]` 
 
-Controls how the output is delivered. Defaults to `inline`.
-* `json` - Returns the output directly in the `output` field of the response body.
-* `url` - Returns a presigned URL in the `outputUrl` field to download the output as a JSON file. The URL expires after 15 minutes. Useful for large outputs.
+Controls the format of the response chunks. Defaults to `json` if not specified.
+* `json` - Returns chunks with inline content
+* `url` - Returns chunks with presigned URLs to content instead of inline data
     
 </dd>
 </dl>
@@ -1033,7 +733,7 @@ Controls how the output is delivered. Defaults to `inline`.
 </dl>
 </details>
 
-<details><summary><code>client.parse_runs.<a href="src/extend_ai/parse_runs/client.py">delete</a>(...) -&gt; AsyncHttpResponse[ParseRunsDeleteResponse]</code></summary>
+<details><summary><code>client.parser_run.<a href="src/extend_ai/parser_run/client.py">delete</a>(...) -&gt; AsyncHttpResponse[ParserRunDeleteResponse]</code></summary>
 <dl>
 <dd>
 
@@ -1045,7 +745,7 @@ Controls how the output is delivered. Defaults to `inline`.
 <dl>
 <dd>
 
-Delete a parse run and all associated data from Extend. This operation is permanent and cannot be undone.
+Delete a parser run and all associated data from Extend. This operation is permanent and cannot be undone.
 
 This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
 </dd>
@@ -1067,8 +767,8 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.parse_runs.delete(
-    id="parse_run_id_here",
+client.parser_run.delete(
+    id="parser_run_id_here",
 )
 
 ```
@@ -1087,9 +787,9 @@ client.parse_runs.delete(
 
 **id:** `str` 
 
-The ID of the parse run to delete.
+The ID of the parser run to delete.
 
-Example: `"pr_xK9mLPqRtN3vS8wF5hB2cQ"`
+Example: `"parser_run_xK9mLPqRtN3vS8wF5hB2cQ"`
     
 </dd>
 </dl>
@@ -1109,8 +809,8 @@ Example: `"pr_xK9mLPqRtN3vS8wF5hB2cQ"`
 </dl>
 </details>
 
-## EditRuns
-<details><summary><code>client.edit_runs.<a href="src/extend_ai/edit_runs/client.py">create</a>(...) -&gt; AsyncHttpResponse[EditRun]</code></summary>
+## Edit
+<details><summary><code>client.edit.<a href="src/extend_ai/edit/client.py">create</a>(...) -&gt; AsyncHttpResponse[EditRun]</code></summary>
 <dl>
 <dd>
 
@@ -1123,10 +823,7 @@ Example: `"pr_xK9mLPqRtN3vS8wF5hB2cQ"`
 <dd>
 
 Edit and manipulate PDF documents by detecting and filling form fields.
-
-The Edit Runs endpoint allows you to convert and edit documents and get an edit run ID that can be used to check status and retrieve results with the [Get Edit Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/edit/get-edit-run) endpoint.
-
-For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/product/editing/edit).
+This is a synchronous endpoint that will wait for the edit operation to complete (up to 5 minutes) before returning results. For longer operations, use the [Edit File Async](/developers/api-reference/edit-endpoints/edit-file-async) endpoint.
 </dd>
 </dl>
 </dd>
@@ -1142,12 +839,13 @@ For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/pr
 
 ```python
 from extend_ai import Extend
+from extend_ai.edit import EditCreateRequestFile
 
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.edit_runs.create(
-    file={"url": "url"},
+client.edit.create(
+    file=EditCreateRequestFile(),
 )
 
 ```
@@ -1164,7 +862,7 @@ client.edit_runs.create(
 <dl>
 <dd>
 
-**file:** `EditRunsCreateRequestFileParams` — The file to be edited. Files can be provided as a URL or an Extend file ID.
+**file:** `EditCreateRequestFile` — A file object containing either a URL or a fileId.
     
 </dd>
 </dl>
@@ -1172,7 +870,7 @@ client.edit_runs.create(
 <dl>
 <dd>
 
-**config:** `typing.Optional[EditConfigParams]` 
+**config:** `typing.Optional[EditCreateRequestConfig]` — Configuration for the edit operation. Field values should be specified using `extend_edit:value` on each field in the schema.
     
 </dd>
 </dl>
@@ -1192,7 +890,93 @@ client.edit_runs.create(
 </dl>
 </details>
 
-<details><summary><code>client.edit_runs.<a href="src/extend_ai/edit_runs/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[EditRun]</code></summary>
+<details><summary><code>client.edit.<a href="src/extend_ai/edit/client.py">create_async</a>(...) -&gt; AsyncHttpResponse[EditRunStatus]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Edit and manipulate PDF documents **asynchronously** by filling forms, adding/modifying text fields, and applying structured changes.
+
+The Edit Async endpoint allows you to convert and edit documents asynchronously and get an edit run ID that can be used to check status and retrieve results with the [Get Edit Run](/developers/api-reference/edit-endpoints/get-edit-run) endpoint.
+
+This is useful for:
+* Large files that may take longer to process
+* Avoiding timeout issues with synchronous editing
+* Processing multiple files in parallel
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+from extend_ai.edit import EditCreateAsyncRequestFile
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.edit.create_async(
+    file=EditCreateAsyncRequestFile(),
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**file:** `EditCreateAsyncRequestFile` — A file object containing either a URL or a fileId.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**config:** `typing.Optional[EditCreateAsyncRequestConfig]` — Configuration for the edit operation. Field values should be specified using `extend_edit:value` on each field in the schema.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.edit.<a href="src/extend_ai/edit/client.py">get</a>(...) -&gt; AsyncHttpResponse[EditGetResponse]</code></summary>
 <dl>
 <dd>
 
@@ -1206,7 +990,9 @@ client.edit_runs.create(
 
 Retrieve the status and results of an edit run.
 
-Use this endpoint to get results for an edit run that has already completed, or to check on the status of an edit run initiated via the [Create Edit Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/edit/create-edit-run) endpoint.
+Use this endpoint to get results for an edit run that has already completed, or to check on the status of an asynchronous edit run initiated via the [Edit File Asynchronously](/developers/api-reference/edit-endpoints/edit-file-async) endpoint.
+
+If editing is still in progress, you'll receive a response with just the status. Once complete, you'll receive the full edited file information in the response.
 </dd>
 </dl>
 </dd>
@@ -1226,7 +1012,7 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.edit_runs.retrieve(
+client.edit.get(
     id="edit_run_id_here",
 )
 
@@ -1248,7 +1034,7 @@ client.edit_runs.retrieve(
 
 The unique identifier for the edit run.
 
-Example: `"edr_xK9mLPqRtN3vS8wF5hB2cQ"`
+Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
     
 </dd>
 </dl>
@@ -1268,7 +1054,7 @@ Example: `"edr_xK9mLPqRtN3vS8wF5hB2cQ"`
 </dl>
 </details>
 
-<details><summary><code>client.edit_runs.<a href="src/extend_ai/edit_runs/client.py">delete</a>(...) -&gt; AsyncHttpResponse[EditRunsDeleteResponse]</code></summary>
+<details><summary><code>client.edit.<a href="src/extend_ai/edit/client.py">delete</a>(...) -&gt; AsyncHttpResponse[EditDeleteResponse]</code></summary>
 <dl>
 <dd>
 
@@ -1302,7 +1088,7 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.edit_runs.delete(
+client.edit.delete(
     id="edit_run_id_here",
 )
 
@@ -1324,7 +1110,7 @@ client.edit_runs.delete(
 
 The ID of the edit run to delete.
 
-Example: `"edr_xK9mLPqRtN3vS8wF5hB2cQ"`
+Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
     
 </dd>
 </dl>
@@ -1344,3350 +1130,8 @@ Example: `"edr_xK9mLPqRtN3vS8wF5hB2cQ"`
 </dl>
 </details>
 
-## ExtractRuns
-<details><summary><code>client.extract_runs.<a href="src/extend_ai/extract_runs/client.py">list</a>(...) -&gt; AsyncHttpResponse[ExtractRunsListResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List all extract runs.
-
-Returns a summary of each run. Use `GET /extract_runs/{id}` to retrieve the full object including `output` and `config`.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.extract_runs.list(
-    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**status:** `typing.Optional[ProcessorRunStatus]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**extractor_id:** `typing.Optional[str]` 
-
-Filters extract runs by the extractor ID. If not provided, all extract runs are returned.
-
-Example: `"ex_BMdfq_yWM3sT-ZzvCnA3f"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**source_id:** `typing.Optional[RunSourceId]` — Filters runs by the source ID.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**source:** `typing.Optional[RunSource]` — Filters runs by the source that created them. If not provided, runs from all sources are returned.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**file_name_contains:** `typing.Optional[str]` 
-
-Filters runs by the name of the file. Only returns runs where the file name contains this string.
-
-Example: `"invoice"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_by:** `typing.Optional[SortBy]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_dir:** `typing.Optional[SortDir]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**next_page_token:** `typing.Optional[NextPageToken]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**max_page_size:** `typing.Optional[MaxPageSize]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.extract_runs.<a href="src/extend_ai/extract_runs/client.py">create</a>(...) -&gt; AsyncHttpResponse[ExtractRun]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Extract structured data from a file using an existing extractor or an inline configuration.
-
-The request returns immediately with a `PROCESSING` status. Use webhooks or poll the [Get Extract Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/get-extract-run) endpoint for results.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.extract_runs.create(
-    file={"url": "url"},
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**file:** `ExtractRunsCreateRequestFileParams` — The file to be extracted from. Files can be provided as a URL, Extend file ID, or raw text.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**extractor:** `typing.Optional[ExtractRunsCreateRequestExtractorParams]` — Reference to an existing extractor. One of `extractor` or `config` must be provided.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[ExtractConfigJsonParams]` — Inline extract configuration. One of `extractor` or `config` must be provided.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**priority:** `typing.Optional[RunPriority]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**metadata:** `typing.Optional[RunMetadata]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.extract_runs.<a href="src/extend_ai/extract_runs/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[ExtractRun]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve details about a specific extract run, including its status, outputs, and any edits made during review.
-
-A common use case for this endpoint is to poll for the status and final output of an extract run when using the [Create Extract Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/create-extract-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.extract_runs.retrieve(
-    id="extract_run_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The unique identifier for this extract run.
-
-Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.extract_runs.<a href="src/extend_ai/extract_runs/client.py">delete</a>(...) -&gt; AsyncHttpResponse[ExtractRunsDeleteResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Delete an extract run and all associated data from Extend. This operation is permanent and cannot be undone.
-
-This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.extract_runs.delete(
-    id="id",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` — The ID of the extract run.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.extract_runs.<a href="src/extend_ai/extract_runs/client.py">cancel</a>(...) -&gt; AsyncHttpResponse[ExtractRun]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Cancel an in-progress extract run.
-
-Note: Only extract runs with a status of `"PROCESSING"` can be cancelled. Extractor runs that have already completed, failed, or been cancelled cannot be cancelled again.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.extract_runs.cancel(
-    id="extract_run_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The ID of the extract run to cancel.
-
-Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Extractors
-<details><summary><code>client.extractors.<a href="src/extend_ai/extractors/client.py">list</a>(...) -&gt; AsyncHttpResponse[ExtractorsListResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List all extractors.
-
-Returns a summary of each extractor. Use `GET /extractors/{id}` to retrieve the full object including `draftVersion`.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.extractors.list(
-    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**next_page_token:** `typing.Optional[NextPageToken]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**max_page_size:** `typing.Optional[MaxPageSize]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_by:** `typing.Optional[SortBy]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_dir:** `typing.Optional[SortDir]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.extractors.<a href="src/extend_ai/extractors/client.py">create</a>(...) -&gt; AsyncHttpResponse[Extractor]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Create a new extractor.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.extractors.create(
-    name="name",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**name:** `str` — The name of the extractor.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**clone_extractor_id:** `typing.Optional[str]` 
-
-The ID of an existing extractor to clone. If provided, the new extractor will be created with the same config as the extractor with this ID. Cannot be provided together with `config`.
-
-Example: `"ex_BMdfq_yWM3sT-ZzvCnA3f"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[ExtractConfigJsonParams]` — The configuration for the extractor. Cannot be provided together with `cloneExtractorId`.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.extractors.<a href="src/extend_ai/extractors/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[Extractor]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Get details of an extractor.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.extractors.retrieve(
-    id="extractor_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The ID of the extractor to get.
-
-Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.extractors.<a href="src/extend_ai/extractors/client.py">update</a>(...) -&gt; AsyncHttpResponse[Extractor]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Update an existing extractor.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.extractors.update(
-    id="extractor_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The ID of the extractor to update.
-
-Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**name:** `typing.Optional[str]` — The new name of the extractor.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[ExtractConfigJsonParams]` — The new configuration for the extractor. This will update the draft version of the extractor.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## ExtractorVersions
-<details><summary><code>client.extractor_versions.<a href="src/extend_ai/extractor_versions/client.py">list</a>(...) -&gt; AsyncHttpResponse[ExtractorVersionsListResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-This endpoint allows you to fetch all versions of a given extractor, including the current `draft` version.
-
-Versions are returned in descending order of creation (newest first) with the `draft` version first. The `draft` version is the latest unpublished version of the extractor, which can be published to create a new version. It might not have any changes from the last published version.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.extractor_versions.list(
-    extractor_id="extractor_id_here",
-    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**extractor_id:** `str` 
-
-The ID of the extractor.
-
-Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_dir:** `typing.Optional[SortDir]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**next_page_token:** `typing.Optional[NextPageToken]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**max_page_size:** `typing.Optional[MaxPageSize]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.extractor_versions.<a href="src/extend_ai/extractor_versions/client.py">create</a>(...) -&gt; AsyncHttpResponse[ExtractorVersion]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-This endpoint allows you to publish a new version of an existing extractor. Publishing a new version creates a snapshot of the extractor's current configuration and makes it available for use in workflows.
-
-Publishing a new version does not automatically update existing workflows using this extractor. You may need to manually update workflows to use the new version if desired.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend, ReleaseType
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.extractor_versions.create(
-    extractor_id="extractor_id_here",
-    release_type=ReleaseType.MAJOR,
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**extractor_id:** `str` 
-
-The ID of the extractor.
-
-Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**release_type:** `ReleaseType` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**description:** `typing.Optional[VersionDescription]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[ExtractConfigJsonParams]` — The configuration for this version of the extractor.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.extractor_versions.<a href="src/extend_ai/extractor_versions/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[ExtractorVersion]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve a specific version of an extractor in Extend
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.extractor_versions.retrieve(
-    extractor_id="extractor_id_here",
-    version_id="extractor_version_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**extractor_id:** `str` 
-
-The ID of the extractor.
-
-Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**version_id:** `str` 
-
-The ID of the specific extractor version.
-
-Example: `"extv_QYk6jgHA_8CsO8rVWhyNC"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## ClassifyRuns
-<details><summary><code>client.classify_runs.<a href="src/extend_ai/classify_runs/client.py">list</a>(...) -&gt; AsyncHttpResponse[ClassifyRunsListResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List all classify runs.
-
-Returns a summary of each run. Use `GET /classify_runs/{id}` to retrieve the full object including `output` and `config`.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.classify_runs.list(
-    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**status:** `typing.Optional[ProcessorRunStatus]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**classifier_id:** `typing.Optional[str]` 
-
-Filters classify runs by the classifier ID. If not provided, all classify runs are returned.
-
-Example: `"cl_BMdfq_yWM3sT-ZzvCnA3f"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**source_id:** `typing.Optional[RunSourceId]` — Filters runs by the source ID.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**source:** `typing.Optional[RunSource]` — Filters runs by the source that created them. If not provided, runs from all sources are returned.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**file_name_contains:** `typing.Optional[str]` 
-
-Filters runs by the name of the file. Only returns runs where the file name contains this string.
-
-Example: `"invoice"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_by:** `typing.Optional[SortBy]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_dir:** `typing.Optional[SortDir]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**next_page_token:** `typing.Optional[NextPageToken]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**max_page_size:** `typing.Optional[MaxPageSize]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.classify_runs.<a href="src/extend_ai/classify_runs/client.py">create</a>(...) -&gt; AsyncHttpResponse[ClassifyRun]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Classify a document using an existing classifier or an inline configuration.
-
-The request returns immediately with a `PROCESSING` status. Use webhooks or poll the [Get Classify Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/classify/get-classify-run) endpoint for results.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.classify_runs.create(
-    file={"url": "url"},
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**file:** `ClassifyRunsCreateRequestFileParams` — The file to be classified. Files can be provided as a URL, an Extend file ID, or raw text.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**classifier:** `typing.Optional[ClassifyRunsCreateRequestClassifierParams]` — Reference to an existing classifier. One of `classifier` or `config` must be provided.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[ClassifyConfigParams]` — Inline classify configuration. One of `classifier` or `config` must be provided.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**priority:** `typing.Optional[RunPriority]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**metadata:** `typing.Optional[RunMetadata]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.classify_runs.<a href="src/extend_ai/classify_runs/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[ClassifyRun]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve details about a specific classify run, including its status and outputs.
-
-A common use case for this endpoint is to poll for the status and final output of a classify run when using the [Create Classify Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/classify/create-classify-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.classify_runs.retrieve(
-    id="classify_run_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The unique identifier for this classify run.
-
-Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.classify_runs.<a href="src/extend_ai/classify_runs/client.py">delete</a>(...) -&gt; AsyncHttpResponse[ClassifyRunsDeleteResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Delete a classify run and all associated data from Extend. This operation is permanent and cannot be undone.
-
-This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.classify_runs.delete(
-    id="id",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` — The ID of the classify run.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.classify_runs.<a href="src/extend_ai/classify_runs/client.py">cancel</a>(...) -&gt; AsyncHttpResponse[ClassifyRun]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Cancel an in-progress classify run.
-
-Note: Only classify runs with a status of `"PROCESSING"` can be cancelled. Classifier runs that have already completed, failed, or been cancelled cannot be cancelled again.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.classify_runs.cancel(
-    id="classify_run_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The ID of the classify run to cancel.
-
-Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Classifiers
-<details><summary><code>client.classifiers.<a href="src/extend_ai/classifiers/client.py">list</a>(...) -&gt; AsyncHttpResponse[ClassifiersListResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List all classifiers.
-
-Returns a summary of each classifier. Use `GET /classifiers/{id}` to retrieve the full object including `draftVersion`.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.classifiers.list(
-    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**next_page_token:** `typing.Optional[NextPageToken]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**max_page_size:** `typing.Optional[MaxPageSize]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_by:** `typing.Optional[SortBy]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_dir:** `typing.Optional[SortDir]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.classifiers.<a href="src/extend_ai/classifiers/client.py">create</a>(...) -&gt; AsyncHttpResponse[Classifier]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Create a new classifier.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.classifiers.create(
-    name="name",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**name:** `str` — The name of the classifier.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**clone_classifier_id:** `typing.Optional[str]` 
-
-The ID of an existing classifier to clone. If provided, the new classifier will be created with the same config as the classifier with this ID. Cannot be provided together with `config`.
-
-Example: `"cl_BMdfq_yWM3sT-ZzvCnA3f"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[ClassifyConfigParams]` — The configuration for the classifier. Cannot be provided together with `cloneClassifierId`.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.classifiers.<a href="src/extend_ai/classifiers/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[Classifier]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Get details of a classifier.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.classifiers.retrieve(
-    id="classifier_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The ID of the classifier to get.
-
-Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.classifiers.<a href="src/extend_ai/classifiers/client.py">update</a>(...) -&gt; AsyncHttpResponse[Classifier]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Update an existing classifier.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.classifiers.update(
-    id="classifier_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The ID of the classifier to update.
-
-Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**name:** `typing.Optional[str]` — The new name of the classifier.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[ClassifyConfigParams]` — The new configuration for the classifier. This will update the draft version of the classifier.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## ClassifierVersions
-<details><summary><code>client.classifier_versions.<a href="src/extend_ai/classifier_versions/client.py">list</a>(...) -&gt; AsyncHttpResponse[ClassifierVersionsListResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-This endpoint allows you to fetch all versions of a given classifier, including the current `draft` version.
-
-Versions are returned in descending order of creation (newest first) with the `draft` version first. The `draft` version is the latest unpublished version of the classifier, which can be published to create a new version. It might not have any changes from the last published version.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.classifier_versions.list(
-    classifier_id="classifier_id_here",
-    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**classifier_id:** `str` 
-
-The ID of the classifier.
-
-Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_dir:** `typing.Optional[SortDir]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**next_page_token:** `typing.Optional[NextPageToken]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**max_page_size:** `typing.Optional[MaxPageSize]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.classifier_versions.<a href="src/extend_ai/classifier_versions/client.py">create</a>(...) -&gt; AsyncHttpResponse[ClassifierVersion]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-This endpoint allows you to publish a new version of an existing classifier. Publishing a new version creates a snapshot of the classifier's current configuration and makes it available for use in workflows.
-
-Publishing a new version does not automatically update existing workflows using this classifier. You may need to manually update workflows to use the new version if desired.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend, ReleaseType
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.classifier_versions.create(
-    classifier_id="classifier_id_here",
-    release_type=ReleaseType.MAJOR,
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**classifier_id:** `str` 
-
-The ID of the classifier.
-
-Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**release_type:** `ReleaseType` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**description:** `typing.Optional[VersionDescription]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[ClassifyConfigParams]` — The configuration for this version of the classifier.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.classifier_versions.<a href="src/extend_ai/classifier_versions/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[ClassifierVersion]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve a specific version of a classifier in Extend
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.classifier_versions.retrieve(
-    classifier_id="classifier_id_here",
-    version_id="classifier_version_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**classifier_id:** `str` 
-
-The ID of the classifier.
-
-Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**version_id:** `str` 
-
-The ID of the specific classifier version.
-
-Example: `"clsv_QYk6jgHA_8CsO8rVWhyNC"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## SplitRuns
-<details><summary><code>client.split_runs.<a href="src/extend_ai/split_runs/client.py">list</a>(...) -&gt; AsyncHttpResponse[SplitRunsListResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List all split runs.
-
-Returns a summary of each run. Use `GET /split_runs/{id}` to retrieve the full object including `output` and `config`.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.split_runs.list(
-    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**status:** `typing.Optional[ProcessorRunStatus]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**splitter_id:** `typing.Optional[str]` 
-
-Filters split runs by the splitter ID. If not provided, all split runs are returned.
-
-Example: `"spl_BMdfq_yWM3sT-ZzvCnA3f"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**source_id:** `typing.Optional[RunSourceId]` — Filters runs by the source ID.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**source:** `typing.Optional[RunSource]` — Filters runs by the source that created them. If not provided, runs from all sources are returned.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**file_name_contains:** `typing.Optional[str]` 
-
-Filters runs by the name of the file. Only returns runs where the file name contains this string.
-
-Example: `"invoice"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_by:** `typing.Optional[SortBy]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_dir:** `typing.Optional[SortDir]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**next_page_token:** `typing.Optional[NextPageToken]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**max_page_size:** `typing.Optional[MaxPageSize]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.split_runs.<a href="src/extend_ai/split_runs/client.py">create</a>(...) -&gt; AsyncHttpResponse[SplitRun]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Split a document into multiple parts using an existing splitter or an inline configuration.
-
-The request returns immediately with a `PROCESSING` status. Use webhooks or poll the [Get Split Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/split/get-split-run) endpoint for results.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.split_runs.create(
-    file={"url": "url"},
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**file:** `SplitRunsCreateRequestFileParams` — The file to be split. Files can be provided as a URL or an Extend file ID.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**splitter:** `typing.Optional[SplitRunsCreateRequestSplitterParams]` — Reference to an existing splitter. One of `splitter` or `config` must be provided.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[SplitConfigParams]` — Inline splitter configuration. One of `splitter` or `config` must be provided.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**priority:** `typing.Optional[RunPriority]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**metadata:** `typing.Optional[RunMetadata]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.split_runs.<a href="src/extend_ai/split_runs/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[SplitRun]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve details about a specific split run, including its status and outputs.
-
-A common use case for this endpoint is to poll for the status and final output of a split run when using the [Create Split Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/split/create-split-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.split_runs.retrieve(
-    id="split_run_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The unique identifier for this split run.
-
-Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.split_runs.<a href="src/extend_ai/split_runs/client.py">delete</a>(...) -&gt; AsyncHttpResponse[SplitRunsDeleteResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Delete a split run and all associated data from Extend. This operation is permanent and cannot be undone.
-
-This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.split_runs.delete(
-    id="id",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` — The ID of the split run.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.split_runs.<a href="src/extend_ai/split_runs/client.py">cancel</a>(...) -&gt; AsyncHttpResponse[SplitRun]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Cancel an in-progress split run.
-
-Note: Only split runs with a status of `"PROCESSING"` can be cancelled. Splitter runs that have already completed, failed, or been cancelled cannot be cancelled again.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.split_runs.cancel(
-    id="split_run_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The ID of the split run to cancel.
-
-Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Splitters
-<details><summary><code>client.splitters.<a href="src/extend_ai/splitters/client.py">list</a>(...) -&gt; AsyncHttpResponse[SplittersListResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List all splitters.
-
-Returns a summary of each splitter. Use `GET /splitters/{id}` to retrieve the full object including `draftVersion`.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.splitters.list(
-    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**next_page_token:** `typing.Optional[NextPageToken]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**max_page_size:** `typing.Optional[MaxPageSize]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_by:** `typing.Optional[SortBy]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_dir:** `typing.Optional[SortDir]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.splitters.<a href="src/extend_ai/splitters/client.py">create</a>(...) -&gt; AsyncHttpResponse[Splitter]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Create a new splitter.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.splitters.create(
-    name="name",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**name:** `str` — The name of the splitter.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**clone_splitter_id:** `typing.Optional[str]` 
-
-The ID of an existing splitter to clone. If provided, the new splitter will be created with the same config as the splitter with this ID. Cannot be provided together with `config`.
-
-Example: `"spl_BMdfq_yWM3sT-ZzvCnA3f"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[SplitConfigParams]` — The configuration for the splitter. Cannot be provided together with `cloneSplitterId`.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.splitters.<a href="src/extend_ai/splitters/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[Splitter]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Get details of a splitter.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.splitters.retrieve(
-    id="splitter_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The ID of the splitter to get.
-
-Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.splitters.<a href="src/extend_ai/splitters/client.py">update</a>(...) -&gt; AsyncHttpResponse[Splitter]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Update an existing splitter.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.splitters.update(
-    id="splitter_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The ID of the splitter to update.
-
-Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**name:** `typing.Optional[str]` — The new name of the splitter.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[SplitConfigParams]` — The new configuration for the splitter. This will update the draft version of the splitter.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## SplitterVersions
-<details><summary><code>client.splitter_versions.<a href="src/extend_ai/splitter_versions/client.py">list</a>(...) -&gt; AsyncHttpResponse[SplitterVersionsListResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-This endpoint allows you to fetch all versions of a given splitter, including the current `draft` version.
-
-Versions are returned in descending order of creation (newest first) with the `draft` version first. The `draft` version is the latest unpublished version of the splitter, which can be published to create a new version. It might not have any changes from the last published version.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.splitter_versions.list(
-    splitter_id="splitter_id_here",
-    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**splitter_id:** `str` 
-
-The ID of the splitter.
-
-Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_dir:** `typing.Optional[SortDir]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**next_page_token:** `typing.Optional[NextPageToken]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**max_page_size:** `typing.Optional[MaxPageSize]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.splitter_versions.<a href="src/extend_ai/splitter_versions/client.py">create</a>(...) -&gt; AsyncHttpResponse[SplitterVersion]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-This endpoint allows you to publish a new version of an existing splitter. Publishing a new version creates a snapshot of the splitter's current configuration and makes it available for use in workflows.
-
-Publishing a new version does not automatically update existing workflows using this splitter. You may need to manually update workflows to use the new version if desired.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend, ReleaseType
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.splitter_versions.create(
-    splitter_id="splitter_id_here",
-    release_type=ReleaseType.MAJOR,
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**splitter_id:** `str` 
-
-The ID of the splitter.
-
-Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**release_type:** `ReleaseType` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**description:** `typing.Optional[VersionDescription]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[SplitConfigParams]` — The configuration for this version of the splitter.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.splitter_versions.<a href="src/extend_ai/splitter_versions/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[SplitterVersion]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve a specific version of a splitter in Extend
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.splitter_versions.retrieve(
-    splitter_id="splitter_id_here",
-    version_id="splitter_version_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**splitter_id:** `str` 
-
-The ID of the splitter.
-
-Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**version_id:** `str` 
-
-The ID of the specific splitter version.
-
-Example: `"splv_QYk6jgHA_8CsO8rVWhyNC"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Workflows
-<details><summary><code>client.workflows.<a href="src/extend_ai/workflows/client.py">create</a>(...) -&gt; AsyncHttpResponse[Workflow]</code></summary>
+## Workflow
+<details><summary><code>client.workflow.<a href="src/extend_ai/workflow/client.py">create</a>(...) -&gt; AsyncHttpResponse[WorkflowCreateResponse]</code></summary>
 <dl>
 <dd>
 
@@ -4721,7 +1165,7 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.workflows.create(
+client.workflow.create(
     name="Invoice Processing",
 )
 
@@ -4759,8 +1203,8 @@ client.workflows.create(
 </dl>
 </details>
 
-## WorkflowRuns
-<details><summary><code>client.workflow_runs.<a href="src/extend_ai/workflow_runs/client.py">list</a>(...) -&gt; AsyncHttpResponse[WorkflowRunsListResponse]</code></summary>
+## WorkflowRun
+<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">list</a>(...) -&gt; AsyncHttpResponse[WorkflowRunListResponse]</code></summary>
 <dl>
 <dd>
 
@@ -4792,8 +1236,15 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.workflow_runs.list(
+client.workflow_run.list(
+    status="PENDING",
+    workflow_id="workflowId",
+    batch_id="batchId",
+    file_name_contains="fileNameContains",
+    sort_by="updatedAt",
+    sort_dir="asc",
     next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+    max_page_size=1,
 )
 
 ```
@@ -4810,7 +1261,19 @@ client.workflow_runs.list(
 <dl>
 <dd>
 
-**status:** `typing.Optional[WorkflowRunStatus]` 
+**status:** `typing.Optional[WorkflowStatus]` 
+
+Filters workflow runs by their status. If not provided, no filter is applied.
+
+ The status of a workflow run:
+ * `"PENDING"` - The workflow run has not started yet
+ * `"PROCESSING"` - The workflow run is in progress
+ * `"NEEDS_REVIEW"` - The workflow run requires manual review
+ * `"REJECTED"` - The workflow run was rejected during manual review
+ * `"PROCESSED"` - The workflow run completed successfully
+ * `"FAILED"` - The workflow run encountered an error
+ * `"CANCELLED"` - The workflow run was cancelled
+ * `"CANCELLING"` - The workflow run is being cancelled
     
 </dd>
 </dl>
@@ -4832,7 +1295,7 @@ Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
 **batch_id:** `typing.Optional[str]` 
 
-Filters workflow runs by the batch ID. This is useful for fetching all runs for a given batch created via the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/batch-run-workflow) endpoint.
+Filters workflow runs by the batch ID. This is useful for fetching all runs for a given batch created via the [Batch Run Workflow](/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
 
 Example: `"batch_7Ws31-F5"`
     
@@ -4844,7 +1307,7 @@ Example: `"batch_7Ws31-F5"`
 
 **file_name_contains:** `typing.Optional[str]` 
 
-Filters runs by the name of the file. Only returns runs where the file name contains this string.
+Filters workflow runs by the name of the file. Only returns workflow runs where the file name contains this string.
 
 Example: `"invoice"`
     
@@ -4854,7 +1317,7 @@ Example: `"invoice"`
 <dl>
 <dd>
 
-**sort_by:** `typing.Optional[SortBy]` 
+**sort_by:** `typing.Optional[SortByEnum]` — Sorts the workflow runs by the given field.
     
 </dd>
 </dl>
@@ -4862,7 +1325,7 @@ Example: `"invoice"`
 <dl>
 <dd>
 
-**sort_dir:** `typing.Optional[SortDir]` 
+**sort_dir:** `typing.Optional[SortDirEnum]` — Sorts the workflow runs in ascending or descending order. Ascending order means the earliest workflow run is returned first.
     
 </dd>
 </dl>
@@ -4898,7 +1361,7 @@ Example: `"invoice"`
 </dl>
 </details>
 
-<details><summary><code>client.workflow_runs.<a href="src/extend_ai/workflow_runs/client.py">create</a>(...) -&gt; AsyncHttpResponse[WorkflowRun]</code></summary>
+<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">create</a>(...) -&gt; AsyncHttpResponse[WorkflowRunCreateResponse]</code></summary>
 <dl>
 <dd>
 
@@ -4910,7 +1373,7 @@ Example: `"invoice"`
 <dl>
 <dd>
 
-Run a workflow with a file. A workflow is a sequence of steps that process files and data in a specific order to achieve a desired outcome.
+Run a Workflow with files. A Workflow is a sequence of steps that process files and data in a specific order to achieve a desired outcome. A WorkflowRun will be created for each file processed. A WorkflowRun represents a single execution of a workflow against a file.
 </dd>
 </dl>
 </dd>
@@ -4930,9 +1393,8 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.workflow_runs.create(
-    workflow={"id": "workflow_BMdfq_yWM3sT-ZzvCnA3f"},
-    file={"url": "url"},
+client.workflow_run.create(
+    workflow_id="workflow_id_here",
 )
 
 ```
@@ -4949,7 +1411,11 @@ client.workflow_runs.create(
 <dl>
 <dd>
 
-**workflow:** `WorkflowReferenceParams` 
+**workflow_id:** `str` 
+
+The ID of the workflow to run.
+
+Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
     
 </dd>
 </dl>
@@ -4957,7 +1423,7 @@ client.workflow_runs.create(
 <dl>
 <dd>
 
-**file:** `WorkflowRunsCreateRequestFileParams` — The file to be processed. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/product/general/supported-file-types). Files can be provided as a URL, an Extend file ID, or raw text. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/batch-run-workflow) endpoint.
+**files:** `typing.Optional[typing.Sequence[WorkflowRunFileInput]]` — An array of files to process through the workflow. Either the `files` array or `rawTexts` array must be provided. Supported file types can be found [here](/product/general/supported-file-types). There is a limit if 50 files that can be processed at once using this endpoint. If you wish to process more at a time, consider using the [Batch Run Workflow](/developers/api-reference/workflow-endpoints/batch-run-workflow) endpoint.
     
 </dd>
 </dl>
@@ -4965,7 +1431,7 @@ client.workflow_runs.create(
 <dl>
 <dd>
 
-**outputs:** `typing.Optional[typing.Sequence[WorkflowRunsCreateRequestOutputsItemParams]]` — Predetermined outputs to be used for the workflow run. Generally not recommended for most use cases, however, can be useful in cases of overriding a classification in a workflow, or a subset of extraction fields when data is known.
+**raw_texts:** `typing.Optional[typing.Sequence[str]]` — An array of raw strings. Can be used in place of files when passing raw data. The raw data will be converted to `.txt` files and run through the workflow. If the data follows a specific format, it is recommended to use the files parameter instead. Either `files` or `rawTexts` must be provided.
     
 </dd>
 </dl>
@@ -4973,7 +1439,13 @@ client.workflow_runs.create(
 <dl>
 <dd>
 
-**priority:** `typing.Optional[RunPriority]` 
+**version:** `typing.Optional[str]` 
+
+An optional version of the workflow that files will be run through. This number can be found when viewing the workflow on the Extend platform. When a version number is not supplied, the most recent published version of the workflow will be used. If no published versions exist, the draft version will be used. To run the `"draft"` version of a workflow, use `"draft"` as the version.
+
+Examples:
+- `"3"` - Run version 3 of the workflow
+- `"draft"` - Run the draft version of the workflow
     
 </dd>
 </dl>
@@ -4981,7 +1453,7 @@ client.workflow_runs.create(
 <dl>
 <dd>
 
-**metadata:** `typing.Optional[RunMetadata]` 
+**priority:** `typing.Optional[int]` — An optional value used to determine the relative order of WorkflowRuns when rate limiting is in effect. Lower values will be prioritized before higher values.
     
 </dd>
 </dl>
@@ -4989,7 +1461,11 @@ client.workflow_runs.create(
 <dl>
 <dd>
 
-**secrets:** `typing.Optional[RunSecrets]` 
+**metadata:** `typing.Optional[JsonObject]` 
+
+An optional metadata object that can be assigned to a specific WorkflowRun to help identify it. It will be returned in the response and webhooks. You can place any arbitrary `key : value` pairs in this object.
+
+To categorize workflow runs for billing and usage tracking, include `extend:usage_tags` with an array of string values (e.g., `{"extend:usage_tags": ["production", "team-eng", "customer-123"]}`). Tags must contain only alphanumeric characters, hyphens, and underscores; any special characters will be automatically removed.
     
 </dd>
 </dl>
@@ -5009,7 +1485,7 @@ client.workflow_runs.create(
 </dl>
 </details>
 
-<details><summary><code>client.workflow_runs.<a href="src/extend_ai/workflow_runs/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[WorkflowRun]</code></summary>
+<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">get</a>(...) -&gt; AsyncHttpResponse[WorkflowRunGetResponse]</code></summary>
 <dl>
 <dd>
 
@@ -5041,8 +1517,8 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.workflow_runs.retrieve(
-    id="workflow_run_id_here",
+client.workflow_run.get(
+    workflow_run_id="workflow_run_id_here",
 )
 
 ```
@@ -5059,11 +1535,11 @@ client.workflow_runs.retrieve(
 <dl>
 <dd>
 
-**id:** `str` 
+**workflow_run_id:** `str` 
 
-The ID of the workflow run.
+The ID of the WorkflowRun that was outputted after a Workflow was run through the API.
 
-Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+Example: `"workflow_run_8k9m-xyzAB_Pqrst-Nvw4"`
     
 </dd>
 </dl>
@@ -5083,7 +1559,7 @@ Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 </dl>
 </details>
 
-<details><summary><code>client.workflow_runs.<a href="src/extend_ai/workflow_runs/client.py">update</a>(...) -&gt; AsyncHttpResponse[WorkflowRun]</code></summary>
+<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">update</a>(...) -&gt; AsyncHttpResponse[WorkflowRunUpdateResponse]</code></summary>
 <dl>
 <dd>
 
@@ -5115,8 +1591,8 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.workflow_runs.update(
-    id="workflow_run_id_here",
+client.workflow_run.update(
+    workflow_run_id="workflow_run_id_here",
 )
 
 ```
@@ -5133,11 +1609,11 @@ client.workflow_runs.update(
 <dl>
 <dd>
 
-**id:** `str` 
+**workflow_run_id:** `str` 
 
-The ID of the workflow run.
+The ID of the WorkflowRun. This ID will start with "workflow_run". This ID can be found in the API response when creating a Workflow Run, or in the "history" tab of a workflow on the Extend platform.
 
-Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+Example: `"workflow_run_8k9m-xyzAB_Pqrst-Nvw4"`
     
 </dd>
 </dl>
@@ -5153,7 +1629,7 @@ Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 <dl>
 <dd>
 
-**metadata:** `typing.Optional[typing.Dict[str, typing.Any]]` 
+**metadata:** `typing.Optional[JsonObject]` 
 
 A metadata object that can be assigned to a specific WorkflowRun. If metadata already exists on this WorkflowRun, the newly incoming metadata will be merged with the existing metadata, with the incoming metadata taking field precedence.
 
@@ -5179,7 +1655,7 @@ To categorize workflow runs for billing and usage tracking, include `extend:usag
 </dl>
 </details>
 
-<details><summary><code>client.workflow_runs.<a href="src/extend_ai/workflow_runs/client.py">delete</a>(...) -&gt; AsyncHttpResponse[WorkflowRunsDeleteResponse]</code></summary>
+<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">delete</a>(...) -&gt; AsyncHttpResponse[WorkflowRunDeleteResponse]</code></summary>
 <dl>
 <dd>
 
@@ -5213,8 +1689,8 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.workflow_runs.delete(
-    id="workflow_run_id_here",
+client.workflow_run.delete(
+    workflow_run_id="workflow_run_id_here",
 )
 
 ```
@@ -5231,9 +1707,9 @@ client.workflow_runs.delete(
 <dl>
 <dd>
 
-**id:** `str` 
+**workflow_run_id:** `str` 
 
-The ID of the workflow run.
+The ID of the workflow run to delete.
 
 Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
     
@@ -5255,7 +1731,7 @@ Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 </dl>
 </details>
 
-<details><summary><code>client.workflow_runs.<a href="src/extend_ai/workflow_runs/client.py">cancel</a>(...) -&gt; AsyncHttpResponse[WorkflowRun]</code></summary>
+<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">cancel</a>(...) -&gt; AsyncHttpResponse[WorkflowRunCancelResponse]</code></summary>
 <dl>
 <dd>
 
@@ -5289,8 +1765,8 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.workflow_runs.cancel(
-    id="workflow_run_id_here",
+client.workflow_run.cancel(
+    workflow_run_id="workflow_run_id_here",
 )
 
 ```
@@ -5307,9 +1783,9 @@ client.workflow_runs.cancel(
 <dl>
 <dd>
 
-**id:** `str` 
+**workflow_run_id:** `str` 
 
-The ID of the workflow run.
+The ID of the workflow run to cancel.
 
 Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
     
@@ -5331,7 +1807,109 @@ Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 </dl>
 </details>
 
-<details><summary><code>client.workflow_runs.<a href="src/extend_ai/workflow_runs/client.py">create_batch</a>(...) -&gt; AsyncHttpResponse[WorkflowRunsCreateBatchResponse]</code></summary>
+## WorkflowRunOutput
+<details><summary><code>client.workflow_run_output.<a href="src/extend_ai/workflow_run_output/client.py">update</a>(...) -&gt; AsyncHttpResponse[WorkflowRunOutputUpdateResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Use this endpoint to submit corrected outputs for a WorkflowRun for future processor evaluation and tuning in Extend.
+
+If you are using our Human-in-the-loop workflow review, then we already will be collecting your operator submitted corrections. However, if you are receiving data via the API without human review, there could be incorrect outputs that you would like to correct for future usage in evaluation and tuning within the Extend platform. This endpoint allows you to submit corrected outputs for a WorkflowRun, by providing the correct output for a given output ID.
+
+The output ID, would be found in a given entry within the outputs arrays of a Workflow Run payload. The ID would look something like `dpr_gwkZZNRrPgkjcq0y-***`.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend, ProvidedJsonOutput
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.workflow_run_output.update(
+    workflow_run_id="workflow_run_id_here",
+    output_id="output_id_here",
+    reviewed_output=ProvidedJsonOutput(
+        value={"key": "value"},
+    ),
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workflow_run_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**output_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**reviewed_output:** `ProvidedProcessorOutput` 
+
+The corrected output of the processor when run against the file.
+
+This should conform to the output type schema of the given processor.
+
+If this is an extraction result, you can include all fields, or just the ones that were corrected, our system will handle merges/dedupes. However, if you do include a field, we assume the value included in the final reviewed value.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## BatchWorkflowRun
+<details><summary><code>client.batch_workflow_run.<a href="src/extend_ai/batch_workflow_run/client.py">create</a>(...) -&gt; AsyncHttpResponse[BatchWorkflowRunCreateResponse]</code></summary>
 <dl>
 <dd>
 
@@ -5345,17 +1923,110 @@ Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 
 This endpoint allows you to efficiently initiate large batches of workflow runs in a single request (up to 1,000 in a single request, but you can queue up multiple batches in rapid succession). It accepts an array of inputs, each containing a file and metadata pair. The primary use case for this endpoint is for doing large bulk runs of >1000 files at a time that can process over the course of a few hours without needing to manage rate limits that would likely occur using the primary run endpoint.
 
-Unlike the single [Run Workflow](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/run-workflow) endpoint which returns the details of the created workflow runs immediately, this batch endpoint returns a `batchId`.
+Unlike the single [Run Workflow](/developers/api-reference/workflow-endpoints/run-workflow) endpoint which returns the details of the created workflow runs immediately, this batch endpoint returns a `batchId`.
 
-Our recommended usage pattern is to integrate with [Webhooks](https://docs.extend.ai/2026-02-09/product/webhooks/configuration) for consuming results, using the `metadata` and `batchId` to match up results to the original inputs in your downstream systems. However, you can integrate in a polling mechanism by using a combination of the [List Workflow Runs](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/list-workflow-runs) endpoint to fetch all runs via a batch, and then [Get Workflow Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/get-workflow-run) to fetch the full outputs each run.
+Our recommended usage pattern is to integrate with [Webhooks](/product/webhooks/configuration) for consuming results, using the `metadata` and `batchId` to match up results to the original inputs in your downstream systems. However, you can integrate in a polling mechanism by using a combination of the [List Workflow Runs](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/list-workflow-runs) endpoint to fetch all runs via a batch, and then [Get Workflow Run](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/get-workflow-run) to fetch the full outputs each run.
 
 **Priority:** All workflow runs created through this batch endpoint are automatically assigned a priority of 90.
 
 **Processing and Monitoring:**
 Upon successful submission, the endpoint returns a `batchId`. The individual workflow runs are then queued for processing.
 
-- **Monitoring:** Track the progress and consume results of individual runs using [Webhooks](https://docs.extend.ai/2026-02-09/product/webhooks/configuration). Subscribe to events like `workflow_run.completed`, `workflow_run.failed`, etc. The webhook payload for these events will include the corresponding `batchId` and the `metadata` you provided for each input.
-- **Fetching Results:** You can also use the [List Workflow Runs](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/list-workflow-runs) endpoint and filter using the `batchId` query param.
+- **Monitoring:** Track the progress and consume results of individual runs using [Webhooks](/product/webhooks/configuration). Subscribe to events like `workflow_run.completed`, `workflow_run.failed`, etc. The webhook payload for these events will include the corresponding `batchId` and the `metadata` you provided for each input.
+- **Fetching Results:** You can also use the [List Workflow Runs](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/list-workflow-runs) endpoint and filter using the `batchId` query param.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+from extend_ai.batch_workflow_run import BatchWorkflowRunCreateRequestInputsItem
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.batch_workflow_run.create(
+    workflow_id="workflow_id_here",
+    inputs=[BatchWorkflowRunCreateRequestInputsItem()],
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workflow_id:** `str` 
+
+The ID of the workflow to run. This ID will start with "workflow_". This ID can be found viewing the workflow on the Extend platform.
+
+Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**inputs:** `typing.Sequence[BatchWorkflowRunCreateRequestInputsItem]` — An array of input objects to be processed by the workflow. Each object represents a single workflow run to be created. The array must contain at least 1 input and at most 1000 inputs.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**version:** `typing.Optional[str]` — An optional version of the workflow to use. This can be a specific version number (e.g., `"1"`, `"2"`) found on the Extend platform, or `"draft"` to use the current unpublished draft version. When a version is not supplied, the latest deployed version of the workflow will be used. If no deployed version exists, the draft version will be used.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## BatchProcessorRun
+<details><summary><code>client.batch_processor_run.<a href="src/extend_ai/batch_processor_run/client.py">get</a>(...) -&gt; AsyncHttpResponse[BatchProcessorRunGetResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve details about a batch processor run, including evaluation runs
 </dd>
 </dl>
 </dd>
@@ -5375,9 +2046,8 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.workflow_runs.create_batch(
-    workflow={"id": "workflow_BMdfq_yWM3sT-ZzvCnA3f"},
-    inputs=[{"file": {"url": "url"}}],
+client.batch_processor_run.get(
+    id="batch_processor_run_id_here",
 )
 
 ```
@@ -5394,7 +2064,11 @@ client.workflow_runs.create_batch(
 <dl>
 <dd>
 
-**workflow:** `WorkflowReferenceParams` 
+**id:** `str` 
+
+The unique identifier of the batch processor run to retrieve. The ID will always start with "bpr_".
+
+Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
     
 </dd>
 </dl>
@@ -5402,7 +2076,768 @@ client.workflow_runs.create_batch(
 <dl>
 <dd>
 
-**inputs:** `typing.Sequence[WorkflowRunsCreateBatchRequestInputsItemParams]` — An array of input objects to be processed by the workflow. Each object represents a single workflow run to be created. The array must contain at least 1 input and at most 1000 inputs.
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## EvaluationSet
+<details><summary><code>client.evaluation_set.<a href="src/extend_ai/evaluation_set/client.py">list</a>(...) -&gt; AsyncHttpResponse[EvaluationSetListResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List evaluation sets in your account. You can use the `processorId` parameter to filter evaluation sets by processor. 
+
+This endpoint returns a paginated response. You can use the `nextPageToken` to fetch subsequent results.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.evaluation_set.list(
+    processor_id="processor_id_here",
+    sort_by="updatedAt",
+    sort_dir="asc",
+    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+    max_page_size=1,
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**processor_id:** `typing.Optional[str]` 
+
+The ID of the processor to filter evaluation sets by.
+
+Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort_by:** `typing.Optional[SortByEnum]` — Sorts the evaluation sets by the given field.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort_dir:** `typing.Optional[SortDirEnum]` — Sorts the evaluation sets in ascending or descending order. Ascending order means the earliest evaluation set is returned first.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**next_page_token:** `typing.Optional[NextPageToken]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**max_page_size:** `typing.Optional[MaxPageSize]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluation_set.<a href="src/extend_ai/evaluation_set/client.py">create</a>(...) -&gt; AsyncHttpResponse[EvaluationSetCreateResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Evaluation sets are collections of files and expected outputs that are used to evaluate the performance of a given processor in Extend. This endpoint will create a new evaluation set in Extend, which items can be added to using the [Create Evaluation Set Item](https://docs.extend.ai/2025-04-21/developers/api-reference/evaluation-set-endpoints/create-evaluation-set-item) endpoint.
+
+Note: it is not necessary to create an evaluation set via API. You can also create an evaluation set via the Extend dashboard and take the ID from there.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.evaluation_set.create(
+    name="My Evaluation Set",
+    description="My Evaluation Set Description",
+    processor_id="processor_id_here",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**name:** `str` 
+
+The name of the evaluation set.
+
+Example: `"Invoice Processing Test Set"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**description:** `str` 
+
+A description of what this evaluation set is used for.
+
+Example: `"Q4 2023 vendor invoices"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**processor_id:** `str` 
+
+The ID of the processor to create an evaluation set for. Evaluation sets can in theory be run against any processor, but it is required to associate the evaluation set with a primary processor.
+
+Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluation_set.<a href="src/extend_ai/evaluation_set/client.py">get</a>(...) -&gt; AsyncHttpResponse[EvaluationSetGetResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a specific evaluation set by ID. This returns an evaluation set object, but does not include the items in the evaluation set. You can use the [List Evaluation Set Items](https://docs.extend.ai/2025-04-21/developers/api-reference/evaluation-set-endpoints/list-evaluation-set-items) endpoint to get the items in an evaluation set.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.evaluation_set.get(
+    id="evaluation_set_id_here",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the evaluation set to retrieve.
+
+Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## EvaluationSetItem
+<details><summary><code>client.evaluation_set_item.<a href="src/extend_ai/evaluation_set_item/client.py">list</a>(...) -&gt; AsyncHttpResponse[EvaluationSetItemListResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all items in a specific evaluation set. Evaluation set items are the individual files and expected outputs that are used to evaluate the performance of a given processor in Extend. 
+
+This endpoint returns a paginated response. You can use the `nextPageToken` to fetch subsequent results.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.evaluation_set_item.list(
+    id="evaluation_set_id_here",
+    sort_by="updatedAt",
+    sort_dir="asc",
+    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+    max_page_size=1,
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the evaluation set to retrieve items for.
+
+Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort_by:** `typing.Optional[SortByEnum]` — Sorts the evaluation set items by the given field.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort_dir:** `typing.Optional[SortDirEnum]` — Sorts the evaluation set items in ascending or descending order. Ascending order means the earliest evaluation set is returned first.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**next_page_token:** `typing.Optional[NextPageToken]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**max_page_size:** `typing.Optional[MaxPageSize]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluation_set_item.<a href="src/extend_ai/evaluation_set_item/client.py">create</a>(...) -&gt; AsyncHttpResponse[EvaluationSetItemCreateResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Evaluation set items are the individual files and expected outputs that are used to evaluate the performance of a given processor in Extend. This endpoint will create a new evaluation set item in Extend, which will be used during an evaluation run.
+
+Best Practices for Outputs in Evaluation Sets:
+- **Configure First, Output Later**
+  - Always create and finalize your processor configuration before creating evaluation sets
+  - Field IDs in outputs must match those defined in your processor configuration
+- **Type Consistency**
+  - Ensure output types exactly match your processor configuration
+  - For example, if a field is configured as "currency", don't submit a simple number value
+- **Field IDs**
+  - Use the exact field IDs from your processor configuration
+  - Create your own semantic IDs instead in the configs for each field/type instead of using the generated ones
+- **Value**
+  - Remember that all results are inside the value key of a result object, except the values within nested structures.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend, ProvidedJsonOutput
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.evaluation_set_item.create(
+    evaluation_set_id="evaluation_set_id_here",
+    file_id="file_id_here",
+    expected_output=ProvidedJsonOutput(
+        value={"key": "value"},
+    ),
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**evaluation_set_id:** `str` 
+
+The ID of the evaluation set to add the item to.
+
+Example: `"ev_Xj8mK2pL9nR4vT7qY5wZ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**file_id:** `str` 
+
+Extend's internal ID for the file. It will always start with "file_".
+
+Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expected_output:** `ProvidedProcessorOutput` — The expected output that will be used to evaluate the processor's performance.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluation_set_item.<a href="src/extend_ai/evaluation_set_item/client.py">update</a>(...) -&gt; AsyncHttpResponse[EvaluationSetItemUpdateResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+If you need to change the expected output for a given evaluation set item, you can use this endpoint to update the item. This can be useful if you need to correct an error in the expected output or if the output of the processor has changed.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend, ProvidedJsonOutput
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.evaluation_set_item.update(
+    id="evaluation_set_item_id_here",
+    expected_output=ProvidedJsonOutput(
+        value={"key": "value"},
+    ),
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the evaluation set item to update.
+
+Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expected_output:** `ProvidedProcessorOutput` — The expected output of the processor when run against the file
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluation_set_item.<a href="src/extend_ai/evaluation_set_item/client.py">delete</a>(...) -&gt; AsyncHttpResponse[EvaluationSetItemDeleteResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete an evaluation set item from an evaluation set. This operation is permanent and cannot be undone.
+
+This endpoint can be used to remove individual items from an evaluation set when they are no longer needed or if they were added in error.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.evaluation_set_item.delete(
+    id="evaluation_set_item_id_here",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the evaluation set item to delete.
+
+Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluation_set_item.<a href="src/extend_ai/evaluation_set_item/client.py">create_batch</a>(...) -&gt; AsyncHttpResponse[EvaluationSetItemCreateBatchResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+If you have a large number of files that you need to add to an evaluation set, you can use this endpoint to create multiple evaluation set items at once. This can be useful if you have a large dataset that you need to evaluate the performance of a processor against.
+
+Note: you still need to create each File first using the file API.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend, ProvidedJsonOutput
+from extend_ai.evaluation_set_item import (
+    EvaluationSetItemCreateBatchRequestItemsItem,
+)
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.evaluation_set_item.create_batch(
+    evaluation_set_id="evaluation_set_id_here",
+    items=[
+        EvaluationSetItemCreateBatchRequestItemsItem(
+            file_id="file_id_here",
+            expected_output=ProvidedJsonOutput(
+                value={"key": "value"},
+            ),
+        )
+    ],
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**evaluation_set_id:** `str` 
+
+The ID of the evaluation set to add the items to.
+
+Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**items:** `typing.Sequence[EvaluationSetItemCreateBatchRequestItemsItem]` — An array of objects representing the evaluation set items to create
     
 </dd>
 </dl>
@@ -5456,7 +2891,16 @@ client = Extend(
     token="YOUR_TOKEN",
 )
 client.processor_run.list(
+    status="PENDING",
+    processor_id="processorId",
+    processor_type="EXTRACT",
+    source_id="sourceId",
+    source="ADMIN",
+    file_name_contains="fileNameContains",
+    sort_by="updatedAt",
+    sort_dir="asc",
     next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+    max_page_size=1,
 )
 
 ```
@@ -5473,7 +2917,7 @@ client.processor_run.list(
 <dl>
 <dd>
 
-**status:** `typing.Optional[LegacyProcessorStatus]` 
+**status:** `typing.Optional[ProcessorStatus]` 
 
 Filters processor runs by their status. If not provided, no filter is applied.
 
@@ -5494,7 +2938,7 @@ Filters processor runs by their status. If not provided, no filter is applied.
 
 Filters processor runs by the processor ID. If not provided, runs for all processors are returned.
 
-Example: `"ex_BMdfq_yWM3sT-ZzvCnA3f"`
+Example: `"dp_BMdfq_yWM3sT-ZzvCnA3f"`
     
 </dd>
 </dl>
@@ -5502,7 +2946,7 @@ Example: `"ex_BMdfq_yWM3sT-ZzvCnA3f"`
 <dl>
 <dd>
 
-**processor_type:** `typing.Optional[LegacyProcessorType]` 
+**processor_type:** `typing.Optional[ProcessorType]` 
 
 Filters processor runs by the processor type. If not provided, runs for all processor types are returned.
 
@@ -5557,7 +3001,7 @@ Example: `"invoice"`
 <dl>
 <dd>
 
-**sort_by:** `typing.Optional[LegacySortByEnum]` — Sorts the processor runs by the given field.
+**sort_by:** `typing.Optional[SortByEnum]` — Sorts the processor runs by the given field.
     
 </dd>
 </dl>
@@ -5565,7 +3009,7 @@ Example: `"invoice"`
 <dl>
 <dd>
 
-**sort_dir:** `typing.Optional[LegacySortDirEnum]` — Sorts the processor runs in ascending or descending order. Ascending order means the earliest processor run is returned first.
+**sort_dir:** `typing.Optional[SortDirEnum]` — Sorts the processor runs in ascending or descending order. Ascending order means the earliest processor run is returned first.
     
 </dd>
 </dl>
@@ -5573,7 +3017,7 @@ Example: `"invoice"`
 <dl>
 <dd>
 
-**next_page_token:** `typing.Optional[LegacyNextPageToken]` 
+**next_page_token:** `typing.Optional[NextPageToken]` 
     
 </dd>
 </dl>
@@ -5581,7 +3025,7 @@ Example: `"invoice"`
 <dl>
 <dd>
 
-**max_page_size:** `typing.Optional[LegacyMaxPageSize]` 
+**max_page_size:** `typing.Optional[MaxPageSize]` 
     
 </dd>
 </dl>
@@ -5659,7 +3103,7 @@ client.processor_run.create(
 <dl>
 <dd>
 
-**processor_id:** `LegacyProcessorId` 
+**processor_id:** `ProcessorId` 
     
 </dd>
 </dl>
@@ -5680,7 +3124,7 @@ An optional version of the processor to use. When not supplied, the most recent 
 <dl>
 <dd>
 
-**file:** `typing.Optional[LegacyProcessorRunFileInputParams]` — The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/general/supported-file-types).
+**file:** `typing.Optional[ProcessorRunFileInput]` — The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/general/supported-file-types).
     
 </dd>
 </dl>
@@ -5716,7 +3160,7 @@ Whether to run the processor synchronously. When `true`, the request will wait f
 <dl>
 <dd>
 
-**metadata:** `typing.Optional[LegacyJsonObject]` 
+**metadata:** `typing.Optional[JsonObject]` 
 
 An optional object that can be passed in to identify the run of the document processor. It will be returned back to you in the response and webhooks.
 
@@ -5728,7 +3172,7 @@ To categorize processor runs for billing and usage tracking, include `extend:usa
 <dl>
 <dd>
 
-**config:** `typing.Optional[ProcessorRunCreateRequestConfigParams]` — The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
+**config:** `typing.Optional[ProcessorRunCreateRequestConfig]` — The configuration for the processor run. If this is provided, this config will be used. If not provided, the config for the specific version you provide will be used. The type of configuration must match the processor type.
     
 </dd>
 </dl>
@@ -5804,7 +3248,7 @@ client.processor_run.get(
 
 The unique identifier for this processor run.
 
-Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
+Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
     
 </dd>
 </dl>
@@ -5880,7 +3324,7 @@ client.processor_run.delete(
 
 The ID of the processor run to delete.
 
-Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
+Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
     
 </dd>
 </dl>
@@ -5956,7 +3400,7 @@ client.processor_run.cancel(
 
 The unique identifier for the processor run to cancel.
 
-Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
+Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
     
 </dd>
 </dl>
@@ -5977,7 +3421,7 @@ Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
 </details>
 
 ## Processor
-<details><summary><code>client.processor.<a href="src/extend_ai/processor/client.py">list</a>(...) -&gt; AsyncHttpResponse[LegacyListProcessorsResponse]</code></summary>
+<details><summary><code>client.processor.<a href="src/extend_ai/processor/client.py">list</a>(...) -&gt; AsyncHttpResponse[ListProcessorsResponse]</code></summary>
 <dl>
 <dd>
 
@@ -6009,7 +3453,13 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.processor.list()
+client.processor.list(
+    type="EXTRACT",
+    next_page_token="nextPageToken",
+    max_page_size=1,
+    sort_by="createdAt",
+    sort_dir="asc",
+)
 
 ```
 </dd>
@@ -6025,7 +3475,7 @@ client.processor.list()
 <dl>
 <dd>
 
-**type:** `typing.Optional[LegacyProcessorType]` — Filter processors by type
+**type:** `typing.Optional[ProcessorType]` — Filter processors by type
     
 </dd>
 </dl>
@@ -6104,14 +3554,14 @@ Create a new processor in Extend, optionally cloning from an existing processor
 <dd>
 
 ```python
-from extend_ai import Extend, LegacyProcessorType
+from extend_ai import Extend
 
 client = Extend(
     token="YOUR_TOKEN",
 )
 client.processor.create(
     name="My Processor Name",
-    type=LegacyProcessorType.EXTRACT,
+    type="EXTRACT",
 )
 
 ```
@@ -6136,7 +3586,7 @@ client.processor.create(
 <dl>
 <dd>
 
-**type:** `LegacyProcessorType` 
+**type:** `ProcessorType` 
     
 </dd>
 </dl>
@@ -6148,7 +3598,7 @@ client.processor.create(
 
 The ID of an existing processor to clone. One of `cloneProcessorId` or `config` must be provided.
 
-Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     
 </dd>
 </dl>
@@ -6156,7 +3606,7 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**config:** `typing.Optional[ProcessorCreateRequestConfigParams]` — The configuration for the processor. The type of configuration must match the processor type. One of `cloneProcessorId` or `config` must be provided.
+**config:** `typing.Optional[ProcessorCreateRequestConfig]` — The configuration for the processor. The type of configuration must match the processor type. One of `cloneProcessorId` or `config` must be provided.
     
 </dd>
 </dl>
@@ -6230,7 +3680,7 @@ client.processor.update(
 
 The ID of the processor to update.
 
-Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     
 </dd>
 </dl>
@@ -6246,7 +3696,7 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**config:** `typing.Optional[ProcessorUpdateRequestConfigParams]` 
+**config:** `typing.Optional[ProcessorUpdateRequestConfig]` 
 
 The new configuration for the processor. The type of configuration must match the processor type:
 * For classification processors, use `ClassificationConfig`
@@ -6329,7 +3779,7 @@ client.processor_version.list(
 
 The ID of the processor to retrieve versions for.
 
-Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     
 </dd>
 </dl>
@@ -6379,14 +3829,13 @@ Publishing a new version does not automatically update existing workflows using 
 
 ```python
 from extend_ai import Extend
-from extend_ai.processor_version import ProcessorVersionCreateRequestReleaseType
 
 client = Extend(
     token="YOUR_TOKEN",
 )
 client.processor_version.create(
     id="processor_id_here",
-    release_type=ProcessorVersionCreateRequestReleaseType.MAJOR,
+    release_type="major",
 )
 
 ```
@@ -6407,7 +3856,7 @@ client.processor_version.create(
 
 The ID of the processor to publish a new version for.
 
-Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     
 </dd>
 </dl>
@@ -6431,7 +3880,7 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**config:** `typing.Optional[ProcessorVersionCreateRequestConfigParams]` — The configuration for this version of the processor. The type of configuration must match the processor type.
+**config:** `typing.Optional[ProcessorVersionCreateRequestConfig]` — The configuration for this version of the processor. The type of configuration must match the processor type.
     
 </dd>
 </dl>
@@ -6506,7 +3955,7 @@ client.processor_version.get(
 
 The ID of the processor.
 
-Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     
 </dd>
 </dl>
@@ -6518,909 +3967,7 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
 The ID of the specific processor version to retrieve.
 
-Example: `"exv_QYk6jgHA_8CsO8rVWhyNC"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## BatchProcessorRun
-<details><summary><code>client.batch_processor_run.<a href="src/extend_ai/batch_processor_run/client.py">get</a>(...) -&gt; AsyncHttpResponse[BatchProcessorRunGetResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve details about a batch processor run, including evaluation runs.
-
-**Deprecated:** This endpoint is maintained for backwards compatibility only and will be replaced in a future API version. Use [Get Evaluation Set Run](/2026-02-09/developers/api-reference/endpoints/evaluation/get-evaluation-set-run) for interacting with evaluation set runs.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.batch_processor_run.get(
-    id="bpr_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The unique identifier of the batch processor run to retrieve.
-
-Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## EvaluationSets
-<details><summary><code>client.evaluation_sets.<a href="src/extend_ai/evaluation_sets/client.py">list</a>(...) -&gt; AsyncHttpResponse[EvaluationSetsListResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List evaluation sets in your account.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.evaluation_sets.list(
-    entity_id="entity_id_here",
-    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**entity_id:** `typing.Optional[str]` 
-
-The ID of the extractor, classifier, or splitter to filter evaluation sets by.
-
-Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_by:** `typing.Optional[SortBy]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_dir:** `typing.Optional[SortDir]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**next_page_token:** `typing.Optional[NextPageToken]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**max_page_size:** `typing.Optional[MaxPageSize]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluation_sets.<a href="src/extend_ai/evaluation_sets/client.py">create</a>(...) -&gt; AsyncHttpResponse[EvaluationSet]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Evaluation sets are collections of files and expected outputs that are used to evaluate the performance of a given extractor, classifier, or splitter. This endpoint will create a new evaluation set, which items can be added to using the [Create Evaluation Set Item](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/evaluation/create-evaluation-set-item) endpoint.
-
-Note: It is not necessary to create an evaluation set via API. You can also create an evaluation set via the Extend dashboard and take the ID from there. To learn more about how to create evaluation sets, see the [Evaluation Sets](https://docs.extend.ai/product/evaluation/overview) product page.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.evaluation_sets.create(
-    name="My Evaluation Set",
-    entity_id="entity_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**name:** `str` 
-
-The name of the evaluation set.
-
-Example: `"Invoice Processing Test Set"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**entity_id:** `str` 
-
-The ID of the extractor, classifier, or splitter to create an evaluation set for. Evaluation sets can in theory be run against any extractor, classifier, or splitter, but it is required to associate the evaluation set with a primary extractor, classifier, or splitter.
-
-Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**description:** `typing.Optional[str]` 
-
-A description of what this evaluation set is used for.
-
-Example: `"Q4 2023 vendor invoices"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluation_sets.<a href="src/extend_ai/evaluation_sets/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[EvaluationSet]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve a specific evaluation set by ID. This returns an evaluation set object, but does not include the items in the evaluation set. You can use the [List Evaluation Set Items](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/evaluation/list-evaluation-set-items) endpoint to get the items in an evaluation set.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.evaluation_sets.retrieve(
-    id="evaluation_set_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The ID of the evaluation set.
-
-Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## EvaluationSetItems
-<details><summary><code>client.evaluation_set_items.<a href="src/extend_ai/evaluation_set_items/client.py">list</a>(...) -&gt; AsyncHttpResponse[EvaluationSetItemsListResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List items in a specific evaluation set.
-
-Returns a summary of each evaluation set item. Use the [Get Evaluation Set Item](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/evaluation/get-evaluation-set-item) endpoint to get the full details of an evaluation set item.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.evaluation_set_items.list(
-    evaluation_set_id="evaluation_set_id_here",
-    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**evaluation_set_id:** `str` 
-
-The ID of the evaluation set.
-
-Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_by:** `typing.Optional[SortBy]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_dir:** `typing.Optional[SortDir]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**next_page_token:** `typing.Optional[NextPageToken]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**max_page_size:** `typing.Optional[MaxPageSize]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluation_set_items.<a href="src/extend_ai/evaluation_set_items/client.py">create</a>(...) -&gt; AsyncHttpResponse[EvaluationSetItemsCreateResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Evaluation set items are the individual files and expected outputs that are used to evaluate the performance of a given extractor, classifier, or splitter in Extend. This endpoint will create new evaluation set items in Extend, which will be used during an evaluation run.
-
-**Limit:** You can create up to 100 items at a time.
-
-Learn more about how to create evaluation set items in the [Evaluation Sets](https://docs.extend.ai/product/evaluation/overview) product page.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.evaluation_set_items.create(
-    evaluation_set_id="evaluation_set_id_here",
-    items=[{"file_id": "file_id_here", "expected_output": {}}],
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**evaluation_set_id:** `str` 
-
-The ID of the evaluation set.
-
-Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**items:** `typing.Sequence[EvaluationSetItemsCreateRequestItemsItemParams]` — An array of objects representing the evaluation set items to create.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluation_set_items.<a href="src/extend_ai/evaluation_set_items/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[EvaluationSetItem]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Get details of an evaluation set item.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.evaluation_set_items.retrieve(
-    evaluation_set_id="evaluation_set_id_here",
-    item_id="evaluation_set_item_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**evaluation_set_id:** `str` 
-
-The ID of the evaluation set.
-
-Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**item_id:** `str` 
-
-The ID of the evaluation set item.
-
-Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluation_set_items.<a href="src/extend_ai/evaluation_set_items/client.py">update</a>(...) -&gt; AsyncHttpResponse[EvaluationSetItem]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-If you need to change the expected output for a given evaluation set item, you can use this endpoint to update the item. This can be useful if you need to correct an error in the expected output or if the output of the extractor, classifier, or splitter has changed.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.evaluation_set_items.update(
-    evaluation_set_id="evaluation_set_id_here",
-    item_id="evaluation_set_item_id_here",
-    expected_output={},
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**evaluation_set_id:** `str` 
-
-The ID of the evaluation set.
-
-Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**item_id:** `str` 
-
-The ID of the evaluation set item.
-
-Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**expected_output:** `ProvidedProcessorOutputParams` — The expected output of the extractor, classifier, or splitter when run against the file. This must conform to the output schema of the entity associated with the evaluation set.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluation_set_items.<a href="src/extend_ai/evaluation_set_items/client.py">delete</a>(...) -&gt; AsyncHttpResponse[EvaluationSetItemsDeleteResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Delete an evaluation set item.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.evaluation_set_items.delete(
-    evaluation_set_id="evaluation_set_id_here",
-    item_id="evaluation_set_item_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**evaluation_set_id:** `str` 
-
-The ID of the evaluation set.
-
-Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**item_id:** `str` 
-
-The ID of the evaluation set item.
-
-Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## EvaluationSetRuns
-<details><summary><code>client.evaluation_set_runs.<a href="src/extend_ai/evaluation_set_runs/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[EvaluationSetRun]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Get details of an evaluation set run.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.evaluation_set_runs.retrieve(
-    id="evaluation_set_run_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The ID of the evaluation set run.
-
-Example: `"evr_Xj8mK2pL9nR4vT7qY5wZ"`
+Example: `"dpv_QYk6jgHA_8CsO8rVWhyNC"`
     
 </dd>
 </dl>
