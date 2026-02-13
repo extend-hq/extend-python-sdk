@@ -3,8 +3,10 @@
 README.md
 uv.lock
 
-# CI workflow — customized with stricter error handling
+# Publish workflow — customized with stricter error handling
+# Keep ci.yml listed so Fern doesn't regenerate it after the rename
 .github/workflows/ci.yml
+.github/workflows/publish.yml
 
 # Protect patched core files
 src/extend_ai/core/serialization.py
