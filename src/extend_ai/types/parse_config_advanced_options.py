@@ -8,6 +8,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .page_ranges import PageRanges
+from .parse_config_advanced_options_excel_parsing_mode import ParseConfigAdvancedOptionsExcelParsingMode
 from .parse_config_advanced_options_return_ocr import ParseConfigAdvancedOptionsReturnOcr
 
 
@@ -29,6 +30,25 @@ class ParseConfigAdvancedOptions(UncheckedBaseModel):
     page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = (
         pydantic.Field(alias="pageRanges", default=None)
     )
+    excel_parsing_mode: typing_extensions.Annotated[
+        typing.Optional[ParseConfigAdvancedOptionsExcelParsingMode], FieldMetadata(alias="excelParsingMode")
+    ] = pydantic.Field(alias="excelParsingMode", default=None)
+    """
+    Controls how Excel files are parsed.
+    
+    * `basic`: Fast, deterministic parsing.
+    * `advanced`: Enable layout block detection for complex spreadsheets.
+    
+    For `.xls` files, `basic` mode is always used.
+    """
+
+    excel_skip_hidden_content: typing_extensions.Annotated[
+        typing.Optional[bool], FieldMetadata(alias="excelSkipHiddenContent")
+    ] = pydantic.Field(alias="excelSkipHiddenContent", default=None)
+    """
+    Whether to exclude hidden rows, columns, and sheets when parsing Excel files.
+    """
+
     vertical_grouping_threshold: typing_extensions.Annotated[
         typing.Optional[float], FieldMetadata(alias="verticalGroupingThreshold")
     ] = pydantic.Field(alias="verticalGroupingThreshold", default=None)

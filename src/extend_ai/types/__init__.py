@@ -121,13 +121,12 @@ if typing.TYPE_CHECKING:
     from .optimizer_run_metrics import OptimizerRunMetrics
     from .optimizer_run_metrics_fields_item import OptimizerRunMetricsFieldsItem
     from .optimizer_run_status import OptimizerRunStatus
-    from .output_metadata import OutputMetadata
-    from .output_metadata_value import OutputMetadataValue
     from .page_ranges import PageRanges
     from .page_ranges_item import PageRangesItem
     from .parse_async_request_file import ParseAsyncRequestFile
     from .parse_config import ParseConfig
     from .parse_config_advanced_options import ParseConfigAdvancedOptions
+    from .parse_config_advanced_options_excel_parsing_mode import ParseConfigAdvancedOptionsExcelParsingMode
     from .parse_config_advanced_options_return_ocr import ParseConfigAdvancedOptionsReturnOcr
     from .parse_config_block_options import ParseConfigBlockOptions
     from .parse_config_block_options_figures import ParseConfigBlockOptionsFigures
@@ -338,13 +337,12 @@ _dynamic_imports: typing.Dict[str, str] = {
     "OptimizerRunMetrics": ".optimizer_run_metrics",
     "OptimizerRunMetricsFieldsItem": ".optimizer_run_metrics_fields_item",
     "OptimizerRunStatus": ".optimizer_run_status",
-    "OutputMetadata": ".output_metadata",
-    "OutputMetadataValue": ".output_metadata_value",
     "PageRanges": ".page_ranges",
     "PageRangesItem": ".page_ranges_item",
     "ParseAsyncRequestFile": ".parse_async_request_file",
     "ParseConfig": ".parse_config",
     "ParseConfigAdvancedOptions": ".parse_config_advanced_options",
+    "ParseConfigAdvancedOptionsExcelParsingMode": ".parse_config_advanced_options_excel_parsing_mode",
     "ParseConfigAdvancedOptionsReturnOcr": ".parse_config_advanced_options_return_ocr",
     "ParseConfigBlockOptions": ".parse_config_block_options",
     "ParseConfigBlockOptionsFigures": ".parse_config_block_options_figures",
@@ -575,13 +573,12 @@ __all__ = [
     "OptimizerRunMetrics",
     "OptimizerRunMetricsFieldsItem",
     "OptimizerRunStatus",
-    "OutputMetadata",
-    "OutputMetadataValue",
     "PageRanges",
     "PageRangesItem",
     "ParseAsyncRequestFile",
     "ParseConfig",
     "ParseConfigAdvancedOptions",
+    "ParseConfigAdvancedOptionsExcelParsingMode",
     "ParseConfigAdvancedOptionsReturnOcr",
     "ParseConfigBlockOptions",
     "ParseConfigBlockOptionsFigures",

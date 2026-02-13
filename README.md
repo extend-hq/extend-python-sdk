@@ -7,27 +7,228 @@ The Extendconfig Python library provides convenient access to the Extendconfig A
 
 ## Table of Contents
 
-- [Documentation](#documentation)
 - [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Polling Helpers](#polling-helpers)
+- [Running Workflows](#running-workflows)
+- [Webhook Verification](#webhook-verification)
+- [Async Support](#async-support)
 - [Reference](#reference)
 - [Usage](#usage)
 - [Async Client](#async-client)
 - [Exception Handling](#exception-handling)
+- [Pagination](#pagination)
+- [Environments](#environments)
 - [Advanced](#advanced)
   - [Access Raw Response Data](#access-raw-response-data)
   - [Retries](#retries)
   - [Timeouts](#timeouts)
   - [Custom Client](#custom-client)
+- [Documentation](#documentation)
 - [Contributing](#contributing)
-
-## Documentation
-
-API reference documentation is available [here](https://docs.extend.ai/2025-04-21/developers).
 
 ## Installation
 
 ```sh
 pip install extend_ai
+```
+
+## Quick start
+
+Parse any document in three lines:
+
+```python
+from extend_ai import Extend
+
+client = Extend(token="YOUR_API_KEY")
+
+result = client.parse(file={"url": "https://example.com/invoice.pdf"})
+
+for chunk in result.output.chunks:
+    print(chunk.content)
+```
+
+`client.parse` is synchronous — it sends the file, waits for processing, and returns a fully populated `ParseRun` with parsed chunks ready to use. The same pattern works for every capability:
+
+```python
+# Extract structured data
+extract_run = client.extract(
+    file={"url": "https://example.com/invoice.pdf"},
+    extractor={"id": "ex_abc123"},
+)
+
+# Classify a document
+classify_run = client.classify(
+    file={"url": "https://example.com/document.pdf"},
+    classifier={"id": "cls_abc123"},
+)
+
+# Split a multi-document file
+split_run = client.split(
+    file={"url": "https://example.com/packet.pdf"},
+    splitter={"id": "spl_abc123"},
+)
+
+# Edit a PDF with instructions
+edit_run = client.edit(
+    file={"url": "https://example.com/form.pdf"},
+    config={"instructions": "Fill out the applicant name as Jane Doe"},
+)
+```
+
+> **Note:** The synchronous methods above have a 5-minute timeout and are best suited for onboarding and testing. For production workloads, use [polling helpers](#polling-helpers) or [webhooks](#webhook-verification) instead.
+
+## Polling helpers
+
+Every run resource exposes a `create_and_poll()` method that creates the run and automatically polls until it reaches a terminal state (`PROCESSED`, `FAILED`, or `CANCELLED`):
+
+```python
+from extend_ai import Extend
+
+client = Extend(token="YOUR_API_KEY")
+
+result = client.extract_runs.create_and_poll(
+    file={"url": "https://example.com/invoice.pdf"},
+    extractor={"id": "ex_abc123"},
+)
+
+if result.status == "PROCESSED":
+    print(result.output)
+else:
+    print(f"Failed: {result.failure_message}")
+```
+
+This works across all run types:
+
+```python
+parse_run     = client.parse_runs.create_and_poll(file={"url": "..."})
+extract_run   = client.extract_runs.create_and_poll(file={"url": "..."}, extractor={"id": "..."})
+classify_run  = client.classify_runs.create_and_poll(file={"url": "..."}, classifier={"id": "..."})
+split_run     = client.split_runs.create_and_poll(file={"url": "..."}, splitter={"id": "..."})
+workflow_run  = client.workflow_runs.create_and_poll(file={"url": "..."}, workflow={"id": "..."})
+edit_run      = client.edit_runs.create_and_poll(file={"url": "..."})
+```
+
+### Custom polling options
+
+```python
+from extend_ai import Extend, PollingOptions
+
+result = client.extract_runs.create_and_poll(
+    file={"url": "https://example.com/invoice.pdf"},
+    extractor={"id": "ex_abc123"},
+    polling_options=PollingOptions(
+        max_wait_ms=300_000,       # 5 minute timeout (default: no timeout)
+        initial_delay_ms=1_000,    # start with 1s delay (default)
+        max_delay_ms=60_000,       # cap at 60s delay (default: 30s)
+    ),
+)
+```
+
+## Running workflows
+
+Workflows chain multiple processing steps (extraction, classification, splitting, etc.) into a single pipeline. Run a workflow by passing a workflow ID and a file:
+
+```python
+result = client.workflow_runs.create_and_poll(
+    file={"url": "https://example.com/invoice.pdf"},
+    workflow={"id": "workflow_abc123"},
+)
+
+print(result.status)  # "PROCESSED"
+
+for step_run in result.step_runs or []:
+    print(step_run.step.type)   # "EXTRACT", "CLASSIFY", etc.
+    print(step_run.result)
+```
+
+## Webhook verification
+
+Verify and parse incoming webhook events using the built-in utilities. Known event types are returned as typed Pydantic models; unknown or future event types fall back to a plain dict so your handler keeps working without SDK updates.
+
+```python
+from extend_ai import Extend
+
+client = Extend(token="YOUR_API_KEY")
+
+def handle_webhook(request):
+    event = client.webhooks.verify_and_parse(
+        body=request.body.decode(),
+        headers=dict(request.headers),
+        signing_secret="wss_your_signing_secret",
+    )
+
+    # Works for both typed model and dict fallback
+    event_type = getattr(event, "event_type", None) or event.get("eventType")
+    payload = getattr(event, "payload", None) or event.get("payload")
+
+    match event_type:
+        case "extract_run.processed":
+            run_id = getattr(payload, "id", None) or payload.get("id")
+            print(f"Extraction complete: {run_id}")
+        case "workflow_run.completed":
+            run_id = getattr(payload, "id", None) or payload.get("id")
+            print(f"Workflow complete: {run_id}")
+        case _:
+            print(f"Received event: {event_type}")
+```
+
+### Manual verification & parsing
+
+```python
+# Verify signature without parsing
+is_valid = client.webhooks.verify(body, headers, signing_secret)
+
+# Parse without verification (not recommended for production)
+event = client.webhooks.parse(body)
+```
+
+### Signed URL payloads
+
+For large payloads, Extend may send a signed URL instead of the full payload. Use `allow_signed_url=True`, then check and fetch when needed:
+
+```python
+event = client.webhooks.verify_and_parse(
+    body=body,
+    headers=headers,
+    signing_secret=signing_secret,
+    allow_signed_url=True,
+)
+
+if client.webhooks.is_signed_url_event(event):
+    full_event = client.webhooks.fetch_signed_payload_sync(event)
+    # full_event is typed or dict; use getattr(..., None) or .get() as in the example above
+else:
+    # Normal inline payload — handle event directly
+    ...
+```
+
+## Async support
+
+Every method has an async counterpart via `AsyncExtend`:
+
+```python
+import asyncio
+from extend_ai import AsyncExtend
+
+client = AsyncExtend(token="YOUR_API_KEY")
+
+async def main():
+    result = await client.parse(file={"url": "https://example.com/invoice.pdf"})
+
+    for chunk in result.output.chunks:
+        print(chunk.content)
+
+asyncio.run(main())
+```
+
+Async polling works the same way:
+
+```python
+result = await client.extract_runs.create_and_poll(
+    file={"url": "https://example.com/invoice.pdf"},
+    extractor={"id": "ex_abc123"},
+)
 ```
 
 ## Reference
@@ -87,6 +288,45 @@ try:
 except ApiError as e:
     print(e.status_code)
     print(e.body)
+```
+
+## Pagination
+
+List endpoints return paginated results using `next_page_token`:
+
+```python
+# First page
+response = client.extract_runs.list(max_page_size=10)
+
+for run in response.data:
+    print(f"{run.id}: {run.status}")
+
+# Next page
+if response.next_page_token:
+    next_page = client.extract_runs.list(
+        max_page_size=10,
+        next_page_token=response.next_page_token,
+    )
+```
+
+## Environments
+
+The SDK defaults to the US production environment. Other regions are available:
+
+```python
+from extend_ai import Extend, ExtendEnvironment
+
+# US (default)
+client = Extend(token="YOUR_API_KEY")
+
+# US2 (HIPAA)
+client = Extend(token="YOUR_API_KEY", environment=ExtendEnvironment.PRODUCTION_US2)
+
+# EU
+client = Extend(token="YOUR_API_KEY", environment=ExtendEnvironment.PRODUCTION_EU1)
+
+# Custom base URL
+client = Extend(token="YOUR_API_KEY", base_url="https://custom-api.example.com")
 ```
 
 ## Advanced
@@ -164,6 +404,10 @@ client = Extend(
     ),
 )
 ```
+
+## Documentation
+
+API reference documentation is available [here](https://docs.extend.ai/2025-04-21/developers).
 
 ## Contributing
 

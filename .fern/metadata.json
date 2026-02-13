@@ -1,7 +1,7 @@
 {
-  "cliVersion": "2.6.2",
+  "cliVersion": "3.37.6",
   "generatorName": "fernapi/fern-python-sdk",
-  "generatorVersion": "4.46.7-rc2",
+  "generatorVersion": "4.53.0",
   "generatorConfig": {
     "client_class_name": "Extend",
     "package_name": "extend_ai",
@@ -10,5 +10,5 @@
       "skip_validation": true
     }
   },
-  "sdkVersion": "0.0.21"
+  "sdkVersion": "0.0.22"
 }

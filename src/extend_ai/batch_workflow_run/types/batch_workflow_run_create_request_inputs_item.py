@@ -31,7 +31,7 @@ class BatchWorkflowRunCreateRequestInputsItem(UncheckedBaseModel):
 
     secrets: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
     """
-    An optional object containing secrets to be used by processors within the workflow for this specific run. Secrets provided here override any globally configured secrets for the workflow.
+    An optional object containing secrets to be used by processors within the workflow for this specific run.
     """
 
     if IS_PYDANTIC_V2:

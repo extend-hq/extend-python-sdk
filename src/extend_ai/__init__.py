@@ -118,13 +118,12 @@ if typing.TYPE_CHECKING:
         OptimizerRunMetrics,
         OptimizerRunMetricsFieldsItem,
         OptimizerRunStatus,
-        OutputMetadata,
-        OutputMetadataValue,
         PageRanges,
         PageRangesItem,
         ParseAsyncRequestFile,
         ParseConfig,
         ParseConfigAdvancedOptions,
+        ParseConfigAdvancedOptionsExcelParsingMode,
         ParseConfigAdvancedOptionsReturnOcr,
         ParseConfigBlockOptions,
         ParseConfigBlockOptionsFigures,
@@ -242,7 +241,6 @@ if typing.TYPE_CHECKING:
         processor_version,
         workflow,
         workflow_run,
-        workflow_run_output,
     )
     from .batch_processor_run import BatchProcessorRunGetResponse
     from .batch_workflow_run import BatchWorkflowRunCreateRequestInputsItem, BatchWorkflowRunCreateResponse
@@ -326,7 +324,6 @@ if typing.TYPE_CHECKING:
         WorkflowRunListResponse,
         WorkflowRunUpdateResponse,
     )
-    from .workflow_run_output import WorkflowRunOutputUpdateResponse
 _dynamic_imports: typing.Dict[str, str] = {
     "ApiVersionEnum": ".types",
     "ArrayStrategy": ".types",
@@ -472,13 +469,12 @@ _dynamic_imports: typing.Dict[str, str] = {
     "OptimizerRunMetrics": ".types",
     "OptimizerRunMetricsFieldsItem": ".types",
     "OptimizerRunStatus": ".types",
-    "OutputMetadata": ".types",
-    "OutputMetadataValue": ".types",
     "PageRanges": ".types",
     "PageRangesItem": ".types",
     "ParseAsyncRequestFile": ".types",
     "ParseConfig": ".types",
     "ParseConfigAdvancedOptions": ".types",
+    "ParseConfigAdvancedOptionsExcelParsingMode": ".types",
     "ParseConfigAdvancedOptionsReturnOcr": ".types",
     "ParseConfigBlockOptions": ".types",
     "ParseConfigBlockOptionsFigures": ".types",
@@ -618,7 +614,6 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WorkflowRunFileInputOutputsItem": ".types",
     "WorkflowRunGetResponse": ".workflow_run",
     "WorkflowRunListResponse": ".workflow_run",
-    "WorkflowRunOutputUpdateResponse": ".workflow_run_output",
     "WorkflowRunSummary": ".types",
     "WorkflowRunUpdateResponse": ".workflow_run",
     "WorkflowStatus": ".types",
@@ -635,7 +630,6 @@ _dynamic_imports: typing.Dict[str, str] = {
     "processor_version": ".processor_version",
     "workflow": ".workflow",
     "workflow_run": ".workflow_run",
-    "workflow_run_output": ".workflow_run_output",
 }
 
 
@@ -805,13 +799,12 @@ __all__ = [
     "OptimizerRunMetrics",
     "OptimizerRunMetricsFieldsItem",
     "OptimizerRunStatus",
-    "OutputMetadata",
-    "OutputMetadataValue",
     "PageRanges",
     "PageRangesItem",
     "ParseAsyncRequestFile",
     "ParseConfig",
     "ParseConfigAdvancedOptions",
+    "ParseConfigAdvancedOptionsExcelParsingMode",
     "ParseConfigAdvancedOptionsReturnOcr",
     "ParseConfigBlockOptions",
     "ParseConfigBlockOptionsFigures",
@@ -951,7 +944,6 @@ __all__ = [
     "WorkflowRunFileInputOutputsItem",
     "WorkflowRunGetResponse",
     "WorkflowRunListResponse",
-    "WorkflowRunOutputUpdateResponse",
     "WorkflowRunSummary",
     "WorkflowRunUpdateResponse",
     "WorkflowStatus",
@@ -968,5 +960,4 @@ __all__ = [
     "processor_version",
     "workflow",
     "workflow_run",
-    "workflow_run_output",
 ]
