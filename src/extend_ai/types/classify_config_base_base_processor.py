@@ -7,20 +7,20 @@ from ..core import enum
 T_Result = typing.TypeVar("T_Result")
 
 
-class ClassifyConfigBaseProcessor(enum.StrEnum):
+class ClassifyConfigBaseBaseProcessor(enum.StrEnum):
     """
     The base processor to use. For classifiers, this can be either `"classification_performance"` or `"classification_light"`. Defaults to `"classification_performance"` if not provided. See [Classification Changelog](https://docs.extend.ai/2026-02-09/changelog/classification/classification-performance) for more details.
     """
 
     CLASSIFICATION_PERFORMANCE = "classification_performance"
     CLASSIFICATION_LIGHT = "classification_light"
-    _UNKNOWN = "__CLASSIFYCONFIGBASEPROCESSOR_UNKNOWN__"
+    _UNKNOWN = "__CLASSIFYCONFIGBASEBASEPROCESSOR_UNKNOWN__"
     """
     This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
     """
 
     @classmethod
-    def _missing_(cls, value: typing.Any) -> "ClassifyConfigBaseProcessor":
+    def _missing_(cls, value: typing.Any) -> "ClassifyConfigBaseBaseProcessor":
         unknown = cls._UNKNOWN
         unknown._value_ = value
         return unknown
@@ -31,8 +31,8 @@ class ClassifyConfigBaseProcessor(enum.StrEnum):
         classification_light: typing.Callable[[], T_Result],
         _unknown_member: typing.Callable[[str], T_Result],
     ) -> T_Result:
-        if self is ClassifyConfigBaseProcessor.CLASSIFICATION_PERFORMANCE:
+        if self is ClassifyConfigBaseBaseProcessor.CLASSIFICATION_PERFORMANCE:
             return classification_performance()
-        if self is ClassifyConfigBaseProcessor.CLASSIFICATION_LIGHT:
+        if self is ClassifyConfigBaseBaseProcessor.CLASSIFICATION_LIGHT:
             return classification_light()
         return _unknown_member(self._value_)

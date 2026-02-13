@@ -7,20 +7,20 @@ from ..core import enum
 T_Result = typing.TypeVar("T_Result")
 
 
-class SplitConfigBaseProcessor(enum.StrEnum):
+class SplitConfigBaseBaseProcessor(enum.StrEnum):
     """
     The base processor to use. For splitters, this can be either `"splitting_performance"` or `"splitting_light"`. Defaults to `"splitting_performance"` if not provided. See [Splitting Changelog](https://docs.extend.ai/2026-02-09/changelog/splitting/splitting-performance) for more details.
     """
 
     SPLITTING_PERFORMANCE = "splitting_performance"
     SPLITTING_LIGHT = "splitting_light"
-    _UNKNOWN = "__SPLITCONFIGBASEPROCESSOR_UNKNOWN__"
+    _UNKNOWN = "__SPLITCONFIGBASEBASEPROCESSOR_UNKNOWN__"
     """
     This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
     """
 
     @classmethod
-    def _missing_(cls, value: typing.Any) -> "SplitConfigBaseProcessor":
+    def _missing_(cls, value: typing.Any) -> "SplitConfigBaseBaseProcessor":
         unknown = cls._UNKNOWN
         unknown._value_ = value
         return unknown
@@ -31,8 +31,8 @@ class SplitConfigBaseProcessor(enum.StrEnum):
         splitting_light: typing.Callable[[], T_Result],
         _unknown_member: typing.Callable[[str], T_Result],
     ) -> T_Result:
-        if self is SplitConfigBaseProcessor.SPLITTING_PERFORMANCE:
+        if self is SplitConfigBaseBaseProcessor.SPLITTING_PERFORMANCE:
             return splitting_performance()
-        if self is SplitConfigBaseProcessor.SPLITTING_LIGHT:
+        if self is SplitConfigBaseBaseProcessor.SPLITTING_LIGHT:
             return splitting_light()
         return _unknown_member(self._value_)

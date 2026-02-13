@@ -2,4 +2,4 @@
 
 from .extract_config_json_base import ExtractConfigJsonBase
 
-ExtractConfigJson = ExtractConfigJsonBase
+ExtractOverrideConfigJson = ExtractConfigJsonBase

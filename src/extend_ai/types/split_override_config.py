@@ -2,4 +2,4 @@
 
 from .split_config_base import SplitConfigBase
 
-SplitConfig = SplitConfigBase
+SplitOverrideConfig = SplitConfigBase

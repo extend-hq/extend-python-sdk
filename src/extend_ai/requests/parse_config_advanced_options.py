@@ -2,6 +2,7 @@
 
 import typing_extensions
 from ..core.serialization import FieldMetadata
+from ..types.parse_config_advanced_options_excel_parsing_mode import ParseConfigAdvancedOptionsExcelParsingMode
 from .page_ranges import PageRangesParams
 from .parse_config_advanced_options_return_ocr import ParseConfigAdvancedOptionsReturnOcrParams
 
@@ -17,6 +18,25 @@ class ParseConfigAdvancedOptionsParams(typing_extensions.TypedDict):
     page_ranges: typing_extensions.NotRequired[
         typing_extensions.Annotated[PageRangesParams, FieldMetadata(alias="pageRanges")]
     ]
+    excel_parsing_mode: typing_extensions.NotRequired[
+        typing_extensions.Annotated[ParseConfigAdvancedOptionsExcelParsingMode, FieldMetadata(alias="excelParsingMode")]
+    ]
+    """
+    Controls how Excel files are parsed.
+    
+    * `basic`: Fast, deterministic parsing.
+    * `advanced`: Enable layout block detection for complex spreadsheets.
+    
+    For `.xls` files, `basic` mode is always used.
+    """
+
+    excel_skip_hidden_content: typing_extensions.NotRequired[
+        typing_extensions.Annotated[bool, FieldMetadata(alias="excelSkipHiddenContent")]
+    ]
+    """
+    Whether to exclude hidden rows, columns, and sheets when parsing Excel files.
+    """
+
     vertical_grouping_threshold: typing_extensions.NotRequired[
         typing_extensions.Annotated[float, FieldMetadata(alias="verticalGroupingThreshold")]
     ]

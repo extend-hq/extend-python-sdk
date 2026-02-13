@@ -7,7 +7,7 @@ import typing_extensions
 from ...core.pydantic_utilities import IS_PYDANTIC_V2
 from ...core.serialization import FieldMetadata
 from ...core.unchecked_base_model import UncheckedBaseModel
-from ...types.classify_config import ClassifyConfig
+from ...types.classify_override_config import ClassifyOverrideConfig
 from ...types.processor_version_string import ProcessorVersionString
 
 
@@ -23,10 +23,10 @@ class ClassifyRunsCreateRequestClassifier(UncheckedBaseModel):
 
     version: typing.Optional[ProcessorVersionString] = None
     override_config: typing_extensions.Annotated[
-        typing.Optional[ClassifyConfig], FieldMetadata(alias="overrideConfig")
+        typing.Optional[ClassifyOverrideConfig], FieldMetadata(alias="overrideConfig")
     ] = pydantic.Field(alias="overrideConfig", default=None)
     """
-    Optional configuration override. If provided, this configuration will override the classifier's saved configuration.
+    Optional partial configuration override. Only the fields you provide will override the classifier's saved configuration. For example, you can pass only `classificationRules` without providing `classifications`.
     """
 
     if IS_PYDANTIC_V2:

@@ -2,4 +2,4 @@
 
 from ..types.classify_config_base import ClassifyConfigBase
 
-ClassifyConfigParams = ClassifyConfigBase
+ClassifyOverrideConfigParams = ClassifyConfigBase
