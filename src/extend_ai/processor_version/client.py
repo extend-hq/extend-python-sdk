@@ -30,47 +30,6 @@ class ProcessorVersionClient:
         """
         return self._raw_client
 
-    def get(
-        self, processor_id: str, processor_version_id: str, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> ProcessorVersionGetResponse:
-        """
-        Retrieve a specific version of a processor in Extend
-
-        Parameters
-        ----------
-        processor_id : str
-            The ID of the processor.
-
-            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
-
-        processor_version_id : str
-            The ID of the specific processor version to retrieve.
-
-            Example: `"dpv_QYk6jgHA_8CsO8rVWhyNC"`
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        ProcessorVersionGetResponse
-            Successfully retrieved processor version
-
-        Examples
-        --------
-        from extend_ai import Extend
-
-        client = Extend(
-            token="YOUR_TOKEN",
-        )
-        client.processor_version.get(
-            processor_id="processor_id_here",
-            processor_version_id="processor_version_id_here",
-        )
-        """
-        _response = self._raw_client.get(processor_id, processor_version_id, request_options=request_options)
-        return _response.data
-
     def list(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> ProcessorVersionListResponse:
         """
         This endpoint allows you to fetch all versions of a given processor, including the current `draft` version.
@@ -162,23 +121,7 @@ class ProcessorVersionClient:
         )
         return _response.data
 
-
-class AsyncProcessorVersionClient:
-    def __init__(self, *, client_wrapper: AsyncClientWrapper):
-        self._raw_client = AsyncRawProcessorVersionClient(client_wrapper=client_wrapper)
-
-    @property
-    def with_raw_response(self) -> AsyncRawProcessorVersionClient:
-        """
-        Retrieves a raw implementation of this client that returns raw responses.
-
-        Returns
-        -------
-        AsyncRawProcessorVersionClient
-        """
-        return self._raw_client
-
-    async def get(
+    def get(
         self, processor_id: str, processor_version_id: str, *, request_options: typing.Optional[RequestOptions] = None
     ) -> ProcessorVersionGetResponse:
         """
@@ -206,26 +149,34 @@ class AsyncProcessorVersionClient:
 
         Examples
         --------
-        import asyncio
+        from extend_ai import Extend
 
-        from extend_ai import AsyncExtend
-
-        client = AsyncExtend(
+        client = Extend(
             token="YOUR_TOKEN",
         )
-
-
-        async def main() -> None:
-            await client.processor_version.get(
-                processor_id="processor_id_here",
-                processor_version_id="processor_version_id_here",
-            )
-
-
-        asyncio.run(main())
+        client.processor_version.get(
+            processor_id="processor_id_here",
+            processor_version_id="processor_version_id_here",
+        )
         """
-        _response = await self._raw_client.get(processor_id, processor_version_id, request_options=request_options)
+        _response = self._raw_client.get(processor_id, processor_version_id, request_options=request_options)
         return _response.data
+
+
+class AsyncProcessorVersionClient:
+    def __init__(self, *, client_wrapper: AsyncClientWrapper):
+        self._raw_client = AsyncRawProcessorVersionClient(client_wrapper=client_wrapper)
+
+    @property
+    def with_raw_response(self) -> AsyncRawProcessorVersionClient:
+        """
+        Retrieves a raw implementation of this client that returns raw responses.
+
+        Returns
+        -------
+        AsyncRawProcessorVersionClient
+        """
+        return self._raw_client
 
     async def list(
         self, id: str, *, request_options: typing.Optional[RequestOptions] = None
@@ -334,4 +285,53 @@ class AsyncProcessorVersionClient:
         _response = await self._raw_client.create(
             id, release_type=release_type, description=description, config=config, request_options=request_options
         )
+        return _response.data
+
+    async def get(
+        self, processor_id: str, processor_version_id: str, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> ProcessorVersionGetResponse:
+        """
+        Retrieve a specific version of a processor in Extend
+
+        Parameters
+        ----------
+        processor_id : str
+            The ID of the processor.
+
+            Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        processor_version_id : str
+            The ID of the specific processor version to retrieve.
+
+            Example: `"dpv_QYk6jgHA_8CsO8rVWhyNC"`
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ProcessorVersionGetResponse
+            Successfully retrieved processor version
+
+        Examples
+        --------
+        import asyncio
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.processor_version.get(
+                processor_id="processor_id_here",
+                processor_version_id="processor_version_id_here",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.get(processor_id, processor_version_id, request_options=request_options)
         return _response.data

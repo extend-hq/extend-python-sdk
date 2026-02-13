@@ -1,5 +1,5 @@
 # Reference
-<details><summary><code>client.<a href="src/extend_ai/client.py">parse</a>(...) -> AsyncHttpResponse[ParserRun]</code></summary>
+<details><summary><code>client.<a href="src/extend_ai/client.py">parse</a>(...) -&gt; AsyncHttpResponse[ParserRun]</code></summary>
 <dl>
 <dd>
 
@@ -94,7 +94,7 @@ Controls the format of the response chunks. Defaults to `json` if not specified.
 </dl>
 </details>
 
-<details><summary><code>client.<a href="src/extend_ai/client.py">parse_async</a>(...) -> AsyncHttpResponse[ParserRunStatus]</code></summary>
+<details><summary><code>client.<a href="src/extend_ai/client.py">parse_async</a>(...) -&gt; AsyncHttpResponse[ParserRunStatus]</code></summary>
 <dl>
 <dd>
 
@@ -182,8 +182,935 @@ client.parse_async(
 </dl>
 </details>
 
+## File
+<details><summary><code>client.file.<a href="src/extend_ai/file/client.py">list</a>(...) -&gt; AsyncHttpResponse[FileListResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List files in your account. Files represent documents that have been uploaded to Extend. This endpoint returns a paginated response. You can use the `nextPageToken` to fetch subsequent results.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.file.list(
+    name_contains="nameContains",
+    sort_dir="asc",
+    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+    max_page_size=1,
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**name_contains:** `typing.Optional[str]` 
+
+Filters files to only include those that contain the given string in the name.
+
+Example: `"invoice"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort_dir:** `typing.Optional[SortDirEnum]` — Sorts the files in ascending or descending order. Ascending order means the earliest file is returned first.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**next_page_token:** `typing.Optional[NextPageToken]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**max_page_size:** `typing.Optional[MaxPageSize]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.file.<a href="src/extend_ai/file/client.py">get</a>(...) -&gt; AsyncHttpResponse[FileGetResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Fetch a file by its ID to obtain additional details and the raw file content.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.file.get(
+    id="file_id_here",
+    raw_text=True,
+    markdown=True,
+    html=True,
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+Extend's ID for the file. It will always start with `"file_"`. This ID is returned when creating a new File, or the value on the `fileId` field in a WorkflowRun.
+
+Example: `"file_Xj8mK2pL9nR4vT7qY5wZ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**raw_text:** `typing.Optional[bool]` — If set to true, the raw text content of the file will be included in the response. This is useful for indexing text-based files like PDFs, Word Documents, etc.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**markdown:** `typing.Optional[bool]` 
+
+If set to true, the markdown content of the file will be included in the response. This is useful for indexing very clean content into RAG pipelines for files like PDFs, Word Documents, etc.
+
+Only available for files with a type of PDF, IMG, or .doc/.docx files that were auto-converted to PDFs.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**html:** `typing.Optional[bool]` 
+
+If set to true, the html content of the file will be included in the response. This is useful for indexing html content into RAG pipelines.
+
+Only available for files with a type of DOCX.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.file.<a href="src/extend_ai/file/client.py">delete</a>(...) -&gt; AsyncHttpResponse[FileDeleteResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a file and all associated data from Extend. This operation is permanent and cannot be undone.
+
+This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.file.delete(
+    id="file_id_here",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the file to delete.
+
+Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.file.<a href="src/extend_ai/file/client.py">upload</a>(...) -&gt; AsyncHttpResponse[FileUploadResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Upload and create a new file in Extend.
+
+This endpoint accepts file contents and registers them as a File in Extend, which can be used for [running workflows](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow), [creating evaluation set items](https://docs.extend.ai/2025-04-21/developers/api-reference/evaluation-set-endpoints/bulk-create-evaluation-set-items), [parsing](https://docs.extend.ai/2025-04-21/developers/api-reference/parse-endpoints/parse-file), etc.
+
+If an uploaded file is detected as a Word or PowerPoint document, it will be automatically converted to a PDF.
+
+Supported file types can be found [here](/product/general/supported-file-types).
+
+This endpoint requires multipart form encoding. Most HTTP clients will handle this encoding automatically (see the examples).
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.file.upload()
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**file:** `from __future__ import annotations
+
+core.File` — See core.File for more documentation
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## ParserRun
+<details><summary><code>client.parser_run.<a href="src/extend_ai/parser_run/client.py">get</a>(...) -&gt; AsyncHttpResponse[ParserRunGetResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the status and results of a parser run.
+
+Use this endpoint to get results for a parser run that has already completed, or to check on the status of an asynchronous parser run initiated via the [Parse File Asynchronously](https://docs.extend.ai/2025-04-21/developers/api-reference/parse-endpoints/parse-file-async) endpoint.
+
+If parsing is still in progress, you'll receive a response with just the status. Once complete, you'll receive the full parsed content in the response.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.parser_run.get(
+    id="parser_run_id_here",
+    response_type="json",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The unique identifier for the parser run.
+
+Example: `"parser_run_xK9mLPqRtN3vS8wF5hB2cQ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**response_type:** `typing.Optional[ParserRunGetRequestResponseType]` 
+
+Controls the format of the response chunks. Defaults to `json` if not specified.
+* `json` - Returns chunks with inline content
+* `url` - Returns chunks with presigned URLs to content instead of inline data
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.parser_run.<a href="src/extend_ai/parser_run/client.py">delete</a>(...) -&gt; AsyncHttpResponse[ParserRunDeleteResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a parser run and all associated data from Extend. This operation is permanent and cannot be undone.
+
+This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.parser_run.delete(
+    id="parser_run_id_here",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the parser run to delete.
+
+Example: `"parser_run_xK9mLPqRtN3vS8wF5hB2cQ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Edit
+<details><summary><code>client.edit.<a href="src/extend_ai/edit/client.py">create</a>(...) -&gt; AsyncHttpResponse[EditRun]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Edit and manipulate PDF documents by detecting and filling form fields.
+This is a synchronous endpoint that will wait for the edit operation to complete (up to 5 minutes) before returning results. For longer operations, use the [Edit File Async](/developers/api-reference/edit-endpoints/edit-file-async) endpoint.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+from extend_ai.edit import EditCreateRequestFile
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.edit.create(
+    file=EditCreateRequestFile(),
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**file:** `EditCreateRequestFile` — A file object containing either a URL or a fileId.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**config:** `typing.Optional[EditCreateRequestConfig]` — Configuration for the edit operation. Field values should be specified using `extend_edit:value` on each field in the schema.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.edit.<a href="src/extend_ai/edit/client.py">create_async</a>(...) -&gt; AsyncHttpResponse[EditRunStatus]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Edit and manipulate PDF documents **asynchronously** by filling forms, adding/modifying text fields, and applying structured changes.
+
+The Edit Async endpoint allows you to convert and edit documents asynchronously and get an edit run ID that can be used to check status and retrieve results with the [Get Edit Run](/developers/api-reference/edit-endpoints/get-edit-run) endpoint.
+
+This is useful for:
+* Large files that may take longer to process
+* Avoiding timeout issues with synchronous editing
+* Processing multiple files in parallel
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+from extend_ai.edit import EditCreateAsyncRequestFile
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.edit.create_async(
+    file=EditCreateAsyncRequestFile(),
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**file:** `EditCreateAsyncRequestFile` — A file object containing either a URL or a fileId.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**config:** `typing.Optional[EditCreateAsyncRequestConfig]` — Configuration for the edit operation. Field values should be specified using `extend_edit:value` on each field in the schema.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.edit.<a href="src/extend_ai/edit/client.py">get</a>(...) -&gt; AsyncHttpResponse[EditGetResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the status and results of an edit run.
+
+Use this endpoint to get results for an edit run that has already completed, or to check on the status of an asynchronous edit run initiated via the [Edit File Asynchronously](/developers/api-reference/edit-endpoints/edit-file-async) endpoint.
+
+If editing is still in progress, you'll receive a response with just the status. Once complete, you'll receive the full edited file information in the response.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.edit.get(
+    id="edit_run_id_here",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The unique identifier for the edit run.
+
+Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.edit.<a href="src/extend_ai/edit/client.py">delete</a>(...) -&gt; AsyncHttpResponse[EditDeleteResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete an edit run and all associated data from Extend. This operation is permanent and cannot be undone.
+
+This endpoint can be used if you'd like to manage data retention on your own rather than relying on automated data retention policies, or to make one-off deletions for your downstream customers.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.edit.delete(
+    id="edit_run_id_here",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the edit run to delete.
+
+Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Workflow
+<details><summary><code>client.workflow.<a href="src/extend_ai/workflow/client.py">create</a>(...) -&gt; AsyncHttpResponse[WorkflowCreateResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new workflow in Extend. Workflows are sequences of steps that process files and data in a specific order to achieve a desired outcome.
+
+This endpoint will create a new workflow in Extend, which can then be configured and deployed. Typically, workflows are created from our UI, however this endpoint can be used to create workflows programmatically. Configuration of the flow still needs to be done in the dashboard.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.workflow.create(
+    name="Invoice Processing",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**name:** `str` — The name of the workflow
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## WorkflowRun
-<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">list</a>(...) -> AsyncHttpResponse[WorkflowRunListResponse]</code></summary>
+<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">list</a>(...) -&gt; AsyncHttpResponse[WorkflowRunListResponse]</code></summary>
 <dl>
 <dd>
 
@@ -340,7 +1267,7 @@ Example: `"invoice"`
 </dl>
 </details>
 
-<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">create</a>(...) -> AsyncHttpResponse[WorkflowRunCreateResponse]</code></summary>
+<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">create</a>(...) -&gt; AsyncHttpResponse[WorkflowRunCreateResponse]</code></summary>
 <dl>
 <dd>
 
@@ -464,7 +1391,7 @@ To categorize workflow runs for billing and usage tracking, include `extend:usag
 </dl>
 </details>
 
-<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">get</a>(...) -> AsyncHttpResponse[WorkflowRunGetResponse]</code></summary>
+<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">get</a>(...) -&gt; AsyncHttpResponse[WorkflowRunGetResponse]</code></summary>
 <dl>
 <dd>
 
@@ -538,7 +1465,7 @@ Example: `"workflow_run_8k9m-xyzAB_Pqrst-Nvw4"`
 </dl>
 </details>
 
-<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">update</a>(...) -> AsyncHttpResponse[WorkflowRunUpdateResponse]</code></summary>
+<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">update</a>(...) -&gt; AsyncHttpResponse[WorkflowRunUpdateResponse]</code></summary>
 <dl>
 <dd>
 
@@ -634,7 +1561,7 @@ To categorize workflow runs for billing and usage tracking, include `extend:usag
 </dl>
 </details>
 
-<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">delete</a>(...) -> AsyncHttpResponse[WorkflowRunDeleteResponse]</code></summary>
+<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">delete</a>(...) -&gt; AsyncHttpResponse[WorkflowRunDeleteResponse]</code></summary>
 <dl>
 <dd>
 
@@ -710,7 +1637,7 @@ Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 </dl>
 </details>
 
-<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">cancel</a>(...) -> AsyncHttpResponse[WorkflowRunCancelResponse]</code></summary>
+<details><summary><code>client.workflow_run.<a href="src/extend_ai/workflow_run/client.py">cancel</a>(...) -&gt; AsyncHttpResponse[WorkflowRunCancelResponse]</code></summary>
 <dl>
 <dd>
 
@@ -786,8 +1713,109 @@ Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 </dl>
 </details>
 
+## WorkflowRunOutput
+<details><summary><code>client.workflow_run_output.<a href="src/extend_ai/workflow_run_output/client.py">update</a>(...) -&gt; AsyncHttpResponse[WorkflowRunOutputUpdateResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Use this endpoint to submit corrected outputs for a WorkflowRun for future processor evaluation and tuning in Extend.
+
+If you are using our Human-in-the-loop workflow review, then we already will be collecting your operator submitted corrections. However, if you are receiving data via the API without human review, there could be incorrect outputs that you would like to correct for future usage in evaluation and tuning within the Extend platform. This endpoint allows you to submit corrected outputs for a WorkflowRun, by providing the correct output for a given output ID.
+
+The output ID, would be found in a given entry within the outputs arrays of a Workflow Run payload. The ID would look something like `dpr_gwkZZNRrPgkjcq0y-***`.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend, ProvidedJsonOutput
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.workflow_run_output.update(
+    workflow_run_id="workflow_run_id_here",
+    output_id="output_id_here",
+    reviewed_output=ProvidedJsonOutput(
+        value={"key": "value"},
+    ),
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workflow_run_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**output_id:** `str` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**reviewed_output:** `ProvidedProcessorOutput` 
+
+The corrected output of the processor when run against the file.
+
+This should conform to the output type schema of the given processor.
+
+If this is an extraction result, you can include all fields, or just the ones that were corrected, our system will handle merges/dedupes. However, if you do include a field, we assume the value included in the final reviewed value.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## BatchWorkflowRun
-<details><summary><code>client.batch_workflow_run.<a href="src/extend_ai/batch_workflow_run/client.py">create</a>(...) -> AsyncHttpResponse[BatchWorkflowRunCreateResponse]</code></summary>
+<details><summary><code>client.batch_workflow_run.<a href="src/extend_ai/batch_workflow_run/client.py">create</a>(...) -&gt; AsyncHttpResponse[BatchWorkflowRunCreateResponse]</code></summary>
 <dl>
 <dd>
 
@@ -891,8 +1919,852 @@ Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 </dl>
 </details>
 
+## BatchProcessorRun
+<details><summary><code>client.batch_processor_run.<a href="src/extend_ai/batch_processor_run/client.py">get</a>(...) -&gt; AsyncHttpResponse[BatchProcessorRunGetResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve details about a batch processor run, including evaluation runs
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.batch_processor_run.get(
+    id="batch_processor_run_id_here",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The unique identifier of the batch processor run to retrieve. The ID will always start with "bpr_".
+
+Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## EvaluationSet
+<details><summary><code>client.evaluation_set.<a href="src/extend_ai/evaluation_set/client.py">list</a>(...) -&gt; AsyncHttpResponse[EvaluationSetListResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List evaluation sets in your account. You can use the `processorId` parameter to filter evaluation sets by processor. 
+
+This endpoint returns a paginated response. You can use the `nextPageToken` to fetch subsequent results.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.evaluation_set.list(
+    processor_id="processor_id_here",
+    sort_by="updatedAt",
+    sort_dir="asc",
+    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+    max_page_size=1,
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**processor_id:** `typing.Optional[str]` 
+
+The ID of the processor to filter evaluation sets by.
+
+Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort_by:** `typing.Optional[SortByEnum]` — Sorts the evaluation sets by the given field.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort_dir:** `typing.Optional[SortDirEnum]` — Sorts the evaluation sets in ascending or descending order. Ascending order means the earliest evaluation set is returned first.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**next_page_token:** `typing.Optional[NextPageToken]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**max_page_size:** `typing.Optional[MaxPageSize]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluation_set.<a href="src/extend_ai/evaluation_set/client.py">create</a>(...) -&gt; AsyncHttpResponse[EvaluationSetCreateResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Evaluation sets are collections of files and expected outputs that are used to evaluate the performance of a given processor in Extend. This endpoint will create a new evaluation set in Extend, which items can be added to using the [Create Evaluation Set Item](https://docs.extend.ai/2025-04-21/developers/api-reference/evaluation-set-endpoints/create-evaluation-set-item) endpoint.
+
+Note: it is not necessary to create an evaluation set via API. You can also create an evaluation set via the Extend dashboard and take the ID from there.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.evaluation_set.create(
+    name="My Evaluation Set",
+    description="My Evaluation Set Description",
+    processor_id="processor_id_here",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**name:** `str` 
+
+The name of the evaluation set.
+
+Example: `"Invoice Processing Test Set"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**description:** `str` 
+
+A description of what this evaluation set is used for.
+
+Example: `"Q4 2023 vendor invoices"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**processor_id:** `str` 
+
+The ID of the processor to create an evaluation set for. Evaluation sets can in theory be run against any processor, but it is required to associate the evaluation set with a primary processor.
+
+Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluation_set.<a href="src/extend_ai/evaluation_set/client.py">get</a>(...) -&gt; AsyncHttpResponse[EvaluationSetGetResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a specific evaluation set by ID. This returns an evaluation set object, but does not include the items in the evaluation set. You can use the [List Evaluation Set Items](https://docs.extend.ai/2025-04-21/developers/api-reference/evaluation-set-endpoints/list-evaluation-set-items) endpoint to get the items in an evaluation set.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.evaluation_set.get(
+    id="evaluation_set_id_here",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the evaluation set to retrieve.
+
+Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## EvaluationSetItem
+<details><summary><code>client.evaluation_set_item.<a href="src/extend_ai/evaluation_set_item/client.py">list</a>(...) -&gt; AsyncHttpResponse[EvaluationSetItemListResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all items in a specific evaluation set. Evaluation set items are the individual files and expected outputs that are used to evaluate the performance of a given processor in Extend. 
+
+This endpoint returns a paginated response. You can use the `nextPageToken` to fetch subsequent results.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.evaluation_set_item.list(
+    id="evaluation_set_id_here",
+    sort_by="updatedAt",
+    sort_dir="asc",
+    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+    max_page_size=1,
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the evaluation set to retrieve items for.
+
+Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort_by:** `typing.Optional[SortByEnum]` — Sorts the evaluation set items by the given field.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort_dir:** `typing.Optional[SortDirEnum]` — Sorts the evaluation set items in ascending or descending order. Ascending order means the earliest evaluation set is returned first.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**next_page_token:** `typing.Optional[NextPageToken]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**max_page_size:** `typing.Optional[MaxPageSize]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluation_set_item.<a href="src/extend_ai/evaluation_set_item/client.py">create</a>(...) -&gt; AsyncHttpResponse[EvaluationSetItemCreateResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Evaluation set items are the individual files and expected outputs that are used to evaluate the performance of a given processor in Extend. This endpoint will create a new evaluation set item in Extend, which will be used during an evaluation run.
+
+Best Practices for Outputs in Evaluation Sets:
+- **Configure First, Output Later**
+  - Always create and finalize your processor configuration before creating evaluation sets
+  - Field IDs in outputs must match those defined in your processor configuration
+- **Type Consistency**
+  - Ensure output types exactly match your processor configuration
+  - For example, if a field is configured as "currency", don't submit a simple number value
+- **Field IDs**
+  - Use the exact field IDs from your processor configuration
+  - Create your own semantic IDs instead in the configs for each field/type instead of using the generated ones
+- **Value**
+  - Remember that all results are inside the value key of a result object, except the values within nested structures.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend, ProvidedJsonOutput
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.evaluation_set_item.create(
+    evaluation_set_id="evaluation_set_id_here",
+    file_id="file_id_here",
+    expected_output=ProvidedJsonOutput(
+        value={"key": "value"},
+    ),
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**evaluation_set_id:** `str` 
+
+The ID of the evaluation set to add the item to.
+
+Example: `"ev_Xj8mK2pL9nR4vT7qY5wZ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**file_id:** `str` 
+
+Extend's internal ID for the file. It will always start with "file_".
+
+Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expected_output:** `ProvidedProcessorOutput` — The expected output that will be used to evaluate the processor's performance.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluation_set_item.<a href="src/extend_ai/evaluation_set_item/client.py">update</a>(...) -&gt; AsyncHttpResponse[EvaluationSetItemUpdateResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+If you need to change the expected output for a given evaluation set item, you can use this endpoint to update the item. This can be useful if you need to correct an error in the expected output or if the output of the processor has changed.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend, ProvidedJsonOutput
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.evaluation_set_item.update(
+    id="evaluation_set_item_id_here",
+    expected_output=ProvidedJsonOutput(
+        value={"key": "value"},
+    ),
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the evaluation set item to update.
+
+Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expected_output:** `ProvidedProcessorOutput` — The expected output of the processor when run against the file
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluation_set_item.<a href="src/extend_ai/evaluation_set_item/client.py">delete</a>(...) -&gt; AsyncHttpResponse[EvaluationSetItemDeleteResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete an evaluation set item from an evaluation set. This operation is permanent and cannot be undone.
+
+This endpoint can be used to remove individual items from an evaluation set when they are no longer needed or if they were added in error.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.evaluation_set_item.delete(
+    id="evaluation_set_item_id_here",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the evaluation set item to delete.
+
+Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluation_set_item.<a href="src/extend_ai/evaluation_set_item/client.py">create_batch</a>(...) -&gt; AsyncHttpResponse[EvaluationSetItemCreateBatchResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+If you have a large number of files that you need to add to an evaluation set, you can use this endpoint to create multiple evaluation set items at once. This can be useful if you have a large dataset that you need to evaluate the performance of a processor against.
+
+Note: you still need to create each File first using the file API.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend, ProvidedJsonOutput
+from extend_ai.evaluation_set_item import (
+    EvaluationSetItemCreateBatchRequestItemsItem,
+)
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.evaluation_set_item.create_batch(
+    evaluation_set_id="evaluation_set_id_here",
+    items=[
+        EvaluationSetItemCreateBatchRequestItemsItem(
+            file_id="file_id_here",
+            expected_output=ProvidedJsonOutput(
+                value={"key": "value"},
+            ),
+        )
+    ],
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**evaluation_set_id:** `str` 
+
+The ID of the evaluation set to add the items to.
+
+Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**items:** `typing.Sequence[EvaluationSetItemCreateBatchRequestItemsItem]` — An array of objects representing the evaluation set items to create
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## ProcessorRun
-<details><summary><code>client.processor_run.<a href="src/extend_ai/processor_run/client.py">list</a>(...) -> AsyncHttpResponse[ProcessorRunListResponse]</code></summary>
+<details><summary><code>client.processor_run.<a href="src/extend_ai/processor_run/client.py">list</a>(...) -&gt; AsyncHttpResponse[ProcessorRunListResponse]</code></summary>
 <dl>
 <dd>
 
@@ -1079,7 +2951,7 @@ Example: `"invoice"`
 </dl>
 </details>
 
-<details><summary><code>client.processor_run.<a href="src/extend_ai/processor_run/client.py">create</a>(...) -> AsyncHttpResponse[ProcessorRunCreateResponse]</code></summary>
+<details><summary><code>client.processor_run.<a href="src/extend_ai/processor_run/client.py">create</a>(...) -&gt; AsyncHttpResponse[ProcessorRunCreateResponse]</code></summary>
 <dl>
 <dd>
 
@@ -1098,7 +2970,7 @@ Run processors (extraction, classification, splitting, etc.) on a given document
 - **Synchronous**: Set `sync: true` to wait for completion and get final results in the response (5-minute timeout).
 
 **For asynchronous processing:**
-- You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+- You can [configure webhooks](https://docs.extend.ai/product/webhooks/configuration) to receive notifications when a processor run is complete or failed.
 - Or you can [poll the get endpoint](https://docs.extend.ai/2025-04-21/developers/api-reference/processor-endpoints/get-processor-run) for updates on the status of the processor run.
 </dd>
 </dl>
@@ -1226,7 +3098,7 @@ To categorize processor runs for billing and usage tracking, include `extend:usa
 </dl>
 </details>
 
-<details><summary><code>client.processor_run.<a href="src/extend_ai/processor_run/client.py">get</a>(...) -> AsyncHttpResponse[ProcessorRunGetResponse]</code></summary>
+<details><summary><code>client.processor_run.<a href="src/extend_ai/processor_run/client.py">get</a>(...) -&gt; AsyncHttpResponse[ProcessorRunGetResponse]</code></summary>
 <dl>
 <dd>
 
@@ -1302,7 +3174,7 @@ Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
 </dl>
 </details>
 
-<details><summary><code>client.processor_run.<a href="src/extend_ai/processor_run/client.py">delete</a>(...) -> AsyncHttpResponse[ProcessorRunDeleteResponse]</code></summary>
+<details><summary><code>client.processor_run.<a href="src/extend_ai/processor_run/client.py">delete</a>(...) -&gt; AsyncHttpResponse[ProcessorRunDeleteResponse]</code></summary>
 <dl>
 <dd>
 
@@ -1378,7 +3250,7 @@ Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
 </dl>
 </details>
 
-<details><summary><code>client.processor_run.<a href="src/extend_ai/processor_run/client.py">cancel</a>(...) -> AsyncHttpResponse[ProcessorRunCancelResponse]</code></summary>
+<details><summary><code>client.processor_run.<a href="src/extend_ai/processor_run/client.py">cancel</a>(...) -&gt; AsyncHttpResponse[ProcessorRunCancelResponse]</code></summary>
 <dl>
 <dd>
 
@@ -1455,7 +3327,7 @@ Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
 </details>
 
 ## Processor
-<details><summary><code>client.processor.<a href="src/extend_ai/processor/client.py">list</a>(...) -> AsyncHttpResponse[ListProcessorsResponse]</code></summary>
+<details><summary><code>client.processor.<a href="src/extend_ai/processor/client.py">list</a>(...) -&gt; AsyncHttpResponse[ListProcessorsResponse]</code></summary>
 <dl>
 <dd>
 
@@ -1561,7 +3433,7 @@ client.processor.list(
 </dl>
 </details>
 
-<details><summary><code>client.processor.<a href="src/extend_ai/processor/client.py">create</a>(...) -> AsyncHttpResponse[ProcessorCreateResponse]</code></summary>
+<details><summary><code>client.processor.<a href="src/extend_ai/processor/client.py">create</a>(...) -&gt; AsyncHttpResponse[ProcessorCreateResponse]</code></summary>
 <dl>
 <dd>
 
@@ -1660,7 +3532,7 @@ Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 </dl>
 </details>
 
-<details><summary><code>client.processor.<a href="src/extend_ai/processor/client.py">update</a>(...) -> AsyncHttpResponse[ProcessorUpdateResponse]</code></summary>
+<details><summary><code>client.processor.<a href="src/extend_ai/processor/client.py">update</a>(...) -&gt; AsyncHttpResponse[ProcessorUpdateResponse]</code></summary>
 <dl>
 <dd>
 
@@ -1756,94 +3628,7 @@ The new configuration for the processor. The type of configuration must match th
 </details>
 
 ## ProcessorVersion
-<details><summary><code>client.processor_version.<a href="src/extend_ai/processor_version/client.py">get</a>(...) -> AsyncHttpResponse[ProcessorVersionGetResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve a specific version of a processor in Extend
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.processor_version.get(
-    processor_id="processor_id_here",
-    processor_version_id="processor_version_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**processor_id:** `str` 
-
-The ID of the processor.
-
-Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**processor_version_id:** `str` 
-
-The ID of the specific processor version to retrieve.
-
-Example: `"dpv_QYk6jgHA_8CsO8rVWhyNC"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.processor_version.<a href="src/extend_ai/processor_version/client.py">list</a>(...) -> AsyncHttpResponse[ProcessorVersionListResponse]</code></summary>
+<details><summary><code>client.processor_version.<a href="src/extend_ai/processor_version/client.py">list</a>(...) -&gt; AsyncHttpResponse[ProcessorVersionListResponse]</code></summary>
 <dl>
 <dd>
 
@@ -1920,7 +3705,7 @@ Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 </dl>
 </details>
 
-<details><summary><code>client.processor_version.<a href="src/extend_ai/processor_version/client.py">create</a>(...) -> AsyncHttpResponse[ProcessorVersionCreateResponse]</code></summary>
+<details><summary><code>client.processor_version.<a href="src/extend_ai/processor_version/client.py">create</a>(...) -&gt; AsyncHttpResponse[ProcessorVersionCreateResponse]</code></summary>
 <dl>
 <dd>
 
@@ -2021,8 +3806,7 @@ Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 </dl>
 </details>
 
-## ParserRun
-<details><summary><code>client.parser_run.<a href="src/extend_ai/parser_run/client.py">get</a>(...) -> AsyncHttpResponse[ParserRunGetResponse]</code></summary>
+<details><summary><code>client.processor_version.<a href="src/extend_ai/processor_version/client.py">get</a>(...) -&gt; AsyncHttpResponse[ProcessorVersionGetResponse]</code></summary>
 <dl>
 <dd>
 
@@ -2034,11 +3818,7 @@ Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-Retrieve the status and results of a parser run.
-
-Use this endpoint to get results for a parser run that has already completed, or to check on the status of an asynchronous parser run initiated via the [Parse File Asynchronously](https://docs.extend.ai/2025-04-21/developers/api-reference/parse-endpoints/parse-file-async) endpoint.
-
-If parsing is still in progress, you'll receive a response with just the status. Once complete, you'll receive the full parsed content in the response.
+Retrieve a specific version of a processor in Extend
 </dd>
 </dl>
 </dd>
@@ -2058,864 +3838,9 @@ from extend_ai import Extend
 client = Extend(
     token="YOUR_TOKEN",
 )
-client.parser_run.get(
-    id="parser_run_id_here",
-    response_type="json",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The unique identifier for the parser run.
-
-Example: `"parser_run_xK9mLPqRtN3vS8wF5hB2cQ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**response_type:** `typing.Optional[ParserRunGetRequestResponseType]` 
-
-Controls the format of the response chunks. Defaults to `json` if not specified.
-* `json` - Returns chunks with inline content
-* `url` - Returns chunks with presigned URLs to content instead of inline data
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.parser_run.<a href="src/extend_ai/parser_run/client.py">delete</a>(...) -> AsyncHttpResponse[ParserRunDeleteResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Delete a parser run and all associated data from Extend. This operation is permanent and cannot be undone.
-
-This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.parser_run.delete(
-    id="parser_run_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The ID of the parser run to delete.
-
-Example: `"parser_run_xK9mLPqRtN3vS8wF5hB2cQ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Edit
-<details><summary><code>client.edit.<a href="src/extend_ai/edit/client.py">create</a>(...) -> AsyncHttpResponse[EditRun]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Edit and manipulate PDF documents by detecting and filling form fields.
-This is a synchronous endpoint that will wait for the edit operation to complete (up to 5 minutes) before returning results. For longer operations, use the [Edit File Async](/developers/api-reference/edit-endpoints/edit-file-async) endpoint.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-from extend_ai.edit import EditCreateRequestFile
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.edit.create(
-    file=EditCreateRequestFile(),
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**file:** `EditCreateRequestFile` — A file object containing either a URL or a fileId.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[EditCreateRequestConfig]` — Configuration for the edit operation. Field values should be specified using `extend_edit:value` on each field in the schema.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.edit.<a href="src/extend_ai/edit/client.py">create_async</a>(...) -> AsyncHttpResponse[EditRunStatus]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Edit and manipulate PDF documents **asynchronously** by filling forms, adding/modifying text fields, and applying structured changes.
-
-The Edit Async endpoint allows you to convert and edit documents asynchronously and get an edit run ID that can be used to check status and retrieve results with the [Get Edit Run](/developers/api-reference/edit-endpoints/get-edit-run) endpoint.
-
-This is useful for:
-* Large files that may take longer to process
-* Avoiding timeout issues with synchronous editing
-* Processing multiple files in parallel
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-from extend_ai.edit import EditCreateAsyncRequestFile
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.edit.create_async(
-    file=EditCreateAsyncRequestFile(),
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**file:** `EditCreateAsyncRequestFile` — A file object containing either a URL or a fileId.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**config:** `typing.Optional[EditCreateAsyncRequestConfig]` — Configuration for the edit operation. Field values should be specified using `extend_edit:value` on each field in the schema.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.edit.<a href="src/extend_ai/edit/client.py">get</a>(...) -> AsyncHttpResponse[EditGetResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve the status and results of an edit run.
-
-Use this endpoint to get results for an edit run that has already completed, or to check on the status of an asynchronous edit run initiated via the [Edit File Asynchronously](/developers/api-reference/edit-endpoints/edit-file-async) endpoint.
-
-If editing is still in progress, you'll receive a response with just the status. Once complete, you'll receive the full edited file information in the response.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.edit.get(
-    id="edit_run_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The unique identifier for the edit run.
-
-Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.edit.<a href="src/extend_ai/edit/client.py">delete</a>(...) -> AsyncHttpResponse[EditDeleteResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Delete an edit run and all associated data from Extend. This operation is permanent and cannot be undone.
-
-This endpoint can be used if you'd like to manage data retention on your own rather than relying on automated data retention policies, or to make one-off deletions for your downstream customers.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.edit.delete(
-    id="edit_run_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The ID of the edit run to delete.
-
-Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## File
-<details><summary><code>client.file.<a href="src/extend_ai/file/client.py">list</a>(...) -> AsyncHttpResponse[FileListResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List files in your account. Files represent documents that have been uploaded to Extend. This endpoint returns a paginated response. You can use the `nextPageToken` to fetch subsequent results.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.file.list(
-    name_contains="nameContains",
-    sort_dir="asc",
-    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
-    max_page_size=1,
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**name_contains:** `typing.Optional[str]` 
-
-Filters files to only include those that contain the given string in the name.
-
-Example: `"invoice"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_dir:** `typing.Optional[SortDirEnum]` — Sorts the files in ascending or descending order. Ascending order means the earliest file is returned first.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**next_page_token:** `typing.Optional[NextPageToken]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**max_page_size:** `typing.Optional[MaxPageSize]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.file.<a href="src/extend_ai/file/client.py">get</a>(...) -> AsyncHttpResponse[FileGetResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Fetch a file by its ID to obtain additional details and the raw file content.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.file.get(
-    id="file_id_here",
-    raw_text=True,
-    markdown=True,
-    html=True,
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-Extend's ID for the file. It will always start with `"file_"`. This ID is returned when creating a new File, or the value on the `fileId` field in a WorkflowRun.
-
-Example: `"file_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**raw_text:** `typing.Optional[bool]` — If set to true, the raw text content of the file will be included in the response. This is useful for indexing text-based files like PDFs, Word Documents, etc.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**markdown:** `typing.Optional[bool]` 
-
-If set to true, the markdown content of the file will be included in the response. This is useful for indexing very clean content into RAG pipelines for files like PDFs, Word Documents, etc.
-
-Only available for files with a type of PDF, IMG, or .doc/.docx files that were auto-converted to PDFs.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**html:** `typing.Optional[bool]` 
-
-If set to true, the html content of the file will be included in the response. This is useful for indexing html content into RAG pipelines.
-
-Only available for files with a type of DOCX.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.file.<a href="src/extend_ai/file/client.py">delete</a>(...) -> AsyncHttpResponse[FileDeleteResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Delete a file and all associated data from Extend. This operation is permanent and cannot be undone.
-
-This endpoint can be used if you'd like to manage data retention on your own rather than automated data retention policies. Or make one-off deletions for your downstream customers.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.file.delete(
-    id="file_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The ID of the file to delete.
-
-Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.file.<a href="src/extend_ai/file/client.py">upload</a>(...) -> AsyncHttpResponse[FileUploadResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Upload and create a new file in Extend.
-
-This endpoint accepts file contents and registers them as a File in Extend, which can be used for [running workflows](https://docs.extend.ai/2025-04-21/developers/api-reference/workflow-endpoints/run-workflow), [creating evaluation set items](https://docs.extend.ai/2025-04-21/developers/api-reference/evaluation-set-endpoints/bulk-create-evaluation-set-items), [parsing](https://docs.extend.ai/2025-04-21/developers/api-reference/parse-endpoints/parse-file), etc.
-
-If an uploaded file is detected as a Word or PowerPoint document, it will be automatically converted to a PDF.
-
-Supported file types can be found [here](/product/general/supported-file-types).
-
-This endpoint requires multipart form encoding. Most HTTP clients will handle this encoding automatically (see the examples).
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.file.upload()
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**file:** `from __future__ import annotations
-
-core.File` — See core.File for more documentation
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## EvaluationSet
-<details><summary><code>client.evaluation_set.<a href="src/extend_ai/evaluation_set/client.py">list</a>(...) -> AsyncHttpResponse[EvaluationSetListResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List evaluation sets in your account. You can use the `processorId` parameter to filter evaluation sets by processor. 
-
-This endpoint returns a paginated response. You can use the `nextPageToken` to fetch subsequent results.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.evaluation_set.list(
+client.processor_version.get(
     processor_id="processor_id_here",
-    sort_by="updatedAt",
-    sort_dir="asc",
-    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
-    max_page_size=1,
+    processor_version_id="processor_version_id_here",
 )
 
 ```
@@ -2928,147 +3853,13 @@ client.evaluation_set.list(
 
 <dl>
 <dd>
-
-<dl>
-<dd>
-
-**processor_id:** `typing.Optional[str]` 
-
-The ID of the processor to filter evaluation sets by.
-
-Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_by:** `typing.Optional[SortByEnum]` — Sorts the evaluation sets by the given field.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_dir:** `typing.Optional[SortDirEnum]` — Sorts the evaluation sets in ascending or descending order. Ascending order means the earliest evaluation set is returned first.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**next_page_token:** `typing.Optional[NextPageToken]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**max_page_size:** `typing.Optional[MaxPageSize]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluation_set.<a href="src/extend_ai/evaluation_set/client.py">create</a>(...) -> AsyncHttpResponse[EvaluationSetCreateResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Evaluation sets are collections of files and expected outputs that are used to evaluate the performance of a given processor in Extend. This endpoint will create a new evaluation set in Extend, which items can be added to using the [Create Evaluation Set Item](https://docs.extend.ai/2025-04-21/developers/api-reference/evaluation-set-endpoints/create-evaluation-set-item) endpoint.
-
-Note: it is not necessary to create an evaluation set via API. You can also create an evaluation set via the Extend dashboard and take the ID from there.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.evaluation_set.create(
-    name="My Evaluation Set",
-    description="My Evaluation Set Description",
-    processor_id="processor_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**name:** `str` 
-
-The name of the evaluation set.
-
-Example: `"Invoice Processing Test Set"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**description:** `str` 
-
-A description of what this evaluation set is used for.
-
-Example: `"Q4 2023 vendor invoices"`
-    
-</dd>
-</dl>
 
 <dl>
 <dd>
 
 **processor_id:** `str` 
 
-The ID of the processor to create an evaluation set for. Evaluation sets can in theory be run against any processor, but it is required to associate the evaluation set with a primary processor.
+The ID of the processor.
 
 Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
     
@@ -3078,802 +3869,11 @@ Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
+**processor_version_id:** `str` 
 
+The ID of the specific processor version to retrieve.
 
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluation_set.<a href="src/extend_ai/evaluation_set/client.py">get</a>(...) -> AsyncHttpResponse[EvaluationSetGetResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve a specific evaluation set by ID. This returns an evaluation set object, but does not include the items in the evaluation set. You can use the [List Evaluation Set Items](https://docs.extend.ai/2025-04-21/developers/api-reference/evaluation-set-endpoints/list-evaluation-set-items) endpoint to get the items in an evaluation set.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.evaluation_set.get(
-    id="evaluation_set_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The ID of the evaluation set to retrieve.
-
-Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## EvaluationSetItem
-<details><summary><code>client.evaluation_set_item.<a href="src/extend_ai/evaluation_set_item/client.py">list</a>(...) -> AsyncHttpResponse[EvaluationSetItemListResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List all items in a specific evaluation set. Evaluation set items are the individual files and expected outputs that are used to evaluate the performance of a given processor in Extend. 
-
-This endpoint returns a paginated response. You can use the `nextPageToken` to fetch subsequent results.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.evaluation_set_item.list(
-    id="evaluation_set_id_here",
-    sort_by="updatedAt",
-    sort_dir="asc",
-    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
-    max_page_size=1,
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The ID of the evaluation set to retrieve items for.
-
-Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_by:** `typing.Optional[SortByEnum]` — Sorts the evaluation set items by the given field.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**sort_dir:** `typing.Optional[SortDirEnum]` — Sorts the evaluation set items in ascending or descending order. Ascending order means the earliest evaluation set is returned first.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**next_page_token:** `typing.Optional[NextPageToken]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**max_page_size:** `typing.Optional[MaxPageSize]` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluation_set_item.<a href="src/extend_ai/evaluation_set_item/client.py">create</a>(...) -> AsyncHttpResponse[EvaluationSetItemCreateResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Evaluation set items are the individual files and expected outputs that are used to evaluate the performance of a given processor in Extend. This endpoint will create a new evaluation set item in Extend, which will be used during an evaluation run.
-
-Best Practices for Outputs in Evaluation Sets:
-- **Configure First, Output Later**
-  - Always create and finalize your processor configuration before creating evaluation sets
-  - Field IDs in outputs must match those defined in your processor configuration
-- **Type Consistency**
-  - Ensure output types exactly match your processor configuration
-  - For example, if a field is configured as "currency", don't submit a simple number value
-- **Field IDs**
-  - Use the exact field IDs from your processor configuration
-  - Create your own semantic IDs instead in the configs for each field/type instead of using the generated ones
-- **Value**
-  - Remember that all results are inside the value key of a result object, except the values within nested structures.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend, ProvidedJsonOutput
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.evaluation_set_item.create(
-    evaluation_set_id="evaluation_set_id_here",
-    file_id="file_id_here",
-    expected_output=ProvidedJsonOutput(
-        value={"key": "value"},
-    ),
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**evaluation_set_id:** `str` 
-
-The ID of the evaluation set to add the item to.
-
-Example: `"ev_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**file_id:** `str` 
-
-Extend's internal ID for the file. It will always start with "file_".
-
-Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**expected_output:** `ProvidedProcessorOutput` — The expected output that will be used to evaluate the processor's performance.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluation_set_item.<a href="src/extend_ai/evaluation_set_item/client.py">update</a>(...) -> AsyncHttpResponse[EvaluationSetItemUpdateResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-If you need to change the expected output for a given evaluation set item, you can use this endpoint to update the item. This can be useful if you need to correct an error in the expected output or if the output of the processor has changed.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend, ProvidedJsonOutput
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.evaluation_set_item.update(
-    id="evaluation_set_item_id_here",
-    expected_output=ProvidedJsonOutput(
-        value={"key": "value"},
-    ),
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The ID of the evaluation set item to update.
-
-Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**expected_output:** `ProvidedProcessorOutput` — The expected output of the processor when run against the file
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluation_set_item.<a href="src/extend_ai/evaluation_set_item/client.py">delete</a>(...) -> AsyncHttpResponse[EvaluationSetItemDeleteResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Delete an evaluation set item from an evaluation set. This operation is permanent and cannot be undone.
-
-This endpoint can be used to remove individual items from an evaluation set when they are no longer needed or if they were added in error.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.evaluation_set_item.delete(
-    id="evaluation_set_item_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The ID of the evaluation set item to delete.
-
-Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluation_set_item.<a href="src/extend_ai/evaluation_set_item/client.py">create_batch</a>(...) -> AsyncHttpResponse[EvaluationSetItemCreateBatchResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-If you have a large number of files that you need to add to an evaluation set, you can use this endpoint to create multiple evaluation set items at once. This can be useful if you have a large dataset that you need to evaluate the performance of a processor against.
-
-Note: you still need to create each File first using the file API.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend, ProvidedJsonOutput
-from extend_ai.evaluation_set_item import (
-    EvaluationSetItemCreateBatchRequestItemsItem,
-)
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.evaluation_set_item.create_batch(
-    evaluation_set_id="evaluation_set_id_here",
-    items=[
-        EvaluationSetItemCreateBatchRequestItemsItem(
-            file_id="file_id_here",
-            expected_output=ProvidedJsonOutput(
-                value={"key": "value"},
-            ),
-        )
-    ],
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**evaluation_set_id:** `str` 
-
-The ID of the evaluation set to add the items to.
-
-Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**items:** `typing.Sequence[EvaluationSetItemCreateBatchRequestItemsItem]` — An array of objects representing the evaluation set items to create
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## WorkflowRunOutput
-<details><summary><code>client.workflow_run_output.<a href="src/extend_ai/workflow_run_output/client.py">update</a>(...) -> AsyncHttpResponse[WorkflowRunOutputUpdateResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Use this endpoint to submit corrected outputs for a WorkflowRun for future processor evaluation and tuning in Extend.
-
-If you are using our Human-in-the-loop workflow review, then we already will be collecting your operator submitted corrections. However, if you are receiving data via the API without human review, there could be incorrect outputs that you would like to correct for future usage in evaluation and tuning within the Extend platform. This endpoint allows you to submit corrected outputs for a WorkflowRun, by providing the correct output for a given output ID.
-
-The output ID, would be found in a given entry within the outputs arrays of a Workflow Run payload. The ID would look something like `dpr_gwkZZNRrPgkjcq0y-***`.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend, ProvidedJsonOutput
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.workflow_run_output.update(
-    workflow_run_id="workflow_run_id_here",
-    output_id="output_id_here",
-    reviewed_output=ProvidedJsonOutput(
-        value={"key": "value"},
-    ),
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**workflow_run_id:** `str` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**output_id:** `str` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**reviewed_output:** `ProvidedProcessorOutput` 
-
-The corrected output of the processor when run against the file.
-
-This should conform to the output type schema of the given processor.
-
-If this is an extraction result, you can include all fields, or just the ones that were corrected, our system will handle merges/dedupes. However, if you do include a field, we assume the value included in the final reviewed value.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## BatchProcessorRun
-<details><summary><code>client.batch_processor_run.<a href="src/extend_ai/batch_processor_run/client.py">get</a>(...) -> AsyncHttpResponse[BatchProcessorRunGetResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve details about a batch processor run, including evaluation runs
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.batch_processor_run.get(
-    id="batch_processor_run_id_here",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `str` 
-
-The unique identifier of the batch processor run to retrieve. The ID will always start with "bpr_".
-
-Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-## Workflow
-<details><summary><code>client.workflow.<a href="src/extend_ai/workflow/client.py">create</a>(...) -> AsyncHttpResponse[WorkflowCreateResponse]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Create a new workflow in Extend. Workflows are sequences of steps that process files and data in a specific order to achieve a desired outcome.
-
-This endpoint will create a new workflow in Extend, which can then be configured and deployed. Typically, workflows are created from our UI, however this endpoint can be used to create workflows programmatically. Configuration of the flow still needs to be done in the dashboard.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```python
-from extend_ai import Extend
-
-client = Extend(
-    token="YOUR_TOKEN",
-)
-client.workflow.create(
-    name="Invoice Processing",
-)
-
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**name:** `str` — The name of the workflow
+Example: `"dpv_QYk6jgHA_8CsO8rVWhyNC"`
     
 </dd>
 </dl>

@@ -198,7 +198,7 @@ class RawProcessorRunClient:
         - **Synchronous**: Set `sync: true` to wait for completion and get final results in the response (5-minute timeout).
 
         **For asynchronous processing:**
-        - You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+        - You can [configure webhooks](https://docs.extend.ai/product/webhooks/configuration) to receive notifications when a processor run is complete or failed.
         - Or you can [poll the get endpoint](https://docs.extend.ai/2025-04-21/developers/api-reference/processor-endpoints/get-processor-run) for updates on the status of the processor run.
 
         Parameters
@@ -702,7 +702,7 @@ class AsyncRawProcessorRunClient:
         - **Synchronous**: Set `sync: true` to wait for completion and get final results in the response (5-minute timeout).
 
         **For asynchronous processing:**
-        - You can [configure webhooks](https://docs.extend.ai/2025-04-21/developers/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+        - You can [configure webhooks](https://docs.extend.ai/product/webhooks/configuration) to receive notifications when a processor run is complete or failed.
         - Or you can [poll the get endpoint](https://docs.extend.ai/2025-04-21/developers/api-reference/processor-endpoints/get-processor-run) for updates on the status of the processor run.
 
         Parameters

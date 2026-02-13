@@ -52,7 +52,7 @@ class Extend:
 
 
 
-    token : typing.Optional[typing.Union[str, typing.Callable[[], str]]]
+    token : typing.Union[str, typing.Callable[[], str]]
     headers : typing.Optional[typing.Dict[str, str]]
         Additional headers to send with every request.
 
@@ -80,7 +80,7 @@ class Extend:
         *,
         base_url: typing.Optional[str] = None,
         environment: ExtendEnvironment = ExtendEnvironment.PRODUCTION,
-        token: typing.Optional[typing.Union[str, typing.Callable[[], str]]] = None,
+        token: typing.Union[str, typing.Callable[[], str]],
         headers: typing.Optional[typing.Dict[str, str]] = None,
         timeout: typing.Optional[float] = None,
         follow_redirects: typing.Optional[bool] = True,
@@ -103,19 +103,19 @@ class Extend:
             extend_api_version=extend_api_version,
         )
         self._raw_client = RawExtend(client_wrapper=self._client_wrapper)
+        self._file: typing.Optional[FileClient] = None
+        self._parser_run: typing.Optional[ParserRunClient] = None
+        self._edit: typing.Optional[EditClient] = None
+        self._workflow: typing.Optional[WorkflowClient] = None
         self._workflow_run: typing.Optional[WorkflowRunClient] = None
+        self._workflow_run_output: typing.Optional[WorkflowRunOutputClient] = None
         self._batch_workflow_run: typing.Optional[BatchWorkflowRunClient] = None
+        self._batch_processor_run: typing.Optional[BatchProcessorRunClient] = None
+        self._evaluation_set: typing.Optional[EvaluationSetClient] = None
+        self._evaluation_set_item: typing.Optional[EvaluationSetItemClient] = None
         self._processor_run: typing.Optional[ProcessorRunClient] = None
         self._processor: typing.Optional[ProcessorClient] = None
         self._processor_version: typing.Optional[ProcessorVersionClient] = None
-        self._parser_run: typing.Optional[ParserRunClient] = None
-        self._edit: typing.Optional[EditClient] = None
-        self._file: typing.Optional[FileClient] = None
-        self._evaluation_set: typing.Optional[EvaluationSetClient] = None
-        self._evaluation_set_item: typing.Optional[EvaluationSetItemClient] = None
-        self._workflow_run_output: typing.Optional[WorkflowRunOutputClient] = None
-        self._batch_processor_run: typing.Optional[BatchProcessorRunClient] = None
-        self._workflow: typing.Optional[WorkflowClient] = None
 
     @property
     def with_raw_response(self) -> RawExtend:
@@ -230,6 +230,38 @@ class Extend:
         return _response.data
 
     @property
+    def file(self):
+        if self._file is None:
+            from .file.client import FileClient  # noqa: E402
+
+            self._file = FileClient(client_wrapper=self._client_wrapper)
+        return self._file
+
+    @property
+    def parser_run(self):
+        if self._parser_run is None:
+            from .parser_run.client import ParserRunClient  # noqa: E402
+
+            self._parser_run = ParserRunClient(client_wrapper=self._client_wrapper)
+        return self._parser_run
+
+    @property
+    def edit(self):
+        if self._edit is None:
+            from .edit.client import EditClient  # noqa: E402
+
+            self._edit = EditClient(client_wrapper=self._client_wrapper)
+        return self._edit
+
+    @property
+    def workflow(self):
+        if self._workflow is None:
+            from .workflow.client import WorkflowClient  # noqa: E402
+
+            self._workflow = WorkflowClient(client_wrapper=self._client_wrapper)
+        return self._workflow
+
+    @property
     def workflow_run(self):
         if self._workflow_run is None:
             from .workflow_run.client import WorkflowRunClient  # noqa: E402
@@ -238,12 +270,44 @@ class Extend:
         return self._workflow_run
 
     @property
+    def workflow_run_output(self):
+        if self._workflow_run_output is None:
+            from .workflow_run_output.client import WorkflowRunOutputClient  # noqa: E402
+
+            self._workflow_run_output = WorkflowRunOutputClient(client_wrapper=self._client_wrapper)
+        return self._workflow_run_output
+
+    @property
     def batch_workflow_run(self):
         if self._batch_workflow_run is None:
             from .batch_workflow_run.client import BatchWorkflowRunClient  # noqa: E402
 
             self._batch_workflow_run = BatchWorkflowRunClient(client_wrapper=self._client_wrapper)
         return self._batch_workflow_run
+
+    @property
+    def batch_processor_run(self):
+        if self._batch_processor_run is None:
+            from .batch_processor_run.client import BatchProcessorRunClient  # noqa: E402
+
+            self._batch_processor_run = BatchProcessorRunClient(client_wrapper=self._client_wrapper)
+        return self._batch_processor_run
+
+    @property
+    def evaluation_set(self):
+        if self._evaluation_set is None:
+            from .evaluation_set.client import EvaluationSetClient  # noqa: E402
+
+            self._evaluation_set = EvaluationSetClient(client_wrapper=self._client_wrapper)
+        return self._evaluation_set
+
+    @property
+    def evaluation_set_item(self):
+        if self._evaluation_set_item is None:
+            from .evaluation_set_item.client import EvaluationSetItemClient  # noqa: E402
+
+            self._evaluation_set_item = EvaluationSetItemClient(client_wrapper=self._client_wrapper)
+        return self._evaluation_set_item
 
     @property
     def processor_run(self):
@@ -269,70 +333,6 @@ class Extend:
             self._processor_version = ProcessorVersionClient(client_wrapper=self._client_wrapper)
         return self._processor_version
 
-    @property
-    def parser_run(self):
-        if self._parser_run is None:
-            from .parser_run.client import ParserRunClient  # noqa: E402
-
-            self._parser_run = ParserRunClient(client_wrapper=self._client_wrapper)
-        return self._parser_run
-
-    @property
-    def edit(self):
-        if self._edit is None:
-            from .edit.client import EditClient  # noqa: E402
-
-            self._edit = EditClient(client_wrapper=self._client_wrapper)
-        return self._edit
-
-    @property
-    def file(self):
-        if self._file is None:
-            from .file.client import FileClient  # noqa: E402
-
-            self._file = FileClient(client_wrapper=self._client_wrapper)
-        return self._file
-
-    @property
-    def evaluation_set(self):
-        if self._evaluation_set is None:
-            from .evaluation_set.client import EvaluationSetClient  # noqa: E402
-
-            self._evaluation_set = EvaluationSetClient(client_wrapper=self._client_wrapper)
-        return self._evaluation_set
-
-    @property
-    def evaluation_set_item(self):
-        if self._evaluation_set_item is None:
-            from .evaluation_set_item.client import EvaluationSetItemClient  # noqa: E402
-
-            self._evaluation_set_item = EvaluationSetItemClient(client_wrapper=self._client_wrapper)
-        return self._evaluation_set_item
-
-    @property
-    def workflow_run_output(self):
-        if self._workflow_run_output is None:
-            from .workflow_run_output.client import WorkflowRunOutputClient  # noqa: E402
-
-            self._workflow_run_output = WorkflowRunOutputClient(client_wrapper=self._client_wrapper)
-        return self._workflow_run_output
-
-    @property
-    def batch_processor_run(self):
-        if self._batch_processor_run is None:
-            from .batch_processor_run.client import BatchProcessorRunClient  # noqa: E402
-
-            self._batch_processor_run = BatchProcessorRunClient(client_wrapper=self._client_wrapper)
-        return self._batch_processor_run
-
-    @property
-    def workflow(self):
-        if self._workflow is None:
-            from .workflow.client import WorkflowClient  # noqa: E402
-
-            self._workflow = WorkflowClient(client_wrapper=self._client_wrapper)
-        return self._workflow
-
 
 class AsyncExtend:
     """
@@ -352,7 +352,7 @@ class AsyncExtend:
 
 
 
-    token : typing.Optional[typing.Union[str, typing.Callable[[], str]]]
+    token : typing.Union[str, typing.Callable[[], str]]
     headers : typing.Optional[typing.Dict[str, str]]
         Additional headers to send with every request.
 
@@ -380,7 +380,7 @@ class AsyncExtend:
         *,
         base_url: typing.Optional[str] = None,
         environment: ExtendEnvironment = ExtendEnvironment.PRODUCTION,
-        token: typing.Optional[typing.Union[str, typing.Callable[[], str]]] = None,
+        token: typing.Union[str, typing.Callable[[], str]],
         headers: typing.Optional[typing.Dict[str, str]] = None,
         timeout: typing.Optional[float] = None,
         follow_redirects: typing.Optional[bool] = True,
@@ -403,19 +403,19 @@ class AsyncExtend:
             extend_api_version=extend_api_version,
         )
         self._raw_client = AsyncRawExtend(client_wrapper=self._client_wrapper)
+        self._file: typing.Optional[AsyncFileClient] = None
+        self._parser_run: typing.Optional[AsyncParserRunClient] = None
+        self._edit: typing.Optional[AsyncEditClient] = None
+        self._workflow: typing.Optional[AsyncWorkflowClient] = None
         self._workflow_run: typing.Optional[AsyncWorkflowRunClient] = None
+        self._workflow_run_output: typing.Optional[AsyncWorkflowRunOutputClient] = None
         self._batch_workflow_run: typing.Optional[AsyncBatchWorkflowRunClient] = None
+        self._batch_processor_run: typing.Optional[AsyncBatchProcessorRunClient] = None
+        self._evaluation_set: typing.Optional[AsyncEvaluationSetClient] = None
+        self._evaluation_set_item: typing.Optional[AsyncEvaluationSetItemClient] = None
         self._processor_run: typing.Optional[AsyncProcessorRunClient] = None
         self._processor: typing.Optional[AsyncProcessorClient] = None
         self._processor_version: typing.Optional[AsyncProcessorVersionClient] = None
-        self._parser_run: typing.Optional[AsyncParserRunClient] = None
-        self._edit: typing.Optional[AsyncEditClient] = None
-        self._file: typing.Optional[AsyncFileClient] = None
-        self._evaluation_set: typing.Optional[AsyncEvaluationSetClient] = None
-        self._evaluation_set_item: typing.Optional[AsyncEvaluationSetItemClient] = None
-        self._workflow_run_output: typing.Optional[AsyncWorkflowRunOutputClient] = None
-        self._batch_processor_run: typing.Optional[AsyncBatchProcessorRunClient] = None
-        self._workflow: typing.Optional[AsyncWorkflowClient] = None
 
     @property
     def with_raw_response(self) -> AsyncRawExtend:
@@ -546,6 +546,38 @@ class AsyncExtend:
         return _response.data
 
     @property
+    def file(self):
+        if self._file is None:
+            from .file.client import AsyncFileClient  # noqa: E402
+
+            self._file = AsyncFileClient(client_wrapper=self._client_wrapper)
+        return self._file
+
+    @property
+    def parser_run(self):
+        if self._parser_run is None:
+            from .parser_run.client import AsyncParserRunClient  # noqa: E402
+
+            self._parser_run = AsyncParserRunClient(client_wrapper=self._client_wrapper)
+        return self._parser_run
+
+    @property
+    def edit(self):
+        if self._edit is None:
+            from .edit.client import AsyncEditClient  # noqa: E402
+
+            self._edit = AsyncEditClient(client_wrapper=self._client_wrapper)
+        return self._edit
+
+    @property
+    def workflow(self):
+        if self._workflow is None:
+            from .workflow.client import AsyncWorkflowClient  # noqa: E402
+
+            self._workflow = AsyncWorkflowClient(client_wrapper=self._client_wrapper)
+        return self._workflow
+
+    @property
     def workflow_run(self):
         if self._workflow_run is None:
             from .workflow_run.client import AsyncWorkflowRunClient  # noqa: E402
@@ -554,12 +586,44 @@ class AsyncExtend:
         return self._workflow_run
 
     @property
+    def workflow_run_output(self):
+        if self._workflow_run_output is None:
+            from .workflow_run_output.client import AsyncWorkflowRunOutputClient  # noqa: E402
+
+            self._workflow_run_output = AsyncWorkflowRunOutputClient(client_wrapper=self._client_wrapper)
+        return self._workflow_run_output
+
+    @property
     def batch_workflow_run(self):
         if self._batch_workflow_run is None:
             from .batch_workflow_run.client import AsyncBatchWorkflowRunClient  # noqa: E402
 
             self._batch_workflow_run = AsyncBatchWorkflowRunClient(client_wrapper=self._client_wrapper)
         return self._batch_workflow_run
+
+    @property
+    def batch_processor_run(self):
+        if self._batch_processor_run is None:
+            from .batch_processor_run.client import AsyncBatchProcessorRunClient  # noqa: E402
+
+            self._batch_processor_run = AsyncBatchProcessorRunClient(client_wrapper=self._client_wrapper)
+        return self._batch_processor_run
+
+    @property
+    def evaluation_set(self):
+        if self._evaluation_set is None:
+            from .evaluation_set.client import AsyncEvaluationSetClient  # noqa: E402
+
+            self._evaluation_set = AsyncEvaluationSetClient(client_wrapper=self._client_wrapper)
+        return self._evaluation_set
+
+    @property
+    def evaluation_set_item(self):
+        if self._evaluation_set_item is None:
+            from .evaluation_set_item.client import AsyncEvaluationSetItemClient  # noqa: E402
+
+            self._evaluation_set_item = AsyncEvaluationSetItemClient(client_wrapper=self._client_wrapper)
+        return self._evaluation_set_item
 
     @property
     def processor_run(self):
@@ -584,70 +648,6 @@ class AsyncExtend:
 
             self._processor_version = AsyncProcessorVersionClient(client_wrapper=self._client_wrapper)
         return self._processor_version
-
-    @property
-    def parser_run(self):
-        if self._parser_run is None:
-            from .parser_run.client import AsyncParserRunClient  # noqa: E402
-
-            self._parser_run = AsyncParserRunClient(client_wrapper=self._client_wrapper)
-        return self._parser_run
-
-    @property
-    def edit(self):
-        if self._edit is None:
-            from .edit.client import AsyncEditClient  # noqa: E402
-
-            self._edit = AsyncEditClient(client_wrapper=self._client_wrapper)
-        return self._edit
-
-    @property
-    def file(self):
-        if self._file is None:
-            from .file.client import AsyncFileClient  # noqa: E402
-
-            self._file = AsyncFileClient(client_wrapper=self._client_wrapper)
-        return self._file
-
-    @property
-    def evaluation_set(self):
-        if self._evaluation_set is None:
-            from .evaluation_set.client import AsyncEvaluationSetClient  # noqa: E402
-
-            self._evaluation_set = AsyncEvaluationSetClient(client_wrapper=self._client_wrapper)
-        return self._evaluation_set
-
-    @property
-    def evaluation_set_item(self):
-        if self._evaluation_set_item is None:
-            from .evaluation_set_item.client import AsyncEvaluationSetItemClient  # noqa: E402
-
-            self._evaluation_set_item = AsyncEvaluationSetItemClient(client_wrapper=self._client_wrapper)
-        return self._evaluation_set_item
-
-    @property
-    def workflow_run_output(self):
-        if self._workflow_run_output is None:
-            from .workflow_run_output.client import AsyncWorkflowRunOutputClient  # noqa: E402
-
-            self._workflow_run_output = AsyncWorkflowRunOutputClient(client_wrapper=self._client_wrapper)
-        return self._workflow_run_output
-
-    @property
-    def batch_processor_run(self):
-        if self._batch_processor_run is None:
-            from .batch_processor_run.client import AsyncBatchProcessorRunClient  # noqa: E402
-
-            self._batch_processor_run = AsyncBatchProcessorRunClient(client_wrapper=self._client_wrapper)
-        return self._batch_processor_run
-
-    @property
-    def workflow(self):
-        if self._workflow is None:
-            from .workflow.client import AsyncWorkflowClient  # noqa: E402
-
-            self._workflow = AsyncWorkflowClient(client_wrapper=self._client_wrapper)
-        return self._workflow
 
 
 def _get_base_url(*, base_url: typing.Optional[str] = None, environment: ExtendEnvironment) -> str:
