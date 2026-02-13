@@ -45,6 +45,13 @@ class ParseConfigParams(typing_extensions.TypedDict):
     * `parse_light`: Lightweight parsing engine optimized for speed. This does not have robust layout support and does not support markdown layout target.
     """
 
+    engine_version: typing_extensions.NotRequired[
+        typing_extensions.Annotated[str, FieldMetadata(alias="engineVersion")]
+    ]
+    """
+    Pin a specific parser engine version for reproducibility. When set to `latest`, the most recent stable version of the selected engine is used.
+    """
+
     block_options: typing_extensions.NotRequired[
         typing_extensions.Annotated[ParseConfigBlockOptionsParams, FieldMetadata(alias="blockOptions")]
     ]
