@@ -8,7 +8,7 @@ from ...core.pydantic_utilities import IS_PYDANTIC_V2
 from ...core.serialization import FieldMetadata
 from ...core.unchecked_base_model import UncheckedBaseModel
 from ...types.processor_version_string import ProcessorVersionString
-from ...types.split_config import SplitConfig
+from ...types.split_override_config import SplitOverrideConfig
 
 
 class SplitRunsCreateRequestSplitter(UncheckedBaseModel):
@@ -23,10 +23,10 @@ class SplitRunsCreateRequestSplitter(UncheckedBaseModel):
 
     version: typing.Optional[ProcessorVersionString] = None
     override_config: typing_extensions.Annotated[
-        typing.Optional[SplitConfig], FieldMetadata(alias="overrideConfig")
+        typing.Optional[SplitOverrideConfig], FieldMetadata(alias="overrideConfig")
     ] = pydantic.Field(alias="overrideConfig", default=None)
     """
-    Optional configuration override. If provided, this configuration will override the splitter's saved configuration.
+    Optional partial configuration override. Only the fields you provide will override the splitter's saved configuration. For example, you can pass only `splitRules` without providing `splitClassifications`.
     """
 
     if IS_PYDANTIC_V2:

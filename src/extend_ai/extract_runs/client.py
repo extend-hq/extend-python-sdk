@@ -135,7 +135,7 @@ class ExtractRunsClient:
         """
         Extract structured data from a file using an existing extractor or an inline configuration.
 
-        The request returns immediately with a `PROCESSING` status. Use webhooks or poll the [Get Extract Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/get-extract-run) endpoint for results.
+        The request returns immediately with a `PROCESSING` status. Use webhooks or poll the Get Extract Run endpoint for results.
 
         Parameters
         ----------
@@ -403,7 +403,7 @@ class AsyncExtractRunsClient:
         """
         Extract structured data from a file using an existing extractor or an inline configuration.
 
-        The request returns immediately with a `PROCESSING` status. Use webhooks or poll the [Get Extract Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/get-extract-run) endpoint for results.
+        The request returns immediately with a `PROCESSING` status. Use webhooks or poll the Get Extract Run endpoint for results.
 
         Parameters
         ----------

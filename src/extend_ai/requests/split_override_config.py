@@ -8,7 +8,12 @@ from .parse_config import ParseConfigParams
 from .split_advanced_options import SplitAdvancedOptionsParams
 
 
-class SplitConfigParams(typing_extensions.TypedDict):
+class SplitOverrideConfigParams(typing_extensions.TypedDict):
+    """
+    Partial configuration override for an existing splitter. All fields are optional — only the fields you provide will override the splitter's saved configuration.
+    For example, you can pass only `splitRules` without providing `splitClassifications`.
+    """
+
     base_processor: typing_extensions.NotRequired[
         typing_extensions.Annotated[SplittingBaseProcessor, FieldMetadata(alias="baseProcessor")]
     ]
@@ -17,8 +22,8 @@ class SplitConfigParams(typing_extensions.TypedDict):
     The version of the `"splitting_performance"` or `"splitting_light"` processor to use. If not provided, the latest stable version for the selected `baseProcessor` will be used automatically. See [Splitting Changelog](https://docs.extend.ai/2026-02-09/changelog/splitting/splitting-performance) for more details.
     """
 
-    split_classifications: typing_extensions.Annotated[
-        ClassificationsParams, FieldMetadata(alias="splitClassifications")
+    split_classifications: typing_extensions.NotRequired[
+        typing_extensions.Annotated[ClassificationsParams, FieldMetadata(alias="splitClassifications")]
     ]
     split_rules: typing_extensions.NotRequired[typing_extensions.Annotated[str, FieldMetadata(alias="splitRules")]]
     """

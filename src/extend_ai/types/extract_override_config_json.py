@@ -13,7 +13,12 @@ from .json_object import JsonObject
 from .parse_config import ParseConfig
 
 
-class ExtractConfigJson(UncheckedBaseModel):
+class ExtractOverrideConfigJson(UncheckedBaseModel):
+    """
+    Partial configuration override for an existing extractor. All fields are optional — only the fields you provide will override the extractor's saved configuration.
+    For example, you can pass only `advancedOptions` or `extractionRules` without providing a `schema`.
+    """
+
     base_processor: typing_extensions.Annotated[
         typing.Optional[ExtractionBaseProcessor], FieldMetadata(alias="baseProcessor")
     ] = pydantic.Field(alias="baseProcessor", default=None)
@@ -31,7 +36,9 @@ class ExtractConfigJson(UncheckedBaseModel):
     Custom rules to guide the extraction process in natural language.
     """
 
-    schema_: typing_extensions.Annotated[JsonObject, FieldMetadata(alias="schema")] = pydantic.Field(alias="schema")
+    schema_: typing_extensions.Annotated[typing.Optional[JsonObject], FieldMetadata(alias="schema")] = pydantic.Field(
+        alias="schema", default=None
+    )
     """
     JSON Schema definition of the data to extract.
     

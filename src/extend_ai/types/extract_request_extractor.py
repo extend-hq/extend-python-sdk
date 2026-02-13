@@ -7,7 +7,7 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .extract_config_json import ExtractConfigJson
+from .extract_override_config_json import ExtractOverrideConfigJson
 from .processor_version_string import ProcessorVersionString
 
 
@@ -23,10 +23,10 @@ class ExtractRequestExtractor(UncheckedBaseModel):
 
     version: typing.Optional[ProcessorVersionString] = None
     override_config: typing_extensions.Annotated[
-        typing.Optional[ExtractConfigJson], FieldMetadata(alias="overrideConfig")
+        typing.Optional[ExtractOverrideConfigJson], FieldMetadata(alias="overrideConfig")
     ] = pydantic.Field(alias="overrideConfig", default=None)
     """
-    Optional configuration override. If provided, this configuration will override the extractor's saved configuration.
+    Optional partial configuration override. Only the fields you provide will override the extractor's saved configuration. For example, you can pass only `advancedOptions` or `extractionRules` without providing a `schema`.
     """
 
     if IS_PYDANTIC_V2:

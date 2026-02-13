@@ -233,6 +233,8 @@ class RawWorkflowRunsClient:
         """
         Run a workflow with a file. A workflow is a sequence of steps that process files and data in a specific order to achieve a desired outcome.
 
+        The request returns immediately with a `PROCESSING` status. Use webhooks or poll the Get Workflow Run endpoint for results.
+
         Parameters
         ----------
         workflow : WorkflowReferenceParams
@@ -1302,6 +1304,8 @@ class AsyncRawWorkflowRunsClient:
     ) -> AsyncHttpResponse[WorkflowRun]:
         """
         Run a workflow with a file. A workflow is a sequence of steps that process files and data in a specific order to achieve a desired outcome.
+
+        The request returns immediately with a `PROCESSING` status. Use webhooks or poll the Get Workflow Run endpoint for results.
 
         Parameters
         ----------

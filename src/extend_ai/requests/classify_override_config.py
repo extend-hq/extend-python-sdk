@@ -8,7 +8,12 @@ from .classify_advanced_options import ClassifyAdvancedOptionsParams
 from .parse_config import ParseConfigParams
 
 
-class ClassifyConfigParams(typing_extensions.TypedDict):
+class ClassifyOverrideConfigParams(typing_extensions.TypedDict):
+    """
+    Partial configuration override for an existing classifier. All fields are optional — only the fields you provide will override the classifier's saved configuration.
+    For example, you can pass only `classificationRules` without providing `classifications`.
+    """
+
     base_processor: typing_extensions.NotRequired[
         typing_extensions.Annotated[ClassificationBaseProcessor, FieldMetadata(alias="baseProcessor")]
     ]
@@ -17,7 +22,7 @@ class ClassifyConfigParams(typing_extensions.TypedDict):
     The version of the `"classification_performance"` or `"classification_light"` processor to use. If not provided, the latest stable version for the selected `baseProcessor` will be used automatically. See [Classification Changelog](https://docs.extend.ai/2026-02-09/changelog/classification/classification-performance) for more details.
     """
 
-    classifications: ClassificationsParams
+    classifications: typing_extensions.NotRequired[ClassificationsParams]
     classification_rules: typing_extensions.NotRequired[
         typing_extensions.Annotated[str, FieldMetadata(alias="classificationRules")]
     ]

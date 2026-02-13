@@ -7,20 +7,16 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .classification_base_processor import ClassificationBaseProcessor
 from .classifications import Classifications
 from .classify_advanced_options import ClassifyAdvancedOptions
-from .classify_config_base_processor import ClassifyConfigBaseProcessor
 from .parse_config import ParseConfig
 
 
 class ClassifyConfig(UncheckedBaseModel):
     base_processor: typing_extensions.Annotated[
-        typing.Optional[ClassifyConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
+        typing.Optional[ClassificationBaseProcessor], FieldMetadata(alias="baseProcessor")
     ] = pydantic.Field(alias="baseProcessor", default=None)
-    """
-    The base processor to use. For classifiers, this can be either `"classification_performance"` or `"classification_light"`. Defaults to `"classification_performance"` if not provided. See [Classification Changelog](https://docs.extend.ai/2026-02-09/changelog/classification/classification-performance) for more details.
-    """
-
     base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
         pydantic.Field(alias="baseVersion", default=None)
     )

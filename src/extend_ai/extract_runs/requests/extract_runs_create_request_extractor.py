@@ -2,7 +2,7 @@
 
 import typing_extensions
 from ...core.serialization import FieldMetadata
-from ...requests.extract_config_json import ExtractConfigJsonParams
+from ...requests.extract_override_config_json import ExtractOverrideConfigJsonParams
 from ...types.processor_version_string import ProcessorVersionString
 
 
@@ -18,8 +18,8 @@ class ExtractRunsCreateRequestExtractorParams(typing_extensions.TypedDict):
 
     version: typing_extensions.NotRequired[ProcessorVersionString]
     override_config: typing_extensions.NotRequired[
-        typing_extensions.Annotated[ExtractConfigJsonParams, FieldMetadata(alias="overrideConfig")]
+        typing_extensions.Annotated[ExtractOverrideConfigJsonParams, FieldMetadata(alias="overrideConfig")]
     ]
     """
-    Optional configuration override. If provided, this configuration will override the extractor's saved configuration.
+    Optional partial configuration override. Only the fields you provide will override the extractor's saved configuration. For example, you can pass only `advancedOptions` or `extractionRules` without providing a `schema`.
     """

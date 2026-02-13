@@ -44,6 +44,7 @@ if typing.TYPE_CHECKING:
     from .citation import Citation
     from .citation_page import CitationPage
     from .classification import Classification
+    from .classification_base_processor import ClassificationBaseProcessor
     from .classifications import Classifications
     from .classifier import Classifier
     from .classifier_created_webhook_event import ClassifierCreatedWebhookEvent
@@ -57,8 +58,8 @@ if typing.TYPE_CHECKING:
     from .classify_advanced_options import ClassifyAdvancedOptions
     from .classify_advanced_options_context import ClassifyAdvancedOptionsContext
     from .classify_config import ClassifyConfig
-    from .classify_config_base_processor import ClassifyConfigBaseProcessor
     from .classify_output import ClassifyOutput
+    from .classify_override_config import ClassifyOverrideConfig
     from .classify_request_classifier import ClassifyRequestClassifier
     from .classify_request_file import ClassifyRequestFile
     from .classify_result import ClassifyResult
@@ -131,7 +132,6 @@ if typing.TYPE_CHECKING:
     from .extract_chunking_options_chunking_strategy import ExtractChunkingOptionsChunkingStrategy
     from .extract_config import ExtractConfig
     from .extract_config_json import ExtractConfigJson
-    from .extract_config_json_base_processor import ExtractConfigJsonBaseProcessor
     from .extract_config_legacy import ExtractConfigLegacy
     from .extract_config_legacy_base_processor import ExtractConfigLegacyBaseProcessor
     from .extract_output import ExtractOutput
@@ -140,6 +140,7 @@ if typing.TYPE_CHECKING:
     from .extract_output_legacy import ExtractOutputLegacy
     from .extract_output_metadata import ExtractOutputMetadata
     from .extract_output_metadata_value import ExtractOutputMetadataValue
+    from .extract_override_config_json import ExtractOverrideConfigJson
     from .extract_request_extractor import ExtractRequestExtractor
     from .extract_request_file import ExtractRequestFile
     from .extract_result import ExtractResult
@@ -149,6 +150,7 @@ if typing.TYPE_CHECKING:
     from .extract_run_summary import ExtractRunSummary
     from .extract_step_run import ExtractStepRun
     from .extract_step_run_step import ExtractStepRunStep
+    from .extraction_base_processor import ExtractionBaseProcessor
     from .extraction_field import ExtractionField
     from .extraction_field_result import ExtractionFieldResult
     from .extraction_field_result_reference import ExtractionFieldResultReference
@@ -279,6 +281,7 @@ if typing.TYPE_CHECKING:
     from .parent_split import ParentSplit
     from .parse_config import ParseConfig
     from .parse_config_advanced_options import ParseConfigAdvancedOptions
+    from .parse_config_advanced_options_excel_parsing_mode import ParseConfigAdvancedOptionsExcelParsingMode
     from .parse_config_advanced_options_return_ocr import ParseConfigAdvancedOptionsReturnOcr
     from .parse_config_block_options import ParseConfigBlockOptions
     from .parse_config_block_options_figures import ParseConfigBlockOptionsFigures
@@ -332,9 +335,9 @@ if typing.TYPE_CHECKING:
     from .split_advanced_options import SplitAdvancedOptions
     from .split_advanced_options_split_method import SplitAdvancedOptionsSplitMethod
     from .split_config import SplitConfig
-    from .split_config_base_processor import SplitConfigBaseProcessor
     from .split_output import SplitOutput
     from .split_output_splits_item import SplitOutputSplitsItem
+    from .split_override_config import SplitOverrideConfig
     from .split_request_file import SplitRequestFile
     from .split_request_splitter import SplitRequestSplitter
     from .split_result import SplitResult
@@ -353,6 +356,7 @@ if typing.TYPE_CHECKING:
     from .splitter_version import SplitterVersion
     from .splitter_version_published_webhook_event import SplitterVersionPublishedWebhookEvent
     from .splitter_version_summary import SplitterVersionSummary
+    from .splitting_base_processor import SplittingBaseProcessor
     from .step_run import StepRun
     from .step_run_base import StepRunBase
     from .step_run_base_status import StepRunBaseStatus
@@ -451,6 +455,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "Citation": ".citation",
     "CitationPage": ".citation_page",
     "Classification": ".classification",
+    "ClassificationBaseProcessor": ".classification_base_processor",
     "Classifications": ".classifications",
     "Classifier": ".classifier",
     "ClassifierCreatedWebhookEvent": ".classifier_created_webhook_event",
@@ -464,8 +469,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ClassifyAdvancedOptions": ".classify_advanced_options",
     "ClassifyAdvancedOptionsContext": ".classify_advanced_options_context",
     "ClassifyConfig": ".classify_config",
-    "ClassifyConfigBaseProcessor": ".classify_config_base_processor",
     "ClassifyOutput": ".classify_output",
+    "ClassifyOverrideConfig": ".classify_override_config",
     "ClassifyRequestClassifier": ".classify_request_classifier",
     "ClassifyRequestFile": ".classify_request_file",
     "ClassifyResult": ".classify_result",
@@ -530,7 +535,6 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ExtractChunkingOptionsChunkingStrategy": ".extract_chunking_options_chunking_strategy",
     "ExtractConfig": ".extract_config",
     "ExtractConfigJson": ".extract_config_json",
-    "ExtractConfigJsonBaseProcessor": ".extract_config_json_base_processor",
     "ExtractConfigLegacy": ".extract_config_legacy",
     "ExtractConfigLegacyBaseProcessor": ".extract_config_legacy_base_processor",
     "ExtractOutput": ".extract_output",
@@ -539,6 +543,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ExtractOutputLegacy": ".extract_output_legacy",
     "ExtractOutputMetadata": ".extract_output_metadata",
     "ExtractOutputMetadataValue": ".extract_output_metadata_value",
+    "ExtractOverrideConfigJson": ".extract_override_config_json",
     "ExtractRequestExtractor": ".extract_request_extractor",
     "ExtractRequestFile": ".extract_request_file",
     "ExtractResult": ".extract_result",
@@ -548,6 +553,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ExtractRunSummary": ".extract_run_summary",
     "ExtractStepRun": ".extract_step_run",
     "ExtractStepRunStep": ".extract_step_run_step",
+    "ExtractionBaseProcessor": ".extraction_base_processor",
     "ExtractionField": ".extraction_field",
     "ExtractionFieldResult": ".extraction_field_result",
     "ExtractionFieldResultReference": ".extraction_field_result_reference",
@@ -666,6 +672,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ParentSplit": ".parent_split",
     "ParseConfig": ".parse_config",
     "ParseConfigAdvancedOptions": ".parse_config_advanced_options",
+    "ParseConfigAdvancedOptionsExcelParsingMode": ".parse_config_advanced_options_excel_parsing_mode",
     "ParseConfigAdvancedOptionsReturnOcr": ".parse_config_advanced_options_return_ocr",
     "ParseConfigBlockOptions": ".parse_config_block_options",
     "ParseConfigBlockOptionsFigures": ".parse_config_block_options_figures",
@@ -719,9 +726,9 @@ _dynamic_imports: typing.Dict[str, str] = {
     "SplitAdvancedOptions": ".split_advanced_options",
     "SplitAdvancedOptionsSplitMethod": ".split_advanced_options_split_method",
     "SplitConfig": ".split_config",
-    "SplitConfigBaseProcessor": ".split_config_base_processor",
     "SplitOutput": ".split_output",
     "SplitOutputSplitsItem": ".split_output_splits_item",
+    "SplitOverrideConfig": ".split_override_config",
     "SplitRequestFile": ".split_request_file",
     "SplitRequestSplitter": ".split_request_splitter",
     "SplitResult": ".split_result",
@@ -740,6 +747,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "SplitterVersion": ".splitter_version",
     "SplitterVersionPublishedWebhookEvent": ".splitter_version_published_webhook_event",
     "SplitterVersionSummary": ".splitter_version_summary",
+    "SplittingBaseProcessor": ".splitting_base_processor",
     "StepRun": ".step_run",
     "StepRunBase": ".step_run_base",
     "StepRunBaseStatus": ".step_run_base_status",
@@ -860,6 +868,7 @@ __all__ = [
     "Citation",
     "CitationPage",
     "Classification",
+    "ClassificationBaseProcessor",
     "Classifications",
     "Classifier",
     "ClassifierCreatedWebhookEvent",
@@ -873,8 +882,8 @@ __all__ = [
     "ClassifyAdvancedOptions",
     "ClassifyAdvancedOptionsContext",
     "ClassifyConfig",
-    "ClassifyConfigBaseProcessor",
     "ClassifyOutput",
+    "ClassifyOverrideConfig",
     "ClassifyRequestClassifier",
     "ClassifyRequestFile",
     "ClassifyResult",
@@ -939,7 +948,6 @@ __all__ = [
     "ExtractChunkingOptionsChunkingStrategy",
     "ExtractConfig",
     "ExtractConfigJson",
-    "ExtractConfigJsonBaseProcessor",
     "ExtractConfigLegacy",
     "ExtractConfigLegacyBaseProcessor",
     "ExtractOutput",
@@ -948,6 +956,7 @@ __all__ = [
     "ExtractOutputLegacy",
     "ExtractOutputMetadata",
     "ExtractOutputMetadataValue",
+    "ExtractOverrideConfigJson",
     "ExtractRequestExtractor",
     "ExtractRequestFile",
     "ExtractResult",
@@ -957,6 +966,7 @@ __all__ = [
     "ExtractRunSummary",
     "ExtractStepRun",
     "ExtractStepRunStep",
+    "ExtractionBaseProcessor",
     "ExtractionField",
     "ExtractionFieldResult",
     "ExtractionFieldResultReference",
@@ -1075,6 +1085,7 @@ __all__ = [
     "ParentSplit",
     "ParseConfig",
     "ParseConfigAdvancedOptions",
+    "ParseConfigAdvancedOptionsExcelParsingMode",
     "ParseConfigAdvancedOptionsReturnOcr",
     "ParseConfigBlockOptions",
     "ParseConfigBlockOptionsFigures",
@@ -1128,9 +1139,9 @@ __all__ = [
     "SplitAdvancedOptions",
     "SplitAdvancedOptionsSplitMethod",
     "SplitConfig",
-    "SplitConfigBaseProcessor",
     "SplitOutput",
     "SplitOutputSplitsItem",
+    "SplitOverrideConfig",
     "SplitRequestFile",
     "SplitRequestSplitter",
     "SplitResult",
@@ -1149,6 +1160,7 @@ __all__ = [
     "SplitterVersion",
     "SplitterVersionPublishedWebhookEvent",
     "SplitterVersionSummary",
+    "SplittingBaseProcessor",
     "StepRun",
     "StepRunBase",
     "StepRunBaseStatus",

@@ -3,7 +3,7 @@
 import typing_extensions
 from ..core.serialization import FieldMetadata
 from ..types.processor_version_string import ProcessorVersionString
-from .split_config import SplitConfigParams
+from .split_override_config import SplitOverrideConfigParams
 
 
 class SplitRequestSplitterParams(typing_extensions.TypedDict):
@@ -18,8 +18,8 @@ class SplitRequestSplitterParams(typing_extensions.TypedDict):
 
     version: typing_extensions.NotRequired[ProcessorVersionString]
     override_config: typing_extensions.NotRequired[
-        typing_extensions.Annotated[SplitConfigParams, FieldMetadata(alias="overrideConfig")]
+        typing_extensions.Annotated[SplitOverrideConfigParams, FieldMetadata(alias="overrideConfig")]
     ]
     """
-    Optional configuration override. If provided, this configuration will override the splitter's saved configuration.
+    Optional partial configuration override. Only the fields you provide will override the splitter's saved configuration. For example, you can pass only `splitRules` without providing `splitClassifications`.
     """
