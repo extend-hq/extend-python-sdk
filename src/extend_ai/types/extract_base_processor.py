@@ -7,20 +7,20 @@ from ..core import enum
 T_Result = typing.TypeVar("T_Result")
 
 
-class ExtractConfigJsonBaseProcessor(enum.StrEnum):
+class ExtractBaseProcessor(enum.StrEnum):
     """
     The base processor to use. For extractors, this can be either `"extraction_performance"` or `"extraction_light"`. Defaults to `"extraction_performance"` if not provided. See [Extraction Changelog](https://docs.extend.ai/2026-02-09/changelog/extraction/extraction-performance) for more details.
     """
 
     EXTRACTION_PERFORMANCE = "extraction_performance"
     EXTRACTION_LIGHT = "extraction_light"
-    _UNKNOWN = "__EXTRACTCONFIGJSONBASEPROCESSOR_UNKNOWN__"
+    _UNKNOWN = "__EXTRACTBASEPROCESSOR_UNKNOWN__"
     """
     This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
     """
 
     @classmethod
-    def _missing_(cls, value: typing.Any) -> "ExtractConfigJsonBaseProcessor":
+    def _missing_(cls, value: typing.Any) -> "ExtractBaseProcessor":
         unknown = cls._UNKNOWN
         unknown._value_ = value
         return unknown
@@ -31,8 +31,8 @@ class ExtractConfigJsonBaseProcessor(enum.StrEnum):
         extraction_light: typing.Callable[[], T_Result],
         _unknown_member: typing.Callable[[str], T_Result],
     ) -> T_Result:
-        if self is ExtractConfigJsonBaseProcessor.EXTRACTION_PERFORMANCE:
+        if self is ExtractBaseProcessor.EXTRACTION_PERFORMANCE:
             return extraction_performance()
-        if self is ExtractConfigJsonBaseProcessor.EXTRACTION_LIGHT:
+        if self is ExtractBaseProcessor.EXTRACTION_LIGHT:
             return extraction_light()
         return _unknown_member(self._value_)
