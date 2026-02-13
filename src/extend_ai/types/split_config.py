@@ -10,17 +10,13 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 from .classifications import Classifications
 from .parse_config import ParseConfig
 from .split_advanced_options import SplitAdvancedOptions
-from .split_config_base_processor import SplitConfigBaseProcessor
+from .split_base_processor import SplitBaseProcessor
 
 
 class SplitConfig(UncheckedBaseModel):
     base_processor: typing_extensions.Annotated[
-        typing.Optional[SplitConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
+        typing.Optional[SplitBaseProcessor], FieldMetadata(alias="baseProcessor")
     ] = pydantic.Field(alias="baseProcessor", default=None)
-    """
-    The base processor to use. For splitters, this can be either `"splitting_performance"` or `"splitting_light"`. Defaults to `"splitting_performance"` if not provided. See [Splitting Changelog](https://docs.extend.ai/2026-02-09/changelog/splitting/splitting-performance) for more details.
-    """
-
     base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
         pydantic.Field(alias="baseVersion", default=None)
     )

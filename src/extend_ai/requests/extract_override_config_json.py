@@ -8,7 +8,12 @@ from .extract_advanced_options import ExtractAdvancedOptionsParams
 from .parse_config import ParseConfigParams
 
 
-class ExtractConfigJsonParams(typing_extensions.TypedDict):
+class ExtractOverrideConfigJsonParams(typing_extensions.TypedDict):
+    """
+    Partial configuration override for an existing extractor. All fields are optional — only the fields you provide will override the extractor's saved configuration.
+    For example, you can pass only `advancedOptions` or `extractionRules` without providing a `schema`.
+    """
+
     base_processor: typing_extensions.NotRequired[
         typing_extensions.Annotated[ExtractBaseProcessor, FieldMetadata(alias="baseProcessor")]
     ]
@@ -24,7 +29,7 @@ class ExtractConfigJsonParams(typing_extensions.TypedDict):
     Custom rules to guide the extraction process in natural language.
     """
 
-    schema: JsonObject
+    schema: typing_extensions.NotRequired[JsonObject]
     """
     JSON Schema definition of the data to extract.
     

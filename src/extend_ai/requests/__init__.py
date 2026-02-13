@@ -50,6 +50,7 @@ if typing.TYPE_CHECKING:
     from .classify_advanced_options import ClassifyAdvancedOptionsParams
     from .classify_config import ClassifyConfigParams
     from .classify_output import ClassifyOutputParams
+    from .classify_override_config import ClassifyOverrideConfigParams
     from .classify_request_classifier import ClassifyRequestClassifierParams
     from .classify_request_file import ClassifyRequestFileParams
     from .classify_result import ClassifyResultParams
@@ -119,6 +120,7 @@ if typing.TYPE_CHECKING:
     from .extract_output_legacy import ExtractOutputLegacyParams
     from .extract_output_metadata import ExtractOutputMetadataParams
     from .extract_output_metadata_value import ExtractOutputMetadataValueParams
+    from .extract_override_config_json import ExtractOverrideConfigJsonParams
     from .extract_request_extractor import ExtractRequestExtractorParams
     from .extract_request_file import ExtractRequestFileParams
     from .extract_result import ExtractResultParams
@@ -259,6 +261,7 @@ if typing.TYPE_CHECKING:
     from .split_config import SplitConfigParams
     from .split_output import SplitOutputParams
     from .split_output_splits_item import SplitOutputSplitsItemParams
+    from .split_override_config import SplitOverrideConfigParams
     from .split_request_file import SplitRequestFileParams
     from .split_request_splitter import SplitRequestSplitterParams
     from .split_result import SplitResultParams
@@ -377,6 +380,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ClassifyAdvancedOptionsParams": ".classify_advanced_options",
     "ClassifyConfigParams": ".classify_config",
     "ClassifyOutputParams": ".classify_output",
+    "ClassifyOverrideConfigParams": ".classify_override_config",
     "ClassifyRequestClassifierParams": ".classify_request_classifier",
     "ClassifyRequestFileParams": ".classify_request_file",
     "ClassifyResultParams": ".classify_result",
@@ -440,6 +444,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ExtractOutputMetadataParams": ".extract_output_metadata",
     "ExtractOutputMetadataValueParams": ".extract_output_metadata_value",
     "ExtractOutputParams": ".extract_output",
+    "ExtractOverrideConfigJsonParams": ".extract_override_config_json",
     "ExtractRequestExtractorParams": ".extract_request_extractor",
     "ExtractRequestFileParams": ".extract_request_file",
     "ExtractResultParams": ".extract_result",
@@ -572,6 +577,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "SplitConfigParams": ".split_config",
     "SplitOutputParams": ".split_output",
     "SplitOutputSplitsItemParams": ".split_output_splits_item",
+    "SplitOverrideConfigParams": ".split_override_config",
     "SplitRequestFileParams": ".split_request_file",
     "SplitRequestSplitterParams": ".split_request_splitter",
     "SplitResultParams": ".split_result",
@@ -712,6 +718,7 @@ __all__ = [
     "ClassifyAdvancedOptionsParams",
     "ClassifyConfigParams",
     "ClassifyOutputParams",
+    "ClassifyOverrideConfigParams",
     "ClassifyRequestClassifierParams",
     "ClassifyRequestFileParams",
     "ClassifyResultParams",
@@ -775,6 +782,7 @@ __all__ = [
     "ExtractOutputMetadataParams",
     "ExtractOutputMetadataValueParams",
     "ExtractOutputParams",
+    "ExtractOverrideConfigJsonParams",
     "ExtractRequestExtractorParams",
     "ExtractRequestFileParams",
     "ExtractResultParams",
@@ -907,6 +915,7 @@ __all__ = [
     "SplitConfigParams",
     "SplitOutputParams",
     "SplitOutputSplitsItemParams",
+    "SplitOverrideConfigParams",
     "SplitRequestFileParams",
     "SplitRequestSplitterParams",
     "SplitResultParams",

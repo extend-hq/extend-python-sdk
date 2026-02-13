@@ -56,9 +56,10 @@ if typing.TYPE_CHECKING:
     from .classifier_version_summary import ClassifierVersionSummary
     from .classify_advanced_options import ClassifyAdvancedOptions
     from .classify_advanced_options_context import ClassifyAdvancedOptionsContext
+    from .classify_base_processor import ClassifyBaseProcessor
     from .classify_config import ClassifyConfig
-    from .classify_config_base_processor import ClassifyConfigBaseProcessor
     from .classify_output import ClassifyOutput
+    from .classify_override_config import ClassifyOverrideConfig
     from .classify_request_classifier import ClassifyRequestClassifier
     from .classify_request_file import ClassifyRequestFile
     from .classify_result import ClassifyResult
@@ -126,12 +127,12 @@ if typing.TYPE_CHECKING:
         ExtractAdvancedOptionsExcelSheetSelectionStrategy,
     )
     from .extract_advanced_options_review_agent import ExtractAdvancedOptionsReviewAgent
+    from .extract_base_processor import ExtractBaseProcessor
     from .extract_chunking_options import ExtractChunkingOptions
     from .extract_chunking_options_chunk_selection_strategy import ExtractChunkingOptionsChunkSelectionStrategy
     from .extract_chunking_options_chunking_strategy import ExtractChunkingOptionsChunkingStrategy
     from .extract_config import ExtractConfig
     from .extract_config_json import ExtractConfigJson
-    from .extract_config_json_base_processor import ExtractConfigJsonBaseProcessor
     from .extract_config_legacy import ExtractConfigLegacy
     from .extract_config_legacy_base_processor import ExtractConfigLegacyBaseProcessor
     from .extract_output import ExtractOutput
@@ -140,6 +141,7 @@ if typing.TYPE_CHECKING:
     from .extract_output_legacy import ExtractOutputLegacy
     from .extract_output_metadata import ExtractOutputMetadata
     from .extract_output_metadata_value import ExtractOutputMetadataValue
+    from .extract_override_config_json import ExtractOverrideConfigJson
     from .extract_request_extractor import ExtractRequestExtractor
     from .extract_request_file import ExtractRequestFile
     from .extract_result import ExtractResult
@@ -279,6 +281,7 @@ if typing.TYPE_CHECKING:
     from .parent_split import ParentSplit
     from .parse_config import ParseConfig
     from .parse_config_advanced_options import ParseConfigAdvancedOptions
+    from .parse_config_advanced_options_excel_parsing_mode import ParseConfigAdvancedOptionsExcelParsingMode
     from .parse_config_advanced_options_return_ocr import ParseConfigAdvancedOptionsReturnOcr
     from .parse_config_block_options import ParseConfigBlockOptions
     from .parse_config_block_options_figures import ParseConfigBlockOptionsFigures
@@ -331,10 +334,11 @@ if typing.TYPE_CHECKING:
     from .sort_dir import SortDir
     from .split_advanced_options import SplitAdvancedOptions
     from .split_advanced_options_split_method import SplitAdvancedOptionsSplitMethod
+    from .split_base_processor import SplitBaseProcessor
     from .split_config import SplitConfig
-    from .split_config_base_processor import SplitConfigBaseProcessor
     from .split_output import SplitOutput
     from .split_output_splits_item import SplitOutputSplitsItem
+    from .split_override_config import SplitOverrideConfig
     from .split_request_file import SplitRequestFile
     from .split_request_splitter import SplitRequestSplitter
     from .split_result import SplitResult
@@ -463,9 +467,10 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ClassifierVersionSummary": ".classifier_version_summary",
     "ClassifyAdvancedOptions": ".classify_advanced_options",
     "ClassifyAdvancedOptionsContext": ".classify_advanced_options_context",
+    "ClassifyBaseProcessor": ".classify_base_processor",
     "ClassifyConfig": ".classify_config",
-    "ClassifyConfigBaseProcessor": ".classify_config_base_processor",
     "ClassifyOutput": ".classify_output",
+    "ClassifyOverrideConfig": ".classify_override_config",
     "ClassifyRequestClassifier": ".classify_request_classifier",
     "ClassifyRequestFile": ".classify_request_file",
     "ClassifyResult": ".classify_result",
@@ -525,12 +530,12 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ExtractAdvancedOptionsArrayCitationStrategy": ".extract_advanced_options_array_citation_strategy",
     "ExtractAdvancedOptionsExcelSheetSelectionStrategy": ".extract_advanced_options_excel_sheet_selection_strategy",
     "ExtractAdvancedOptionsReviewAgent": ".extract_advanced_options_review_agent",
+    "ExtractBaseProcessor": ".extract_base_processor",
     "ExtractChunkingOptions": ".extract_chunking_options",
     "ExtractChunkingOptionsChunkSelectionStrategy": ".extract_chunking_options_chunk_selection_strategy",
     "ExtractChunkingOptionsChunkingStrategy": ".extract_chunking_options_chunking_strategy",
     "ExtractConfig": ".extract_config",
     "ExtractConfigJson": ".extract_config_json",
-    "ExtractConfigJsonBaseProcessor": ".extract_config_json_base_processor",
     "ExtractConfigLegacy": ".extract_config_legacy",
     "ExtractConfigLegacyBaseProcessor": ".extract_config_legacy_base_processor",
     "ExtractOutput": ".extract_output",
@@ -539,6 +544,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ExtractOutputLegacy": ".extract_output_legacy",
     "ExtractOutputMetadata": ".extract_output_metadata",
     "ExtractOutputMetadataValue": ".extract_output_metadata_value",
+    "ExtractOverrideConfigJson": ".extract_override_config_json",
     "ExtractRequestExtractor": ".extract_request_extractor",
     "ExtractRequestFile": ".extract_request_file",
     "ExtractResult": ".extract_result",
@@ -666,6 +672,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ParentSplit": ".parent_split",
     "ParseConfig": ".parse_config",
     "ParseConfigAdvancedOptions": ".parse_config_advanced_options",
+    "ParseConfigAdvancedOptionsExcelParsingMode": ".parse_config_advanced_options_excel_parsing_mode",
     "ParseConfigAdvancedOptionsReturnOcr": ".parse_config_advanced_options_return_ocr",
     "ParseConfigBlockOptions": ".parse_config_block_options",
     "ParseConfigBlockOptionsFigures": ".parse_config_block_options_figures",
@@ -718,10 +725,11 @@ _dynamic_imports: typing.Dict[str, str] = {
     "SortDir": ".sort_dir",
     "SplitAdvancedOptions": ".split_advanced_options",
     "SplitAdvancedOptionsSplitMethod": ".split_advanced_options_split_method",
+    "SplitBaseProcessor": ".split_base_processor",
     "SplitConfig": ".split_config",
-    "SplitConfigBaseProcessor": ".split_config_base_processor",
     "SplitOutput": ".split_output",
     "SplitOutputSplitsItem": ".split_output_splits_item",
+    "SplitOverrideConfig": ".split_override_config",
     "SplitRequestFile": ".split_request_file",
     "SplitRequestSplitter": ".split_request_splitter",
     "SplitResult": ".split_result",
@@ -872,9 +880,10 @@ __all__ = [
     "ClassifierVersionSummary",
     "ClassifyAdvancedOptions",
     "ClassifyAdvancedOptionsContext",
+    "ClassifyBaseProcessor",
     "ClassifyConfig",
-    "ClassifyConfigBaseProcessor",
     "ClassifyOutput",
+    "ClassifyOverrideConfig",
     "ClassifyRequestClassifier",
     "ClassifyRequestFile",
     "ClassifyResult",
@@ -934,12 +943,12 @@ __all__ = [
     "ExtractAdvancedOptionsArrayCitationStrategy",
     "ExtractAdvancedOptionsExcelSheetSelectionStrategy",
     "ExtractAdvancedOptionsReviewAgent",
+    "ExtractBaseProcessor",
     "ExtractChunkingOptions",
     "ExtractChunkingOptionsChunkSelectionStrategy",
     "ExtractChunkingOptionsChunkingStrategy",
     "ExtractConfig",
     "ExtractConfigJson",
-    "ExtractConfigJsonBaseProcessor",
     "ExtractConfigLegacy",
     "ExtractConfigLegacyBaseProcessor",
     "ExtractOutput",
@@ -948,6 +957,7 @@ __all__ = [
     "ExtractOutputLegacy",
     "ExtractOutputMetadata",
     "ExtractOutputMetadataValue",
+    "ExtractOverrideConfigJson",
     "ExtractRequestExtractor",
     "ExtractRequestFile",
     "ExtractResult",
@@ -1075,6 +1085,7 @@ __all__ = [
     "ParentSplit",
     "ParseConfig",
     "ParseConfigAdvancedOptions",
+    "ParseConfigAdvancedOptionsExcelParsingMode",
     "ParseConfigAdvancedOptionsReturnOcr",
     "ParseConfigBlockOptions",
     "ParseConfigBlockOptionsFigures",
@@ -1127,10 +1138,11 @@ __all__ = [
     "SortDir",
     "SplitAdvancedOptions",
     "SplitAdvancedOptionsSplitMethod",
+    "SplitBaseProcessor",
     "SplitConfig",
-    "SplitConfigBaseProcessor",
     "SplitOutput",
     "SplitOutputSplitsItem",
+    "SplitOverrideConfig",
     "SplitRequestFile",
     "SplitRequestSplitter",
     "SplitResult",

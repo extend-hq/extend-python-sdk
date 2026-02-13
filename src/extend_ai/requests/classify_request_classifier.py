@@ -3,7 +3,7 @@
 import typing_extensions
 from ..core.serialization import FieldMetadata
 from ..types.processor_version_string import ProcessorVersionString
-from .classify_config import ClassifyConfigParams
+from .classify_override_config import ClassifyOverrideConfigParams
 
 
 class ClassifyRequestClassifierParams(typing_extensions.TypedDict):
@@ -18,8 +18,8 @@ class ClassifyRequestClassifierParams(typing_extensions.TypedDict):
 
     version: typing_extensions.NotRequired[ProcessorVersionString]
     override_config: typing_extensions.NotRequired[
-        typing_extensions.Annotated[ClassifyConfigParams, FieldMetadata(alias="overrideConfig")]
+        typing_extensions.Annotated[ClassifyOverrideConfigParams, FieldMetadata(alias="overrideConfig")]
     ]
     """
-    Optional configuration override. If provided, this configuration will override the classifier's saved configuration.
+    Optional partial configuration override. Only the fields you provide will override the classifier's saved configuration. For example, you can pass only `classificationRules` without providing `classifications`.
     """

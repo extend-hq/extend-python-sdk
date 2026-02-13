@@ -42,9 +42,9 @@ class RawEditRunsClient:
         """
         Edit and manipulate PDF documents by detecting and filling form fields.
 
-        The Edit Runs endpoint allows you to convert and edit documents and get an edit run ID that can be used to check status and retrieve results with the [Get Edit Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/edit/get-edit-run) endpoint.
+        The Edit Runs endpoint allows you to convert and edit documents and get an edit run ID that can be used to check status and retrieve results with the Get Edit Run endpoint.
 
-        For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/product/editing/edit).
+        The request returns immediately with a `PROCESSING` status. Use webhooks or poll the Get Edit Run endpoint for results.
 
         Parameters
         ----------
@@ -468,9 +468,9 @@ class AsyncRawEditRunsClient:
         """
         Edit and manipulate PDF documents by detecting and filling form fields.
 
-        The Edit Runs endpoint allows you to convert and edit documents and get an edit run ID that can be used to check status and retrieve results with the [Get Edit Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/edit/get-edit-run) endpoint.
+        The Edit Runs endpoint allows you to convert and edit documents and get an edit run ID that can be used to check status and retrieve results with the Get Edit Run endpoint.
 
-        For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/product/editing/edit).
+        The request returns immediately with a `PROCESSING` status. Use webhooks or poll the Get Edit Run endpoint for results.
 
         Parameters
         ----------

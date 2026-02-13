@@ -8,32 +8,39 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .classifications import Classifications
-from .classify_advanced_options import ClassifyAdvancedOptions
-from .classify_base_processor import ClassifyBaseProcessor
 from .parse_config import ParseConfig
+from .split_advanced_options import SplitAdvancedOptions
+from .split_base_processor import SplitBaseProcessor
 
 
-class ClassifyConfig(UncheckedBaseModel):
+class SplitOverrideConfig(UncheckedBaseModel):
+    """
+    Partial configuration override for an existing splitter. All fields are optional — only the fields you provide will override the splitter's saved configuration.
+    For example, you can pass only `splitRules` without providing `splitClassifications`.
+    """
+
     base_processor: typing_extensions.Annotated[
-        typing.Optional[ClassifyBaseProcessor], FieldMetadata(alias="baseProcessor")
+        typing.Optional[SplitBaseProcessor], FieldMetadata(alias="baseProcessor")
     ] = pydantic.Field(alias="baseProcessor", default=None)
     base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
         pydantic.Field(alias="baseVersion", default=None)
     )
     """
-    The version of the `"classification_performance"` or `"classification_light"` processor to use. If not provided, the latest stable version for the selected `baseProcessor` will be used automatically. See [Classification Changelog](https://docs.extend.ai/2026-02-09/changelog/classification/classification-performance) for more details.
+    The version of the `"splitting_performance"` or `"splitting_light"` processor to use. If not provided, the latest stable version for the selected `baseProcessor` will be used automatically. See [Splitting Changelog](https://docs.extend.ai/2026-02-09/changelog/splitting/splitting-performance) for more details.
     """
 
-    classifications: Classifications
-    classification_rules: typing_extensions.Annotated[
-        typing.Optional[str], FieldMetadata(alias="classificationRules")
-    ] = pydantic.Field(alias="classificationRules", default=None)
+    split_classifications: typing_extensions.Annotated[
+        typing.Optional[Classifications], FieldMetadata(alias="splitClassifications")
+    ] = pydantic.Field(alias="splitClassifications", default=None)
+    split_rules: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="splitRules")] = pydantic.Field(
+        alias="splitRules", default=None
+    )
     """
-    Custom rules to guide the classification process in natural language.
+    Custom rules to guide the document splitting process in natural language.
     """
 
     advanced_options: typing_extensions.Annotated[
-        typing.Optional[ClassifyAdvancedOptions], FieldMetadata(alias="advancedOptions")
+        typing.Optional[SplitAdvancedOptions], FieldMetadata(alias="advancedOptions")
     ] = pydantic.Field(alias="advancedOptions", default=None)
     """
     Advanced configuration options.
