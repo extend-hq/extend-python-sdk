@@ -3,6 +3,9 @@
 README.md
 uv.lock
 
+# CI workflow — customized with stricter error handling
+.github/workflows/ci.yml
+
 # Protect patched core files
 src/extend_ai/core/serialization.py
 
