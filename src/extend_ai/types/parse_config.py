@@ -50,6 +50,13 @@ class ParseConfig(UncheckedBaseModel):
     * `parse_light`: Lightweight parsing engine optimized for speed. This does not have robust layout support and does not support markdown layout target.
     """
 
+    engine_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="engineVersion")] = (
+        pydantic.Field(alias="engineVersion", default=None)
+    )
+    """
+    Pin a specific parser engine version for reproducibility. When set to `latest`, the most recent stable version of the selected engine is used.
+    """
+
     block_options: typing_extensions.Annotated[
         typing.Optional[ParseConfigBlockOptions], FieldMetadata(alias="blockOptions")
     ] = pydantic.Field(alias="blockOptions", default=None)
