@@ -29,6 +29,7 @@ if typing.TYPE_CHECKING:
     from .processor_version.client import AsyncProcessorVersionClient, ProcessorVersionClient
     from .workflow.client import AsyncWorkflowClient, WorkflowClient
     from .workflow_run.client import AsyncWorkflowRunClient, WorkflowRunClient
+    from .workflow_run_output.client import AsyncWorkflowRunOutputClient, WorkflowRunOutputClient
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
@@ -107,6 +108,7 @@ class Extend:
         self._edit: typing.Optional[EditClient] = None
         self._workflow: typing.Optional[WorkflowClient] = None
         self._workflow_run: typing.Optional[WorkflowRunClient] = None
+        self._workflow_run_output: typing.Optional[WorkflowRunOutputClient] = None
         self._batch_workflow_run: typing.Optional[BatchWorkflowRunClient] = None
         self._batch_processor_run: typing.Optional[BatchProcessorRunClient] = None
         self._evaluation_set: typing.Optional[EvaluationSetClient] = None
@@ -268,6 +270,14 @@ class Extend:
         return self._workflow_run
 
     @property
+    def workflow_run_output(self):
+        if self._workflow_run_output is None:
+            from .workflow_run_output.client import WorkflowRunOutputClient  # noqa: E402
+
+            self._workflow_run_output = WorkflowRunOutputClient(client_wrapper=self._client_wrapper)
+        return self._workflow_run_output
+
+    @property
     def batch_workflow_run(self):
         if self._batch_workflow_run is None:
             from .batch_workflow_run.client import BatchWorkflowRunClient  # noqa: E402
@@ -398,6 +408,7 @@ class AsyncExtend:
         self._edit: typing.Optional[AsyncEditClient] = None
         self._workflow: typing.Optional[AsyncWorkflowClient] = None
         self._workflow_run: typing.Optional[AsyncWorkflowRunClient] = None
+        self._workflow_run_output: typing.Optional[AsyncWorkflowRunOutputClient] = None
         self._batch_workflow_run: typing.Optional[AsyncBatchWorkflowRunClient] = None
         self._batch_processor_run: typing.Optional[AsyncBatchProcessorRunClient] = None
         self._evaluation_set: typing.Optional[AsyncEvaluationSetClient] = None
@@ -573,6 +584,14 @@ class AsyncExtend:
 
             self._workflow_run = AsyncWorkflowRunClient(client_wrapper=self._client_wrapper)
         return self._workflow_run
+
+    @property
+    def workflow_run_output(self):
+        if self._workflow_run_output is None:
+            from .workflow_run_output.client import AsyncWorkflowRunOutputClient  # noqa: E402
+
+            self._workflow_run_output = AsyncWorkflowRunOutputClient(client_wrapper=self._client_wrapper)
+        return self._workflow_run_output
 
     @property
     def batch_workflow_run(self):
