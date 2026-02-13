@@ -53,6 +53,17 @@ jobs:
         run: poetry install
       - name: Publish to pypi
         run: |
+          set -euo pipefail
+
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          echo "Publishing tag: $TAG_NAME"
+
+          # Validate tag matches expected patterns
+          if ! [[ "$TAG_NAME" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+            echo "::error::Unexpected tag format '$TAG_NAME'. Expected semver (e.g. v1.0.4, 0.1.0)."
+            exit 1
+          fi
+
           poetry config repositories.remote https://upload.pypi.org/legacy/
           poetry --no-interaction -v publish --build --repository remote --username "$PYPI_USERNAME" --password "$PYPI_PASSWORD"
         env:
