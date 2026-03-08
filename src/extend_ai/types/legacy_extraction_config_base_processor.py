@@ -9,7 +9,7 @@ T_Result = typing.TypeVar("T_Result")
 
 class LegacyExtractionConfigBaseProcessor(enum.StrEnum):
     """
-    The base processor to use. For extractors, this must be either `"extraction_performance"` or `"extraction_light"`. See [Extraction Changelog](/changelog/extraction/extraction-performance) for more details.
+    The base processor to use. For extractors, this must be either `"extraction_performance"` or `"extraction_light"`. See [Extraction Changelog](https://docs.extend.ai/2026-02-09/changelog/extraction/extraction-performance) for more details.
     """
 
     EXTRACTION_PERFORMANCE = "extraction_performance"

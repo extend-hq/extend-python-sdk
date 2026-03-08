@@ -71,7 +71,10 @@ class ParseRunsClient:
             token="YOUR_TOKEN",
         )
         client.parse_runs.create(
-            file={"url": "url"},
+            file={
+                "url": "https://example.com/bank_statement.pdf",
+                "name": "bank_statement.pdf",
+            },
         )
         """
         _response = self._raw_client.create(
@@ -221,7 +224,10 @@ class AsyncParseRunsClient:
 
         async def main() -> None:
             await client.parse_runs.create(
-                file={"url": "url"},
+                file={
+                    "url": "https://example.com/bank_statement.pdf",
+                    "name": "bank_statement.pdf",
+                },
             )
 
 

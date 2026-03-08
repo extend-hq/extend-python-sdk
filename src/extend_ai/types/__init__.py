@@ -365,6 +365,11 @@ if typing.TYPE_CHECKING:
     from .too_many_requests_error_body import TooManyRequestsErrorBody
     from .updated_at import UpdatedAt
     from .version_description import VersionDescription
+    from .webhook_advanced_options import WebhookAdvancedOptions
+    from .webhook_endpoint import WebhookEndpoint
+    from .webhook_endpoint_create import WebhookEndpointCreate
+    from .webhook_endpoint_event_type import WebhookEndpointEventType
+    from .webhook_endpoint_status import WebhookEndpointStatus
     from .webhook_event import (
         WebhookEvent,
         WebhookEvent_ClassifierCreated,
@@ -402,6 +407,11 @@ if typing.TYPE_CHECKING:
         WebhookEvent_WorkflowRunRejected,
         WebhookEvent_WorkflowRunStepRunProcessed,
     )
+    from .webhook_payload_format import WebhookPayloadFormat
+    from .webhook_payload_options import WebhookPayloadOptions
+    from .webhook_subscription import WebhookSubscription
+    from .webhook_subscription_event_type import WebhookSubscriptionEventType
+    from .webhook_subscription_resource_type import WebhookSubscriptionResourceType
     from .workflow import Workflow
     from .workflow_created_webhook_event import WorkflowCreatedWebhookEvent
     from .workflow_deleted_webhook_event import WorkflowDeletedWebhookEvent
@@ -756,6 +766,11 @@ _dynamic_imports: typing.Dict[str, str] = {
     "TooManyRequestsErrorBody": ".too_many_requests_error_body",
     "UpdatedAt": ".updated_at",
     "VersionDescription": ".version_description",
+    "WebhookAdvancedOptions": ".webhook_advanced_options",
+    "WebhookEndpoint": ".webhook_endpoint",
+    "WebhookEndpointCreate": ".webhook_endpoint_create",
+    "WebhookEndpointEventType": ".webhook_endpoint_event_type",
+    "WebhookEndpointStatus": ".webhook_endpoint_status",
     "WebhookEvent": ".webhook_event",
     "WebhookEvent_ClassifierCreated": ".webhook_event",
     "WebhookEvent_ClassifierDeleted": ".webhook_event",
@@ -791,6 +806,11 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WebhookEvent_WorkflowRunNeedsReview": ".webhook_event",
     "WebhookEvent_WorkflowRunRejected": ".webhook_event",
     "WebhookEvent_WorkflowRunStepRunProcessed": ".webhook_event",
+    "WebhookPayloadFormat": ".webhook_payload_format",
+    "WebhookPayloadOptions": ".webhook_payload_options",
+    "WebhookSubscription": ".webhook_subscription",
+    "WebhookSubscriptionEventType": ".webhook_subscription_event_type",
+    "WebhookSubscriptionResourceType": ".webhook_subscription_resource_type",
     "Workflow": ".workflow",
     "WorkflowCreatedWebhookEvent": ".workflow_created_webhook_event",
     "WorkflowDeletedWebhookEvent": ".workflow_deleted_webhook_event",
@@ -1169,6 +1189,11 @@ __all__ = [
     "TooManyRequestsErrorBody",
     "UpdatedAt",
     "VersionDescription",
+    "WebhookAdvancedOptions",
+    "WebhookEndpoint",
+    "WebhookEndpointCreate",
+    "WebhookEndpointEventType",
+    "WebhookEndpointStatus",
     "WebhookEvent",
     "WebhookEvent_ClassifierCreated",
     "WebhookEvent_ClassifierDeleted",
@@ -1204,6 +1229,11 @@ __all__ = [
     "WebhookEvent_WorkflowRunNeedsReview",
     "WebhookEvent_WorkflowRunRejected",
     "WebhookEvent_WorkflowRunStepRunProcessed",
+    "WebhookPayloadFormat",
+    "WebhookPayloadOptions",
+    "WebhookSubscription",
+    "WebhookSubscriptionEventType",
+    "WebhookSubscriptionResourceType",
     "Workflow",
     "WorkflowCreatedWebhookEvent",
     "WorkflowDeletedWebhookEvent",

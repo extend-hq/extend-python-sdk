@@ -37,7 +37,7 @@ class LegacySplitterAdvancedOptions(UncheckedBaseModel):
         pydantic.Field(alias="fixedPageLimit", default=None)
     )
     """
-    Limit processing to a specific number of pages from the beginning of the document. See [Page Ranges](/product/page-ranges).
+    Limit processing to a specific number of pages from the beginning of the document. See [Page Ranges](https://docs.extend.ai/2026-02-09/product/page-ranges).
     """
 
     page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = (

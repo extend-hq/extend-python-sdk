@@ -168,7 +168,8 @@ class SplitRunsClient:
             token="YOUR_TOKEN",
         )
         client.split_runs.create(
-            file={"url": "url"},
+            splitter={"id": "spl_1234567890"},
+            file={"url": "https://example.com/multi-document.pdf"},
         )
         """
         _response = self._raw_client.create(
@@ -441,7 +442,8 @@ class AsyncSplitRunsClient:
 
         async def main() -> None:
             await client.split_runs.create(
-                file={"url": "url"},
+                splitter={"id": "spl_1234567890"},
+                file={"url": "https://example.com/multi-document.pdf"},
             )
 
 

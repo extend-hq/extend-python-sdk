@@ -168,7 +168,8 @@ class ClassifyRunsClient:
             token="YOUR_TOKEN",
         )
         client.classify_runs.create(
-            file={"url": "url"},
+            classifier={"id": "cl_1234567890"},
+            file={"url": "https://example.com/document.pdf"},
         )
         """
         _response = self._raw_client.create(
@@ -441,7 +442,8 @@ class AsyncClassifyRunsClient:
 
         async def main() -> None:
             await client.classify_runs.create(
-                file={"url": "url"},
+                classifier={"id": "cl_1234567890"},
+                file={"url": "https://example.com/document.pdf"},
             )
 
 

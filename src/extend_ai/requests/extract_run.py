@@ -53,7 +53,10 @@ class ExtractRunParams(typing_extensions.TypedDict):
     status: ProcessorRunStatus
     output: typing.Optional[ExtractOutputParams]
     """
-    The final output, either reviewed or initial.
+    The final output, either reviewed or initial. This is a union of two possible shapes:
+    
+    - **[JSON Schema output](https://docs.extend.ai/2026-02-09/product/extraction/output-types):** The current output format, returned for runs created with a JSON Schema config.
+    - **[Legacy output](https://docs.extend.ai/2025-04-21/product/legacy/output-type-legacy):** A legacy output format from a previous API version. This shape is only returned for runs that were originally created with a legacy config.
     
     **Availability:** Present when `status` is `"PROCESSED"`.
     """
@@ -129,7 +132,10 @@ class ExtractRunParams(typing_extensions.TypedDict):
 
     config: ExtractConfigParams
     """
-    The configuration used for this extract run.
+    The configuration used for this extract run. This is a union of two possible shapes:
+    
+    - **[JSON Schema config](https://docs.extend.ai/2026-02-09/product/extraction/schema):** The current config format. All runs created through this API version use this shape.
+    - **[Legacy config](https://docs.extend.ai/2025-04-21/product/legacy/legacy-schema):** A fields-array config from a previous API version. This shape is only returned when retrieving runs that were originally created with the legacy format. This API version does not support creating runs with legacy configs.
     """
 
     file: FileSummaryParams

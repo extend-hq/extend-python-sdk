@@ -38,7 +38,10 @@ client = Extend(
     token="YOUR_TOKEN",
 )
 client.parse(
-    file={"url": "url"},
+    file={
+        "url": "https://example.com/bank_statement.pdf",
+        "name": "bank_statement.pdf",
+    },
 )
 
 ```
@@ -142,7 +145,11 @@ client = Extend(
     token="YOUR_TOKEN",
 )
 client.edit(
-    file={"url": "url"},
+    file={"url": "https://example.com/form.pdf"},
+    config={
+        "instructions": "Fill out the form with the provided data",
+        "advanced_options": {"flatten_pdf": True},
+    },
 )
 
 ```
@@ -205,7 +212,7 @@ Extract structured data from a file synchronously, waiting for the result before
 
 The Extract endpoint allows you to extract structured data from files using an existing extractor or an inline configuration.
 
-For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/product/extracting/extract).
+For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/product/extraction/quick-start-5-minutes).
 </dd>
 </dl>
 </dd>
@@ -226,7 +233,26 @@ client = Extend(
     token="YOUR_TOKEN",
 )
 client.extract(
-    file={"url": "url"},
+    config={
+        "schema": {
+            "type": "object",
+            "properties": {
+                "vendor_name": {
+                    "type": "string",
+                    "description": "The name of the vendor",
+                },
+                "invoice_number": {
+                    "type": "string",
+                    "description": "The invoice number",
+                },
+                "total_amount": {
+                    "type": "number",
+                    "description": "The total amount due",
+                },
+            },
+        }
+    },
+    file={"url": "https://example.com/invoice.pdf"},
 )
 
 ```
@@ -305,7 +331,7 @@ Classify a document synchronously, waiting for the result before returning. This
 
 The Classify endpoint allows you to classify documents using an existing classifier or an inline configuration.
 
-For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/product/classifying/classify).
+For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/product/classification/configuring-a-classifier).
 </dd>
 </dl>
 </dd>
@@ -326,7 +352,26 @@ client = Extend(
     token="YOUR_TOKEN",
 )
 client.classify(
-    file={"url": "url"},
+    config={
+        "classifications": [
+            {
+                "id": "invoice",
+                "type": "invoice",
+                "description": "An invoice or bill for goods or services",
+            },
+            {
+                "id": "receipt",
+                "type": "receipt",
+                "description": "A receipt confirming payment",
+            },
+            {
+                "id": "other",
+                "type": "other",
+                "description": "Any other document type",
+            },
+        ]
+    },
+    file={"url": "https://example.com/document.pdf"},
 )
 
 ```
@@ -405,7 +450,7 @@ Split a document synchronously, waiting for the result before returning. This en
 
 The Split endpoint allows you to split documents into multiple parts using an existing splitter or an inline configuration.
 
-For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/product/splitting/split).
+For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/product/splitting/configuring-a-splitter).
 </dd>
 </dl>
 </dd>
@@ -426,7 +471,26 @@ client = Extend(
     token="YOUR_TOKEN",
 )
 client.split(
-    file={"url": "url"},
+    config={
+        "split_classifications": [
+            {
+                "id": "invoice",
+                "type": "invoice",
+                "description": "An invoice or bill for goods or services",
+            },
+            {
+                "id": "receipt",
+                "type": "receipt",
+                "description": "A receipt confirming payment",
+            },
+            {
+                "id": "other",
+                "type": "other",
+                "description": "Any other document type",
+            },
+        ]
+    },
+    file={"url": "https://example.com/multi-document.pdf"},
 )
 
 ```
@@ -790,7 +854,7 @@ Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
 
 Upload and create a new file in Extend.
 
-This endpoint accepts file contents and registers them as a File in Extend, which can be used for [running workflows](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/run-workflow), [creating evaluation set items](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/evaluation/bulk-create-evaluation-set-items), [parsing](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/parse/parse-file), etc.
+This endpoint accepts file contents and registers them as a File in Extend, which can be used for [running workflows](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/create-workflow-run), [creating evaluation set items](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/evaluation/create-evaluation-set-item), [parsing](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/parse/parse-file), etc.
 
 If an uploaded file is detected as a Word or PowerPoint document, it will be automatically converted to a PDF.
 
@@ -892,7 +956,10 @@ client = Extend(
     token="YOUR_TOKEN",
 )
 client.parse_runs.create(
-    file={"url": "url"},
+    file={
+        "url": "https://example.com/bank_statement.pdf",
+        "name": "bank_statement.pdf",
+    },
 )
 
 ```
@@ -1147,7 +1214,11 @@ client = Extend(
     token="YOUR_TOKEN",
 )
 client.edit_runs.create(
-    file={"url": "url"},
+    file={"url": "https://example.com/form.pdf"},
+    config={
+        "instructions": "Fill out the form with the provided data",
+        "advanced_options": {"flatten_pdf": True},
+    },
 )
 
 ```
@@ -1524,7 +1595,8 @@ client = Extend(
     token="YOUR_TOKEN",
 )
 client.extract_runs.create(
-    file={"url": "url"},
+    extractor={"id": "ex_1234567890"},
+    file={"url": "https://example.com/invoice.pdf"},
 )
 
 ```
@@ -1947,7 +2019,26 @@ client = Extend(
     token="YOUR_TOKEN",
 )
 client.extractors.create(
-    name="name",
+    name="Invoice Extractor",
+    config={
+        "schema": {
+            "type": "object",
+            "properties": {
+                "vendor_name": {
+                    "type": "string",
+                    "description": "The name of the vendor",
+                },
+                "invoice_number": {
+                    "type": "string",
+                    "description": "The invoice number",
+                },
+                "total_amount": {
+                    "type": "number",
+                    "description": "The total amount due",
+                },
+            },
+        }
+    },
 )
 
 ```
@@ -2112,6 +2203,7 @@ client = Extend(
 )
 client.extractors.update(
     id="extractor_id_here",
+    name="Invoice Extractor v2",
 )
 
 ```
@@ -2306,7 +2398,8 @@ client = Extend(
 )
 client.extractor_versions.create(
     extractor_id="extractor_id_here",
-    release_type=ReleaseType.MAJOR,
+    release_type=ReleaseType.MINOR,
+    description="Updated extraction rules for better accuracy",
 )
 
 ```
@@ -2638,7 +2731,8 @@ client = Extend(
     token="YOUR_TOKEN",
 )
 client.classify_runs.create(
-    file={"url": "url"},
+    classifier={"id": "cl_1234567890"},
+    file={"url": "https://example.com/document.pdf"},
 )
 
 ```
@@ -3061,7 +3155,26 @@ client = Extend(
     token="YOUR_TOKEN",
 )
 client.classifiers.create(
-    name="name",
+    name="Document Classifier",
+    config={
+        "classifications": [
+            {
+                "id": "invoice",
+                "type": "invoice",
+                "description": "An invoice or bill for goods or services",
+            },
+            {
+                "id": "receipt",
+                "type": "receipt",
+                "description": "A receipt confirming payment",
+            },
+            {
+                "id": "other",
+                "type": "other",
+                "description": "Any other document type",
+            },
+        ]
+    },
 )
 
 ```
@@ -3226,6 +3339,7 @@ client = Extend(
 )
 client.classifiers.update(
     id="classifier_id_here",
+    name="Document Classifier v2",
 )
 
 ```
@@ -3420,7 +3534,8 @@ client = Extend(
 )
 client.classifier_versions.create(
     classifier_id="classifier_id_here",
-    release_type=ReleaseType.MAJOR,
+    release_type=ReleaseType.MINOR,
+    description="Added new document classification type",
 )
 
 ```
@@ -3752,7 +3867,8 @@ client = Extend(
     token="YOUR_TOKEN",
 )
 client.split_runs.create(
-    file={"url": "url"},
+    splitter={"id": "spl_1234567890"},
+    file={"url": "https://example.com/multi-document.pdf"},
 )
 
 ```
@@ -4175,7 +4291,26 @@ client = Extend(
     token="YOUR_TOKEN",
 )
 client.splitters.create(
-    name="name",
+    name="Document Splitter",
+    config={
+        "split_classifications": [
+            {
+                "id": "invoice",
+                "type": "invoice",
+                "description": "An invoice or bill for goods or services",
+            },
+            {
+                "id": "receipt",
+                "type": "receipt",
+                "description": "A receipt confirming payment",
+            },
+            {
+                "id": "other",
+                "type": "other",
+                "description": "Any other document type",
+            },
+        ]
+    },
 )
 
 ```
@@ -4340,6 +4475,7 @@ client = Extend(
 )
 client.splitters.update(
     id="splitter_id_here",
+    name="Document Splitter v2",
 )
 
 ```
@@ -4534,7 +4670,8 @@ client = Extend(
 )
 client.splitter_versions.create(
     splitter_id="splitter_id_here",
-    release_type=ReleaseType.MAJOR,
+    release_type=ReleaseType.MINOR,
+    description="Improved split boundary detection",
 )
 
 ```
@@ -4832,7 +4969,7 @@ Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
 **batch_id:** `typing.Optional[str]` 
 
-Filters workflow runs by the batch ID. This is useful for fetching all runs for a given batch created via the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/batch-run-workflow) endpoint.
+Filters workflow runs by the batch ID. This is useful for fetching all runs for a given batch created via the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
 
 Example: `"batch_7Ws31-F5"`
     
@@ -4933,8 +5070,8 @@ client = Extend(
     token="YOUR_TOKEN",
 )
 client.workflow_runs.create(
-    workflow={"id": "workflow_BMdfq_yWM3sT-ZzvCnA3f"},
-    file={"url": "url"},
+    workflow={"id": "wf_1234567890"},
+    file={"url": "https://example.com/invoice.pdf"},
 )
 
 ```
@@ -4959,7 +5096,7 @@ client.workflow_runs.create(
 <dl>
 <dd>
 
-**file:** `WorkflowRunsCreateRequestFileParams` — The file to be processed. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/product/general/supported-file-types). Files can be provided as a URL, an Extend file ID, or raw text. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/batch-run-workflow) endpoint.
+**file:** `WorkflowRunsCreateRequestFileParams` — The file to be processed. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/product/general/supported-file-types). Files can be provided as a URL, an Extend file ID, or raw text. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
     
 </dd>
 </dl>
@@ -5119,6 +5256,8 @@ client = Extend(
 )
 client.workflow_runs.update(
     id="workflow_run_id_here",
+    name="Invoice #12345",
+    metadata={"customerId": "cust_abc123", "source": "email-inbox"},
 )
 
 ```
@@ -5347,7 +5486,7 @@ Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 
 This endpoint allows you to efficiently initiate large batches of workflow runs in a single request (up to 1,000 in a single request, but you can queue up multiple batches in rapid succession). It accepts an array of inputs, each containing a file and metadata pair. The primary use case for this endpoint is for doing large bulk runs of >1000 files at a time that can process over the course of a few hours without needing to manage rate limits that would likely occur using the primary run endpoint.
 
-Unlike the single [Run Workflow](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/run-workflow) endpoint which returns the details of the created workflow runs immediately, this batch endpoint returns a `batchId`.
+Unlike the single [Run Workflow](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/create-workflow-run) endpoint which returns the details of the created workflow runs immediately, this batch endpoint returns a `batchId`.
 
 Our recommended usage pattern is to integrate with [Webhooks](https://docs.extend.ai/2026-02-09/product/webhooks/configuration) for consuming results, using the `metadata` and `batchId` to match up results to the original inputs in your downstream systems. However, you can integrate in a polling mechanism by using a combination of the [List Workflow Runs](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/list-workflow-runs) endpoint to fetch all runs via a batch, and then [Get Workflow Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/get-workflow-run) to fetch the full outputs each run.
 
@@ -5378,8 +5517,17 @@ client = Extend(
     token="YOUR_TOKEN",
 )
 client.workflow_runs.create_batch(
-    workflow={"id": "workflow_BMdfq_yWM3sT-ZzvCnA3f"},
-    inputs=[{"file": {"url": "url"}}],
+    workflow={"id": "wf_1234567890"},
+    inputs=[
+        {
+            "file": {"url": "https://example.com/invoice1.pdf"},
+            "metadata": {"customerId": "cust_abc123"},
+        },
+        {
+            "file": {"url": "https://example.com/invoice2.pdf"},
+            "metadata": {"customerId": "cust_def456"},
+        },
+    ],
 )
 
 ```
@@ -5622,8 +5770,8 @@ Run processors (extraction, classification, splitting, etc.) on a given document
 - **Synchronous**: Set `sync: true` to wait for completion and get final results in the response (5-minute timeout).
 
 **For asynchronous processing:**
-- You can [configure webhooks](https://docs.extend.ai/product/webhooks/configuration) to receive notifications when a processor run is complete or failed.
-- Or you can [poll the get endpoint](https://docs.extend.ai/2025-04-21/developers/api-reference/processor-endpoints/get-processor-run) for updates on the status of the processor run.
+- You can [configure webhooks](https://docs.extend.ai/2026-02-09/product/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+- Or you can [poll the get endpoint](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/legacy/get-processor-run) for updates on the status of the processor run.
 </dd>
 </dl>
 </dd>
@@ -5682,7 +5830,7 @@ An optional version of the processor to use. When not supplied, the most recent 
 <dl>
 <dd>
 
-**file:** `typing.Optional[LegacyProcessorRunFileInputParams]` — The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/general/supported-file-types).
+**file:** `typing.Optional[LegacyProcessorRunFileInputParams]` — The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/product/general/supported-file-types).
     
 </dd>
 </dl>
@@ -5764,7 +5912,7 @@ To categorize processor runs for billing and usage tracking, include `extend:usa
 
 Retrieve details about a specific processor run, including its status, outputs, and any edits made during review.
 
-A common use case for this endpoint is to poll for the status and final output of an async processor run when using the [Run Processor](https://docs.extend.ai/2025-04-21/developers/api-reference/processor-endpoints/run-processor) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
+A common use case for this endpoint is to poll for the status and final output of an async processor run when using the [Run Processor](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/legacy/create-processor-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
 </dd>
 </dl>
 </dd>
@@ -6555,7 +6703,7 @@ Example: `"exv_QYk6jgHA_8CsO8rVWhyNC"`
 
 Retrieve details about a batch processor run, including evaluation runs.
 
-**Deprecated:** This endpoint is maintained for backwards compatibility only and will be replaced in a future API version. Use [Get Evaluation Set Run](/2026-02-09/developers/api-reference/endpoints/evaluation/get-evaluation-set-run) for interacting with evaluation set runs.
+**Deprecated:** This endpoint is maintained for backwards compatibility only and will be replaced in a future API version. Use [Get Evaluation Set Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/evaluation/get-evaluation-set-run) for interacting with evaluation set runs.
 </dd>
 </dl>
 </dd>
@@ -6739,7 +6887,7 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
 Evaluation sets are collections of files and expected outputs that are used to evaluate the performance of a given extractor, classifier, or splitter. This endpoint will create a new evaluation set, which items can be added to using the [Create Evaluation Set Item](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/evaluation/create-evaluation-set-item) endpoint.
 
-Note: It is not necessary to create an evaluation set via API. You can also create an evaluation set via the Extend dashboard and take the ID from there. To learn more about how to create evaluation sets, see the [Evaluation Sets](https://docs.extend.ai/product/evaluation/overview) product page.
+Note: It is not necessary to create an evaluation set via API. You can also create an evaluation set via the Extend dashboard and take the ID from there. To learn more about how to create evaluation sets, see the [Evaluation Sets](https://docs.extend.ai/2026-02-09/product/evaluation/overview) product page.
 </dd>
 </dl>
 </dd>
@@ -6760,8 +6908,9 @@ client = Extend(
     token="YOUR_TOKEN",
 )
 client.evaluation_sets.create(
-    name="My Evaluation Set",
-    entity_id="entity_id_here",
+    name="Invoice Processing Test Set",
+    description="Q4 vendor invoices for accuracy testing",
+    entity_id="ex_1234567890",
 )
 
 ```
@@ -7026,7 +7175,7 @@ Evaluation set items are the individual files and expected outputs that are used
 
 **Limit:** You can create up to 100 items at a time.
 
-Learn more about how to create evaluation set items in the [Evaluation Sets](https://docs.extend.ai/product/evaluation/overview) product page.
+Learn more about how to create evaluation set items in the [Evaluation Sets](https://docs.extend.ai/2026-02-09/product/evaluation/overview) product page.
 </dd>
 </dl>
 </dd>
@@ -7048,7 +7197,18 @@ client = Extend(
 )
 client.evaluation_set_items.create(
     evaluation_set_id="evaluation_set_id_here",
-    items=[{"file_id": "file_id_here", "expected_output": {}}],
+    items=[
+        {
+            "file_id": "file_xK9mLPqRtN3vS8wF5hB2cQ",
+            "expected_output": {
+                "value": {
+                    "vendor_name": "Acme Corp",
+                    "invoice_number": "INV-001",
+                    "total_amount": 1500,
+                }
+            },
+        }
+    ],
 )
 
 ```
@@ -7219,7 +7379,13 @@ client = Extend(
 client.evaluation_set_items.update(
     evaluation_set_id="evaluation_set_id_here",
     item_id="evaluation_set_item_id_here",
-    expected_output={},
+    expected_output={
+        "value": {
+            "vendor_name": "Acme Corp",
+            "invoice_number": "INV-001",
+            "total_amount": 1750,
+        }
+    },
 )
 
 ```
@@ -7423,6 +7589,927 @@ client.evaluation_set_runs.retrieve(
 The ID of the evaluation set run.
 
 Example: `"evr_Xj8mK2pL9nR4vT7qY5wZ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## WebhookEndpoints
+<details><summary><code>client.webhook_endpoints.<a href="src/extend_ai/webhook_endpoints/client.py">list</a>(...) -&gt; AsyncHttpResponse[WebhookEndpointsListResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all webhook endpoints.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.webhook_endpoints.list(
+    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**status:** `typing.Optional[WebhookEndpointStatus]` — Filter by endpoint status.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort_dir:** `typing.Optional[SortDir]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**next_page_token:** `typing.Optional[NextPageToken]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**max_page_size:** `typing.Optional[MaxPageSize]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.webhook_endpoints.<a href="src/extend_ai/webhook_endpoints/client.py">create</a>(...) -&gt; AsyncHttpResponse[WebhookEndpointCreate]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new webhook endpoint. The response includes a `signingSecret` that is only returned once — store it securely for verifying webhook signatures.
+
+The `enabledEvents` array specifies which global event types this endpoint should receive. Use the [Webhook Events](https://docs.extend.ai/2026-02-09/developers/api-reference/webhook-events) reference to see available event types.
+
+To subscribe to events scoped to a specific resource (e.g., a single extractor or workflow), use [Create Webhook Subscription](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/webhook/create-webhook-subscription) after creating the endpoint.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import ApiVersionEnum, Extend, WebhookEndpointEventType
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.webhook_endpoints.create(
+    url="https://example.com/webhooks",
+    name="Production webhook",
+    enabled_events=[
+        WebhookEndpointEventType.EXTRACT_RUN_PROCESSED,
+        WebhookEndpointEventType.WORKFLOW_CREATED,
+    ],
+    api_version=ApiVersionEnum.TWO_THOUSAND_TWENTY_SIX0209,
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**url:** `str` — The URL that webhook events will be sent to.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `str` — A human-readable name for the webhook endpoint.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**enabled_events:** `typing.Sequence[WebhookEndpointEventType]` — The list of global event types to subscribe to. Pass an empty array to create an endpoint with no global events (useful if you only plan to use resource-scoped subscriptions).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**api_version:** `ApiVersionEnum` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**status:** `typing.Optional[WebhookEndpointStatus]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**advanced_options:** `typing.Optional[WebhookAdvancedOptionsParams]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.webhook_endpoints.<a href="src/extend_ai/webhook_endpoints/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[WebhookEndpoint]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a webhook endpoint by ID.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.webhook_endpoints.retrieve(
+    id="webhook_endpoint_id_here",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the webhook endpoint.
+
+Example: `"wh_Xj8mK2pL9nR4vT7qY5wZ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.webhook_endpoints.<a href="src/extend_ai/webhook_endpoints/client.py">update</a>(...) -&gt; AsyncHttpResponse[WebhookEndpoint]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a webhook endpoint. Only the fields you include in the request body will be updated; omitted fields remain unchanged.
+
+The `apiVersion` of a webhook endpoint cannot be changed after creation.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.webhook_endpoints.update(
+    id="webhook_endpoint_id_here",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the webhook endpoint to update.
+
+Example: `"wh_Xj8mK2pL9nR4vT7qY5wZ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**url:** `typing.Optional[str]` — The URL that webhook events will be sent to.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `typing.Optional[str]` — A human-readable name for the webhook endpoint.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**status:** `typing.Optional[WebhookEndpointStatus]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**enabled_events:** `typing.Optional[typing.Sequence[WebhookEndpointEventType]]` — The list of global event types to subscribe to.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**advanced_options:** `typing.Optional[WebhookAdvancedOptionsParams]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.webhook_endpoints.<a href="src/extend_ai/webhook_endpoints/client.py">delete</a>(...) -&gt; AsyncHttpResponse[WebhookEndpointsDeleteResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a webhook endpoint and all of its subscriptions. This operation is permanent and cannot be undone.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.webhook_endpoints.delete(
+    id="webhook_endpoint_id_here",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the webhook endpoint to delete.
+
+Example: `"wh_Xj8mK2pL9nR4vT7qY5wZ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## WebhookSubscriptions
+<details><summary><code>client.webhook_subscriptions.<a href="src/extend_ai/webhook_subscriptions/client.py">list</a>(...) -&gt; AsyncHttpResponse[WebhookSubscriptionsListResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List webhook subscriptions. You can filter by `webhookEndpointId` to see all subscriptions for a given endpoint, or by `resourceId` to see all subscriptions for a given resource.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.webhook_subscriptions.list(
+    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**webhook_endpoint_id:** `typing.Optional[str]` — Filter subscriptions by the webhook endpoint they belong to.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**resource_id:** `typing.Optional[str]` — Filter subscriptions by the resource they are scoped to.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort_dir:** `typing.Optional[SortDir]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**next_page_token:** `typing.Optional[NextPageToken]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**max_page_size:** `typing.Optional[MaxPageSize]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.webhook_subscriptions.<a href="src/extend_ai/webhook_subscriptions/client.py">create</a>(...) -&gt; AsyncHttpResponse[WebhookSubscription]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a resource-scoped webhook subscription on an existing webhook endpoint.
+
+Subscriptions let you receive events for a specific resource (e.g., a single extractor or workflow) rather than all resources of that type. The `enabledEvents` must be valid for the given `resourceType` and the endpoint's `apiVersion`.
+
+If a subscription already exists for the same endpoint and resource, it will be updated with the new `enabledEvents` instead of creating a duplicate.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import (
+    Extend,
+    WebhookSubscriptionEventType,
+    WebhookSubscriptionResourceType,
+)
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.webhook_subscriptions.create(
+    webhook_endpoint_id="wh_Xj8mK2pL9nR4vT7qY5wZ",
+    resource_type=WebhookSubscriptionResourceType.EXTRACTOR,
+    resource_id="ex_Xj8mK2pL9nR4vT7qY5wZ",
+    enabled_events=[
+        WebhookSubscriptionEventType.EXTRACT_RUN_PROCESSED,
+        WebhookSubscriptionEventType.EXTRACT_RUN_FAILED,
+    ],
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**webhook_endpoint_id:** `str` — The ID of the webhook endpoint to attach this subscription to.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**resource_type:** `WebhookSubscriptionResourceType` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**resource_id:** `str` — The ID of the resource to scope this subscription to.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**enabled_events:** `typing.Sequence[WebhookSubscriptionEventType]` — The event types to subscribe to. Must be valid for the given `resourceType`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.webhook_subscriptions.<a href="src/extend_ai/webhook_subscriptions/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[WebhookSubscription]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a webhook subscription by ID.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.webhook_subscriptions.retrieve(
+    id="webhook_subscription_id_here",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the webhook subscription.
+
+Example: `"whes_Xj8mK2pL9nR4vT7qY5wZ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.webhook_subscriptions.<a href="src/extend_ai/webhook_subscriptions/client.py">update</a>(...) -&gt; AsyncHttpResponse[WebhookSubscription]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the enabled events on a webhook subscription.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend, WebhookSubscriptionEventType
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.webhook_subscriptions.update(
+    id="webhook_subscription_id_here",
+    enabled_events=[WebhookSubscriptionEventType.EXTRACT_RUN_PROCESSED],
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the webhook subscription to update.
+
+Example: `"whes_Xj8mK2pL9nR4vT7qY5wZ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**enabled_events:** `typing.Sequence[WebhookSubscriptionEventType]` — The event types to subscribe to. Must be valid for the subscription's resource type.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.webhook_subscriptions.<a href="src/extend_ai/webhook_subscriptions/client.py">delete</a>(...) -&gt; AsyncHttpResponse[WebhookSubscriptionsDeleteResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a webhook subscription. This operation is permanent and cannot be undone.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.webhook_subscriptions.delete(
+    id="webhook_subscription_id_here",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the webhook subscription to delete.
+
+Example: `"whes_Xj8mK2pL9nR4vT7qY5wZ"`
     
 </dd>
 </dl>

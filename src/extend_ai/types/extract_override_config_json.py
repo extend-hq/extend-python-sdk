@@ -42,7 +42,7 @@ class ExtractOverrideConfigJson(UncheckedBaseModel):
     """
     JSON Schema definition of the data to extract.
     
-    See the [JSON Schema guide](https://docs.extend.ai/2026-02-09/product/extraction/schema/json-schema) for details and examples of schema configuration.
+    See the [JSON Schema guide](https://docs.extend.ai/2026-02-09/product/extraction/schema) for details and examples of schema configuration.
     """
 
     advanced_options: typing_extensions.Annotated[

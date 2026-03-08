@@ -134,7 +134,8 @@ class SplitterVersionsClient:
         )
         client.splitter_versions.create(
             splitter_id="splitter_id_here",
-            release_type=ReleaseType.MAJOR,
+            release_type=ReleaseType.MINOR,
+            description="Improved split boundary detection",
         )
         """
         _response = self._raw_client.create(
@@ -317,7 +318,8 @@ class AsyncSplitterVersionsClient:
         async def main() -> None:
             await client.splitter_versions.create(
                 splitter_id="splitter_id_here",
-                release_type=ReleaseType.MAJOR,
+                release_type=ReleaseType.MINOR,
+                description="Improved split boundary detection",
             )
 
 
