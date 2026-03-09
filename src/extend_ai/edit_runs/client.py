@@ -66,7 +66,11 @@ class EditRunsClient:
             token="YOUR_TOKEN",
         )
         client.edit_runs.create(
-            file={"url": "url"},
+            file={"url": "https://example.com/form.pdf"},
+            config={
+                "instructions": "Fill out the form with the provided data",
+                "advanced_options": {"flatten_pdf": True},
+            },
         )
         """
         _response = self._raw_client.create(file=file, config=config, request_options=request_options)
@@ -200,7 +204,11 @@ class AsyncEditRunsClient:
 
         async def main() -> None:
             await client.edit_runs.create(
-                file={"url": "url"},
+                file={"url": "https://example.com/form.pdf"},
+                config={
+                    "instructions": "Fill out the form with the provided data",
+                    "advanced_options": {"flatten_pdf": True},
+                },
             )
 
 

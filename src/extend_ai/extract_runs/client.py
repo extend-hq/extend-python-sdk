@@ -168,7 +168,8 @@ class ExtractRunsClient:
             token="YOUR_TOKEN",
         )
         client.extract_runs.create(
-            file={"url": "url"},
+            extractor={"id": "ex_1234567890"},
+            file={"url": "https://example.com/invoice.pdf"},
         )
         """
         _response = self._raw_client.create(
@@ -441,7 +442,8 @@ class AsyncExtractRunsClient:
 
         async def main() -> None:
             await client.extract_runs.create(
-                file={"url": "url"},
+                extractor={"id": "ex_1234567890"},
+                file={"url": "https://example.com/invoice.pdf"},
             )
 
 

@@ -134,7 +134,8 @@ class ExtractorVersionsClient:
         )
         client.extractor_versions.create(
             extractor_id="extractor_id_here",
-            release_type=ReleaseType.MAJOR,
+            release_type=ReleaseType.MINOR,
+            description="Updated extraction rules for better accuracy",
         )
         """
         _response = self._raw_client.create(
@@ -317,7 +318,8 @@ class AsyncExtractorVersionsClient:
         async def main() -> None:
             await client.extractor_versions.create(
                 extractor_id="extractor_id_here",
-                release_type=ReleaseType.MAJOR,
+                release_type=ReleaseType.MINOR,
+                description="Updated extraction rules for better accuracy",
             )
 
 

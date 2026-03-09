@@ -15,12 +15,12 @@ class LegacyClassificationConfigParams(typing_extensions.TypedDict):
         typing_extensions.Annotated[LegacyClassificationConfigBaseProcessor, FieldMetadata(alias="baseProcessor")]
     ]
     """
-    The base processor to use. For classifiers, this must be either `"classification_performance"` or `"classification_light"`. See [Classification Changelog](/changelog/classification/classification-performance) for more details.
+    The base processor to use. For classifiers, this must be either `"classification_performance"` or `"classification_light"`. See [Classification Changelog](https://docs.extend.ai/2026-02-09/changelog/classification/classification-performance) for more details.
     """
 
     base_version: typing_extensions.NotRequired[typing_extensions.Annotated[str, FieldMetadata(alias="baseVersion")]]
     """
-    The version of the `"classification_performance"` or `"classification_light"` processor to use. If this is provided, the `baseProcessor` must also be provided. See [Classification Changelog](/changelog/classification/classification-performance) for more details.
+    The version of the `"classification_performance"` or `"classification_light"` processor to use. If this is provided, the `baseProcessor` must also be provided. See [Classification Changelog](https://docs.extend.ai/2026-02-09/changelog/classification/classification-performance) for more details.
     """
 
     classifications: typing.Sequence[LegacyClassificationParams]

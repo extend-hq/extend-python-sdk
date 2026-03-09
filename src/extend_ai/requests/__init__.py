@@ -285,6 +285,9 @@ if typing.TYPE_CHECKING:
     from .table_cell_details import TableCellDetailsParams
     from .table_details import TableDetailsParams
     from .too_many_requests_error_body import TooManyRequestsErrorBodyParams
+    from .webhook_advanced_options import WebhookAdvancedOptionsParams
+    from .webhook_endpoint import WebhookEndpointParams
+    from .webhook_endpoint_create import WebhookEndpointCreateParams
     from .webhook_event import (
         WebhookEventParams,
         WebhookEvent_ClassifierCreatedParams,
@@ -322,6 +325,8 @@ if typing.TYPE_CHECKING:
         WebhookEvent_WorkflowRunRejectedParams,
         WebhookEvent_WorkflowRunStepRunProcessedParams,
     )
+    from .webhook_payload_options import WebhookPayloadOptionsParams
+    from .webhook_subscription import WebhookSubscriptionParams
     from .workflow import WorkflowParams
     from .workflow_created_webhook_event import WorkflowCreatedWebhookEventParams
     from .workflow_deleted_webhook_event import WorkflowDeletedWebhookEventParams
@@ -601,6 +606,9 @@ _dynamic_imports: typing.Dict[str, str] = {
     "TableCellDetailsParams": ".table_cell_details",
     "TableDetailsParams": ".table_details",
     "TooManyRequestsErrorBodyParams": ".too_many_requests_error_body",
+    "WebhookAdvancedOptionsParams": ".webhook_advanced_options",
+    "WebhookEndpointCreateParams": ".webhook_endpoint_create",
+    "WebhookEndpointParams": ".webhook_endpoint",
     "WebhookEventParams": ".webhook_event",
     "WebhookEvent_ClassifierCreatedParams": ".webhook_event",
     "WebhookEvent_ClassifierDeletedParams": ".webhook_event",
@@ -636,6 +644,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WebhookEvent_WorkflowRunNeedsReviewParams": ".webhook_event",
     "WebhookEvent_WorkflowRunRejectedParams": ".webhook_event",
     "WebhookEvent_WorkflowRunStepRunProcessedParams": ".webhook_event",
+    "WebhookPayloadOptionsParams": ".webhook_payload_options",
+    "WebhookSubscriptionParams": ".webhook_subscription",
     "WorkflowCreatedWebhookEventParams": ".workflow_created_webhook_event",
     "WorkflowDeletedWebhookEventParams": ".workflow_deleted_webhook_event",
     "WorkflowDeployedWebhookEventParams": ".workflow_deployed_webhook_event",
@@ -939,6 +949,9 @@ __all__ = [
     "TableCellDetailsParams",
     "TableDetailsParams",
     "TooManyRequestsErrorBodyParams",
+    "WebhookAdvancedOptionsParams",
+    "WebhookEndpointCreateParams",
+    "WebhookEndpointParams",
     "WebhookEventParams",
     "WebhookEvent_ClassifierCreatedParams",
     "WebhookEvent_ClassifierDeletedParams",
@@ -974,6 +987,8 @@ __all__ = [
     "WebhookEvent_WorkflowRunNeedsReviewParams",
     "WebhookEvent_WorkflowRunRejectedParams",
     "WebhookEvent_WorkflowRunStepRunProcessedParams",
+    "WebhookPayloadOptionsParams",
+    "WebhookSubscriptionParams",
     "WorkflowCreatedWebhookEventParams",
     "WorkflowDeletedWebhookEventParams",
     "WorkflowDeployedWebhookEventParams",

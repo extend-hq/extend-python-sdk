@@ -18,14 +18,14 @@ class LegacySplitterConfig(UncheckedBaseModel):
         typing.Optional[LegacySplitterConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
     ] = pydantic.Field(alias="baseProcessor", default=None)
     """
-    The base processor to use. For splitters, this can currently only be `"splitting_performance"` or `"splitting_light"`. See [Splitting Changelog](/changelog/splitting/splitting-performance) for more details.
+    The base processor to use. For splitters, this can currently only be `"splitting_performance"` or `"splitting_light"`. See [Splitting Changelog](https://docs.extend.ai/2026-02-09/changelog/splitting/splitting-performance) for more details.
     """
 
     base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
         pydantic.Field(alias="baseVersion", default=None)
     )
     """
-    The version of the `"splitting_performance"` or `"splitting_light"` processor to use. If this is provided, the `baseProcessor` must also be provided. See [Splitting Changelog](/changelog/splitting/splitting-performance) for more details.
+    The version of the `"splitting_performance"` or `"splitting_light"` processor to use. If this is provided, the `baseProcessor` must also be provided. See [Splitting Changelog](https://docs.extend.ai/2026-02-09/changelog/splitting/splitting-performance) for more details.
     """
 
     split_classifications: typing_extensions.Annotated[

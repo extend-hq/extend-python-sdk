@@ -206,7 +206,7 @@ class RawEvaluationSetItemsClient:
 
         **Limit:** You can create up to 100 items at a time.
 
-        Learn more about how to create evaluation set items in the [Evaluation Sets](https://docs.extend.ai/product/evaluation/overview) product page.
+        Learn more about how to create evaluation set items in the [Evaluation Sets](https://docs.extend.ai/2026-02-09/product/evaluation/overview) product page.
 
         Parameters
         ----------
@@ -953,7 +953,7 @@ class AsyncRawEvaluationSetItemsClient:
 
         **Limit:** You can create up to 100 items at a time.
 
-        Learn more about how to create evaluation set items in the [Evaluation Sets](https://docs.extend.ai/product/evaluation/overview) product page.
+        Learn more about how to create evaluation set items in the [Evaluation Sets](https://docs.extend.ai/2026-02-09/product/evaluation/overview) product page.
 
         Parameters
         ----------

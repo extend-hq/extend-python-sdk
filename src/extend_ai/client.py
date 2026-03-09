@@ -50,6 +50,8 @@ if typing.TYPE_CHECKING:
     from .split_runs.client import AsyncSplitRunsClient, SplitRunsClient
     from .splitter_versions.client import AsyncSplitterVersionsClient, SplitterVersionsClient
     from .splitters.client import AsyncSplittersClient, SplittersClient
+    from .webhook_endpoints.client import AsyncWebhookEndpointsClient, WebhookEndpointsClient
+    from .webhook_subscriptions.client import AsyncWebhookSubscriptionsClient, WebhookSubscriptionsClient
     from .workflow_runs.client import AsyncWorkflowRunsClient, WorkflowRunsClient
     from .workflows.client import AsyncWorkflowsClient, WorkflowsClient
 # this is used as the default value for optional parameters
@@ -146,6 +148,8 @@ class Extend:
         self._evaluation_sets: typing.Optional[EvaluationSetsClient] = None
         self._evaluation_set_items: typing.Optional[EvaluationSetItemsClient] = None
         self._evaluation_set_runs: typing.Optional[EvaluationSetRunsClient] = None
+        self._webhook_endpoints: typing.Optional[WebhookEndpointsClient] = None
+        self._webhook_subscriptions: typing.Optional[WebhookSubscriptionsClient] = None
 
     @property
     def with_raw_response(self) -> RawExtend:
@@ -206,7 +210,10 @@ class Extend:
             token="YOUR_TOKEN",
         )
         client.parse(
-            file={"url": "url"},
+            file={
+                "url": "https://example.com/bank_statement.pdf",
+                "name": "bank_statement.pdf",
+            },
         )
         """
         _response = self._raw_client.parse(
@@ -253,7 +260,11 @@ class Extend:
             token="YOUR_TOKEN",
         )
         client.edit(
-            file={"url": "url"},
+            file={"url": "https://example.com/form.pdf"},
+            config={
+                "instructions": "Fill out the form with the provided data",
+                "advanced_options": {"flatten_pdf": True},
+            },
         )
         """
         _response = self._raw_client.edit(file=file, config=config, request_options=request_options)
@@ -275,7 +286,7 @@ class Extend:
 
         The Extract endpoint allows you to extract structured data from files using an existing extractor or an inline configuration.
 
-        For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/product/extracting/extract).
+        For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/product/extraction/quick-start-5-minutes).
 
         Parameters
         ----------
@@ -306,7 +317,26 @@ class Extend:
             token="YOUR_TOKEN",
         )
         client.extract(
-            file={"url": "url"},
+            config={
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "vendor_name": {
+                            "type": "string",
+                            "description": "The name of the vendor",
+                        },
+                        "invoice_number": {
+                            "type": "string",
+                            "description": "The invoice number",
+                        },
+                        "total_amount": {
+                            "type": "number",
+                            "description": "The total amount due",
+                        },
+                    },
+                }
+            },
+            file={"url": "https://example.com/invoice.pdf"},
         )
         """
         _response = self._raw_client.extract(
@@ -330,7 +360,7 @@ class Extend:
 
         The Classify endpoint allows you to classify documents using an existing classifier or an inline configuration.
 
-        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/product/classifying/classify).
+        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/product/classification/configuring-a-classifier).
 
         Parameters
         ----------
@@ -361,7 +391,26 @@ class Extend:
             token="YOUR_TOKEN",
         )
         client.classify(
-            file={"url": "url"},
+            config={
+                "classifications": [
+                    {
+                        "id": "invoice",
+                        "type": "invoice",
+                        "description": "An invoice or bill for goods or services",
+                    },
+                    {
+                        "id": "receipt",
+                        "type": "receipt",
+                        "description": "A receipt confirming payment",
+                    },
+                    {
+                        "id": "other",
+                        "type": "other",
+                        "description": "Any other document type",
+                    },
+                ]
+            },
+            file={"url": "https://example.com/document.pdf"},
         )
         """
         _response = self._raw_client.classify(
@@ -385,7 +434,7 @@ class Extend:
 
         The Split endpoint allows you to split documents into multiple parts using an existing splitter or an inline configuration.
 
-        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/product/splitting/split).
+        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/product/splitting/configuring-a-splitter).
 
         Parameters
         ----------
@@ -416,7 +465,26 @@ class Extend:
             token="YOUR_TOKEN",
         )
         client.split(
-            file={"url": "url"},
+            config={
+                "split_classifications": [
+                    {
+                        "id": "invoice",
+                        "type": "invoice",
+                        "description": "An invoice or bill for goods or services",
+                    },
+                    {
+                        "id": "receipt",
+                        "type": "receipt",
+                        "description": "A receipt confirming payment",
+                    },
+                    {
+                        "id": "other",
+                        "type": "other",
+                        "description": "Any other document type",
+                    },
+                ]
+            },
+            file={"url": "https://example.com/multi-document.pdf"},
         )
         """
         _response = self._raw_client.split(
@@ -592,6 +660,22 @@ class Extend:
             self._evaluation_set_runs = EvaluationSetRunsClient(client_wrapper=self._client_wrapper)
         return self._evaluation_set_runs
 
+    @property
+    def webhook_endpoints(self):
+        if self._webhook_endpoints is None:
+            from .webhook_endpoints.client import WebhookEndpointsClient  # noqa: E402
+
+            self._webhook_endpoints = WebhookEndpointsClient(client_wrapper=self._client_wrapper)
+        return self._webhook_endpoints
+
+    @property
+    def webhook_subscriptions(self):
+        if self._webhook_subscriptions is None:
+            from .webhook_subscriptions.client import WebhookSubscriptionsClient  # noqa: E402
+
+            self._webhook_subscriptions = WebhookSubscriptionsClient(client_wrapper=self._client_wrapper)
+        return self._webhook_subscriptions
+
 
 class AsyncExtend:
     """
@@ -683,6 +767,8 @@ class AsyncExtend:
         self._evaluation_sets: typing.Optional[AsyncEvaluationSetsClient] = None
         self._evaluation_set_items: typing.Optional[AsyncEvaluationSetItemsClient] = None
         self._evaluation_set_runs: typing.Optional[AsyncEvaluationSetRunsClient] = None
+        self._webhook_endpoints: typing.Optional[AsyncWebhookEndpointsClient] = None
+        self._webhook_subscriptions: typing.Optional[AsyncWebhookSubscriptionsClient] = None
 
     @property
     def with_raw_response(self) -> AsyncRawExtend:
@@ -748,7 +834,10 @@ class AsyncExtend:
 
         async def main() -> None:
             await client.parse(
-                file={"url": "url"},
+                file={
+                    "url": "https://example.com/bank_statement.pdf",
+                    "name": "bank_statement.pdf",
+                },
             )
 
 
@@ -803,7 +892,11 @@ class AsyncExtend:
 
         async def main() -> None:
             await client.edit(
-                file={"url": "url"},
+                file={"url": "https://example.com/form.pdf"},
+                config={
+                    "instructions": "Fill out the form with the provided data",
+                    "advanced_options": {"flatten_pdf": True},
+                },
             )
 
 
@@ -828,7 +921,7 @@ class AsyncExtend:
 
         The Extract endpoint allows you to extract structured data from files using an existing extractor or an inline configuration.
 
-        For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/product/extracting/extract).
+        For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/product/extraction/quick-start-5-minutes).
 
         Parameters
         ----------
@@ -864,7 +957,26 @@ class AsyncExtend:
 
         async def main() -> None:
             await client.extract(
-                file={"url": "url"},
+                config={
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "vendor_name": {
+                                "type": "string",
+                                "description": "The name of the vendor",
+                            },
+                            "invoice_number": {
+                                "type": "string",
+                                "description": "The invoice number",
+                            },
+                            "total_amount": {
+                                "type": "number",
+                                "description": "The total amount due",
+                            },
+                        },
+                    }
+                },
+                file={"url": "https://example.com/invoice.pdf"},
             )
 
 
@@ -891,7 +1003,7 @@ class AsyncExtend:
 
         The Classify endpoint allows you to classify documents using an existing classifier or an inline configuration.
 
-        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/product/classifying/classify).
+        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/product/classification/configuring-a-classifier).
 
         Parameters
         ----------
@@ -927,7 +1039,26 @@ class AsyncExtend:
 
         async def main() -> None:
             await client.classify(
-                file={"url": "url"},
+                config={
+                    "classifications": [
+                        {
+                            "id": "invoice",
+                            "type": "invoice",
+                            "description": "An invoice or bill for goods or services",
+                        },
+                        {
+                            "id": "receipt",
+                            "type": "receipt",
+                            "description": "A receipt confirming payment",
+                        },
+                        {
+                            "id": "other",
+                            "type": "other",
+                            "description": "Any other document type",
+                        },
+                    ]
+                },
+                file={"url": "https://example.com/document.pdf"},
             )
 
 
@@ -954,7 +1085,7 @@ class AsyncExtend:
 
         The Split endpoint allows you to split documents into multiple parts using an existing splitter or an inline configuration.
 
-        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/product/splitting/split).
+        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/product/splitting/configuring-a-splitter).
 
         Parameters
         ----------
@@ -990,7 +1121,26 @@ class AsyncExtend:
 
         async def main() -> None:
             await client.split(
-                file={"url": "url"},
+                config={
+                    "split_classifications": [
+                        {
+                            "id": "invoice",
+                            "type": "invoice",
+                            "description": "An invoice or bill for goods or services",
+                        },
+                        {
+                            "id": "receipt",
+                            "type": "receipt",
+                            "description": "A receipt confirming payment",
+                        },
+                        {
+                            "id": "other",
+                            "type": "other",
+                            "description": "Any other document type",
+                        },
+                    ]
+                },
+                file={"url": "https://example.com/multi-document.pdf"},
             )
 
 
@@ -1168,6 +1318,22 @@ class AsyncExtend:
 
             self._evaluation_set_runs = AsyncEvaluationSetRunsClient(client_wrapper=self._client_wrapper)
         return self._evaluation_set_runs
+
+    @property
+    def webhook_endpoints(self):
+        if self._webhook_endpoints is None:
+            from .webhook_endpoints.client import AsyncWebhookEndpointsClient  # noqa: E402
+
+            self._webhook_endpoints = AsyncWebhookEndpointsClient(client_wrapper=self._client_wrapper)
+        return self._webhook_endpoints
+
+    @property
+    def webhook_subscriptions(self):
+        if self._webhook_subscriptions is None:
+            from .webhook_subscriptions.client import AsyncWebhookSubscriptionsClient  # noqa: E402
+
+            self._webhook_subscriptions = AsyncWebhookSubscriptionsClient(client_wrapper=self._client_wrapper)
+        return self._webhook_subscriptions
 
 
 def _get_base_url(*, base_url: typing.Optional[str] = None, environment: ExtendEnvironment) -> str:

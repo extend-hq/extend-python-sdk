@@ -124,7 +124,26 @@ class SplittersClient:
             token="YOUR_TOKEN",
         )
         client.splitters.create(
-            name="name",
+            name="Document Splitter",
+            config={
+                "split_classifications": [
+                    {
+                        "id": "invoice",
+                        "type": "invoice",
+                        "description": "An invoice or bill for goods or services",
+                    },
+                    {
+                        "id": "receipt",
+                        "type": "receipt",
+                        "description": "A receipt confirming payment",
+                    },
+                    {
+                        "id": "other",
+                        "type": "other",
+                        "description": "Any other document type",
+                    },
+                ]
+            },
         )
         """
         _response = self._raw_client.create(
@@ -206,6 +225,7 @@ class SplittersClient:
         )
         client.splitters.update(
             id="splitter_id_here",
+            name="Document Splitter v2",
         )
         """
         _response = self._raw_client.update(id, name=name, config=config, request_options=request_options)
@@ -332,7 +352,26 @@ class AsyncSplittersClient:
 
         async def main() -> None:
             await client.splitters.create(
-                name="name",
+                name="Document Splitter",
+                config={
+                    "split_classifications": [
+                        {
+                            "id": "invoice",
+                            "type": "invoice",
+                            "description": "An invoice or bill for goods or services",
+                        },
+                        {
+                            "id": "receipt",
+                            "type": "receipt",
+                            "description": "A receipt confirming payment",
+                        },
+                        {
+                            "id": "other",
+                            "type": "other",
+                            "description": "Any other document type",
+                        },
+                    ]
+                },
             )
 
 
@@ -430,6 +469,7 @@ class AsyncSplittersClient:
         async def main() -> None:
             await client.splitters.update(
                 id="splitter_id_here",
+                name="Document Splitter v2",
             )
 
 

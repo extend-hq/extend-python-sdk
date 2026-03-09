@@ -124,7 +124,26 @@ class ExtractorsClient:
             token="YOUR_TOKEN",
         )
         client.extractors.create(
-            name="name",
+            name="Invoice Extractor",
+            config={
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "vendor_name": {
+                            "type": "string",
+                            "description": "The name of the vendor",
+                        },
+                        "invoice_number": {
+                            "type": "string",
+                            "description": "The invoice number",
+                        },
+                        "total_amount": {
+                            "type": "number",
+                            "description": "The total amount due",
+                        },
+                    },
+                }
+            },
         )
         """
         _response = self._raw_client.create(
@@ -206,6 +225,7 @@ class ExtractorsClient:
         )
         client.extractors.update(
             id="extractor_id_here",
+            name="Invoice Extractor v2",
         )
         """
         _response = self._raw_client.update(id, name=name, config=config, request_options=request_options)
@@ -332,7 +352,26 @@ class AsyncExtractorsClient:
 
         async def main() -> None:
             await client.extractors.create(
-                name="name",
+                name="Invoice Extractor",
+                config={
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "vendor_name": {
+                                "type": "string",
+                                "description": "The name of the vendor",
+                            },
+                            "invoice_number": {
+                                "type": "string",
+                                "description": "The invoice number",
+                            },
+                            "total_amount": {
+                                "type": "number",
+                                "description": "The total amount due",
+                            },
+                        },
+                    }
+                },
             )
 
 
@@ -430,6 +469,7 @@ class AsyncExtractorsClient:
         async def main() -> None:
             await client.extractors.update(
                 id="extractor_id_here",
+                name="Invoice Extractor v2",
             )
 
 

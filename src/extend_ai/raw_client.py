@@ -386,7 +386,7 @@ class RawExtend:
 
         The Extract endpoint allows you to extract structured data from files using an existing extractor or an inline configuration.
 
-        For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/product/extracting/extract).
+        For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/product/extraction/quick-start-5-minutes).
 
         Parameters
         ----------
@@ -553,7 +553,7 @@ class RawExtend:
 
         The Classify endpoint allows you to classify documents using an existing classifier or an inline configuration.
 
-        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/product/classifying/classify).
+        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/product/classification/configuring-a-classifier).
 
         Parameters
         ----------
@@ -720,7 +720,7 @@ class RawExtend:
 
         The Split endpoint allows you to split documents into multiple parts using an existing splitter or an inline configuration.
 
-        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/product/splitting/split).
+        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/product/splitting/configuring-a-splitter).
 
         Parameters
         ----------
@@ -1215,7 +1215,7 @@ class AsyncRawExtend:
 
         The Extract endpoint allows you to extract structured data from files using an existing extractor or an inline configuration.
 
-        For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/product/extracting/extract).
+        For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/product/extraction/quick-start-5-minutes).
 
         Parameters
         ----------
@@ -1382,7 +1382,7 @@ class AsyncRawExtend:
 
         The Classify endpoint allows you to classify documents using an existing classifier or an inline configuration.
 
-        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/product/classifying/classify).
+        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/product/classification/configuring-a-classifier).
 
         Parameters
         ----------
@@ -1549,7 +1549,7 @@ class AsyncRawExtend:
 
         The Split endpoint allows you to split documents into multiple parts using an existing splitter or an inline configuration.
 
-        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/product/splitting/split).
+        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/product/splitting/configuring-a-splitter).
 
         Parameters
         ----------

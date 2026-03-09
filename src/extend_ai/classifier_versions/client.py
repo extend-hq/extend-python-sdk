@@ -134,7 +134,8 @@ class ClassifierVersionsClient:
         )
         client.classifier_versions.create(
             classifier_id="classifier_id_here",
-            release_type=ReleaseType.MAJOR,
+            release_type=ReleaseType.MINOR,
+            description="Added new document classification type",
         )
         """
         _response = self._raw_client.create(
@@ -317,7 +318,8 @@ class AsyncClassifierVersionsClient:
         async def main() -> None:
             await client.classifier_versions.create(
                 classifier_id="classifier_id_here",
-                release_type=ReleaseType.MAJOR,
+                release_type=ReleaseType.MINOR,
+                description="Added new document classification type",
             )
 
 

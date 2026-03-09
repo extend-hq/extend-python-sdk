@@ -100,7 +100,7 @@ class EvaluationSetsClient:
         """
         Evaluation sets are collections of files and expected outputs that are used to evaluate the performance of a given extractor, classifier, or splitter. This endpoint will create a new evaluation set, which items can be added to using the [Create Evaluation Set Item](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/evaluation/create-evaluation-set-item) endpoint.
 
-        Note: It is not necessary to create an evaluation set via API. You can also create an evaluation set via the Extend dashboard and take the ID from there. To learn more about how to create evaluation sets, see the [Evaluation Sets](https://docs.extend.ai/product/evaluation/overview) product page.
+        Note: It is not necessary to create an evaluation set via API. You can also create an evaluation set via the Extend dashboard and take the ID from there. To learn more about how to create evaluation sets, see the [Evaluation Sets](https://docs.extend.ai/2026-02-09/product/evaluation/overview) product page.
 
         Parameters
         ----------
@@ -135,8 +135,9 @@ class EvaluationSetsClient:
             token="YOUR_TOKEN",
         )
         client.evaluation_sets.create(
-            name="My Evaluation Set",
-            entity_id="entity_id_here",
+            name="Invoice Processing Test Set",
+            description="Q4 vendor invoices for accuracy testing",
+            entity_id="ex_1234567890",
         )
         """
         _response = self._raw_client.create(
@@ -270,7 +271,7 @@ class AsyncEvaluationSetsClient:
         """
         Evaluation sets are collections of files and expected outputs that are used to evaluate the performance of a given extractor, classifier, or splitter. This endpoint will create a new evaluation set, which items can be added to using the [Create Evaluation Set Item](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/evaluation/create-evaluation-set-item) endpoint.
 
-        Note: It is not necessary to create an evaluation set via API. You can also create an evaluation set via the Extend dashboard and take the ID from there. To learn more about how to create evaluation sets, see the [Evaluation Sets](https://docs.extend.ai/product/evaluation/overview) product page.
+        Note: It is not necessary to create an evaluation set via API. You can also create an evaluation set via the Extend dashboard and take the ID from there. To learn more about how to create evaluation sets, see the [Evaluation Sets](https://docs.extend.ai/2026-02-09/product/evaluation/overview) product page.
 
         Parameters
         ----------
@@ -310,8 +311,9 @@ class AsyncEvaluationSetsClient:
 
         async def main() -> None:
             await client.evaluation_sets.create(
-                name="My Evaluation Set",
-                entity_id="entity_id_here",
+                name="Invoice Processing Test Set",
+                description="Q4 vendor invoices for accuracy testing",
+                entity_id="ex_1234567890",
             )
 
 

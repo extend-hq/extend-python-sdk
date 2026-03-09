@@ -20,14 +20,14 @@ class LegacyExtractionConfig(UncheckedBaseModel):
         typing.Optional[LegacyExtractionConfigBaseProcessor], FieldMetadata(alias="baseProcessor")
     ] = pydantic.Field(alias="baseProcessor", default=None)
     """
-    The base processor to use. For extractors, this must be either `"extraction_performance"` or `"extraction_light"`. See [Extraction Changelog](/changelog/extraction/extraction-performance) for more details.
+    The base processor to use. For extractors, this must be either `"extraction_performance"` or `"extraction_light"`. See [Extraction Changelog](https://docs.extend.ai/2026-02-09/changelog/extraction/extraction-performance) for more details.
     """
 
     base_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="baseVersion")] = (
         pydantic.Field(alias="baseVersion", default=None)
     )
     """
-    The version of the `"extraction_performance"` or `"extraction_light"` processor to use. If this is provided, the `baseProcessor` must also be provided. See [Extraction Changelog](/changelog/extraction/extraction-performance) for more details.
+    The version of the `"extraction_performance"` or `"extraction_light"` processor to use. If this is provided, the `baseProcessor` must also be provided. See [Extraction Changelog](https://docs.extend.ai/2026-02-09/changelog/extraction/extraction-performance) for more details.
     """
 
     extraction_rules: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="extractionRules")] = (
@@ -43,7 +43,7 @@ class LegacyExtractionConfig(UncheckedBaseModel):
     """
     JSON Schema definition of the data to extract. Either `fields` or `schema` must be provided.
     
-    See the [JSON Schema guide](/product/extraction/schema/json-schema) for details and examples of schema configuration.
+    See the [JSON Schema guide](https://docs.extend.ai/2026-02-09/product/extraction/schema) for details and examples of schema configuration.
     """
 
     fields: typing.Optional[typing.List["LegacyExtractionField"]] = pydantic.Field(default=None)

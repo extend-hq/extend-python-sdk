@@ -107,7 +107,7 @@ class EvaluationSetItemsClient:
 
         **Limit:** You can create up to 100 items at a time.
 
-        Learn more about how to create evaluation set items in the [Evaluation Sets](https://docs.extend.ai/product/evaluation/overview) product page.
+        Learn more about how to create evaluation set items in the [Evaluation Sets](https://docs.extend.ai/2026-02-09/product/evaluation/overview) product page.
 
         Parameters
         ----------
@@ -136,7 +136,18 @@ class EvaluationSetItemsClient:
         )
         client.evaluation_set_items.create(
             evaluation_set_id="evaluation_set_id_here",
-            items=[{"file_id": "file_id_here", "expected_output": {}}],
+            items=[
+                {
+                    "file_id": "file_xK9mLPqRtN3vS8wF5hB2cQ",
+                    "expected_output": {
+                        "value": {
+                            "vendor_name": "Acme Corp",
+                            "invoice_number": "INV-001",
+                            "total_amount": 1500,
+                        }
+                    },
+                }
+            ],
         )
         """
         _response = self._raw_client.create(evaluation_set_id, items=items, request_options=request_options)
@@ -227,7 +238,13 @@ class EvaluationSetItemsClient:
         client.evaluation_set_items.update(
             evaluation_set_id="evaluation_set_id_here",
             item_id="evaluation_set_item_id_here",
-            expected_output={},
+            expected_output={
+                "value": {
+                    "vendor_name": "Acme Corp",
+                    "invoice_number": "INV-001",
+                    "total_amount": 1750,
+                }
+            },
         )
         """
         _response = self._raw_client.update(
@@ -372,7 +389,7 @@ class AsyncEvaluationSetItemsClient:
 
         **Limit:** You can create up to 100 items at a time.
 
-        Learn more about how to create evaluation set items in the [Evaluation Sets](https://docs.extend.ai/product/evaluation/overview) product page.
+        Learn more about how to create evaluation set items in the [Evaluation Sets](https://docs.extend.ai/2026-02-09/product/evaluation/overview) product page.
 
         Parameters
         ----------
@@ -406,7 +423,18 @@ class AsyncEvaluationSetItemsClient:
         async def main() -> None:
             await client.evaluation_set_items.create(
                 evaluation_set_id="evaluation_set_id_here",
-                items=[{"file_id": "file_id_here", "expected_output": {}}],
+                items=[
+                    {
+                        "file_id": "file_xK9mLPqRtN3vS8wF5hB2cQ",
+                        "expected_output": {
+                            "value": {
+                                "vendor_name": "Acme Corp",
+                                "invoice_number": "INV-001",
+                                "total_amount": 1500,
+                            }
+                        },
+                    }
+                ],
             )
 
 
@@ -513,7 +541,13 @@ class AsyncEvaluationSetItemsClient:
             await client.evaluation_set_items.update(
                 evaluation_set_id="evaluation_set_id_here",
                 item_id="evaluation_set_item_id_here",
-                expected_output={},
+                expected_output={
+                    "value": {
+                        "vendor_name": "Acme Corp",
+                        "invoice_number": "INV-001",
+                        "total_amount": 1750,
+                    }
+                },
             )
 
 
