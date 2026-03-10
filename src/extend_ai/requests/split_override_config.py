@@ -3,9 +3,9 @@
 import typing_extensions
 from ..core.serialization import FieldMetadata
 from ..types.split_base_processor import SplitBaseProcessor
-from .classifications import ClassificationsParams
 from .parse_config import ParseConfigParams
 from .split_advanced_options import SplitAdvancedOptionsParams
+from .split_classifications import SplitClassificationsParams
 
 
 class SplitOverrideConfigParams(typing_extensions.TypedDict):
@@ -23,7 +23,7 @@ class SplitOverrideConfigParams(typing_extensions.TypedDict):
     """
 
     split_classifications: typing_extensions.NotRequired[
-        typing_extensions.Annotated[ClassificationsParams, FieldMetadata(alias="splitClassifications")]
+        typing_extensions.Annotated[SplitClassificationsParams, FieldMetadata(alias="splitClassifications")]
     ]
     split_rules: typing_extensions.NotRequired[typing_extensions.Annotated[str, FieldMetadata(alias="splitRules")]]
     """

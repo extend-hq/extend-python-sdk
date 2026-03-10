@@ -7,10 +7,10 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .classifications import Classifications
 from .parse_config import ParseConfig
 from .split_advanced_options import SplitAdvancedOptions
 from .split_base_processor import SplitBaseProcessor
+from .split_classifications import SplitClassifications
 
 
 class SplitOverrideConfig(UncheckedBaseModel):
@@ -30,7 +30,7 @@ class SplitOverrideConfig(UncheckedBaseModel):
     """
 
     split_classifications: typing_extensions.Annotated[
-        typing.Optional[Classifications], FieldMetadata(alias="splitClassifications")
+        typing.Optional[SplitClassifications], FieldMetadata(alias="splitClassifications")
     ] = pydantic.Field(alias="splitClassifications", default=None)
     split_rules: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="splitRules")] = pydantic.Field(
         alias="splitRules", default=None

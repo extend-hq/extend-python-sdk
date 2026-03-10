@@ -58,6 +58,13 @@ class EditJson(UncheckedBaseModel):
     extend_edit_bbox: typing_extensions.Annotated[
         typing.Optional[EditBoundingBox], FieldMetadata(alias="extend_edit:bbox")
     ] = pydantic.Field(alias="extend_edit:bbox", default=None)
+    extend_edit_bboxes: typing_extensions.Annotated[
+        typing.Optional[typing.List[EditBoundingBox]], FieldMetadata(alias="extend_edit:bboxes")
+    ] = pydantic.Field(alias="extend_edit:bboxes", default=None)
+    """
+    Array of bounding boxes for radio enums. Enum at index i corresponds to bbox at index i.
+    """
+
     extend_edit_page_index: typing_extensions.Annotated[
         typing.Optional[int], FieldMetadata(alias="extend_edit:page_index")
     ] = pydantic.Field(alias="extend_edit:page_index", default=None)

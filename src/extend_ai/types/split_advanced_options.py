@@ -17,6 +17,8 @@ class SplitAdvancedOptions(UncheckedBaseModel):
     ] = pydantic.Field(alias="splitIdentifierRules", default=None)
     """
     Custom rules for identifying split points.
+    
+    **Deprecated:** For `splitting_light` >= 1.3.0 and `splitting_performance` >= 1.5.0, use the `identifierKey` field on each classification in `splitClassifications` instead. This provides per-type identifier extraction rules rather than a single global rule. On those versions, this field is accepted but ignored if provided.
     """
 
     split_method: typing_extensions.Annotated[
@@ -24,6 +26,8 @@ class SplitAdvancedOptions(UncheckedBaseModel):
     ] = pydantic.Field(alias="splitMethod", default=None)
     """
     The method to use for splitting documents. `high_precision` is more accurate but slower, while `basic_precision` is faster but less precise.
+    
+    **Deprecated:** For `splitting_light` >= 1.3.0 and `splitting_performance` >= 1.5.0, this field has no impact and is ignored if provided. It is still accepted for compatibility with older integrations.
     """
 
     split_excel_documents_by_sheet_enabled: typing_extensions.Annotated[

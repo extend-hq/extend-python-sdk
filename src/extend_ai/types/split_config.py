@@ -7,10 +7,10 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .classifications import Classifications
 from .parse_config import ParseConfig
 from .split_advanced_options import SplitAdvancedOptions
 from .split_base_processor import SplitBaseProcessor
+from .split_classifications import SplitClassifications
 
 
 class SplitConfig(UncheckedBaseModel):
@@ -24,9 +24,9 @@ class SplitConfig(UncheckedBaseModel):
     The version of the `"splitting_performance"` or `"splitting_light"` processor to use. If not provided, the latest stable version for the selected `baseProcessor` will be used automatically. See [Splitting Changelog](https://docs.extend.ai/2026-02-09/changelog/splitting/splitting-performance) for more details.
     """
 
-    split_classifications: typing_extensions.Annotated[Classifications, FieldMetadata(alias="splitClassifications")] = (
-        pydantic.Field(alias="splitClassifications")
-    )
+    split_classifications: typing_extensions.Annotated[
+        SplitClassifications, FieldMetadata(alias="splitClassifications")
+    ] = pydantic.Field(alias="splitClassifications")
     split_rules: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="splitRules")] = pydantic.Field(
         alias="splitRules", default=None
     )

@@ -477,11 +477,13 @@ client.split(
                 "id": "invoice",
                 "type": "invoice",
                 "description": "An invoice or bill for goods or services",
+                "identifier_key": "invoice number from the document header",
             },
             {
                 "id": "receipt",
                 "type": "receipt",
                 "description": "A receipt confirming payment",
+                "identifier_key": "receipt number",
             },
             {
                 "id": "other",
@@ -4298,11 +4300,13 @@ client.splitters.create(
                 "id": "invoice",
                 "type": "invoice",
                 "description": "An invoice or bill for goods or services",
+                "identifier_key": "invoice number from the document header",
             },
             {
                 "id": "receipt",
                 "type": "receipt",
                 "description": "A receipt confirming payment",
+                "identifier_key": "receipt number",
             },
             {
                 "id": "other",
