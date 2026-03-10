@@ -28,6 +28,20 @@ class EditConfigAdvancedOptions(UncheckedBaseModel):
     Whether to flatten the PDF (form widgets will not be editable with a PDF edit). Defaults to `true`.
     """
 
+    radio_enums_enabled: typing_extensions.Annotated[
+        typing.Optional[bool], FieldMetadata(alias="radioEnumsEnabled")
+    ] = pydantic.Field(alias="radioEnumsEnabled", default=None)
+    """
+    Whether to model radio fields as enums. This ensures only one radio widget is filled. Defaults to false.
+    """
+
+    native_fields_only: typing_extensions.Annotated[typing.Optional[bool], FieldMetadata(alias="nativeFieldsOnly")] = (
+        pydantic.Field(alias="nativeFieldsOnly", default=None)
+    )
+    """
+    If enabled, only native AcroForm from the PDF will be imported and used in the schema (skips object detection). Defaults to false.
+    """
+
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
     else:

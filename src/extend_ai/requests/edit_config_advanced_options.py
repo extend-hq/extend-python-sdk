@@ -20,3 +20,17 @@ class EditConfigAdvancedOptionsParams(typing_extensions.TypedDict):
     """
     Whether to flatten the PDF (form widgets will not be editable with a PDF edit). Defaults to `true`.
     """
+
+    radio_enums_enabled: typing_extensions.NotRequired[
+        typing_extensions.Annotated[bool, FieldMetadata(alias="radioEnumsEnabled")]
+    ]
+    """
+    Whether to model radio fields as enums. This ensures only one radio widget is filled. Defaults to false.
+    """
+
+    native_fields_only: typing_extensions.NotRequired[
+        typing_extensions.Annotated[bool, FieldMetadata(alias="nativeFieldsOnly")]
+    ]
+    """
+    If enabled, only native AcroForm from the PDF will be imported and used in the schema (skips object detection). Defaults to false.
+    """

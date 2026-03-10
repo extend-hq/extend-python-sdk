@@ -10,6 +10,8 @@ T_Result = typing.TypeVar("T_Result")
 class SplitAdvancedOptionsSplitMethod(enum.StrEnum):
     """
     The method to use for splitting documents. `high_precision` is more accurate but slower, while `basic_precision` is faster but less precise.
+
+    **Deprecated:** For `splitting_light` >= 1.3.0 and `splitting_performance` >= 1.5.0, this field has no impact and is ignored if provided. It is still accepted for compatibility with older integrations.
     """
 
     HIGH_PRECISION = "high_precision"

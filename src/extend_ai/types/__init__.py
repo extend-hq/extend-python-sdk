@@ -335,6 +335,8 @@ if typing.TYPE_CHECKING:
     from .split_advanced_options import SplitAdvancedOptions
     from .split_advanced_options_split_method import SplitAdvancedOptionsSplitMethod
     from .split_base_processor import SplitBaseProcessor
+    from .split_classification import SplitClassification
+    from .split_classifications import SplitClassifications
     from .split_config import SplitConfig
     from .split_output import SplitOutput
     from .split_output_splits_item import SplitOutputSplitsItem
@@ -736,6 +738,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "SplitAdvancedOptions": ".split_advanced_options",
     "SplitAdvancedOptionsSplitMethod": ".split_advanced_options_split_method",
     "SplitBaseProcessor": ".split_base_processor",
+    "SplitClassification": ".split_classification",
+    "SplitClassifications": ".split_classifications",
     "SplitConfig": ".split_config",
     "SplitOutput": ".split_output",
     "SplitOutputSplitsItem": ".split_output_splits_item",
@@ -1159,6 +1163,8 @@ __all__ = [
     "SplitAdvancedOptions",
     "SplitAdvancedOptionsSplitMethod",
     "SplitBaseProcessor",
+    "SplitClassification",
+    "SplitClassifications",
     "SplitConfig",
     "SplitOutput",
     "SplitOutputSplitsItem",

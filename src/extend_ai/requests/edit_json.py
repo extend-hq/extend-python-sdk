@@ -58,6 +58,13 @@ class EditJsonParams(typing_extensions.TypedDict):
     extend_edit_bbox: typing_extensions.NotRequired[
         typing_extensions.Annotated[EditBoundingBoxParams, FieldMetadata(alias="extend_edit:bbox")]
     ]
+    extend_edit_bboxes: typing_extensions.NotRequired[
+        typing_extensions.Annotated[typing.Sequence[EditBoundingBoxParams], FieldMetadata(alias="extend_edit:bboxes")]
+    ]
+    """
+    Array of bounding boxes for radio enums. Enum at index i corresponds to bbox at index i.
+    """
+
     extend_edit_page_index: typing_extensions.NotRequired[
         typing_extensions.Annotated[int, FieldMetadata(alias="extend_edit:page_index")]
     ]
