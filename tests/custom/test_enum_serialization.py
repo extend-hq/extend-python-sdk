@@ -11,7 +11,7 @@ import warnings
 
 from extend_ai.core.unchecked_base_model import construct_type
 from extend_ai.types.workflow_run import WorkflowRun
-from extend_ai.types.parse_run import ParseRun
+from extend_ai.types.parser_run import ParserRun
 
 
 WORKFLOW_RUN_JSON = {
@@ -38,23 +38,12 @@ WORKFLOW_RUN_JSON = {
     "stepRuns": [],
 }
 
-PARSE_RUN_JSON = {
-    "object": "parse_run",
-    "id": "pr_test123",
-    "file": {
-        "object": "file",
-        "id": "file_1",
-        "name": "document.pdf",
-        "type": "PDF",
-        "metadata": {},
-        "createdAt": "2025-01-01T00:00:00Z",
-        "updatedAt": "2025-01-01T00:00:00Z",
-    },
+PARSER_RUN_JSON = {
+    "object": "parser_run",
+    "id": "parser_run_test123",
+    "fileId": "file_1",
+    "chunks": [],
     "status": "PROCESSED",
-    "config": {
-        "target": "spatial",
-        "engine": "parse_performance",
-    },
 }
 
 
@@ -79,12 +68,12 @@ def test_workflow_run_model_dump_json_no_warnings() -> None:
     )
 
 
-def test_parse_run_model_dump_json_no_warnings() -> None:
-    parse_run = construct_type(type_=ParseRun, object_=PARSE_RUN_JSON)
+def test_parser_run_model_dump_json_no_warnings() -> None:
+    parser_run = construct_type(type_=ParserRun, object_=PARSER_RUN_JSON)
 
     with warnings.catch_warnings(record=True) as caught:
         warnings.simplefilter("always")
-        parse_run.model_dump_json()
+        parser_run.model_dump_json()
 
     bad = _enum_serialization_warnings(caught)
     assert bad == [], (
