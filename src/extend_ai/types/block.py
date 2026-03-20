@@ -6,14 +6,17 @@ import typing
 
 import pydantic
 import typing_extensions
-from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
+from ..core.pydantic_utilities import IS_PYDANTIC_V2, parse_obj_as, update_forward_refs
 from ..core.serialization import FieldMetadata
-from ..core.unchecked_base_model import UncheckedBaseModel
+from ..core.unchecked_base_model import UncheckedBaseModel, construct_type
 from .block_details import BlockDetails
 from .block_metadata import BlockMetadata
 from .block_polygon_item import BlockPolygonItem
 from .block_type import BlockType
 from .bounding_box import BoundingBox
+from .figure_details import FigureDetails
+from .table_cell_details import TableCellDetails
+from .table_details import TableDetails
 
 
 class Block(UncheckedBaseModel):
@@ -86,6 +89,75 @@ class Block(UncheckedBaseModel):
             frozen = True
             smart_union = True
             extra = pydantic.Extra.allow
+
+    @classmethod
+    def construct(
+        cls,
+        _fields_set: typing.Optional[typing.Set[str]] = None,
+        **values: typing.Any,
+    ) -> "Block":
+        details = values.get("details")
+        details_type = _get_details_type(values.get("type"))
+        coerced_details = None
+        if details is not None and details_type is not None:
+            coerced_details = _construct_block_details(
+                details_type=details_type,
+                details=details,
+                block_type=values.get("type"),
+            )
+
+        block = typing.cast("Block", super().construct(_fields_set=_fields_set, **values))
+        if coerced_details is not None:
+            object.__setattr__(block, "details", coerced_details)
+        return block
+
+
+def _get_details_type(
+    block_type: typing.Any,
+) -> typing.Optional[typing.Type[typing.Union[TableDetails, TableCellDetails, FigureDetails]]]:
+    raw_block_type = getattr(block_type, "value", block_type)
+    if raw_block_type == BlockType.TABLE.value:
+        return TableDetails
+    if raw_block_type in {BlockType.TABLE_CELL.value, BlockType.TABLE_HEAD.value}:
+        return TableCellDetails
+    if raw_block_type == BlockType.FIGURE.value:
+        return FigureDetails
+    return None
+
+
+def _construct_block_details(
+    *,
+    details_type: typing.Type[typing.Union[TableDetails, TableCellDetails, FigureDetails]],
+    details: typing.Any,
+    block_type: typing.Any,
+) -> typing.Any:
+    if isinstance(details, details_type):
+        return details
+
+    if isinstance(details, typing.Mapping):
+        normalized_details = dict(details)
+        expected_type = _get_expected_details_type(details_type)
+        raw_block_type = getattr(block_type, "value", block_type)
+        if expected_type is not None and normalized_details.get("type") in {None, raw_block_type}:
+            normalized_details["type"] = expected_type
+
+        try:
+            return parse_obj_as(details_type, normalized_details)
+        except Exception:
+            return construct_type(type_=details_type, object_=normalized_details)
+
+    return details
+
+
+def _get_expected_details_type(
+    details_type: typing.Type[typing.Union[TableDetails, TableCellDetails, FigureDetails]],
+) -> typing.Optional[str]:
+    if IS_PYDANTIC_V2:
+        field = details_type.model_fields.get("type")
+        return typing.cast(typing.Optional[str], getattr(field, "default", None))
+
+    field = details_type.__fields__.get("type")
+    return typing.cast(typing.Optional[str], getattr(field, "default", None))
 
 
 update_forward_refs(Block)
