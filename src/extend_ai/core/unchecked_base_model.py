@@ -3,6 +3,7 @@
 import datetime as dt
 import enum
 import inspect
+import sys
 import typing
 import uuid
 
@@ -32,6 +33,29 @@ class UnionMetadata:
 
 
 Model = typing.TypeVar("Model", bound=pydantic.BaseModel)
+
+
+def _maybe_resolve_forward_ref(
+    type_: typing.Any,
+    host: typing.Optional[typing.Type[typing.Any]],
+) -> typing.Any:
+    """
+    Resolve string forward references (e.g. List[ForwardRef('Block')]) using the host model's defining module.
+    Pydantic v2 often leaves these unevaluated on model_fields, which would otherwise skip recursive construct_type.
+    """
+    if host is None or not isinstance(type_, typing.ForwardRef):
+        return type_
+    mod = sys.modules.get(host.__module__)
+    if mod is None:
+        return type_
+    globalns = vars(mod)
+    try:
+        try:
+            return type_._evaluate(globalns, globalns, frozenset())  # type: ignore[call-arg,misc]
+        except TypeError:
+            return type_._evaluate(globalns, globalns)
+    except Exception:
+        return type_
 
 
 class UncheckedBaseModel(UniversalBaseModel):
@@ -87,7 +111,9 @@ class UncheckedBaseModel(UniversalBaseModel):
                     type_ = typing.cast(typing.Type, field.outer_type_)  # type: ignore # Pydantic < v1.10.15
 
                 fields_values[name] = (
-                    construct_type(object_=values[key], type_=type_) if type_ is not None else values[key]
+                    construct_type(object_=values[key], type_=type_, host=cls)
+                    if type_ is not None
+                    else values[key]
                 )
                 _fields_set.add(name)
             else:
@@ -151,7 +177,11 @@ def _validate_collection_items_compatible(collection: typing.Any, target_type: t
     return True
 
 
-def _convert_undiscriminated_union_type(union_type: typing.Type[typing.Any], object_: typing.Any) -> typing.Any:
+def _convert_undiscriminated_union_type(
+    union_type: typing.Type[typing.Any],
+    object_: typing.Any,
+    host: typing.Optional[typing.Type[typing.Any]] = None,
+) -> typing.Any:
     inner_types = get_args(union_type)
     if typing.Any in inner_types:
         return object_
@@ -159,7 +189,7 @@ def _convert_undiscriminated_union_type(union_type: typing.Type[typing.Any], obj
     for inner_type in inner_types:
         # Handle lists of objects that need parsing
         if get_origin(inner_type) is list and isinstance(object_, list):
-            list_inner_type = get_args(inner_type)[0]
+            list_inner_type = _maybe_resolve_forward_ref(get_args(inner_type)[0], host)
             try:
                 if inspect.isclass(list_inner_type) and issubclass(list_inner_type, pydantic.BaseModel):
                     # Validate that all items in the list are compatible with the target type
@@ -207,19 +237,23 @@ def _convert_undiscriminated_union_type(union_type: typing.Type[typing.Any], obj
             # If all literal fields match, try to construct this type
             if literal_fields_match:
                 try:
-                    return construct_type(object_=object_, type_=inner_type)
+                    return construct_type(object_=object_, type_=inner_type, host=host)
                 except Exception:
                     continue
 
     # Second pass: if no literal matches, just return the first successful cast
     for inner_type in inner_types:
         try:
-            return construct_type(object_=object_, type_=inner_type)
+            return construct_type(object_=object_, type_=inner_type, host=host)
         except Exception:
             continue
 
 
-def _convert_union_type(type_: typing.Type[typing.Any], object_: typing.Any) -> typing.Any:
+def _convert_union_type(
+    type_: typing.Type[typing.Any],
+    object_: typing.Any,
+    host: typing.Optional[typing.Type[typing.Any]] = None,
+) -> typing.Any:
     base_type = get_origin(type_) or type_
     union_type = type_
     if base_type == typing_extensions.Annotated:  # type: ignore[comparison-overlap]
@@ -235,14 +269,19 @@ def _convert_union_type(type_: typing.Type[typing.Any], object_: typing.Any) -> 
                         except:
                             objects_discriminant = object_[metadata.discriminant]
                         if inner_type.__fields__[metadata.discriminant].default == objects_discriminant:
-                            return construct_type(object_=object_, type_=inner_type)
+                            return construct_type(object_=object_, type_=inner_type, host=host)
                 except Exception:
                     # Allow to fall through to our regular union handling
                     pass
-    return _convert_undiscriminated_union_type(union_type, object_)
+    return _convert_undiscriminated_union_type(union_type, object_, host)
 
 
-def construct_type(*, type_: typing.Type[typing.Any], object_: typing.Any) -> typing.Any:
+def construct_type(
+    *,
+    type_: typing.Type[typing.Any],
+    object_: typing.Any,
+    host: typing.Optional[typing.Type[typing.Any]] = None,
+) -> typing.Any:
     """
     Here we are essentially creating the same `construct` method in spirit as the above, but for all types, not just
     Pydantic models.
@@ -265,8 +304,12 @@ def construct_type(*, type_: typing.Type[typing.Any], object_: typing.Any) -> ty
             return object_
 
         key_type, items_type = get_args(type_)
+        key_type = _maybe_resolve_forward_ref(key_type, host)
+        items_type = _maybe_resolve_forward_ref(items_type, host)
         d = {
-            construct_type(object_=key, type_=key_type): construct_type(object_=item, type_=items_type)
+            construct_type(object_=key, type_=key_type, host=host): construct_type(
+                object_=item, type_=items_type, host=host
+            )
             for key, item in object_.items()
         }
         return d
@@ -275,18 +318,18 @@ def construct_type(*, type_: typing.Type[typing.Any], object_: typing.Any) -> ty
         if not isinstance(object_, list):
             return object_
 
-        inner_type = get_args(type_)[0]
-        return [construct_type(object_=entry, type_=inner_type) for entry in object_]
+        inner_type = _maybe_resolve_forward_ref(get_args(type_)[0], host)
+        return [construct_type(object_=entry, type_=inner_type, host=host) for entry in object_]
 
     if base_type == set:
         if not isinstance(object_, set) and not isinstance(object_, list):
             return object_
 
-        inner_type = get_args(type_)[0]
-        return {construct_type(object_=entry, type_=inner_type) for entry in object_}
+        inner_type = _maybe_resolve_forward_ref(get_args(type_)[0], host)
+        return {construct_type(object_=entry, type_=inner_type, host=host) for entry in object_}
 
     if is_union(base_type) or is_annotated_union:
-        return _convert_union_type(type_, object_)
+        return _convert_union_type(type_, object_, host)
 
     # Cannot do an `issubclass` with a literal type, let's also just confirm we have a class before this call
     if (
