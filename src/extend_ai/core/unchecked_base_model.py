@@ -151,10 +151,59 @@ def _validate_collection_items_compatible(collection: typing.Any, target_type: t
     return True
 
 
+def _get_literal_field_value(inner_type: typing.Type[typing.Any], field_name: str, field: typing.Any, object_: typing.Any) -> typing.Any:
+    """Get the value of a field from an object, checking both alias and field name."""
+    name_or_alias = get_field_to_alias_mapping(inner_type).get(field_name, field_name)
+    if isinstance(object_, dict):
+        return object_.get(name_or_alias)
+    return getattr(object_, name_or_alias, None)
+
+
+def _literal_fields_match_strict(inner_type: typing.Type[typing.Any], object_: typing.Any) -> bool:
+    """
+    Return True iff every Literal-typed field in `inner_type` has a value in `object_`
+    that exactly matches the field's default (the declared Literal value).
+
+    Unlike the lenient check, this requires the key to be PRESENT in the object and
+    match the Literal default — it does not vacuously pass when the key is absent.
+    For types with no Literal fields, always returns True.
+    """
+    fields = _get_model_fields(inner_type)
+    for field_name, field in fields.items():
+        if IS_PYDANTIC_V2:
+            field_type = field.annotation  # type: ignore # Pydantic v2
+        else:
+            field_type = field.outer_type_  # type: ignore # Pydantic v1
+
+        if is_literal_type(field_type):  # type: ignore[arg-type]
+            field_default = _get_field_default(field)
+            object_value = _get_literal_field_value(inner_type, field_name, field, object_)
+            if field_default != object_value:
+                return False
+    return True
+
+
 def _convert_undiscriminated_union_type(union_type: typing.Type[typing.Any], object_: typing.Any) -> typing.Any:
     inner_types = get_args(union_type)
     if typing.Any in inner_types:
         return object_
+
+    # Determine whether any Pydantic model in the union uses Literal fields as a
+    # type discriminant. When they do, we use strict matching (the discriminant key
+    # must be present in the object with the exact expected value) to prevent models
+    # with all-optional fields from greedily matching inputs that belong to a
+    # different variant or to a plain-dict fallback type (e.g. Dict[str, Any]).
+    has_literal_discriminant = any(
+        inspect.isclass(t)
+        and issubclass(t, pydantic.BaseModel)
+        and any(
+            is_literal_type(
+                f.annotation if IS_PYDANTIC_V2 else f.outer_type_  # type: ignore
+            )
+            for f in _get_model_fields(t).values()
+        )
+        for t in inner_types
+    )
 
     for inner_type in inner_types:
         # Handle lists of objects that need parsing
@@ -171,49 +220,61 @@ def _convert_undiscriminated_union_type(union_type: typing.Type[typing.Any], obj
 
         try:
             if inspect.isclass(inner_type) and issubclass(inner_type, pydantic.BaseModel):
+                # When the union uses Literal discriminants, require a strict match
+                # before attempting an expensive validated parse. This prevents
+                # all-optional models from vacuously succeeding for inputs that
+                # belong to a different variant or to the Dict[str, Any] fallback.
+                if has_literal_discriminant and not _literal_fields_match_strict(inner_type, object_):
+                    continue
                 # Attempt a validated parse until one works
                 return parse_obj_as(inner_type, object_)
         except Exception:
             continue
 
-    # If none of the types work, try matching literal fields first, then fall back
-    # First pass: try types where all literal fields match the object's values
+    # If none of the types work, try matching literal fields, then fall back.
+    # First pass: try types where all literal fields match the object's values.
+    # When a Literal discriminant is present we require a strict match here too,
+    # so that plain-dict fallback types (e.g. Dict[str, Any]) are reached when
+    # the discriminant is absent from the input.
     for inner_type in inner_types:
         if inspect.isclass(inner_type) and issubclass(inner_type, pydantic.BaseModel):
-            fields = _get_model_fields(inner_type)
-            literal_fields_match = True
-
-            for field_name, field in fields.items():
-                # Check if this field has a Literal type
-                if IS_PYDANTIC_V2:
-                    field_type = field.annotation  # type: ignore # Pydantic v2
-                else:
-                    field_type = field.outer_type_  # type: ignore # Pydantic v1
-
-                if is_literal_type(field_type):  # type: ignore[arg-type]
-                    field_default = _get_field_default(field)
-                    name_or_alias = get_field_to_alias_mapping(inner_type).get(field_name, field_name)
-                    # Get the value from the object
-                    if isinstance(object_, dict):
-                        object_value = object_.get(name_or_alias)
+            if has_literal_discriminant:
+                if not _literal_fields_match_strict(inner_type, object_):
+                    continue
+            else:
+                # Legacy lenient check: skip only when a Literal field value is
+                # present but doesn't match (allows absent-discriminant inputs).
+                fields = _get_model_fields(inner_type)
+                literal_fields_match = True
+                for field_name, field in fields.items():
+                    if IS_PYDANTIC_V2:
+                        field_type = field.annotation  # type: ignore # Pydantic v2
                     else:
-                        object_value = getattr(object_, name_or_alias, None)
+                        field_type = field.outer_type_  # type: ignore # Pydantic v1
 
-                    # If the literal field value doesn't match, this type is not a match
-                    if object_value is not None and field_default != object_value:
-                        literal_fields_match = False
-                        break
+                    if is_literal_type(field_type):  # type: ignore[arg-type]
+                        field_default = _get_field_default(field)
+                        object_value = _get_literal_field_value(inner_type, field_name, field, object_)
+                        if object_value is not None and field_default != object_value:
+                            literal_fields_match = False
+                            break
 
-            # If all literal fields match, try to construct this type
-            if literal_fields_match:
-                try:
-                    return construct_type(object_=object_, type_=inner_type)
-                except Exception:
+                if not literal_fields_match:
                     continue
 
-    # Second pass: if no literal matches, just return the first successful cast
+            try:
+                return construct_type(object_=object_, type_=inner_type)
+            except Exception:
+                continue
+
+    # Second pass: if no literal matches, just return the first successful cast.
+    # When a Literal discriminant is present, skip Pydantic models whose
+    # discriminant doesn't match so that the plain-dict fallback type is reached.
     for inner_type in inner_types:
         try:
+            if has_literal_discriminant and inspect.isclass(inner_type) and issubclass(inner_type, pydantic.BaseModel):
+                if not _literal_fields_match_strict(inner_type, object_):
+                    continue
             return construct_type(object_=object_, type_=inner_type)
         except Exception:
             continue
