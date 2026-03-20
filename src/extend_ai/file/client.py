@@ -184,7 +184,13 @@ class FileClient:
         _response = self._raw_client.delete(id, request_options=request_options)
         return _response.data
 
-    def upload(self, *, file: core.File, request_options: typing.Optional[RequestOptions] = None) -> FileUploadResponse:
+    def upload(
+        self,
+        *,
+        file: core.File,
+        convert_to_pdf: typing.Optional[bool] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> FileUploadResponse:
         """
         Upload and create a new file in Extend.
 
@@ -192,7 +198,7 @@ class FileClient:
 
         If an uploaded file is detected as a Word or PowerPoint document, it will be automatically converted to a PDF.
 
-        Supported file types can be found [here](/product/general/supported-file-types).
+        Supported file types can be found [here](https://docs.extend.ai/2025-04-21/product/general/supported-file-types).
 
         This endpoint requires multipart form encoding. Most HTTP clients will handle this encoding automatically (see the examples).
 
@@ -200,6 +206,9 @@ class FileClient:
         ----------
         file : core.File
             See core.File for more documentation
+
+        convert_to_pdf : typing.Optional[bool]
+            When true, converts the uploaded file to PDF. Supported file types include images (JPEG, PNG, TIFF, GIF, BMP, WebP, HEIC/HEIF), Word documents, PowerPoint, Excel, and HTML.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -216,9 +225,11 @@ class FileClient:
         client = Extend(
             token="YOUR_TOKEN",
         )
-        client.file.upload()
+        client.file.upload(
+            convert_to_pdf=True,
+        )
         """
-        _response = self._raw_client.upload(file=file, request_options=request_options)
+        _response = self._raw_client.upload(file=file, convert_to_pdf=convert_to_pdf, request_options=request_options)
         return _response.data
 
 
@@ -413,7 +424,11 @@ class AsyncFileClient:
         return _response.data
 
     async def upload(
-        self, *, file: core.File, request_options: typing.Optional[RequestOptions] = None
+        self,
+        *,
+        file: core.File,
+        convert_to_pdf: typing.Optional[bool] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> FileUploadResponse:
         """
         Upload and create a new file in Extend.
@@ -422,7 +437,7 @@ class AsyncFileClient:
 
         If an uploaded file is detected as a Word or PowerPoint document, it will be automatically converted to a PDF.
 
-        Supported file types can be found [here](/product/general/supported-file-types).
+        Supported file types can be found [here](https://docs.extend.ai/2025-04-21/product/general/supported-file-types).
 
         This endpoint requires multipart form encoding. Most HTTP clients will handle this encoding automatically (see the examples).
 
@@ -430,6 +445,9 @@ class AsyncFileClient:
         ----------
         file : core.File
             See core.File for more documentation
+
+        convert_to_pdf : typing.Optional[bool]
+            When true, converts the uploaded file to PDF. Supported file types include images (JPEG, PNG, TIFF, GIF, BMP, WebP, HEIC/HEIF), Word documents, PowerPoint, Excel, and HTML.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -451,10 +469,14 @@ class AsyncFileClient:
 
 
         async def main() -> None:
-            await client.file.upload()
+            await client.file.upload(
+                convert_to_pdf=True,
+            )
 
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.upload(file=file, request_options=request_options)
+        _response = await self._raw_client.upload(
+            file=file, convert_to_pdf=convert_to_pdf, request_options=request_options
+        )
         return _response.data

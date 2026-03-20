@@ -109,7 +109,7 @@ class ExtractionAdvancedOptions(UncheckedBaseModel):
         pydantic.Field(alias="fixedPageLimit", default=None)
     )
     """
-    DEPRECATED - See [Page Ranges](/product/page-ranges).
+    DEPRECATED - See [Page Ranges](https://docs.extend.ai/2025-04-21/product/page-ranges).
     """
 
     page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = (
