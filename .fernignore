@@ -1,4 +1,4 @@
-# Specify files that shouldn't be modified by Fern
+# Files that Fern should NOT overwrite during SDK generation.
 
 README.md
 uv.lock
@@ -8,8 +8,11 @@ uv.lock
 .github/workflows/ci.yml
 .github/workflows/publish.yml
 
-# Protect patched core files
+# Patched core files — these contain bug fixes not yet in the upstream Fern generator.
+# See the "Custom Patches" section in README.md for details.
+# If you patch another Fern-generated file, add it here AND on the v0.x branch if relevant.
 src/extend_ai/core/serialization.py
+src/extend_ai/core/unchecked_base_model.py
 
 # Protect custom wrapper code
 src/extend_ai/wrapper/

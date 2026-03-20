@@ -367,6 +367,24 @@ Full API reference documentation is available at [docs.extend.ai](https://docs.e
 
 A complete SDK reference is available in [reference.md](./reference.md).
 
+## Custom patches
+
+This SDK includes patches to Fern-generated core files that fix bugs not yet addressed upstream. These files are listed in [`.fernignore`](.fernignore) so Fern does not overwrite them during generation.
+
+| File | What it fixes |
+|---|---|
+| `src/extend_ai/core/serialization.py` | Circular TypedDict alias resolution on Python 3.10+ (field aliases like `extend_edit:bbox` were sent with underscores) |
+| `src/extend_ai/core/unchecked_base_model.py` | ForwardRef resolution for `Chunk.blocks`, strict union discriminant matching for `BlockDetails`, enum serialization warnings |
+
+Each patch has regression tests in `tests/custom/`. If a Fern update accidentally overwrites a patched file, CI will fail.
+
+### Maintaining patches
+
+1. Make your fix on a branch, add regression tests in `tests/custom/`
+2. Add the patched file to `.fernignore` if not already listed
+3. If the fix applies to the v0 API, cherry-pick it onto the `v0.x` branch and update `.fernignore` there too
+4. Note: `.fernignore` means Fern won't auto-update the file — if Fern releases upstream improvements, merge them manually
+
 ## Contributing
 
 While we value open-source contributions to this SDK, this library is generated programmatically. Additions made directly to this library would have to be moved over to our generation code, otherwise they would be overwritten upon the next generated release. Feel free to open a PR as a proof of concept, but know that we will not be able to merge it as-is. We suggest opening an issue first to discuss with us!
