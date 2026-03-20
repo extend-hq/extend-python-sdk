@@ -908,6 +908,14 @@ core.File` — See core.File for more documentation
 <dl>
 <dd>
 
+**convert_to_pdf:** `typing.Optional[bool]` — When true, converts the uploaded file to PDF. Supported file types include images (JPEG, PNG, TIFF, GIF, BMP, WebP, HEIC/HEIF), Word documents, PowerPoint, Excel, and HTML.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>

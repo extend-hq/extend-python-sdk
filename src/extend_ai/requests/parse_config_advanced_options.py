@@ -37,6 +37,20 @@ class ParseConfigAdvancedOptionsParams(typing_extensions.TypedDict):
     Whether to exclude hidden rows, columns, and sheets when parsing Excel files.
     """
 
+    excel_use_raw_cell_values: typing_extensions.NotRequired[
+        typing_extensions.Annotated[bool, FieldMetadata(alias="excelUseRawCellValues")]
+    ]
+    """
+    Whether to return raw calculated cell values instead of locale-formatted values when parsing Excel files. Useful when downstream processing needs the underlying numeric or unformatted data.
+    """
+
+    excel_skip_calculation: typing_extensions.NotRequired[
+        typing_extensions.Annotated[bool, FieldMetadata(alias="excelSkipCalculation")]
+    ]
+    """
+    Whether to skip formula recalculation when opening Excel workbooks. Significantly improves parsing speed for formula-heavy spreadsheets. Disable if cell values depend on volatile functions like NOW() or TODAY().
+    """
+
     vertical_grouping_threshold: typing_extensions.NotRequired[
         typing_extensions.Annotated[float, FieldMetadata(alias="verticalGroupingThreshold")]
     ]
@@ -49,4 +63,11 @@ class ParseConfigAdvancedOptionsParams(typing_extensions.TypedDict):
     ]
     """
     Options for returning raw OCR data in the response.
+    """
+
+    always_convert_to_pdf: typing_extensions.NotRequired[
+        typing_extensions.Annotated[bool, FieldMetadata(alias="alwaysConvertToPdf")]
+    ]
+    """
+    Whether to convert supported file types (images, Word documents, PowerPoint, Excel, HTML) to PDF before parsing. This can improve parsing quality for some file types and ensures spatial output with bounding boxes.
     """

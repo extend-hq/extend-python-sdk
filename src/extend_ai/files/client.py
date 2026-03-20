@@ -182,7 +182,13 @@ class FilesClient:
         _response = self._raw_client.delete(id, request_options=request_options)
         return _response.data
 
-    def upload(self, *, file: core.File, request_options: typing.Optional[RequestOptions] = None) -> File:
+    def upload(
+        self,
+        *,
+        file: core.File,
+        convert_to_pdf: typing.Optional[bool] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> File:
         """
         Upload and create a new file in Extend.
 
@@ -198,6 +204,9 @@ class FilesClient:
         ----------
         file : core.File
             See core.File for more documentation
+
+        convert_to_pdf : typing.Optional[bool]
+            When true, converts the uploaded file to PDF. Supported file types include images (JPEG, PNG, TIFF, GIF, BMP, WebP, HEIC/HEIF), Word documents, PowerPoint, Excel, and HTML.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -216,7 +225,7 @@ class FilesClient:
         )
         client.files.upload()
         """
-        _response = self._raw_client.upload(file=file, request_options=request_options)
+        _response = self._raw_client.upload(file=file, convert_to_pdf=convert_to_pdf, request_options=request_options)
         return _response.data
 
 
@@ -409,7 +418,13 @@ class AsyncFilesClient:
         _response = await self._raw_client.delete(id, request_options=request_options)
         return _response.data
 
-    async def upload(self, *, file: core.File, request_options: typing.Optional[RequestOptions] = None) -> File:
+    async def upload(
+        self,
+        *,
+        file: core.File,
+        convert_to_pdf: typing.Optional[bool] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> File:
         """
         Upload and create a new file in Extend.
 
@@ -425,6 +440,9 @@ class AsyncFilesClient:
         ----------
         file : core.File
             See core.File for more documentation
+
+        convert_to_pdf : typing.Optional[bool]
+            When true, converts the uploaded file to PDF. Supported file types include images (JPEG, PNG, TIFF, GIF, BMP, WebP, HEIC/HEIF), Word documents, PowerPoint, Excel, and HTML.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -451,5 +469,7 @@ class AsyncFilesClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.upload(file=file, request_options=request_options)
+        _response = await self._raw_client.upload(
+            file=file, convert_to_pdf=convert_to_pdf, request_options=request_options
+        )
         return _response.data
