@@ -483,7 +483,13 @@ class RawFilesClient:
             status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
         )
 
-    def upload(self, *, file: core.File, request_options: typing.Optional[RequestOptions] = None) -> HttpResponse[File]:
+    def upload(
+        self,
+        *,
+        file: core.File,
+        convert_to_pdf: typing.Optional[bool] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[File]:
         """
         Upload and create a new file in Extend.
 
@@ -500,6 +506,9 @@ class RawFilesClient:
         file : core.File
             See core.File for more documentation
 
+        convert_to_pdf : typing.Optional[bool]
+            When true, converts the uploaded file to PDF. Supported file types include images (JPEG, PNG, TIFF, GIF, BMP, WebP, HEIC/HEIF), Word documents, PowerPoint, Excel, and HTML.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -511,6 +520,9 @@ class RawFilesClient:
         _response = self._client_wrapper.httpx_client.request(
             "files/upload",
             method="POST",
+            params={
+                "convertToPdf": convert_to_pdf,
+            },
             data={},
             files={
                 "file": file,
@@ -1081,7 +1093,11 @@ class AsyncRawFilesClient:
         )
 
     async def upload(
-        self, *, file: core.File, request_options: typing.Optional[RequestOptions] = None
+        self,
+        *,
+        file: core.File,
+        convert_to_pdf: typing.Optional[bool] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[File]:
         """
         Upload and create a new file in Extend.
@@ -1099,6 +1115,9 @@ class AsyncRawFilesClient:
         file : core.File
             See core.File for more documentation
 
+        convert_to_pdf : typing.Optional[bool]
+            When true, converts the uploaded file to PDF. Supported file types include images (JPEG, PNG, TIFF, GIF, BMP, WebP, HEIC/HEIF), Word documents, PowerPoint, Excel, and HTML.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -1110,6 +1129,9 @@ class AsyncRawFilesClient:
         _response = await self._client_wrapper.httpx_client.request(
             "files/upload",
             method="POST",
+            params={
+                "convertToPdf": convert_to_pdf,
+            },
             data={},
             files={
                 "file": file,

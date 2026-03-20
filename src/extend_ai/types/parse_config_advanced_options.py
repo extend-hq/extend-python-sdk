@@ -42,6 +42,20 @@ class ParseConfigAdvancedOptions(UncheckedBaseModel):
     Whether to exclude hidden rows, columns, and sheets when parsing Excel files.
     """
 
+    excel_use_raw_cell_values: typing_extensions.Annotated[
+        typing.Optional[bool], FieldMetadata(alias="excelUseRawCellValues")
+    ] = pydantic.Field(alias="excelUseRawCellValues", default=None)
+    """
+    Whether to return raw calculated cell values instead of locale-formatted values when parsing Excel files. Useful when downstream processing needs the underlying numeric or unformatted data.
+    """
+
+    excel_skip_calculation: typing_extensions.Annotated[
+        typing.Optional[bool], FieldMetadata(alias="excelSkipCalculation")
+    ] = pydantic.Field(alias="excelSkipCalculation", default=None)
+    """
+    Whether to skip formula recalculation when opening Excel workbooks. Significantly improves parsing speed for formula-heavy spreadsheets. Disable if cell values depend on volatile functions like NOW() or TODAY().
+    """
+
     vertical_grouping_threshold: typing_extensions.Annotated[
         typing.Optional[float], FieldMetadata(alias="verticalGroupingThreshold")
     ] = pydantic.Field(alias="verticalGroupingThreshold", default=None)
@@ -54,6 +68,13 @@ class ParseConfigAdvancedOptions(UncheckedBaseModel):
     ] = pydantic.Field(alias="returnOcr", default=None)
     """
     Options for returning raw OCR data in the response.
+    """
+
+    always_convert_to_pdf: typing_extensions.Annotated[
+        typing.Optional[bool], FieldMetadata(alias="alwaysConvertToPdf")
+    ] = pydantic.Field(alias="alwaysConvertToPdf", default=None)
+    """
+    Whether to convert supported file types (images, Word documents, PowerPoint, Excel, HTML) to PDF before parsing. This can improve parsing quality for some file types and ensures spatial output with bounding boxes.
     """
 
     if IS_PYDANTIC_V2:
