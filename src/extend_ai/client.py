@@ -141,7 +141,7 @@ class Extend:
 
         The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
 
-        For more details, see the [Parse File guide](/product/parsing/parse).
+        For more details, see the [Parse File guide](https://docs.extend.ai/2025-04-21/product/parsing/parse).
 
         Parameters
         ----------
@@ -198,7 +198,7 @@ class Extend:
         * Large files that may take longer to process
         * Avoiding timeout issues with synchronous parsing.
 
-        For more details, see the [Parse File guide](/product/parsing/parse).
+        For more details, see the [Parse File guide](https://docs.extend.ai/2025-04-21/product/parsing/parse).
 
         Parameters
         ----------
@@ -441,7 +441,7 @@ class AsyncExtend:
 
         The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
 
-        For more details, see the [Parse File guide](/product/parsing/parse).
+        For more details, see the [Parse File guide](https://docs.extend.ai/2025-04-21/product/parsing/parse).
 
         Parameters
         ----------
@@ -506,7 +506,7 @@ class AsyncExtend:
         * Large files that may take longer to process
         * Avoiding timeout issues with synchronous parsing.
 
-        For more details, see the [Parse File guide](/product/parsing/parse).
+        For more details, see the [Parse File guide](https://docs.extend.ai/2025-04-21/product/parsing/parse).
 
         Parameters
         ----------

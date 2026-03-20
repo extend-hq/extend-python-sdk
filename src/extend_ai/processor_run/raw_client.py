@@ -121,7 +121,7 @@ class RawProcessorRunClient:
         HttpResponse[ProcessorRunListResponse]
             You will get a list of summaries for each processor run. These are shortened versions of the full ProcessorRun object.
 
-            To get the full object, use the [Get ProcessorRun](/developers/api-reference/processor-endpoints/get-processor-run) endpoint.
+            To get the full object, use the [Get ProcessorRun](https://docs.extend.ai/2025-04-21/developers/api-reference/processor-endpoints/get-processor-run) endpoint.
         """
         _response = self._client_wrapper.httpx_client.request(
             "processor_runs",
@@ -212,7 +212,7 @@ class RawProcessorRunClient:
             - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
 
         file : typing.Optional[ProcessorRunFileInput]
-            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/general/supported-file-types).
+            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/product/general/supported-file-types).
 
         raw_text : typing.Optional[str]
             A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
@@ -625,7 +625,7 @@ class AsyncRawProcessorRunClient:
         AsyncHttpResponse[ProcessorRunListResponse]
             You will get a list of summaries for each processor run. These are shortened versions of the full ProcessorRun object.
 
-            To get the full object, use the [Get ProcessorRun](/developers/api-reference/processor-endpoints/get-processor-run) endpoint.
+            To get the full object, use the [Get ProcessorRun](https://docs.extend.ai/2025-04-21/developers/api-reference/processor-endpoints/get-processor-run) endpoint.
         """
         _response = await self._client_wrapper.httpx_client.request(
             "processor_runs",
@@ -716,7 +716,7 @@ class AsyncRawProcessorRunClient:
             - Specific version numbers corresponding to versions your team has published, e.g. `"1.0"`, `"2.2"`, etc.
 
         file : typing.Optional[ProcessorRunFileInput]
-            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](/product/general/supported-file-types).
+            The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](https://docs.extend.ai/2025-04-21/product/general/supported-file-types).
 
         raw_text : typing.Optional[str]
             A raw string to be processed. Can be used in place of file when passing raw text data streams. One of `file` or `rawText` must be provided.
