@@ -176,6 +176,7 @@ if typing.TYPE_CHECKING:
     from .file_from_id import FileFromId
     from .file_from_text import FileFromText
     from .file_from_url import FileFromUrl
+    from .file_from_url_settings import FileFromUrlSettings
     from .file_metadata import FileMetadata
     from .file_summary import FileSummary
     from .file_type import FileType
@@ -591,6 +592,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "FileFromId": ".file_from_id",
     "FileFromText": ".file_from_text",
     "FileFromUrl": ".file_from_url",
+    "FileFromUrlSettings": ".file_from_url_settings",
     "FileMetadata": ".file_metadata",
     "FileSummary": ".file_summary",
     "FileType": ".file_type",
@@ -1016,6 +1018,7 @@ __all__ = [
     "FileFromId",
     "FileFromText",
     "FileFromUrl",
+    "FileFromUrlSettings",
     "FileMetadata",
     "FileSummary",
     "FileType",

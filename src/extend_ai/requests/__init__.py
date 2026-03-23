@@ -154,6 +154,7 @@ if typing.TYPE_CHECKING:
     from .file_from_id import FileFromIdParams
     from .file_from_text import FileFromTextParams
     from .file_from_url import FileFromUrlParams
+    from .file_from_url_settings import FileFromUrlSettingsParams
     from .file_metadata import FileMetadataParams
     from .file_summary import FileSummaryParams
     from .insight import InsightParams
@@ -482,6 +483,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "FileFromIdParams": ".file_from_id",
     "FileFromTextParams": ".file_from_text",
     "FileFromUrlParams": ".file_from_url",
+    "FileFromUrlSettingsParams": ".file_from_url_settings",
     "FileMetadataParams": ".file_metadata",
     "FileParams": ".file",
     "FileSummaryParams": ".file_summary",
@@ -827,6 +829,7 @@ __all__ = [
     "FileFromIdParams",
     "FileFromTextParams",
     "FileFromUrlParams",
+    "FileFromUrlSettingsParams",
     "FileMetadataParams",
     "FileParams",
     "FileSummaryParams",

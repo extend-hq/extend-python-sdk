@@ -187,6 +187,7 @@ class FilesClient:
         *,
         file: core.File,
         convert_to_pdf: typing.Optional[bool] = None,
+        password: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> File:
         """
@@ -208,6 +209,9 @@ class FilesClient:
         convert_to_pdf : typing.Optional[bool]
             When true, converts the uploaded file to PDF. Supported file types include images (JPEG, PNG, TIFF, GIF, BMP, WebP, HEIC/HEIF), Word documents, PowerPoint, Excel, and HTML.
 
+        password : typing.Optional[str]
+            The password to unlock a password-protected PDF.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -225,7 +229,9 @@ class FilesClient:
         )
         client.files.upload()
         """
-        _response = self._raw_client.upload(file=file, convert_to_pdf=convert_to_pdf, request_options=request_options)
+        _response = self._raw_client.upload(
+            file=file, convert_to_pdf=convert_to_pdf, password=password, request_options=request_options
+        )
         return _response.data
 
 
@@ -423,6 +429,7 @@ class AsyncFilesClient:
         *,
         file: core.File,
         convert_to_pdf: typing.Optional[bool] = None,
+        password: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> File:
         """
@@ -443,6 +450,9 @@ class AsyncFilesClient:
 
         convert_to_pdf : typing.Optional[bool]
             When true, converts the uploaded file to PDF. Supported file types include images (JPEG, PNG, TIFF, GIF, BMP, WebP, HEIC/HEIF), Word documents, PowerPoint, Excel, and HTML.
+
+        password : typing.Optional[str]
+            The password to unlock a password-protected PDF.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -470,6 +480,6 @@ class AsyncFilesClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.upload(
-            file=file, convert_to_pdf=convert_to_pdf, request_options=request_options
+            file=file, convert_to_pdf=convert_to_pdf, password=password, request_options=request_options
         )
         return _response.data

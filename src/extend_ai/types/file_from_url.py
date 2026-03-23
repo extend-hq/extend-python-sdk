@@ -5,6 +5,7 @@ import typing
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .file_from_url_settings import FileFromUrlSettings
 
 
 class FileFromUrl(UncheckedBaseModel):
@@ -18,6 +19,11 @@ class FileFromUrl(UncheckedBaseModel):
     name: typing.Optional[str] = pydantic.Field(default=None)
     """
     The name of the file. If not set, the file name is taken from the URL.
+    """
+
+    settings: typing.Optional[FileFromUrlSettings] = pydantic.Field(default=None)
+    """
+    Optional settings for the file, such as a password for password-protected PDFs.
     """
 
     if IS_PYDANTIC_V2:

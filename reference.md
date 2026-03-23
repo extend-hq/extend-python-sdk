@@ -916,6 +916,14 @@ core.File` — See core.File for more documentation
 <dl>
 <dd>
 
+**password:** `typing.Optional[str]` — The password to unlock a password-protected PDF.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>

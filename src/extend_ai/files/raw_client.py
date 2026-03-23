@@ -488,6 +488,7 @@ class RawFilesClient:
         *,
         file: core.File,
         convert_to_pdf: typing.Optional[bool] = None,
+        password: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[File]:
         """
@@ -509,6 +510,9 @@ class RawFilesClient:
         convert_to_pdf : typing.Optional[bool]
             When true, converts the uploaded file to PDF. Supported file types include images (JPEG, PNG, TIFF, GIF, BMP, WebP, HEIC/HEIF), Word documents, PowerPoint, Excel, and HTML.
 
+        password : typing.Optional[str]
+            The password to unlock a password-protected PDF.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -523,7 +527,9 @@ class RawFilesClient:
             params={
                 "convertToPdf": convert_to_pdf,
             },
-            data={},
+            data={
+                "password": password,
+            },
             files={
                 "file": file,
             },
@@ -1097,6 +1103,7 @@ class AsyncRawFilesClient:
         *,
         file: core.File,
         convert_to_pdf: typing.Optional[bool] = None,
+        password: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[File]:
         """
@@ -1118,6 +1125,9 @@ class AsyncRawFilesClient:
         convert_to_pdf : typing.Optional[bool]
             When true, converts the uploaded file to PDF. Supported file types include images (JPEG, PNG, TIFF, GIF, BMP, WebP, HEIC/HEIF), Word documents, PowerPoint, Excel, and HTML.
 
+        password : typing.Optional[str]
+            The password to unlock a password-protected PDF.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -1132,7 +1142,9 @@ class AsyncRawFilesClient:
             params={
                 "convertToPdf": convert_to_pdf,
             },
-            data={},
+            data={
+                "password": password,
+            },
             files={
                 "file": file,
             },
