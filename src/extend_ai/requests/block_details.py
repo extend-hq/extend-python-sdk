@@ -3,8 +3,17 @@
 import typing
 
 from ..types.empty_block_details import EmptyBlockDetails
+from .barcode_details import BarcodeDetailsParams
 from .figure_details import FigureDetailsParams
+from .key_value_details import KeyValueDetailsParams
 from .table_cell_details import TableCellDetailsParams
 from .table_details import TableDetailsParams
 
-BlockDetailsParams = typing.Union[TableDetailsParams, TableCellDetailsParams, FigureDetailsParams, EmptyBlockDetails]
+BlockDetailsParams = typing.Union[
+    TableDetailsParams,
+    TableCellDetailsParams,
+    FigureDetailsParams,
+    BarcodeDetailsParams,
+    KeyValueDetailsParams,
+    EmptyBlockDetails,
+]

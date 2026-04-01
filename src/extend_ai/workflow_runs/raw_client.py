@@ -55,6 +55,7 @@ class RawWorkflowRunsClient:
         sort_dir: typing.Optional[SortDir] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[WorkflowRunsListResponse]:
         """
@@ -87,6 +88,9 @@ class RawWorkflowRunsClient:
 
         max_page_size : typing.Optional[MaxPageSize]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -109,6 +113,9 @@ class RawWorkflowRunsClient:
                 "sortDir": sort_dir,
                 "nextPageToken": next_page_token,
                 "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
         )
@@ -392,7 +399,11 @@ class RawWorkflowRunsClient:
         )
 
     def retrieve(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[WorkflowRun]:
         """
         Once a workflow has been run, you can check the status and output of a specific WorkflowRun.
@@ -403,6 +414,9 @@ class RawWorkflowRunsClient:
             The ID of the workflow run.
 
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -415,6 +429,9 @@ class RawWorkflowRunsClient:
         _response = self._client_wrapper.httpx_client.request(
             f"workflow_runs/{jsonable_encoder(id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -528,6 +545,7 @@ class RawWorkflowRunsClient:
         self,
         id: str,
         *,
+        extend_workspace_id: typing.Optional[str] = None,
         name: typing.Optional[str] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -541,6 +559,9 @@ class RawWorkflowRunsClient:
             The ID of the workflow run.
 
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             An optional name that can be assigned to a specific WorkflowRun
@@ -569,6 +590,7 @@ class RawWorkflowRunsClient:
             },
             headers={
                 "content-type": "application/json",
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
             omit=OMIT,
@@ -681,7 +703,11 @@ class RawWorkflowRunsClient:
         )
 
     def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[WorkflowRunsDeleteResponse]:
         """
         Delete a workflow run and all associated data from Extend. This operation is permanent and cannot be undone.
@@ -695,6 +721,9 @@ class RawWorkflowRunsClient:
 
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -706,6 +735,9 @@ class RawWorkflowRunsClient:
         _response = self._client_wrapper.httpx_client.request(
             f"workflow_runs/{jsonable_encoder(id)}",
             method="DELETE",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -815,7 +847,13 @@ class RawWorkflowRunsClient:
             status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
         )
 
-    def cancel(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> HttpResponse[WorkflowRun]:
+    def cancel(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[WorkflowRun]:
         """
         Cancel a running workflow run by its ID. This endpoint allows you to stop a workflow run that is currently in progress.
 
@@ -828,6 +866,9 @@ class RawWorkflowRunsClient:
 
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -839,6 +880,9 @@ class RawWorkflowRunsClient:
         _response = self._client_wrapper.httpx_client.request(
             f"workflow_runs/{jsonable_encoder(id)}/cancel",
             method="POST",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -1127,6 +1171,7 @@ class AsyncRawWorkflowRunsClient:
         sort_dir: typing.Optional[SortDir] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[WorkflowRunsListResponse]:
         """
@@ -1159,6 +1204,9 @@ class AsyncRawWorkflowRunsClient:
 
         max_page_size : typing.Optional[MaxPageSize]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -1181,6 +1229,9 @@ class AsyncRawWorkflowRunsClient:
                 "sortDir": sort_dir,
                 "nextPageToken": next_page_token,
                 "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
         )
@@ -1464,7 +1515,11 @@ class AsyncRawWorkflowRunsClient:
         )
 
     async def retrieve(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[WorkflowRun]:
         """
         Once a workflow has been run, you can check the status and output of a specific WorkflowRun.
@@ -1475,6 +1530,9 @@ class AsyncRawWorkflowRunsClient:
             The ID of the workflow run.
 
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1487,6 +1545,9 @@ class AsyncRawWorkflowRunsClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"workflow_runs/{jsonable_encoder(id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -1600,6 +1661,7 @@ class AsyncRawWorkflowRunsClient:
         self,
         id: str,
         *,
+        extend_workspace_id: typing.Optional[str] = None,
         name: typing.Optional[str] = OMIT,
         metadata: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -1613,6 +1675,9 @@ class AsyncRawWorkflowRunsClient:
             The ID of the workflow run.
 
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             An optional name that can be assigned to a specific WorkflowRun
@@ -1641,6 +1706,7 @@ class AsyncRawWorkflowRunsClient:
             },
             headers={
                 "content-type": "application/json",
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
             omit=OMIT,
@@ -1753,7 +1819,11 @@ class AsyncRawWorkflowRunsClient:
         )
 
     async def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[WorkflowRunsDeleteResponse]:
         """
         Delete a workflow run and all associated data from Extend. This operation is permanent and cannot be undone.
@@ -1767,6 +1837,9 @@ class AsyncRawWorkflowRunsClient:
 
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -1778,6 +1851,9 @@ class AsyncRawWorkflowRunsClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"workflow_runs/{jsonable_encoder(id)}",
             method="DELETE",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -1888,7 +1964,11 @@ class AsyncRawWorkflowRunsClient:
         )
 
     async def cancel(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[WorkflowRun]:
         """
         Cancel a running workflow run by its ID. This endpoint allows you to stop a workflow run that is currently in progress.
@@ -1902,6 +1982,9 @@ class AsyncRawWorkflowRunsClient:
 
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -1913,6 +1996,9 @@ class AsyncRawWorkflowRunsClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"workflow_runs/{jsonable_encoder(id)}/cancel",
             method="POST",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:

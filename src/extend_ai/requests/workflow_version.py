@@ -3,31 +3,39 @@
 import typing
 
 import typing_extensions
+from ..core.serialization import FieldMetadata
+from ..types.created_at import CreatedAt
+from .workflow_step_definition import WorkflowStepDefinitionParams
 
 
 class WorkflowVersionParams(typing_extensions.TypedDict):
+    """
+    A workflow version with its step definitions.
+    """
+
     object: typing.Literal["workflow_version"]
     """
-    The type of object. In this case, it will always be `"workflow_version"`.
+    The type of object. Always `"workflow_version"`.
     """
 
     id: str
     """
     The ID of the workflow version.
-    
-    Example: `"workflow_version_Zk9mNP12Qw4-yTv8BdR3H"`
     """
 
     version: str
     """
-    The version of the workflow version.
-    
-    Example: `"3"`
+    The version number as a string, or `"draft"` for the draft version.
     """
 
     name: typing.Optional[str]
     """
     The name of the workflow version.
-    
-    Example: `"Invoice Processing"`
     """
+
+    steps: typing.Sequence[WorkflowStepDefinitionParams]
+    """
+    The step definitions for this version.
+    """
+
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]

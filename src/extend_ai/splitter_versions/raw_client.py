@@ -43,6 +43,7 @@ class RawSplitterVersionsClient:
         sort_dir: typing.Optional[SortDir] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[SplitterVersionsListResponse]:
         """
@@ -63,6 +64,9 @@ class RawSplitterVersionsClient:
 
         max_page_size : typing.Optional[MaxPageSize]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -78,6 +82,9 @@ class RawSplitterVersionsClient:
                 "sortDir": sort_dir,
                 "nextPageToken": next_page_token,
                 "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
         )
@@ -193,6 +200,7 @@ class RawSplitterVersionsClient:
         splitter_id: str,
         *,
         release_type: ReleaseType,
+        extend_workspace_id: typing.Optional[str] = None,
         description: typing.Optional[VersionDescription] = OMIT,
         config: typing.Optional[SplitConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -210,6 +218,9 @@ class RawSplitterVersionsClient:
             Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
 
         release_type : ReleaseType
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         description : typing.Optional[VersionDescription]
 
@@ -236,6 +247,7 @@ class RawSplitterVersionsClient:
             },
             headers={
                 "content-type": "application/json",
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
             omit=OMIT,
@@ -348,7 +360,12 @@ class RawSplitterVersionsClient:
         )
 
     def retrieve(
-        self, splitter_id: str, version_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        splitter_id: str,
+        version_id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[SplitterVersion]:
         """
         Retrieve a specific version of a splitter in Extend
@@ -365,6 +382,9 @@ class RawSplitterVersionsClient:
 
             Example: `"splv_QYk6jgHA_8CsO8rVWhyNC"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -376,6 +396,9 @@ class RawSplitterVersionsClient:
         _response = self._client_wrapper.httpx_client.request(
             f"splitters/{jsonable_encoder(splitter_id)}/versions/{jsonable_encoder(version_id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -497,6 +520,7 @@ class AsyncRawSplitterVersionsClient:
         sort_dir: typing.Optional[SortDir] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[SplitterVersionsListResponse]:
         """
@@ -517,6 +541,9 @@ class AsyncRawSplitterVersionsClient:
 
         max_page_size : typing.Optional[MaxPageSize]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -532,6 +559,9 @@ class AsyncRawSplitterVersionsClient:
                 "sortDir": sort_dir,
                 "nextPageToken": next_page_token,
                 "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
         )
@@ -647,6 +677,7 @@ class AsyncRawSplitterVersionsClient:
         splitter_id: str,
         *,
         release_type: ReleaseType,
+        extend_workspace_id: typing.Optional[str] = None,
         description: typing.Optional[VersionDescription] = OMIT,
         config: typing.Optional[SplitConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -664,6 +695,9 @@ class AsyncRawSplitterVersionsClient:
             Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
 
         release_type : ReleaseType
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         description : typing.Optional[VersionDescription]
 
@@ -690,6 +724,7 @@ class AsyncRawSplitterVersionsClient:
             },
             headers={
                 "content-type": "application/json",
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
             omit=OMIT,
@@ -802,7 +837,12 @@ class AsyncRawSplitterVersionsClient:
         )
 
     async def retrieve(
-        self, splitter_id: str, version_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        splitter_id: str,
+        version_id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[SplitterVersion]:
         """
         Retrieve a specific version of a splitter in Extend
@@ -819,6 +859,9 @@ class AsyncRawSplitterVersionsClient:
 
             Example: `"splv_QYk6jgHA_8CsO8rVWhyNC"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -830,6 +873,9 @@ class AsyncRawSplitterVersionsClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"splitters/{jsonable_encoder(splitter_id)}/versions/{jsonable_encoder(version_id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:

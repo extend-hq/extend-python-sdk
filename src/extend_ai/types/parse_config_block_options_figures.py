@@ -26,6 +26,13 @@ class ParseConfigBlockOptionsFigures(UncheckedBaseModel):
     Whether to clip and extract images from figures.
     """
 
+    advanced_chart_extraction_enabled: typing_extensions.Annotated[
+        typing.Optional[bool], FieldMetadata(alias="advancedChartExtractionEnabled")
+    ] = pydantic.Field(alias="advancedChartExtractionEnabled", default=None)
+    """
+    Whether to enable advanced chart extraction using vision models for improved data extraction from charts.
+    """
+
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
     else:

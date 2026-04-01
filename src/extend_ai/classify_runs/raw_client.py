@@ -55,6 +55,7 @@ class RawClassifyRunsClient:
         sort_dir: typing.Optional[SortDir] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ClassifyRunsListResponse]:
         """
@@ -90,6 +91,9 @@ class RawClassifyRunsClient:
 
         max_page_size : typing.Optional[MaxPageSize]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -113,6 +117,9 @@ class RawClassifyRunsClient:
                 "sortDir": sort_dir,
                 "nextPageToken": next_page_token,
                 "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
         )
@@ -391,7 +398,11 @@ class RawClassifyRunsClient:
         )
 
     def retrieve(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ClassifyRun]:
         """
         Retrieve details about a specific classify run, including its status and outputs.
@@ -405,6 +416,9 @@ class RawClassifyRunsClient:
 
             Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -416,6 +430,9 @@ class RawClassifyRunsClient:
         _response = self._client_wrapper.httpx_client.request(
             f"classify_runs/{jsonable_encoder(id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -526,7 +543,11 @@ class RawClassifyRunsClient:
         )
 
     def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ClassifyRunsDeleteResponse]:
         """
         Delete a classify run and all associated data from Extend. This operation is permanent and cannot be undone.
@@ -537,6 +558,9 @@ class RawClassifyRunsClient:
         ----------
         id : str
             The ID of the classify run.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -549,6 +573,9 @@ class RawClassifyRunsClient:
         _response = self._client_wrapper.httpx_client.request(
             f"classify_runs/{jsonable_encoder(id)}",
             method="DELETE",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -658,7 +685,13 @@ class RawClassifyRunsClient:
             status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
         )
 
-    def cancel(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> HttpResponse[ClassifyRun]:
+    def cancel(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[ClassifyRun]:
         """
         Cancel an in-progress classify run.
 
@@ -671,6 +704,9 @@ class RawClassifyRunsClient:
 
             Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -682,6 +718,9 @@ class RawClassifyRunsClient:
         _response = self._client_wrapper.httpx_client.request(
             f"classify_runs/{jsonable_encoder(id)}/cancel",
             method="POST",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -808,6 +847,7 @@ class AsyncRawClassifyRunsClient:
         sort_dir: typing.Optional[SortDir] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ClassifyRunsListResponse]:
         """
@@ -843,6 +883,9 @@ class AsyncRawClassifyRunsClient:
 
         max_page_size : typing.Optional[MaxPageSize]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -866,6 +909,9 @@ class AsyncRawClassifyRunsClient:
                 "sortDir": sort_dir,
                 "nextPageToken": next_page_token,
                 "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
         )
@@ -1144,7 +1190,11 @@ class AsyncRawClassifyRunsClient:
         )
 
     async def retrieve(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ClassifyRun]:
         """
         Retrieve details about a specific classify run, including its status and outputs.
@@ -1158,6 +1208,9 @@ class AsyncRawClassifyRunsClient:
 
             Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -1169,6 +1222,9 @@ class AsyncRawClassifyRunsClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"classify_runs/{jsonable_encoder(id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -1279,7 +1335,11 @@ class AsyncRawClassifyRunsClient:
         )
 
     async def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ClassifyRunsDeleteResponse]:
         """
         Delete a classify run and all associated data from Extend. This operation is permanent and cannot be undone.
@@ -1290,6 +1350,9 @@ class AsyncRawClassifyRunsClient:
         ----------
         id : str
             The ID of the classify run.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1302,6 +1365,9 @@ class AsyncRawClassifyRunsClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"classify_runs/{jsonable_encoder(id)}",
             method="DELETE",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -1412,7 +1478,11 @@ class AsyncRawClassifyRunsClient:
         )
 
     async def cancel(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ClassifyRun]:
         """
         Cancel an in-progress classify run.
@@ -1426,6 +1496,9 @@ class AsyncRawClassifyRunsClient:
 
             Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -1437,6 +1510,9 @@ class AsyncRawClassifyRunsClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"classify_runs/{jsonable_encoder(id)}/cancel",
             method="POST",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:

@@ -185,7 +185,13 @@ class RawEditRunsClient:
             status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
         )
 
-    def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> HttpResponse[EditRun]:
+    def retrieve(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[EditRun]:
         """
         Retrieve the status and results of an edit run.
 
@@ -198,6 +204,9 @@ class RawEditRunsClient:
 
             Example: `"edr_xK9mLPqRtN3vS8wF5hB2cQ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -209,6 +218,9 @@ class RawEditRunsClient:
         _response = self._client_wrapper.httpx_client.request(
             f"edit_runs/{jsonable_encoder(id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -319,7 +331,11 @@ class RawEditRunsClient:
         )
 
     def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[EditRunsDeleteResponse]:
         """
         Delete an edit run and all associated data from Extend. This operation is permanent and cannot be undone.
@@ -333,6 +349,9 @@ class RawEditRunsClient:
 
             Example: `"edr_xK9mLPqRtN3vS8wF5hB2cQ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -344,6 +363,9 @@ class RawEditRunsClient:
         _response = self._client_wrapper.httpx_client.request(
             f"edit_runs/{jsonable_encoder(id)}",
             method="DELETE",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -612,7 +634,11 @@ class AsyncRawEditRunsClient:
         )
 
     async def retrieve(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[EditRun]:
         """
         Retrieve the status and results of an edit run.
@@ -626,6 +652,9 @@ class AsyncRawEditRunsClient:
 
             Example: `"edr_xK9mLPqRtN3vS8wF5hB2cQ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -637,6 +666,9 @@ class AsyncRawEditRunsClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"edit_runs/{jsonable_encoder(id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -747,7 +779,11 @@ class AsyncRawEditRunsClient:
         )
 
     async def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[EditRunsDeleteResponse]:
         """
         Delete an edit run and all associated data from Extend. This operation is permanent and cannot be undone.
@@ -761,6 +797,9 @@ class AsyncRawEditRunsClient:
 
             Example: `"edr_xK9mLPqRtN3vS8wF5hB2cQ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -772,6 +811,9 @@ class AsyncRawEditRunsClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"edit_runs/{jsonable_encoder(id)}",
             method="DELETE",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:

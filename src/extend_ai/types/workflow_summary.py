@@ -3,29 +3,40 @@
 import typing
 
 import pydantic
+import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .created_at import CreatedAt
+from .updated_at import UpdatedAt
 
 
 class WorkflowSummary(UncheckedBaseModel):
+    """
+    A summary representation of a workflow.
+    """
+
     object: typing.Literal["workflow"] = pydantic.Field(default="workflow")
     """
-    The type of object. In this case, it will always be `"workflow"`.
+    The type of object. Always `"workflow"`.
     """
 
     id: str = pydantic.Field()
     """
     The ID of the workflow.
-    
-    Example: `"workflow_BMlfq_yWM3sT-ZzvCnA3f"`
     """
 
     name: str = pydantic.Field()
     """
     The name of the workflow.
-    
-    Example: `"Invoice Processing"`
     """
+
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
+    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")] = pydantic.Field(
+        alias="updatedAt"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -41,6 +41,7 @@ class WebhookSubscriptionsClient:
         sort_dir: typing.Optional[SortDir] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WebhookSubscriptionsListResponse:
         """
@@ -59,6 +60,9 @@ class WebhookSubscriptionsClient:
         next_page_token : typing.Optional[NextPageToken]
 
         max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -85,6 +89,7 @@ class WebhookSubscriptionsClient:
             sort_dir=sort_dir,
             next_page_token=next_page_token,
             max_page_size=max_page_size,
+            extend_workspace_id=extend_workspace_id,
             request_options=request_options,
         )
         return _response.data
@@ -156,7 +161,13 @@ class WebhookSubscriptionsClient:
         )
         return _response.data
 
-    def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> WebhookSubscription:
+    def retrieve(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> WebhookSubscription:
         """
         Retrieve a webhook subscription by ID.
 
@@ -166,6 +177,9 @@ class WebhookSubscriptionsClient:
             The ID of the webhook subscription.
 
             Example: `"whes_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -186,7 +200,9 @@ class WebhookSubscriptionsClient:
             id="webhook_subscription_id_here",
         )
         """
-        _response = self._raw_client.retrieve(id, request_options=request_options)
+        _response = self._raw_client.retrieve(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     def update(
@@ -194,6 +210,7 @@ class WebhookSubscriptionsClient:
         id: str,
         *,
         enabled_events: typing.Sequence[WebhookSubscriptionEventType],
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WebhookSubscription:
         """
@@ -208,6 +225,9 @@ class WebhookSubscriptionsClient:
 
         enabled_events : typing.Sequence[WebhookSubscriptionEventType]
             The event types to subscribe to. Must be valid for the subscription's resource type.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -229,11 +249,17 @@ class WebhookSubscriptionsClient:
             enabled_events=[WebhookSubscriptionEventType.EXTRACT_RUN_PROCESSED],
         )
         """
-        _response = self._raw_client.update(id, enabled_events=enabled_events, request_options=request_options)
+        _response = self._raw_client.update(
+            id, enabled_events=enabled_events, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> WebhookSubscriptionsDeleteResponse:
         """
         Delete a webhook subscription. This operation is permanent and cannot be undone.
@@ -244,6 +270,9 @@ class WebhookSubscriptionsClient:
             The ID of the webhook subscription to delete.
 
             Example: `"whes_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -264,7 +293,9 @@ class WebhookSubscriptionsClient:
             id="webhook_subscription_id_here",
         )
         """
-        _response = self._raw_client.delete(id, request_options=request_options)
+        _response = self._raw_client.delete(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
 
@@ -291,6 +322,7 @@ class AsyncWebhookSubscriptionsClient:
         sort_dir: typing.Optional[SortDir] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WebhookSubscriptionsListResponse:
         """
@@ -309,6 +341,9 @@ class AsyncWebhookSubscriptionsClient:
         next_page_token : typing.Optional[NextPageToken]
 
         max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -343,6 +378,7 @@ class AsyncWebhookSubscriptionsClient:
             sort_dir=sort_dir,
             next_page_token=next_page_token,
             max_page_size=max_page_size,
+            extend_workspace_id=extend_workspace_id,
             request_options=request_options,
         )
         return _response.data
@@ -423,7 +459,11 @@ class AsyncWebhookSubscriptionsClient:
         return _response.data
 
     async def retrieve(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> WebhookSubscription:
         """
         Retrieve a webhook subscription by ID.
@@ -434,6 +474,9 @@ class AsyncWebhookSubscriptionsClient:
             The ID of the webhook subscription.
 
             Example: `"whes_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -462,7 +505,9 @@ class AsyncWebhookSubscriptionsClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.retrieve(id, request_options=request_options)
+        _response = await self._raw_client.retrieve(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     async def update(
@@ -470,6 +515,7 @@ class AsyncWebhookSubscriptionsClient:
         id: str,
         *,
         enabled_events: typing.Sequence[WebhookSubscriptionEventType],
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WebhookSubscription:
         """
@@ -484,6 +530,9 @@ class AsyncWebhookSubscriptionsClient:
 
         enabled_events : typing.Sequence[WebhookSubscriptionEventType]
             The event types to subscribe to. Must be valid for the subscription's resource type.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -513,11 +562,17 @@ class AsyncWebhookSubscriptionsClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.update(id, enabled_events=enabled_events, request_options=request_options)
+        _response = await self._raw_client.update(
+            id, enabled_events=enabled_events, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     async def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> WebhookSubscriptionsDeleteResponse:
         """
         Delete a webhook subscription. This operation is permanent and cannot be undone.
@@ -528,6 +583,9 @@ class AsyncWebhookSubscriptionsClient:
             The ID of the webhook subscription to delete.
 
             Example: `"whes_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -556,5 +614,7 @@ class AsyncWebhookSubscriptionsClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.delete(id, request_options=request_options)
+        _response = await self._raw_client.delete(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data

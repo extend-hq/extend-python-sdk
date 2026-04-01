@@ -40,6 +40,7 @@ class ExtractorVersionsClient:
         sort_dir: typing.Optional[SortDir] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ExtractorVersionsListResponse:
         """
@@ -59,6 +60,9 @@ class ExtractorVersionsClient:
         next_page_token : typing.Optional[NextPageToken]
 
         max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -85,6 +89,7 @@ class ExtractorVersionsClient:
             sort_dir=sort_dir,
             next_page_token=next_page_token,
             max_page_size=max_page_size,
+            extend_workspace_id=extend_workspace_id,
             request_options=request_options,
         )
         return _response.data
@@ -94,6 +99,7 @@ class ExtractorVersionsClient:
         extractor_id: str,
         *,
         release_type: ReleaseType,
+        extend_workspace_id: typing.Optional[str] = None,
         description: typing.Optional[VersionDescription] = OMIT,
         config: typing.Optional[ExtractConfigJsonParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -111,6 +117,9 @@ class ExtractorVersionsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         release_type : ReleaseType
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         description : typing.Optional[VersionDescription]
 
@@ -141,6 +150,7 @@ class ExtractorVersionsClient:
         _response = self._raw_client.create(
             extractor_id,
             release_type=release_type,
+            extend_workspace_id=extend_workspace_id,
             description=description,
             config=config,
             request_options=request_options,
@@ -148,7 +158,12 @@ class ExtractorVersionsClient:
         return _response.data
 
     def retrieve(
-        self, extractor_id: str, version_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        extractor_id: str,
+        version_id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> ExtractorVersion:
         """
         Retrieve a specific version of an extractor in Extend
@@ -164,6 +179,9 @@ class ExtractorVersionsClient:
             The ID of the specific extractor version.
 
             Example: `"extv_QYk6jgHA_8CsO8rVWhyNC"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -185,7 +203,9 @@ class ExtractorVersionsClient:
             version_id="extractor_version_id_here",
         )
         """
-        _response = self._raw_client.retrieve(extractor_id, version_id, request_options=request_options)
+        _response = self._raw_client.retrieve(
+            extractor_id, version_id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
 
@@ -211,6 +231,7 @@ class AsyncExtractorVersionsClient:
         sort_dir: typing.Optional[SortDir] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ExtractorVersionsListResponse:
         """
@@ -230,6 +251,9 @@ class AsyncExtractorVersionsClient:
         next_page_token : typing.Optional[NextPageToken]
 
         max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -264,6 +288,7 @@ class AsyncExtractorVersionsClient:
             sort_dir=sort_dir,
             next_page_token=next_page_token,
             max_page_size=max_page_size,
+            extend_workspace_id=extend_workspace_id,
             request_options=request_options,
         )
         return _response.data
@@ -273,6 +298,7 @@ class AsyncExtractorVersionsClient:
         extractor_id: str,
         *,
         release_type: ReleaseType,
+        extend_workspace_id: typing.Optional[str] = None,
         description: typing.Optional[VersionDescription] = OMIT,
         config: typing.Optional[ExtractConfigJsonParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -290,6 +316,9 @@ class AsyncExtractorVersionsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         release_type : ReleaseType
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         description : typing.Optional[VersionDescription]
 
@@ -328,6 +357,7 @@ class AsyncExtractorVersionsClient:
         _response = await self._raw_client.create(
             extractor_id,
             release_type=release_type,
+            extend_workspace_id=extend_workspace_id,
             description=description,
             config=config,
             request_options=request_options,
@@ -335,7 +365,12 @@ class AsyncExtractorVersionsClient:
         return _response.data
 
     async def retrieve(
-        self, extractor_id: str, version_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        extractor_id: str,
+        version_id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> ExtractorVersion:
         """
         Retrieve a specific version of an extractor in Extend
@@ -351,6 +386,9 @@ class AsyncExtractorVersionsClient:
             The ID of the specific extractor version.
 
             Example: `"extv_QYk6jgHA_8CsO8rVWhyNC"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -380,5 +418,7 @@ class AsyncExtractorVersionsClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.retrieve(extractor_id, version_id, request_options=request_options)
+        _response = await self._raw_client.retrieve(
+            extractor_id, version_id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
