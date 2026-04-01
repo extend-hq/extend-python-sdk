@@ -26,7 +26,11 @@ class RawEvaluationSetRunsClient:
         self._client_wrapper = client_wrapper
 
     def retrieve(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[EvaluationSetRun]:
         """
         Get details of an evaluation set run.
@@ -37,6 +41,9 @@ class RawEvaluationSetRunsClient:
             The ID of the evaluation set run.
 
             Example: `"evr_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -49,6 +56,9 @@ class RawEvaluationSetRunsClient:
         _response = self._client_wrapper.httpx_client.request(
             f"evaluation_set_runs/{jsonable_encoder(id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -164,7 +174,11 @@ class AsyncRawEvaluationSetRunsClient:
         self._client_wrapper = client_wrapper
 
     async def retrieve(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[EvaluationSetRun]:
         """
         Get details of an evaluation set run.
@@ -175,6 +189,9 @@ class AsyncRawEvaluationSetRunsClient:
             The ID of the evaluation set run.
 
             Example: `"evr_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -187,6 +204,9 @@ class AsyncRawEvaluationSetRunsClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"evaluation_set_runs/{jsonable_encoder(id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:

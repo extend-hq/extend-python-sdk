@@ -40,6 +40,7 @@ class RawProcessorClient:
         max_page_size: typing.Optional[int] = None,
         sort_by: typing.Optional[ProcessorListRequestSortBy] = None,
         sort_dir: typing.Optional[ProcessorListRequestSortDir] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[LegacyListProcessorsResponse]:
         """
@@ -62,6 +63,9 @@ class RawProcessorClient:
         sort_dir : typing.Optional[ProcessorListRequestSortDir]
             Sort direction
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -79,6 +83,9 @@ class RawProcessorClient:
                 "maxPageSize": max_page_size,
                 "sortBy": sort_by,
                 "sortDir": sort_dir,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
         )
@@ -245,6 +252,7 @@ class RawProcessorClient:
         self,
         id: str,
         *,
+        extend_workspace_id: typing.Optional[str] = None,
         name: typing.Optional[str] = OMIT,
         config: typing.Optional[ProcessorUpdateRequestConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -258,6 +266,9 @@ class RawProcessorClient:
             The ID of the processor to update.
 
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             The new name for the processor
@@ -287,6 +298,7 @@ class RawProcessorClient:
             },
             headers={
                 "content-type": "application/json",
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
             omit=OMIT,
@@ -352,6 +364,7 @@ class AsyncRawProcessorClient:
         max_page_size: typing.Optional[int] = None,
         sort_by: typing.Optional[ProcessorListRequestSortBy] = None,
         sort_dir: typing.Optional[ProcessorListRequestSortDir] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[LegacyListProcessorsResponse]:
         """
@@ -374,6 +387,9 @@ class AsyncRawProcessorClient:
         sort_dir : typing.Optional[ProcessorListRequestSortDir]
             Sort direction
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -391,6 +407,9 @@ class AsyncRawProcessorClient:
                 "maxPageSize": max_page_size,
                 "sortBy": sort_by,
                 "sortDir": sort_dir,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
         )
@@ -557,6 +576,7 @@ class AsyncRawProcessorClient:
         self,
         id: str,
         *,
+        extend_workspace_id: typing.Optional[str] = None,
         name: typing.Optional[str] = OMIT,
         config: typing.Optional[ProcessorUpdateRequestConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -570,6 +590,9 @@ class AsyncRawProcessorClient:
             The ID of the processor to update.
 
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             The new name for the processor
@@ -599,6 +622,7 @@ class AsyncRawProcessorClient:
             },
             headers={
                 "content-type": "application/json",
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
             omit=OMIT,

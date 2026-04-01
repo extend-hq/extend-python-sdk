@@ -19,6 +19,8 @@ class WorkflowStepBase(UncheckedBaseModel):
 
     id: str = pydantic.Field()
     """
+    **Deprecated:** This ID is not consistent across workflow versions. This field will be removed in a future API version.
+    
     The ID of the workflow step.
     
     Example: `"step_xKm9pNv3qWsY_jL2tR5Dh"`

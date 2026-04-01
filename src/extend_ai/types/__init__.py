@@ -10,6 +10,7 @@ if typing.TYPE_CHECKING:
     from .api_version_enum import ApiVersionEnum
     from .array_strategy import ArrayStrategy
     from .array_strategy_type import ArrayStrategyType
+    from .barcode_details import BarcodeDetails
     from .batch_processor_run import BatchProcessorRun
     from .batch_processor_run_metrics import BatchProcessorRunMetrics
     from .batch_processor_run_options import BatchProcessorRunOptions
@@ -34,6 +35,7 @@ if typing.TYPE_CHECKING:
     from .block_details import BlockDetails
     from .block_metadata import BlockMetadata
     from .block_metadata_page import BlockMetadataPage
+    from .block_metadata_text_direction import BlockMetadataTextDirection
     from .block_polygon_item import BlockPolygonItem
     from .block_type import BlockType
     from .bounding_box import BoundingBox
@@ -44,11 +46,13 @@ if typing.TYPE_CHECKING:
     from .citation import Citation
     from .citation_page import CitationPage
     from .classification import Classification
+    from .classification_next_entry import ClassificationNextEntry
     from .classifications import Classifications
     from .classifier import Classifier
     from .classifier_created_webhook_event import ClassifierCreatedWebhookEvent
     from .classifier_deleted_webhook_event import ClassifierDeletedWebhookEvent
     from .classifier_draft_updated_webhook_event import ClassifierDraftUpdatedWebhookEvent
+    from .classifier_ref import ClassifierRef
     from .classifier_summary import ClassifierSummary
     from .classifier_updated_webhook_event import ClassifierUpdatedWebhookEvent
     from .classifier_version import ClassifierVersion
@@ -67,17 +71,38 @@ if typing.TYPE_CHECKING:
     from .classify_run_failed_webhook_event import ClassifyRunFailedWebhookEvent
     from .classify_run_processed_webhook_event import ClassifyRunProcessedWebhookEvent
     from .classify_run_summary import ClassifyRunSummary
+    from .classify_step_definition import ClassifyStepDefinition
+    from .classify_step_definition_config import ClassifyStepDefinitionConfig
     from .classify_step_run import ClassifyStepRun
     from .classify_step_run_step import ClassifyStepRunStep
+    from .collect_step_definition import CollectStepDefinition
     from .conditional_extract_result import ConditionalExtractResult
+    from .conditional_extract_step_definition import ConditionalExtractStepDefinition
+    from .conditional_extract_step_definition_config import ConditionalExtractStepDefinitionConfig
+    from .conditional_extract_step_definition_config_rules_item import ConditionalExtractStepDefinitionConfigRulesItem
     from .conditional_extract_step_run import ConditionalExtractStepRun
     from .conditional_extract_step_run_step import ConditionalExtractStepRunStep
+    from .conditional_next_entry import ConditionalNextEntry
+    from .conditional_step_definition import ConditionalStepDefinition
+    from .conditional_step_definition_config import ConditionalStepDefinitionConfig
+    from .conditional_step_definition_config_conditions_item import ConditionalStepDefinitionConfigConditionsItem
+    from .conditional_step_definition_config_conditions_item_operation import (
+        ConditionalStepDefinitionConfigConditionsItemOperation,
+    )
+    from .conditional_step_definition_config_conditions_item_type import (
+        ConditionalStepDefinitionConfigConditionsItemType,
+    )
     from .created_at import CreatedAt
     from .edit_bounding_box import EditBoundingBox
+    from .edit_conditional_clause import EditConditionalClause
+    from .edit_conditional_object_property import EditConditionalObjectProperty
+    from .edit_conditional_property import EditConditionalProperty
     from .edit_config import EditConfig
     from .edit_config_advanced_options import EditConfigAdvancedOptions
+    from .edit_dependent_required import EditDependentRequired
     from .edit_json import EditJson
     from .edit_json_extend_edit_field_type import EditJsonExtendEditFieldType
+    from .edit_json_extend_edit_image import EditJsonExtendEditImage
     from .edit_object_json import EditObjectJson
     from .edit_request_file import EditRequestFile
     from .edit_root_json import EditRootJson
@@ -88,6 +113,11 @@ if typing.TYPE_CHECKING:
     from .edit_run_output_edited_file import EditRunOutputEditedFile
     from .edit_run_processed_webhook_event import EditRunProcessedWebhookEvent
     from .edit_run_status import EditRunStatus
+    from .edit_schema_generation_config import EditSchemaGenerationConfig
+    from .edit_schema_generation_config_advanced_options import EditSchemaGenerationConfigAdvancedOptions
+    from .edit_schema_generation_mapping_match import EditSchemaGenerationMappingMatch
+    from .edit_schema_generation_mapping_result import EditSchemaGenerationMappingResult
+    from .edit_schema_generation_response import EditSchemaGenerationResponse
     from .edit_text_options import EditTextOptions
     from .empty_block_details import EmptyBlockDetails
     from .enum import Enum
@@ -119,6 +149,20 @@ if typing.TYPE_CHECKING:
     from .excel_sheet_range import ExcelSheetRange
     from .external_data_validation_result import ExternalDataValidationResult
     from .external_data_validation_result_response import ExternalDataValidationResultResponse
+    from .external_data_validation_step_definition import ExternalDataValidationStepDefinition
+    from .external_data_validation_step_definition_config import ExternalDataValidationStepDefinitionConfig
+    from .external_data_validation_step_definition_config_failure_behavior import (
+        ExternalDataValidationStepDefinitionConfigFailureBehavior,
+    )
+    from .external_data_validation_step_definition_config_request_options import (
+        ExternalDataValidationStepDefinitionConfigRequestOptions,
+    )
+    from .external_data_validation_step_definition_config_request_options_content_type import (
+        ExternalDataValidationStepDefinitionConfigRequestOptionsContentType,
+    )
+    from .external_data_validation_step_definition_config_request_options_method import (
+        ExternalDataValidationStepDefinitionConfigRequestOptionsMethod,
+    )
     from .external_data_validation_step_run import ExternalDataValidationStepRun
     from .external_data_validation_step_run_step import ExternalDataValidationStepRunStep
     from .extract_advanced_options import ExtractAdvancedOptions
@@ -149,6 +193,8 @@ if typing.TYPE_CHECKING:
     from .extract_run_failed_webhook_event import ExtractRunFailedWebhookEvent
     from .extract_run_processed_webhook_event import ExtractRunProcessedWebhookEvent
     from .extract_run_summary import ExtractRunSummary
+    from .extract_step_definition import ExtractStepDefinition
+    from .extract_step_definition_config import ExtractStepDefinitionConfig
     from .extract_step_run import ExtractStepRun
     from .extract_step_run_step import ExtractStepRunStep
     from .extraction_field import ExtractionField
@@ -161,6 +207,7 @@ if typing.TYPE_CHECKING:
     from .extractor_created_webhook_event import ExtractorCreatedWebhookEvent
     from .extractor_deleted_webhook_event import ExtractorDeletedWebhookEvent
     from .extractor_draft_updated_webhook_event import ExtractorDraftUpdatedWebhookEvent
+    from .extractor_ref import ExtractorRef
     from .extractor_summary import ExtractorSummary
     from .extractor_updated_webhook_event import ExtractorUpdatedWebhookEvent
     from .extractor_version import ExtractorVersion
@@ -173,6 +220,11 @@ if typing.TYPE_CHECKING:
     from .file_contents_pages_item import FileContentsPagesItem
     from .file_contents_sections_item import FileContentsSectionsItem
     from .file_contents_sheets_item import FileContentsSheetsItem
+    from .file_conversion_step_definition import FileConversionStepDefinition
+    from .file_conversion_step_definition_config import FileConversionStepDefinitionConfig
+    from .file_conversion_step_definition_config_failure_behavior import (
+        FileConversionStepDefinitionConfigFailureBehavior,
+    )
     from .file_from_id import FileFromId
     from .file_from_text import FileFromText
     from .file_from_url import FileFromUrl
@@ -180,8 +232,10 @@ if typing.TYPE_CHECKING:
     from .file_metadata import FileMetadata
     from .file_summary import FileSummary
     from .file_type import FileType
+    from .human_review_step_definition import HumanReviewStepDefinition
     from .insight import Insight
     from .json_object import JsonObject
+    from .key_value_details import KeyValueDetails
     from .legacy_batch_processor_run import LegacyBatchProcessorRun
     from .legacy_batch_processor_run_metrics import LegacyBatchProcessorRunMetrics
     from .legacy_batch_processor_run_options import LegacyBatchProcessorRunOptions
@@ -274,6 +328,9 @@ if typing.TYPE_CHECKING:
     from .max_page_size import MaxPageSize
     from .merge_extract_result import MergeExtractResult
     from .merge_extract_result_merged_extractors_item import MergeExtractResultMergedExtractorsItem
+    from .merge_extract_step_definition import MergeExtractStepDefinition
+    from .merge_extract_step_definition_config import MergeExtractStepDefinitionConfig
+    from .merge_extract_step_definition_config_merge_order import MergeExtractStepDefinitionConfigMergeOrder
     from .merge_extract_step_run import MergeExtractStepRun
     from .merge_extract_step_run_step import MergeExtractStepRunStep
     from .next_page_token import NextPageToken
@@ -282,10 +339,14 @@ if typing.TYPE_CHECKING:
     from .parent_split import ParentSplit
     from .parse_config import ParseConfig
     from .parse_config_advanced_options import ParseConfigAdvancedOptions
+    from .parse_config_advanced_options_enrichment_format import ParseConfigAdvancedOptionsEnrichmentFormat
     from .parse_config_advanced_options_excel_parsing_mode import ParseConfigAdvancedOptionsExcelParsingMode
+    from .parse_config_advanced_options_image_conversion_quality import ParseConfigAdvancedOptionsImageConversionQuality
     from .parse_config_advanced_options_return_ocr import ParseConfigAdvancedOptionsReturnOcr
     from .parse_config_block_options import ParseConfigBlockOptions
+    from .parse_config_block_options_barcodes import ParseConfigBlockOptionsBarcodes
     from .parse_config_block_options_figures import ParseConfigBlockOptionsFigures
+    from .parse_config_block_options_key_value import ParseConfigBlockOptionsKeyValue
     from .parse_config_block_options_tables import ParseConfigBlockOptionsTables
     from .parse_config_block_options_tables_agentic import ParseConfigBlockOptionsTablesAgentic
     from .parse_config_block_options_tables_target_format import ParseConfigBlockOptionsTablesTargetFormat
@@ -309,6 +370,8 @@ if typing.TYPE_CHECKING:
     from .parse_run_status import ParseRunStatus
     from .parse_run_status_enum import ParseRunStatusEnum
     from .parse_run_status_status import ParseRunStatusStatus
+    from .parse_step_definition import ParseStepDefinition
+    from .parse_step_definition_config import ParseStepDefinitionConfig
     from .parse_step_run import ParseStepRun
     from .parse_step_run_step import ParseStepRunStep
     from .polygon import Polygon
@@ -320,9 +383,14 @@ if typing.TYPE_CHECKING:
     from .provided_split_output import ProvidedSplitOutput
     from .provided_split_output_splits_item import ProvidedSplitOutputSplitsItem
     from .release_type import ReleaseType
+    from .rule_validation_next_entry import RuleValidationNextEntry
+    from .rule_validation_next_entry_result import RuleValidationNextEntryResult
     from .rule_validation_result import RuleValidationResult
     from .rule_validation_result_rules_item import RuleValidationResultRulesItem
     from .rule_validation_result_rules_item_failure_reason import RuleValidationResultRulesItemFailureReason
+    from .rule_validation_step_definition import RuleValidationStepDefinition
+    from .rule_validation_step_definition_config import RuleValidationStepDefinitionConfig
+    from .rule_validation_step_definition_config_rules_item import RuleValidationStepDefinitionConfigRulesItem
     from .rule_validation_step_run import RuleValidationStepRun
     from .rule_validation_step_run_step import RuleValidationStepRunStep
     from .run_metadata import RunMetadata
@@ -331,6 +399,7 @@ if typing.TYPE_CHECKING:
     from .run_source import RunSource
     from .run_source_id import RunSourceId
     from .run_usage import RunUsage
+    from .simple_next_entry import SimpleNextEntry
     from .sort_by import SortBy
     from .sort_dir import SortDir
     from .split_advanced_options import SplitAdvancedOptions
@@ -349,12 +418,15 @@ if typing.TYPE_CHECKING:
     from .split_run_failed_webhook_event import SplitRunFailedWebhookEvent
     from .split_run_processed_webhook_event import SplitRunProcessedWebhookEvent
     from .split_run_summary import SplitRunSummary
+    from .split_step_definition import SplitStepDefinition
+    from .split_step_definition_config import SplitStepDefinitionConfig
     from .split_step_run import SplitStepRun
     from .split_step_run_step import SplitStepRunStep
     from .splitter import Splitter
     from .splitter_created_webhook_event import SplitterCreatedWebhookEvent
     from .splitter_deleted_webhook_event import SplitterDeletedWebhookEvent
     from .splitter_draft_updated_webhook_event import SplitterDraftUpdatedWebhookEvent
+    from .splitter_ref import SplitterRef
     from .splitter_summary import SplitterSummary
     from .splitter_updated_webhook_event import SplitterUpdatedWebhookEvent
     from .splitter_version import SplitterVersion
@@ -366,6 +438,7 @@ if typing.TYPE_CHECKING:
     from .table_cell_details import TableCellDetails
     from .table_details import TableDetails
     from .too_many_requests_error_body import TooManyRequestsErrorBody
+    from .trigger_step_definition import TriggerStepDefinition
     from .updated_at import UpdatedAt
     from .version_description import VersionDescription
     from .webhook_advanced_options import WebhookAdvancedOptions
@@ -412,6 +485,7 @@ if typing.TYPE_CHECKING:
     )
     from .webhook_payload_format import WebhookPayloadFormat
     from .webhook_payload_options import WebhookPayloadOptions
+    from .webhook_response_step_definition import WebhookResponseStepDefinition
     from .webhook_subscription import WebhookSubscription
     from .webhook_subscription_event_type import WebhookSubscriptionEventType
     from .webhook_subscription_resource_type import WebhookSubscriptionResourceType
@@ -430,6 +504,23 @@ if typing.TYPE_CHECKING:
     from .workflow_run_step_run_processed_webhook_event import WorkflowRunStepRunProcessedWebhookEvent
     from .workflow_run_summary import WorkflowRunSummary
     from .workflow_step_base import WorkflowStepBase
+    from .workflow_step_definition import (
+        WorkflowStepDefinition,
+        WorkflowStepDefinition_Classify,
+        WorkflowStepDefinition_Collect,
+        WorkflowStepDefinition_Conditional,
+        WorkflowStepDefinition_ConditionalExtract,
+        WorkflowStepDefinition_ExternalDataValidation,
+        WorkflowStepDefinition_Extract,
+        WorkflowStepDefinition_FileConversion,
+        WorkflowStepDefinition_HumanReview,
+        WorkflowStepDefinition_MergeExtract,
+        WorkflowStepDefinition_Parse,
+        WorkflowStepDefinition_RuleValidation,
+        WorkflowStepDefinition_Split,
+        WorkflowStepDefinition_Trigger,
+        WorkflowStepDefinition_WebhookResponse,
+    )
     from .workflow_summary import WorkflowSummary
     from .workflow_version import WorkflowVersion
     from .workflow_version_summary import WorkflowVersionSummary
@@ -438,6 +529,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ApiVersionEnum": ".api_version_enum",
     "ArrayStrategy": ".array_strategy",
     "ArrayStrategyType": ".array_strategy_type",
+    "BarcodeDetails": ".barcode_details",
     "BatchProcessorRun": ".batch_processor_run",
     "BatchProcessorRunMetrics": ".batch_processor_run_metrics",
     "BatchProcessorRunOptions": ".batch_processor_run_options",
@@ -458,6 +550,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "BlockDetails": ".block_details",
     "BlockMetadata": ".block_metadata",
     "BlockMetadataPage": ".block_metadata_page",
+    "BlockMetadataTextDirection": ".block_metadata_text_direction",
     "BlockPolygonItem": ".block_polygon_item",
     "BlockType": ".block_type",
     "BoundingBox": ".bounding_box",
@@ -468,11 +561,13 @@ _dynamic_imports: typing.Dict[str, str] = {
     "Citation": ".citation",
     "CitationPage": ".citation_page",
     "Classification": ".classification",
+    "ClassificationNextEntry": ".classification_next_entry",
     "Classifications": ".classifications",
     "Classifier": ".classifier",
     "ClassifierCreatedWebhookEvent": ".classifier_created_webhook_event",
     "ClassifierDeletedWebhookEvent": ".classifier_deleted_webhook_event",
     "ClassifierDraftUpdatedWebhookEvent": ".classifier_draft_updated_webhook_event",
+    "ClassifierRef": ".classifier_ref",
     "ClassifierSummary": ".classifier_summary",
     "ClassifierUpdatedWebhookEvent": ".classifier_updated_webhook_event",
     "ClassifierVersion": ".classifier_version",
@@ -491,17 +586,34 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ClassifyRunFailedWebhookEvent": ".classify_run_failed_webhook_event",
     "ClassifyRunProcessedWebhookEvent": ".classify_run_processed_webhook_event",
     "ClassifyRunSummary": ".classify_run_summary",
+    "ClassifyStepDefinition": ".classify_step_definition",
+    "ClassifyStepDefinitionConfig": ".classify_step_definition_config",
     "ClassifyStepRun": ".classify_step_run",
     "ClassifyStepRunStep": ".classify_step_run_step",
+    "CollectStepDefinition": ".collect_step_definition",
     "ConditionalExtractResult": ".conditional_extract_result",
+    "ConditionalExtractStepDefinition": ".conditional_extract_step_definition",
+    "ConditionalExtractStepDefinitionConfig": ".conditional_extract_step_definition_config",
+    "ConditionalExtractStepDefinitionConfigRulesItem": ".conditional_extract_step_definition_config_rules_item",
     "ConditionalExtractStepRun": ".conditional_extract_step_run",
     "ConditionalExtractStepRunStep": ".conditional_extract_step_run_step",
+    "ConditionalNextEntry": ".conditional_next_entry",
+    "ConditionalStepDefinition": ".conditional_step_definition",
+    "ConditionalStepDefinitionConfig": ".conditional_step_definition_config",
+    "ConditionalStepDefinitionConfigConditionsItem": ".conditional_step_definition_config_conditions_item",
+    "ConditionalStepDefinitionConfigConditionsItemOperation": ".conditional_step_definition_config_conditions_item_operation",
+    "ConditionalStepDefinitionConfigConditionsItemType": ".conditional_step_definition_config_conditions_item_type",
     "CreatedAt": ".created_at",
     "EditBoundingBox": ".edit_bounding_box",
+    "EditConditionalClause": ".edit_conditional_clause",
+    "EditConditionalObjectProperty": ".edit_conditional_object_property",
+    "EditConditionalProperty": ".edit_conditional_property",
     "EditConfig": ".edit_config",
     "EditConfigAdvancedOptions": ".edit_config_advanced_options",
+    "EditDependentRequired": ".edit_dependent_required",
     "EditJson": ".edit_json",
     "EditJsonExtendEditFieldType": ".edit_json_extend_edit_field_type",
+    "EditJsonExtendEditImage": ".edit_json_extend_edit_image",
     "EditObjectJson": ".edit_object_json",
     "EditRequestFile": ".edit_request_file",
     "EditRootJson": ".edit_root_json",
@@ -512,6 +624,11 @@ _dynamic_imports: typing.Dict[str, str] = {
     "EditRunOutputEditedFile": ".edit_run_output_edited_file",
     "EditRunProcessedWebhookEvent": ".edit_run_processed_webhook_event",
     "EditRunStatus": ".edit_run_status",
+    "EditSchemaGenerationConfig": ".edit_schema_generation_config",
+    "EditSchemaGenerationConfigAdvancedOptions": ".edit_schema_generation_config_advanced_options",
+    "EditSchemaGenerationMappingMatch": ".edit_schema_generation_mapping_match",
+    "EditSchemaGenerationMappingResult": ".edit_schema_generation_mapping_result",
+    "EditSchemaGenerationResponse": ".edit_schema_generation_response",
     "EditTextOptions": ".edit_text_options",
     "EmptyBlockDetails": ".empty_block_details",
     "Enum": ".enum",
@@ -537,6 +654,12 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ExcelSheetRange": ".excel_sheet_range",
     "ExternalDataValidationResult": ".external_data_validation_result",
     "ExternalDataValidationResultResponse": ".external_data_validation_result_response",
+    "ExternalDataValidationStepDefinition": ".external_data_validation_step_definition",
+    "ExternalDataValidationStepDefinitionConfig": ".external_data_validation_step_definition_config",
+    "ExternalDataValidationStepDefinitionConfigFailureBehavior": ".external_data_validation_step_definition_config_failure_behavior",
+    "ExternalDataValidationStepDefinitionConfigRequestOptions": ".external_data_validation_step_definition_config_request_options",
+    "ExternalDataValidationStepDefinitionConfigRequestOptionsContentType": ".external_data_validation_step_definition_config_request_options_content_type",
+    "ExternalDataValidationStepDefinitionConfigRequestOptionsMethod": ".external_data_validation_step_definition_config_request_options_method",
     "ExternalDataValidationStepRun": ".external_data_validation_step_run",
     "ExternalDataValidationStepRunStep": ".external_data_validation_step_run_step",
     "ExtractAdvancedOptions": ".extract_advanced_options",
@@ -565,6 +688,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ExtractRunFailedWebhookEvent": ".extract_run_failed_webhook_event",
     "ExtractRunProcessedWebhookEvent": ".extract_run_processed_webhook_event",
     "ExtractRunSummary": ".extract_run_summary",
+    "ExtractStepDefinition": ".extract_step_definition",
+    "ExtractStepDefinitionConfig": ".extract_step_definition_config",
     "ExtractStepRun": ".extract_step_run",
     "ExtractStepRunStep": ".extract_step_run_step",
     "ExtractionField": ".extraction_field",
@@ -577,6 +702,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ExtractorCreatedWebhookEvent": ".extractor_created_webhook_event",
     "ExtractorDeletedWebhookEvent": ".extractor_deleted_webhook_event",
     "ExtractorDraftUpdatedWebhookEvent": ".extractor_draft_updated_webhook_event",
+    "ExtractorRef": ".extractor_ref",
     "ExtractorSummary": ".extractor_summary",
     "ExtractorUpdatedWebhookEvent": ".extractor_updated_webhook_event",
     "ExtractorVersion": ".extractor_version",
@@ -589,6 +715,9 @@ _dynamic_imports: typing.Dict[str, str] = {
     "FileContentsPagesItem": ".file_contents_pages_item",
     "FileContentsSectionsItem": ".file_contents_sections_item",
     "FileContentsSheetsItem": ".file_contents_sheets_item",
+    "FileConversionStepDefinition": ".file_conversion_step_definition",
+    "FileConversionStepDefinitionConfig": ".file_conversion_step_definition_config",
+    "FileConversionStepDefinitionConfigFailureBehavior": ".file_conversion_step_definition_config_failure_behavior",
     "FileFromId": ".file_from_id",
     "FileFromText": ".file_from_text",
     "FileFromUrl": ".file_from_url",
@@ -596,8 +725,10 @@ _dynamic_imports: typing.Dict[str, str] = {
     "FileMetadata": ".file_metadata",
     "FileSummary": ".file_summary",
     "FileType": ".file_type",
+    "HumanReviewStepDefinition": ".human_review_step_definition",
     "Insight": ".insight",
     "JsonObject": ".json_object",
+    "KeyValueDetails": ".key_value_details",
     "LegacyBatchProcessorRun": ".legacy_batch_processor_run",
     "LegacyBatchProcessorRunMetrics": ".legacy_batch_processor_run_metrics",
     "LegacyBatchProcessorRunOptions": ".legacy_batch_processor_run_options",
@@ -678,6 +809,9 @@ _dynamic_imports: typing.Dict[str, str] = {
     "MaxPageSize": ".max_page_size",
     "MergeExtractResult": ".merge_extract_result",
     "MergeExtractResultMergedExtractorsItem": ".merge_extract_result_merged_extractors_item",
+    "MergeExtractStepDefinition": ".merge_extract_step_definition",
+    "MergeExtractStepDefinitionConfig": ".merge_extract_step_definition_config",
+    "MergeExtractStepDefinitionConfigMergeOrder": ".merge_extract_step_definition_config_merge_order",
     "MergeExtractStepRun": ".merge_extract_step_run",
     "MergeExtractStepRunStep": ".merge_extract_step_run_step",
     "NextPageToken": ".next_page_token",
@@ -686,10 +820,14 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ParentSplit": ".parent_split",
     "ParseConfig": ".parse_config",
     "ParseConfigAdvancedOptions": ".parse_config_advanced_options",
+    "ParseConfigAdvancedOptionsEnrichmentFormat": ".parse_config_advanced_options_enrichment_format",
     "ParseConfigAdvancedOptionsExcelParsingMode": ".parse_config_advanced_options_excel_parsing_mode",
+    "ParseConfigAdvancedOptionsImageConversionQuality": ".parse_config_advanced_options_image_conversion_quality",
     "ParseConfigAdvancedOptionsReturnOcr": ".parse_config_advanced_options_return_ocr",
     "ParseConfigBlockOptions": ".parse_config_block_options",
+    "ParseConfigBlockOptionsBarcodes": ".parse_config_block_options_barcodes",
     "ParseConfigBlockOptionsFigures": ".parse_config_block_options_figures",
+    "ParseConfigBlockOptionsKeyValue": ".parse_config_block_options_key_value",
     "ParseConfigBlockOptionsTables": ".parse_config_block_options_tables",
     "ParseConfigBlockOptionsTablesAgentic": ".parse_config_block_options_tables_agentic",
     "ParseConfigBlockOptionsTablesTargetFormat": ".parse_config_block_options_tables_target_format",
@@ -713,6 +851,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ParseRunStatus": ".parse_run_status",
     "ParseRunStatusEnum": ".parse_run_status_enum",
     "ParseRunStatusStatus": ".parse_run_status_status",
+    "ParseStepDefinition": ".parse_step_definition",
+    "ParseStepDefinitionConfig": ".parse_step_definition_config",
     "ParseStepRun": ".parse_step_run",
     "ParseStepRunStep": ".parse_step_run_step",
     "Polygon": ".polygon",
@@ -724,9 +864,14 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ProvidedSplitOutput": ".provided_split_output",
     "ProvidedSplitOutputSplitsItem": ".provided_split_output_splits_item",
     "ReleaseType": ".release_type",
+    "RuleValidationNextEntry": ".rule_validation_next_entry",
+    "RuleValidationNextEntryResult": ".rule_validation_next_entry_result",
     "RuleValidationResult": ".rule_validation_result",
     "RuleValidationResultRulesItem": ".rule_validation_result_rules_item",
     "RuleValidationResultRulesItemFailureReason": ".rule_validation_result_rules_item_failure_reason",
+    "RuleValidationStepDefinition": ".rule_validation_step_definition",
+    "RuleValidationStepDefinitionConfig": ".rule_validation_step_definition_config",
+    "RuleValidationStepDefinitionConfigRulesItem": ".rule_validation_step_definition_config_rules_item",
     "RuleValidationStepRun": ".rule_validation_step_run",
     "RuleValidationStepRunStep": ".rule_validation_step_run_step",
     "RunMetadata": ".run_metadata",
@@ -735,6 +880,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "RunSource": ".run_source",
     "RunSourceId": ".run_source_id",
     "RunUsage": ".run_usage",
+    "SimpleNextEntry": ".simple_next_entry",
     "SortBy": ".sort_by",
     "SortDir": ".sort_dir",
     "SplitAdvancedOptions": ".split_advanced_options",
@@ -753,12 +899,15 @@ _dynamic_imports: typing.Dict[str, str] = {
     "SplitRunFailedWebhookEvent": ".split_run_failed_webhook_event",
     "SplitRunProcessedWebhookEvent": ".split_run_processed_webhook_event",
     "SplitRunSummary": ".split_run_summary",
+    "SplitStepDefinition": ".split_step_definition",
+    "SplitStepDefinitionConfig": ".split_step_definition_config",
     "SplitStepRun": ".split_step_run",
     "SplitStepRunStep": ".split_step_run_step",
     "Splitter": ".splitter",
     "SplitterCreatedWebhookEvent": ".splitter_created_webhook_event",
     "SplitterDeletedWebhookEvent": ".splitter_deleted_webhook_event",
     "SplitterDraftUpdatedWebhookEvent": ".splitter_draft_updated_webhook_event",
+    "SplitterRef": ".splitter_ref",
     "SplitterSummary": ".splitter_summary",
     "SplitterUpdatedWebhookEvent": ".splitter_updated_webhook_event",
     "SplitterVersion": ".splitter_version",
@@ -770,6 +919,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "TableCellDetails": ".table_cell_details",
     "TableDetails": ".table_details",
     "TooManyRequestsErrorBody": ".too_many_requests_error_body",
+    "TriggerStepDefinition": ".trigger_step_definition",
     "UpdatedAt": ".updated_at",
     "VersionDescription": ".version_description",
     "WebhookAdvancedOptions": ".webhook_advanced_options",
@@ -814,6 +964,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WebhookEvent_WorkflowRunStepRunProcessed": ".webhook_event",
     "WebhookPayloadFormat": ".webhook_payload_format",
     "WebhookPayloadOptions": ".webhook_payload_options",
+    "WebhookResponseStepDefinition": ".webhook_response_step_definition",
     "WebhookSubscription": ".webhook_subscription",
     "WebhookSubscriptionEventType": ".webhook_subscription_event_type",
     "WebhookSubscriptionResourceType": ".webhook_subscription_resource_type",
@@ -832,6 +983,21 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WorkflowRunStepRunProcessedWebhookEvent": ".workflow_run_step_run_processed_webhook_event",
     "WorkflowRunSummary": ".workflow_run_summary",
     "WorkflowStepBase": ".workflow_step_base",
+    "WorkflowStepDefinition": ".workflow_step_definition",
+    "WorkflowStepDefinition_Classify": ".workflow_step_definition",
+    "WorkflowStepDefinition_Collect": ".workflow_step_definition",
+    "WorkflowStepDefinition_Conditional": ".workflow_step_definition",
+    "WorkflowStepDefinition_ConditionalExtract": ".workflow_step_definition",
+    "WorkflowStepDefinition_ExternalDataValidation": ".workflow_step_definition",
+    "WorkflowStepDefinition_Extract": ".workflow_step_definition",
+    "WorkflowStepDefinition_FileConversion": ".workflow_step_definition",
+    "WorkflowStepDefinition_HumanReview": ".workflow_step_definition",
+    "WorkflowStepDefinition_MergeExtract": ".workflow_step_definition",
+    "WorkflowStepDefinition_Parse": ".workflow_step_definition",
+    "WorkflowStepDefinition_RuleValidation": ".workflow_step_definition",
+    "WorkflowStepDefinition_Split": ".workflow_step_definition",
+    "WorkflowStepDefinition_Trigger": ".workflow_step_definition",
+    "WorkflowStepDefinition_WebhookResponse": ".workflow_step_definition",
     "WorkflowSummary": ".workflow_summary",
     "WorkflowVersion": ".workflow_version",
     "WorkflowVersionSummary": ".workflow_version_summary",
@@ -864,6 +1030,7 @@ __all__ = [
     "ApiVersionEnum",
     "ArrayStrategy",
     "ArrayStrategyType",
+    "BarcodeDetails",
     "BatchProcessorRun",
     "BatchProcessorRunMetrics",
     "BatchProcessorRunOptions",
@@ -884,6 +1051,7 @@ __all__ = [
     "BlockDetails",
     "BlockMetadata",
     "BlockMetadataPage",
+    "BlockMetadataTextDirection",
     "BlockPolygonItem",
     "BlockType",
     "BoundingBox",
@@ -894,11 +1062,13 @@ __all__ = [
     "Citation",
     "CitationPage",
     "Classification",
+    "ClassificationNextEntry",
     "Classifications",
     "Classifier",
     "ClassifierCreatedWebhookEvent",
     "ClassifierDeletedWebhookEvent",
     "ClassifierDraftUpdatedWebhookEvent",
+    "ClassifierRef",
     "ClassifierSummary",
     "ClassifierUpdatedWebhookEvent",
     "ClassifierVersion",
@@ -917,17 +1087,34 @@ __all__ = [
     "ClassifyRunFailedWebhookEvent",
     "ClassifyRunProcessedWebhookEvent",
     "ClassifyRunSummary",
+    "ClassifyStepDefinition",
+    "ClassifyStepDefinitionConfig",
     "ClassifyStepRun",
     "ClassifyStepRunStep",
+    "CollectStepDefinition",
     "ConditionalExtractResult",
+    "ConditionalExtractStepDefinition",
+    "ConditionalExtractStepDefinitionConfig",
+    "ConditionalExtractStepDefinitionConfigRulesItem",
     "ConditionalExtractStepRun",
     "ConditionalExtractStepRunStep",
+    "ConditionalNextEntry",
+    "ConditionalStepDefinition",
+    "ConditionalStepDefinitionConfig",
+    "ConditionalStepDefinitionConfigConditionsItem",
+    "ConditionalStepDefinitionConfigConditionsItemOperation",
+    "ConditionalStepDefinitionConfigConditionsItemType",
     "CreatedAt",
     "EditBoundingBox",
+    "EditConditionalClause",
+    "EditConditionalObjectProperty",
+    "EditConditionalProperty",
     "EditConfig",
     "EditConfigAdvancedOptions",
+    "EditDependentRequired",
     "EditJson",
     "EditJsonExtendEditFieldType",
+    "EditJsonExtendEditImage",
     "EditObjectJson",
     "EditRequestFile",
     "EditRootJson",
@@ -938,6 +1125,11 @@ __all__ = [
     "EditRunOutputEditedFile",
     "EditRunProcessedWebhookEvent",
     "EditRunStatus",
+    "EditSchemaGenerationConfig",
+    "EditSchemaGenerationConfigAdvancedOptions",
+    "EditSchemaGenerationMappingMatch",
+    "EditSchemaGenerationMappingResult",
+    "EditSchemaGenerationResponse",
     "EditTextOptions",
     "EmptyBlockDetails",
     "Enum",
@@ -963,6 +1155,12 @@ __all__ = [
     "ExcelSheetRange",
     "ExternalDataValidationResult",
     "ExternalDataValidationResultResponse",
+    "ExternalDataValidationStepDefinition",
+    "ExternalDataValidationStepDefinitionConfig",
+    "ExternalDataValidationStepDefinitionConfigFailureBehavior",
+    "ExternalDataValidationStepDefinitionConfigRequestOptions",
+    "ExternalDataValidationStepDefinitionConfigRequestOptionsContentType",
+    "ExternalDataValidationStepDefinitionConfigRequestOptionsMethod",
     "ExternalDataValidationStepRun",
     "ExternalDataValidationStepRunStep",
     "ExtractAdvancedOptions",
@@ -991,6 +1189,8 @@ __all__ = [
     "ExtractRunFailedWebhookEvent",
     "ExtractRunProcessedWebhookEvent",
     "ExtractRunSummary",
+    "ExtractStepDefinition",
+    "ExtractStepDefinitionConfig",
     "ExtractStepRun",
     "ExtractStepRunStep",
     "ExtractionField",
@@ -1003,6 +1203,7 @@ __all__ = [
     "ExtractorCreatedWebhookEvent",
     "ExtractorDeletedWebhookEvent",
     "ExtractorDraftUpdatedWebhookEvent",
+    "ExtractorRef",
     "ExtractorSummary",
     "ExtractorUpdatedWebhookEvent",
     "ExtractorVersion",
@@ -1015,6 +1216,9 @@ __all__ = [
     "FileContentsPagesItem",
     "FileContentsSectionsItem",
     "FileContentsSheetsItem",
+    "FileConversionStepDefinition",
+    "FileConversionStepDefinitionConfig",
+    "FileConversionStepDefinitionConfigFailureBehavior",
     "FileFromId",
     "FileFromText",
     "FileFromUrl",
@@ -1022,8 +1226,10 @@ __all__ = [
     "FileMetadata",
     "FileSummary",
     "FileType",
+    "HumanReviewStepDefinition",
     "Insight",
     "JsonObject",
+    "KeyValueDetails",
     "LegacyBatchProcessorRun",
     "LegacyBatchProcessorRunMetrics",
     "LegacyBatchProcessorRunOptions",
@@ -1104,6 +1310,9 @@ __all__ = [
     "MaxPageSize",
     "MergeExtractResult",
     "MergeExtractResultMergedExtractorsItem",
+    "MergeExtractStepDefinition",
+    "MergeExtractStepDefinitionConfig",
+    "MergeExtractStepDefinitionConfigMergeOrder",
     "MergeExtractStepRun",
     "MergeExtractStepRunStep",
     "NextPageToken",
@@ -1112,10 +1321,14 @@ __all__ = [
     "ParentSplit",
     "ParseConfig",
     "ParseConfigAdvancedOptions",
+    "ParseConfigAdvancedOptionsEnrichmentFormat",
     "ParseConfigAdvancedOptionsExcelParsingMode",
+    "ParseConfigAdvancedOptionsImageConversionQuality",
     "ParseConfigAdvancedOptionsReturnOcr",
     "ParseConfigBlockOptions",
+    "ParseConfigBlockOptionsBarcodes",
     "ParseConfigBlockOptionsFigures",
+    "ParseConfigBlockOptionsKeyValue",
     "ParseConfigBlockOptionsTables",
     "ParseConfigBlockOptionsTablesAgentic",
     "ParseConfigBlockOptionsTablesTargetFormat",
@@ -1139,6 +1352,8 @@ __all__ = [
     "ParseRunStatus",
     "ParseRunStatusEnum",
     "ParseRunStatusStatus",
+    "ParseStepDefinition",
+    "ParseStepDefinitionConfig",
     "ParseStepRun",
     "ParseStepRunStep",
     "Polygon",
@@ -1150,9 +1365,14 @@ __all__ = [
     "ProvidedSplitOutput",
     "ProvidedSplitOutputSplitsItem",
     "ReleaseType",
+    "RuleValidationNextEntry",
+    "RuleValidationNextEntryResult",
     "RuleValidationResult",
     "RuleValidationResultRulesItem",
     "RuleValidationResultRulesItemFailureReason",
+    "RuleValidationStepDefinition",
+    "RuleValidationStepDefinitionConfig",
+    "RuleValidationStepDefinitionConfigRulesItem",
     "RuleValidationStepRun",
     "RuleValidationStepRunStep",
     "RunMetadata",
@@ -1161,6 +1381,7 @@ __all__ = [
     "RunSource",
     "RunSourceId",
     "RunUsage",
+    "SimpleNextEntry",
     "SortBy",
     "SortDir",
     "SplitAdvancedOptions",
@@ -1179,12 +1400,15 @@ __all__ = [
     "SplitRunFailedWebhookEvent",
     "SplitRunProcessedWebhookEvent",
     "SplitRunSummary",
+    "SplitStepDefinition",
+    "SplitStepDefinitionConfig",
     "SplitStepRun",
     "SplitStepRunStep",
     "Splitter",
     "SplitterCreatedWebhookEvent",
     "SplitterDeletedWebhookEvent",
     "SplitterDraftUpdatedWebhookEvent",
+    "SplitterRef",
     "SplitterSummary",
     "SplitterUpdatedWebhookEvent",
     "SplitterVersion",
@@ -1196,6 +1420,7 @@ __all__ = [
     "TableCellDetails",
     "TableDetails",
     "TooManyRequestsErrorBody",
+    "TriggerStepDefinition",
     "UpdatedAt",
     "VersionDescription",
     "WebhookAdvancedOptions",
@@ -1240,6 +1465,7 @@ __all__ = [
     "WebhookEvent_WorkflowRunStepRunProcessed",
     "WebhookPayloadFormat",
     "WebhookPayloadOptions",
+    "WebhookResponseStepDefinition",
     "WebhookSubscription",
     "WebhookSubscriptionEventType",
     "WebhookSubscriptionResourceType",
@@ -1258,6 +1484,21 @@ __all__ = [
     "WorkflowRunStepRunProcessedWebhookEvent",
     "WorkflowRunSummary",
     "WorkflowStepBase",
+    "WorkflowStepDefinition",
+    "WorkflowStepDefinition_Classify",
+    "WorkflowStepDefinition_Collect",
+    "WorkflowStepDefinition_Conditional",
+    "WorkflowStepDefinition_ConditionalExtract",
+    "WorkflowStepDefinition_ExternalDataValidation",
+    "WorkflowStepDefinition_Extract",
+    "WorkflowStepDefinition_FileConversion",
+    "WorkflowStepDefinition_HumanReview",
+    "WorkflowStepDefinition_MergeExtract",
+    "WorkflowStepDefinition_Parse",
+    "WorkflowStepDefinition_RuleValidation",
+    "WorkflowStepDefinition_Split",
+    "WorkflowStepDefinition_Trigger",
+    "WorkflowStepDefinition_WebhookResponse",
     "WorkflowSummary",
     "WorkflowVersion",
     "WorkflowVersionSummary",

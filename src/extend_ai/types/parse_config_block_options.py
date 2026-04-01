@@ -3,9 +3,13 @@
 import typing
 
 import pydantic
+import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .parse_config_block_options_barcodes import ParseConfigBlockOptionsBarcodes
 from .parse_config_block_options_figures import ParseConfigBlockOptionsFigures
+from .parse_config_block_options_key_value import ParseConfigBlockOptionsKeyValue
 from .parse_config_block_options_tables import ParseConfigBlockOptionsTables
 from .parse_config_block_options_text import ParseConfigBlockOptionsText
 
@@ -28,6 +32,18 @@ class ParseConfigBlockOptions(UncheckedBaseModel):
     text: typing.Optional[ParseConfigBlockOptionsText] = pydantic.Field(default=None)
     """
     Options for text blocks.
+    """
+
+    key_value: typing_extensions.Annotated[
+        typing.Optional[ParseConfigBlockOptionsKeyValue], FieldMetadata(alias="keyValue")
+    ] = pydantic.Field(alias="keyValue", default=None)
+    """
+    Options for key-value pair blocks.
+    """
+
+    barcodes: typing.Optional[ParseConfigBlockOptionsBarcodes] = pydantic.Field(default=None)
+    """
+    Options for barcode blocks.
     """
 
     if IS_PYDANTIC_V2:

@@ -36,6 +36,7 @@ if typing.TYPE_CHECKING:
     from .classifiers.client import AsyncClassifiersClient, ClassifiersClient
     from .classify_runs.client import AsyncClassifyRunsClient, ClassifyRunsClient
     from .edit_runs.client import AsyncEditRunsClient, EditRunsClient
+    from .edit_schemas.client import AsyncEditSchemasClient, EditSchemasClient
     from .evaluation_set_items.client import AsyncEvaluationSetItemsClient, EvaluationSetItemsClient
     from .evaluation_set_runs.client import AsyncEvaluationSetRunsClient, EvaluationSetRunsClient
     from .evaluation_sets.client import AsyncEvaluationSetsClient, EvaluationSetsClient
@@ -130,6 +131,7 @@ class Extend:
         self._files: typing.Optional[FilesClient] = None
         self._parse_runs: typing.Optional[ParseRunsClient] = None
         self._edit_runs: typing.Optional[EditRunsClient] = None
+        self._edit_schemas: typing.Optional[EditSchemasClient] = None
         self._extract_runs: typing.Optional[ExtractRunsClient] = None
         self._extractors: typing.Optional[ExtractorsClient] = None
         self._extractor_versions: typing.Optional[ExtractorVersionsClient] = None
@@ -167,6 +169,7 @@ class Extend:
         *,
         file: ParseRequestFileParams,
         response_type: typing.Optional[ParseRequestResponseType] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         config: typing.Optional[ParseConfigParams] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -189,6 +192,9 @@ class Extend:
             Controls the format of the response chunks. Defaults to `json` if not specified.
             * `json` - Returns parsed outputs in the response body
             * `url` - Return a presigned URL to the parsed content in the response body
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         config : typing.Optional[ParseConfigParams]
 
@@ -217,7 +223,12 @@ class Extend:
         )
         """
         _response = self._raw_client.parse(
-            file=file, response_type=response_type, config=config, metadata=metadata, request_options=request_options
+            file=file,
+            response_type=response_type,
+            extend_workspace_id=extend_workspace_id,
+            config=config,
+            metadata=metadata,
+            request_options=request_options,
         )
         return _response.data
 
@@ -519,6 +530,14 @@ class Extend:
         return self._edit_runs
 
     @property
+    def edit_schemas(self):
+        if self._edit_schemas is None:
+            from .edit_schemas.client import EditSchemasClient  # noqa: E402
+
+            self._edit_schemas = EditSchemasClient(client_wrapper=self._client_wrapper)
+        return self._edit_schemas
+
+    @property
     def extract_runs(self):
         if self._extract_runs is None:
             from .extract_runs.client import ExtractRunsClient  # noqa: E402
@@ -751,6 +770,7 @@ class AsyncExtend:
         self._files: typing.Optional[AsyncFilesClient] = None
         self._parse_runs: typing.Optional[AsyncParseRunsClient] = None
         self._edit_runs: typing.Optional[AsyncEditRunsClient] = None
+        self._edit_schemas: typing.Optional[AsyncEditSchemasClient] = None
         self._extract_runs: typing.Optional[AsyncExtractRunsClient] = None
         self._extractors: typing.Optional[AsyncExtractorsClient] = None
         self._extractor_versions: typing.Optional[AsyncExtractorVersionsClient] = None
@@ -788,6 +808,7 @@ class AsyncExtend:
         *,
         file: ParseRequestFileParams,
         response_type: typing.Optional[ParseRequestResponseType] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         config: typing.Optional[ParseConfigParams] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -810,6 +831,9 @@ class AsyncExtend:
             Controls the format of the response chunks. Defaults to `json` if not specified.
             * `json` - Returns parsed outputs in the response body
             * `url` - Return a presigned URL to the parsed content in the response body
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         config : typing.Optional[ParseConfigParams]
 
@@ -846,7 +870,12 @@ class AsyncExtend:
         asyncio.run(main())
         """
         _response = await self._raw_client.parse(
-            file=file, response_type=response_type, config=config, metadata=metadata, request_options=request_options
+            file=file,
+            response_type=response_type,
+            extend_workspace_id=extend_workspace_id,
+            config=config,
+            metadata=metadata,
+            request_options=request_options,
         )
         return _response.data
 
@@ -1178,6 +1207,14 @@ class AsyncExtend:
 
             self._edit_runs = AsyncEditRunsClient(client_wrapper=self._client_wrapper)
         return self._edit_runs
+
+    @property
+    def edit_schemas(self):
+        if self._edit_schemas is None:
+            from .edit_schemas.client import AsyncEditSchemasClient  # noqa: E402
+
+            self._edit_schemas = AsyncEditSchemasClient(client_wrapper=self._client_wrapper)
+        return self._edit_schemas
 
     @property
     def extract_runs(self):

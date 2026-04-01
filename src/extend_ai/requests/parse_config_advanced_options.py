@@ -2,7 +2,11 @@
 
 import typing_extensions
 from ..core.serialization import FieldMetadata
+from ..types.parse_config_advanced_options_enrichment_format import ParseConfigAdvancedOptionsEnrichmentFormat
 from ..types.parse_config_advanced_options_excel_parsing_mode import ParseConfigAdvancedOptionsExcelParsingMode
+from ..types.parse_config_advanced_options_image_conversion_quality import (
+    ParseConfigAdvancedOptionsImageConversionQuality,
+)
 from .page_ranges import PageRangesParams
 from .parse_config_advanced_options_return_ocr import ParseConfigAdvancedOptionsReturnOcrParams
 
@@ -70,4 +74,27 @@ class ParseConfigAdvancedOptionsParams(typing_extensions.TypedDict):
     ]
     """
     Whether to convert supported file types (images, Word documents, PowerPoint, Excel, HTML) to PDF before parsing. This can improve parsing quality for some file types and ensures spatial output with bounding boxes.
+    """
+
+    enrichment_format: typing_extensions.NotRequired[
+        typing_extensions.Annotated[ParseConfigAdvancedOptionsEnrichmentFormat, FieldMetadata(alias="enrichmentFormat")]
+    ]
+    """
+    The format used for enrichment annotations in the output.
+    
+    * `xml`: Use XML-style tags for enrichment annotations, e.g. <page_number>1</page_number> or <barcode>1234567890</barcode>
+    * `bracket`: Use bracket-style notation for enrichment annotations, e.g. [page_number: 1] or [barcode: 1234567890]
+    """
+
+    image_conversion_quality: typing_extensions.NotRequired[
+        typing_extensions.Annotated[
+            ParseConfigAdvancedOptionsImageConversionQuality, FieldMetadata(alias="imageConversionQuality")
+        ]
+    ]
+    """
+    Controls the quality level when converting images or documents to PDF for parsing.
+    
+    * `high`: Maximum quality, can add some latency for large/dense documents
+    * `medium`: Balanced quality and speed
+    * `low`: Lower quality, smaller file sizes, faster processing
     """

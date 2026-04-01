@@ -8,6 +8,7 @@ import typing_extensions
 from ..core.serialization import FieldMetadata
 from ..types.edit_json_extend_edit_field_type import EditJsonExtendEditFieldType
 from .edit_bounding_box import EditBoundingBoxParams
+from .edit_json_extend_edit_image import EditJsonExtendEditImageParams
 from .edit_text_options import EditTextOptionsParams
 
 if typing.TYPE_CHECKING:
@@ -87,6 +88,13 @@ class EditJsonParams(typing_extensions.TypedDict):
     ]
     """
     The value to fill into this field. Can be any type. This will force the value at this field to be filled with this value. If a value is not provided, we will attempt to generate or infer one based on the instructions.
+    """
+
+    extend_edit_image: typing_extensions.NotRequired[
+        typing_extensions.Annotated[EditJsonExtendEditImageParams, FieldMetadata(alias="extend_edit:image")]
+    ]
+    """
+    Image fill for signature fields. Only PNG and JPEG image URLs are supported.
     """
 
     extend_edit_row_heights: typing_extensions.NotRequired[

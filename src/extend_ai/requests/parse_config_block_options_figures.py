@@ -20,3 +20,10 @@ class ParseConfigBlockOptionsFiguresParams(typing_extensions.TypedDict):
     """
     Whether to clip and extract images from figures.
     """
+
+    advanced_chart_extraction_enabled: typing_extensions.NotRequired[
+        typing_extensions.Annotated[bool, FieldMetadata(alias="advancedChartExtractionEnabled")]
+    ]
+    """
+    Whether to enable advanced chart extraction using vision models for improved data extraction from charts.
+    """

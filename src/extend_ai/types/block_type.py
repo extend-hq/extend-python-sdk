@@ -14,9 +14,14 @@ class BlockType(enum.StrEnum):
     * `"heading"` - Section or document headings
     * `"section_heading"` - Subsection headings
     * `"table"` - Tabular data with rows and columns
+    * `"figure"` - Images, charts, diagrams, or logos
     * `"table_head"` - Table header cells
     * `"table_cell"` - Table body cells
-    * `"figure"` - Images, charts, diagrams, or logos
+    * `"key_value"` - Key-value pairs (e.g., form regions, key-val groups, etc)
+    * `"page_number"` - Page number indicators
+    * `"barcode"` - Barcodes and QR codes
+    * `"header"` - Page headers
+    * `"footer"` - Page footers
     """
 
     TEXT = "text"
@@ -26,6 +31,11 @@ class BlockType(enum.StrEnum):
     FIGURE = "figure"
     TABLE_HEAD = "table_head"
     TABLE_CELL = "table_cell"
+    KEY_VALUE = "key_value"
+    PAGE_NUMBER = "page_number"
+    BARCODE = "barcode"
+    HEADER = "header"
+    FOOTER = "footer"
     _UNKNOWN = "__BLOCKTYPE_UNKNOWN__"
     """
     This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
@@ -46,6 +56,11 @@ class BlockType(enum.StrEnum):
         figure: typing.Callable[[], T_Result],
         table_head: typing.Callable[[], T_Result],
         table_cell: typing.Callable[[], T_Result],
+        key_value: typing.Callable[[], T_Result],
+        page_number: typing.Callable[[], T_Result],
+        barcode: typing.Callable[[], T_Result],
+        header: typing.Callable[[], T_Result],
+        footer: typing.Callable[[], T_Result],
         _unknown_member: typing.Callable[[str], T_Result],
     ) -> T_Result:
         if self is BlockType.TEXT:
@@ -62,4 +77,14 @@ class BlockType(enum.StrEnum):
             return table_head()
         if self is BlockType.TABLE_CELL:
             return table_cell()
+        if self is BlockType.KEY_VALUE:
+            return key_value()
+        if self is BlockType.PAGE_NUMBER:
+            return page_number()
+        if self is BlockType.BARCODE:
+            return barcode()
+        if self is BlockType.HEADER:
+            return header()
+        if self is BlockType.FOOTER:
+            return footer()
         return _unknown_member(self._value_)

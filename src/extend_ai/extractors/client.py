@@ -39,6 +39,7 @@ class ExtractorsClient:
         max_page_size: typing.Optional[MaxPageSize] = None,
         sort_by: typing.Optional[SortBy] = None,
         sort_dir: typing.Optional[SortDir] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ExtractorsListResponse:
         """
@@ -55,6 +56,9 @@ class ExtractorsClient:
         sort_by : typing.Optional[SortBy]
 
         sort_dir : typing.Optional[SortDir]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -80,6 +84,7 @@ class ExtractorsClient:
             max_page_size=max_page_size,
             sort_by=sort_by,
             sort_dir=sort_dir,
+            extend_workspace_id=extend_workspace_id,
             request_options=request_options,
         )
         return _response.data
@@ -151,7 +156,13 @@ class ExtractorsClient:
         )
         return _response.data
 
-    def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> Extractor:
+    def retrieve(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> Extractor:
         """
         Get details of an extractor.
 
@@ -161,6 +172,9 @@ class ExtractorsClient:
             The ID of the extractor to get.
 
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -181,13 +195,16 @@ class ExtractorsClient:
             id="extractor_id_here",
         )
         """
-        _response = self._raw_client.retrieve(id, request_options=request_options)
+        _response = self._raw_client.retrieve(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     def update(
         self,
         id: str,
         *,
+        extend_workspace_id: typing.Optional[str] = None,
         name: typing.Optional[str] = OMIT,
         config: typing.Optional[ExtractConfigJsonParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -201,6 +218,9 @@ class ExtractorsClient:
             The ID of the extractor to update.
 
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             The new name of the extractor.
@@ -228,7 +248,9 @@ class ExtractorsClient:
             name="Invoice Extractor v2",
         )
         """
-        _response = self._raw_client.update(id, name=name, config=config, request_options=request_options)
+        _response = self._raw_client.update(
+            id, extend_workspace_id=extend_workspace_id, name=name, config=config, request_options=request_options
+        )
         return _response.data
 
 
@@ -254,6 +276,7 @@ class AsyncExtractorsClient:
         max_page_size: typing.Optional[MaxPageSize] = None,
         sort_by: typing.Optional[SortBy] = None,
         sort_dir: typing.Optional[SortDir] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ExtractorsListResponse:
         """
@@ -270,6 +293,9 @@ class AsyncExtractorsClient:
         sort_by : typing.Optional[SortBy]
 
         sort_dir : typing.Optional[SortDir]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -303,6 +329,7 @@ class AsyncExtractorsClient:
             max_page_size=max_page_size,
             sort_by=sort_by,
             sort_dir=sort_dir,
+            extend_workspace_id=extend_workspace_id,
             request_options=request_options,
         )
         return _response.data
@@ -382,7 +409,13 @@ class AsyncExtractorsClient:
         )
         return _response.data
 
-    async def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> Extractor:
+    async def retrieve(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> Extractor:
         """
         Get details of an extractor.
 
@@ -392,6 +425,9 @@ class AsyncExtractorsClient:
             The ID of the extractor to get.
 
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -420,13 +456,16 @@ class AsyncExtractorsClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.retrieve(id, request_options=request_options)
+        _response = await self._raw_client.retrieve(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     async def update(
         self,
         id: str,
         *,
+        extend_workspace_id: typing.Optional[str] = None,
         name: typing.Optional[str] = OMIT,
         config: typing.Optional[ExtractConfigJsonParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -440,6 +479,9 @@ class AsyncExtractorsClient:
             The ID of the extractor to update.
 
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             The new name of the extractor.
@@ -475,5 +517,7 @@ class AsyncExtractorsClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.update(id, name=name, config=config, request_options=request_options)
+        _response = await self._raw_client.update(
+            id, extend_workspace_id=extend_workspace_id, name=name, config=config, request_options=request_options
+        )
         return _response.data

@@ -42,6 +42,7 @@ class RawSplittersClient:
         max_page_size: typing.Optional[MaxPageSize] = None,
         sort_by: typing.Optional[SortBy] = None,
         sort_dir: typing.Optional[SortDir] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[SplittersListResponse]:
         """
@@ -59,6 +60,9 @@ class RawSplittersClient:
 
         sort_dir : typing.Optional[SortDir]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -75,6 +79,9 @@ class RawSplittersClient:
                 "maxPageSize": max_page_size,
                 "sortBy": sort_by,
                 "sortDir": sort_dir,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
         )
@@ -340,7 +347,13 @@ class RawSplittersClient:
             status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
         )
 
-    def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> HttpResponse[Splitter]:
+    def retrieve(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[Splitter]:
         """
         Get details of a splitter.
 
@@ -350,6 +363,9 @@ class RawSplittersClient:
             The ID of the splitter to get.
 
             Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -362,6 +378,9 @@ class RawSplittersClient:
         _response = self._client_wrapper.httpx_client.request(
             f"splitters/{jsonable_encoder(id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -475,6 +494,7 @@ class RawSplittersClient:
         self,
         id: str,
         *,
+        extend_workspace_id: typing.Optional[str] = None,
         name: typing.Optional[str] = OMIT,
         config: typing.Optional[SplitConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -488,6 +508,9 @@ class RawSplittersClient:
             The ID of the splitter to update.
 
             Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             The new name of the splitter.
@@ -514,6 +537,7 @@ class RawSplittersClient:
             },
             headers={
                 "content-type": "application/json",
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
             omit=OMIT,
@@ -637,6 +661,7 @@ class AsyncRawSplittersClient:
         max_page_size: typing.Optional[MaxPageSize] = None,
         sort_by: typing.Optional[SortBy] = None,
         sort_dir: typing.Optional[SortDir] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[SplittersListResponse]:
         """
@@ -654,6 +679,9 @@ class AsyncRawSplittersClient:
 
         sort_dir : typing.Optional[SortDir]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -670,6 +698,9 @@ class AsyncRawSplittersClient:
                 "maxPageSize": max_page_size,
                 "sortBy": sort_by,
                 "sortDir": sort_dir,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
         )
@@ -936,7 +967,11 @@ class AsyncRawSplittersClient:
         )
 
     async def retrieve(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[Splitter]:
         """
         Get details of a splitter.
@@ -947,6 +982,9 @@ class AsyncRawSplittersClient:
             The ID of the splitter to get.
 
             Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -959,6 +997,9 @@ class AsyncRawSplittersClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"splitters/{jsonable_encoder(id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -1072,6 +1113,7 @@ class AsyncRawSplittersClient:
         self,
         id: str,
         *,
+        extend_workspace_id: typing.Optional[str] = None,
         name: typing.Optional[str] = OMIT,
         config: typing.Optional[SplitConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -1085,6 +1127,9 @@ class AsyncRawSplittersClient:
             The ID of the splitter to update.
 
             Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             The new name of the splitter.
@@ -1111,6 +1156,7 @@ class AsyncRawSplittersClient:
             },
             headers={
                 "content-type": "application/json",
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
             omit=OMIT,
