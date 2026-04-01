@@ -17,6 +17,13 @@ class EditConfigParams(typing_extensions.TypedDict):
     Custom instructions provided for the edit operation.
     """
 
+    schema_generation_instructions: typing_extensions.NotRequired[
+        typing_extensions.Annotated[str, FieldMetadata(alias="schemaGenerationInstructions")]
+    ]
+    """
+    Additional instructions used when generating a schema from the document.
+    """
+
     advanced_options: typing_extensions.NotRequired[
         typing_extensions.Annotated[EditConfigAdvancedOptionsParams, FieldMetadata(alias="advancedOptions")]
     ]

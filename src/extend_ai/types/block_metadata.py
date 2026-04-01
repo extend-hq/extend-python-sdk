@@ -3,9 +3,12 @@
 import typing
 
 import pydantic
+import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .block_metadata_page import BlockMetadataPage
+from .block_metadata_text_direction import BlockMetadataTextDirection
 
 
 class BlockMetadata(UncheckedBaseModel):
@@ -16,6 +19,13 @@ class BlockMetadata(UncheckedBaseModel):
     page: typing.Optional[BlockMetadataPage] = pydantic.Field(default=None)
     """
     Information about the page this block appears on.
+    """
+
+    text_direction: typing_extensions.Annotated[
+        typing.Optional[BlockMetadataTextDirection], FieldMetadata(alias="textDirection")
+    ] = pydantic.Field(alias="textDirection", default=None)
+    """
+    Text direction for this block's content ("ltr" for left-to-right, "rtl" for right-to-left).
     """
 
     if IS_PYDANTIC_V2:

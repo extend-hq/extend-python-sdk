@@ -4,8 +4,14 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
+from ..requests.workflow_step_definition import WorkflowStepDefinitionParams
+from ..types.max_page_size import MaxPageSize
+from ..types.next_page_token import NextPageToken
+from ..types.sort_by import SortBy
+from ..types.sort_dir import SortDir
 from ..types.workflow import Workflow
 from .raw_client import AsyncRawWorkflowsClient, RawWorkflowsClient
+from .types.workflows_list_response import WorkflowsListResponse
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -26,16 +32,81 @@ class WorkflowsClient:
         """
         return self._raw_client
 
-    def create(self, *, name: str, request_options: typing.Optional[RequestOptions] = None) -> Workflow:
+    def list(
+        self,
+        *,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        sort_by: typing.Optional[SortBy] = None,
+        sort_dir: typing.Optional[SortDir] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> WorkflowsListResponse:
         """
-        Create a new workflow in Extend. Workflows are sequences of steps that process files and data in a specific order to achieve a desired outcome.
+        List all workflows. Returns a paginated list of workflow summaries.
 
-        This endpoint will create a new workflow in Extend, which can then be configured and deployed. Typically, workflows are created from our UI, however this endpoint can be used to create workflows programmatically. Configuration of the flow still needs to be done in the dashboard.
+        Parameters
+        ----------
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        sort_by : typing.Optional[SortBy]
+
+        sort_dir : typing.Optional[SortDir]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        WorkflowsListResponse
+            Successfully retrieved workflows
+
+        Examples
+        --------
+        from extend_ai import Extend
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.workflows.list(
+            next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+        )
+        """
+        _response = self._raw_client.list(
+            next_page_token=next_page_token,
+            max_page_size=max_page_size,
+            sort_by=sort_by,
+            sort_dir=sort_dir,
+            request_options=request_options,
+        )
+        return _response.data
+
+    def create(
+        self,
+        *,
+        name: str,
+        steps: typing.Optional[typing.Sequence[WorkflowStepDefinitionParams]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> Workflow:
+        """
+        Create a new workflow. Optionally provide `steps` to define the workflow's step graph.
+
+        When `steps` is omitted, the workflow is created with default steps (`TRIGGER` → `PARSE`). When `steps` is provided, the step graph is validated and the draft version is populated with the given steps.
+
+        **Note:** The default steps may change in the future. If your integration depends on a specific step graph, provide `steps` explicitly.
 
         Parameters
         ----------
         name : str
-            The name of the workflow
+            The name of the workflow.
+
+        steps : typing.Optional[typing.Sequence[WorkflowStepDefinitionParams]]
+            The steps that define the workflow's processing graph. Each step has a `type`, a unique `name`, and optional `next` entries that define routing to downstream steps.
+
+            When omitted, the workflow is created with default steps (`TRIGGER` → `PARSE`). The default steps may change in the future.
+
+            See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for step definitions, branching patterns, and examples.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -43,7 +114,7 @@ class WorkflowsClient:
         Returns
         -------
         Workflow
-            Successfully created workflow
+            Workflow created successfully
 
         Examples
         --------
@@ -56,7 +127,87 @@ class WorkflowsClient:
             name="Invoice Processing",
         )
         """
-        _response = self._raw_client.create(name=name, request_options=request_options)
+        _response = self._raw_client.create(name=name, steps=steps, request_options=request_options)
+        return _response.data
+
+    def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> Workflow:
+        """
+        Get details of a workflow, including its draft version and steps.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the workflow.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        Workflow
+            Workflow details
+
+        Examples
+        --------
+        from extend_ai import Extend
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.workflows.retrieve(
+            id="workflow_abc123",
+        )
+        """
+        _response = self._raw_client.retrieve(id, request_options=request_options)
+        return _response.data
+
+    def update(
+        self,
+        id: str,
+        *,
+        name: typing.Optional[str] = OMIT,
+        steps: typing.Optional[typing.Sequence[WorkflowStepDefinitionParams]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> Workflow:
+        """
+        Update a workflow's draft. You can update the name, the steps, or both.
+
+        When `steps` is provided, the draft version's steps are replaced with the new set. Steps with matching names from the previous draft preserve their internal identity.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the workflow to update.
+
+        name : typing.Optional[str]
+            The new name for the workflow.
+
+        steps : typing.Optional[typing.Sequence[WorkflowStepDefinitionParams]]
+            The new step definitions for the draft version. Replaces all existing draft steps.
+
+            See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for step definitions, branching patterns, and examples.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        Workflow
+            Workflow updated successfully
+
+        Examples
+        --------
+        from extend_ai import Extend
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.workflows.update(
+            id="workflow_abc123",
+            name="Updated Invoice Processing",
+        )
+        """
+        _response = self._raw_client.update(id, name=name, steps=steps, request_options=request_options)
         return _response.data
 
 
@@ -75,16 +226,89 @@ class AsyncWorkflowsClient:
         """
         return self._raw_client
 
-    async def create(self, *, name: str, request_options: typing.Optional[RequestOptions] = None) -> Workflow:
+    async def list(
+        self,
+        *,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        sort_by: typing.Optional[SortBy] = None,
+        sort_dir: typing.Optional[SortDir] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> WorkflowsListResponse:
         """
-        Create a new workflow in Extend. Workflows are sequences of steps that process files and data in a specific order to achieve a desired outcome.
+        List all workflows. Returns a paginated list of workflow summaries.
 
-        This endpoint will create a new workflow in Extend, which can then be configured and deployed. Typically, workflows are created from our UI, however this endpoint can be used to create workflows programmatically. Configuration of the flow still needs to be done in the dashboard.
+        Parameters
+        ----------
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        sort_by : typing.Optional[SortBy]
+
+        sort_dir : typing.Optional[SortDir]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        WorkflowsListResponse
+            Successfully retrieved workflows
+
+        Examples
+        --------
+        import asyncio
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflows.list(
+                next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.list(
+            next_page_token=next_page_token,
+            max_page_size=max_page_size,
+            sort_by=sort_by,
+            sort_dir=sort_dir,
+            request_options=request_options,
+        )
+        return _response.data
+
+    async def create(
+        self,
+        *,
+        name: str,
+        steps: typing.Optional[typing.Sequence[WorkflowStepDefinitionParams]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> Workflow:
+        """
+        Create a new workflow. Optionally provide `steps` to define the workflow's step graph.
+
+        When `steps` is omitted, the workflow is created with default steps (`TRIGGER` → `PARSE`). When `steps` is provided, the step graph is validated and the draft version is populated with the given steps.
+
+        **Note:** The default steps may change in the future. If your integration depends on a specific step graph, provide `steps` explicitly.
 
         Parameters
         ----------
         name : str
-            The name of the workflow
+            The name of the workflow.
+
+        steps : typing.Optional[typing.Sequence[WorkflowStepDefinitionParams]]
+            The steps that define the workflow's processing graph. Each step has a `type`, a unique `name`, and optional `next` entries that define routing to downstream steps.
+
+            When omitted, the workflow is created with default steps (`TRIGGER` → `PARSE`). The default steps may change in the future.
+
+            See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for step definitions, branching patterns, and examples.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -92,7 +316,7 @@ class AsyncWorkflowsClient:
         Returns
         -------
         Workflow
-            Successfully created workflow
+            Workflow created successfully
 
         Examples
         --------
@@ -113,5 +337,101 @@ class AsyncWorkflowsClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.create(name=name, request_options=request_options)
+        _response = await self._raw_client.create(name=name, steps=steps, request_options=request_options)
+        return _response.data
+
+    async def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> Workflow:
+        """
+        Get details of a workflow, including its draft version and steps.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the workflow.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        Workflow
+            Workflow details
+
+        Examples
+        --------
+        import asyncio
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflows.retrieve(
+                id="workflow_abc123",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.retrieve(id, request_options=request_options)
+        return _response.data
+
+    async def update(
+        self,
+        id: str,
+        *,
+        name: typing.Optional[str] = OMIT,
+        steps: typing.Optional[typing.Sequence[WorkflowStepDefinitionParams]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> Workflow:
+        """
+        Update a workflow's draft. You can update the name, the steps, or both.
+
+        When `steps` is provided, the draft version's steps are replaced with the new set. Steps with matching names from the previous draft preserve their internal identity.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the workflow to update.
+
+        name : typing.Optional[str]
+            The new name for the workflow.
+
+        steps : typing.Optional[typing.Sequence[WorkflowStepDefinitionParams]]
+            The new step definitions for the draft version. Replaces all existing draft steps.
+
+            See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for step definitions, branching patterns, and examples.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        Workflow
+            Workflow updated successfully
+
+        Examples
+        --------
+        import asyncio
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.workflows.update(
+                id="workflow_abc123",
+                name="Updated Invoice Processing",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.update(id, name=name, steps=steps, request_options=request_options)
         return _response.data

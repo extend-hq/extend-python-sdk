@@ -54,6 +54,7 @@ class ProcessorRunClient:
         sort_dir: typing.Optional[LegacySortDirEnum] = None,
         next_page_token: typing.Optional[LegacyNextPageToken] = None,
         max_page_size: typing.Optional[LegacyMaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ProcessorRunListResponse:
         """
@@ -113,6 +114,9 @@ class ProcessorRunClient:
 
         max_page_size : typing.Optional[LegacyMaxPageSize]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -145,6 +149,7 @@ class ProcessorRunClient:
             sort_dir=sort_dir,
             next_page_token=next_page_token,
             max_page_size=max_page_size,
+            extend_workspace_id=extend_workspace_id,
             request_options=request_options,
         )
         return _response.data
@@ -237,7 +242,13 @@ class ProcessorRunClient:
         )
         return _response.data
 
-    def get(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> ProcessorRunGetResponse:
+    def get(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ProcessorRunGetResponse:
         """
         Retrieve details about a specific processor run, including its status, outputs, and any edits made during review.
 
@@ -249,6 +260,9 @@ class ProcessorRunClient:
             The unique identifier for this processor run.
 
             Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -269,10 +283,16 @@ class ProcessorRunClient:
             id="processor_run_id_here",
         )
         """
-        _response = self._raw_client.get(id, request_options=request_options)
+        _response = self._raw_client.get(id, extend_workspace_id=extend_workspace_id, request_options=request_options)
         return _response.data
 
-    def delete(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> ProcessorRunDeleteResponse:
+    def delete(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ProcessorRunDeleteResponse:
         """
         Delete a processor run and all associated data from Extend. This operation is permanent and cannot be undone.
 
@@ -284,6 +304,9 @@ class ProcessorRunClient:
             The ID of the processor run to delete.
 
             Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -304,10 +327,18 @@ class ProcessorRunClient:
             id="processor_run_id_here",
         )
         """
-        _response = self._raw_client.delete(id, request_options=request_options)
+        _response = self._raw_client.delete(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
-    def cancel(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> ProcessorRunCancelResponse:
+    def cancel(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ProcessorRunCancelResponse:
         """
         Cancel a running processor run by its ID. This endpoint allows you to stop a processor run that is currently in progress.
 
@@ -319,6 +350,9 @@ class ProcessorRunClient:
             The unique identifier for the processor run to cancel.
 
             Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -339,7 +373,9 @@ class ProcessorRunClient:
             id="processor_run_id_here",
         )
         """
-        _response = self._raw_client.cancel(id, request_options=request_options)
+        _response = self._raw_client.cancel(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
 
@@ -371,6 +407,7 @@ class AsyncProcessorRunClient:
         sort_dir: typing.Optional[LegacySortDirEnum] = None,
         next_page_token: typing.Optional[LegacyNextPageToken] = None,
         max_page_size: typing.Optional[LegacyMaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ProcessorRunListResponse:
         """
@@ -430,6 +467,9 @@ class AsyncProcessorRunClient:
 
         max_page_size : typing.Optional[LegacyMaxPageSize]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -470,6 +510,7 @@ class AsyncProcessorRunClient:
             sort_dir=sort_dir,
             next_page_token=next_page_token,
             max_page_size=max_page_size,
+            extend_workspace_id=extend_workspace_id,
             request_options=request_options,
         )
         return _response.data
@@ -570,7 +611,13 @@ class AsyncProcessorRunClient:
         )
         return _response.data
 
-    async def get(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> ProcessorRunGetResponse:
+    async def get(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ProcessorRunGetResponse:
         """
         Retrieve details about a specific processor run, including its status, outputs, and any edits made during review.
 
@@ -582,6 +629,9 @@ class AsyncProcessorRunClient:
             The unique identifier for this processor run.
 
             Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -610,11 +660,17 @@ class AsyncProcessorRunClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.get(id, request_options=request_options)
+        _response = await self._raw_client.get(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     async def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> ProcessorRunDeleteResponse:
         """
         Delete a processor run and all associated data from Extend. This operation is permanent and cannot be undone.
@@ -627,6 +683,9 @@ class AsyncProcessorRunClient:
             The ID of the processor run to delete.
 
             Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -655,11 +714,17 @@ class AsyncProcessorRunClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.delete(id, request_options=request_options)
+        _response = await self._raw_client.delete(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     async def cancel(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> ProcessorRunCancelResponse:
         """
         Cancel a running processor run by its ID. This endpoint allows you to stop a processor run that is currently in progress.
@@ -672,6 +737,9 @@ class AsyncProcessorRunClient:
             The unique identifier for the processor run to cancel.
 
             Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -700,5 +768,7 @@ class AsyncProcessorRunClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.cancel(id, request_options=request_options)
+        _response = await self._raw_client.cancel(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data

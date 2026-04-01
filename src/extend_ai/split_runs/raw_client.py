@@ -55,6 +55,7 @@ class RawSplitRunsClient:
         sort_dir: typing.Optional[SortDir] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[SplitRunsListResponse]:
         """
@@ -90,6 +91,9 @@ class RawSplitRunsClient:
 
         max_page_size : typing.Optional[MaxPageSize]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -113,6 +117,9 @@ class RawSplitRunsClient:
                 "sortDir": sort_dir,
                 "nextPageToken": next_page_token,
                 "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
         )
@@ -390,7 +397,13 @@ class RawSplitRunsClient:
             status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
         )
 
-    def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> HttpResponse[SplitRun]:
+    def retrieve(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[SplitRun]:
         """
         Retrieve details about a specific split run, including its status and outputs.
 
@@ -403,6 +416,9 @@ class RawSplitRunsClient:
 
             Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -414,6 +430,9 @@ class RawSplitRunsClient:
         _response = self._client_wrapper.httpx_client.request(
             f"split_runs/{jsonable_encoder(id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -524,7 +543,11 @@ class RawSplitRunsClient:
         )
 
     def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[SplitRunsDeleteResponse]:
         """
         Delete a split run and all associated data from Extend. This operation is permanent and cannot be undone.
@@ -535,6 +558,9 @@ class RawSplitRunsClient:
         ----------
         id : str
             The ID of the split run.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -547,6 +573,9 @@ class RawSplitRunsClient:
         _response = self._client_wrapper.httpx_client.request(
             f"split_runs/{jsonable_encoder(id)}",
             method="DELETE",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -656,7 +685,13 @@ class RawSplitRunsClient:
             status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
         )
 
-    def cancel(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> HttpResponse[SplitRun]:
+    def cancel(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[SplitRun]:
         """
         Cancel an in-progress split run.
 
@@ -669,6 +704,9 @@ class RawSplitRunsClient:
 
             Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -680,6 +718,9 @@ class RawSplitRunsClient:
         _response = self._client_wrapper.httpx_client.request(
             f"split_runs/{jsonable_encoder(id)}/cancel",
             method="POST",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -806,6 +847,7 @@ class AsyncRawSplitRunsClient:
         sort_dir: typing.Optional[SortDir] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[SplitRunsListResponse]:
         """
@@ -841,6 +883,9 @@ class AsyncRawSplitRunsClient:
 
         max_page_size : typing.Optional[MaxPageSize]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -864,6 +909,9 @@ class AsyncRawSplitRunsClient:
                 "sortDir": sort_dir,
                 "nextPageToken": next_page_token,
                 "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
         )
@@ -1142,7 +1190,11 @@ class AsyncRawSplitRunsClient:
         )
 
     async def retrieve(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[SplitRun]:
         """
         Retrieve details about a specific split run, including its status and outputs.
@@ -1156,6 +1208,9 @@ class AsyncRawSplitRunsClient:
 
             Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -1167,6 +1222,9 @@ class AsyncRawSplitRunsClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"split_runs/{jsonable_encoder(id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -1277,7 +1335,11 @@ class AsyncRawSplitRunsClient:
         )
 
     async def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[SplitRunsDeleteResponse]:
         """
         Delete a split run and all associated data from Extend. This operation is permanent and cannot be undone.
@@ -1288,6 +1350,9 @@ class AsyncRawSplitRunsClient:
         ----------
         id : str
             The ID of the split run.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1300,6 +1365,9 @@ class AsyncRawSplitRunsClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"split_runs/{jsonable_encoder(id)}",
             method="DELETE",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -1410,7 +1478,11 @@ class AsyncRawSplitRunsClient:
         )
 
     async def cancel(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[SplitRun]:
         """
         Cancel an in-progress split run.
@@ -1424,6 +1496,9 @@ class AsyncRawSplitRunsClient:
 
             Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -1435,6 +1510,9 @@ class AsyncRawSplitRunsClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"split_runs/{jsonable_encoder(id)}/cancel",
             method="POST",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:

@@ -53,6 +53,7 @@ class RawProcessorRunClient:
         sort_dir: typing.Optional[LegacySortDirEnum] = None,
         next_page_token: typing.Optional[LegacyNextPageToken] = None,
         max_page_size: typing.Optional[LegacyMaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ProcessorRunListResponse]:
         """
@@ -112,6 +113,9 @@ class RawProcessorRunClient:
 
         max_page_size : typing.Optional[LegacyMaxPageSize]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -136,6 +140,9 @@ class RawProcessorRunClient:
                 "sortDir": sort_dir,
                 "nextPageToken": next_page_token,
                 "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
         )
@@ -323,7 +330,11 @@ class RawProcessorRunClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     def get(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ProcessorRunGetResponse]:
         """
         Retrieve details about a specific processor run, including its status, outputs, and any edits made during review.
@@ -337,6 +348,9 @@ class RawProcessorRunClient:
 
             Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -348,6 +362,9 @@ class RawProcessorRunClient:
         _response = self._client_wrapper.httpx_client.request(
             f"processor_runs/{jsonable_encoder(id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -399,7 +416,11 @@ class RawProcessorRunClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ProcessorRunDeleteResponse]:
         """
         Delete a processor run and all associated data from Extend. This operation is permanent and cannot be undone.
@@ -413,6 +434,9 @@ class RawProcessorRunClient:
 
             Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -424,6 +448,9 @@ class RawProcessorRunClient:
         _response = self._client_wrapper.httpx_client.request(
             f"processor_runs/{jsonable_encoder(id)}",
             method="DELETE",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -464,7 +491,11 @@ class RawProcessorRunClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     def cancel(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ProcessorRunCancelResponse]:
         """
         Cancel a running processor run by its ID. This endpoint allows you to stop a processor run that is currently in progress.
@@ -478,6 +509,9 @@ class RawProcessorRunClient:
 
             Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -489,6 +523,9 @@ class RawProcessorRunClient:
         _response = self._client_wrapper.httpx_client.request(
             f"processor_runs/{jsonable_encoder(id)}/cancel",
             method="POST",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -557,6 +594,7 @@ class AsyncRawProcessorRunClient:
         sort_dir: typing.Optional[LegacySortDirEnum] = None,
         next_page_token: typing.Optional[LegacyNextPageToken] = None,
         max_page_size: typing.Optional[LegacyMaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ProcessorRunListResponse]:
         """
@@ -616,6 +654,9 @@ class AsyncRawProcessorRunClient:
 
         max_page_size : typing.Optional[LegacyMaxPageSize]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -640,6 +681,9 @@ class AsyncRawProcessorRunClient:
                 "sortDir": sort_dir,
                 "nextPageToken": next_page_token,
                 "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
         )
@@ -827,7 +871,11 @@ class AsyncRawProcessorRunClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     async def get(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ProcessorRunGetResponse]:
         """
         Retrieve details about a specific processor run, including its status, outputs, and any edits made during review.
@@ -841,6 +889,9 @@ class AsyncRawProcessorRunClient:
 
             Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -852,6 +903,9 @@ class AsyncRawProcessorRunClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"processor_runs/{jsonable_encoder(id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -903,7 +957,11 @@ class AsyncRawProcessorRunClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     async def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ProcessorRunDeleteResponse]:
         """
         Delete a processor run and all associated data from Extend. This operation is permanent and cannot be undone.
@@ -917,6 +975,9 @@ class AsyncRawProcessorRunClient:
 
             Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -928,6 +989,9 @@ class AsyncRawProcessorRunClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"processor_runs/{jsonable_encoder(id)}",
             method="DELETE",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -968,7 +1032,11 @@ class AsyncRawProcessorRunClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     async def cancel(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ProcessorRunCancelResponse]:
         """
         Cancel a running processor run by its ID. This endpoint allows you to stop a processor run that is currently in progress.
@@ -982,6 +1050,9 @@ class AsyncRawProcessorRunClient:
 
             Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -993,6 +1064,9 @@ class AsyncRawProcessorRunClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"processor_runs/{jsonable_encoder(id)}/cancel",
             method="POST",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:

@@ -3,36 +3,47 @@
 import typing
 
 import pydantic
+import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .created_at import CreatedAt
+from .workflow_step_definition import WorkflowStepDefinition
 
 
 class WorkflowVersion(UncheckedBaseModel):
+    """
+    A workflow version with its step definitions.
+    """
+
     object: typing.Literal["workflow_version"] = pydantic.Field(default="workflow_version")
     """
-    The type of object. In this case, it will always be `"workflow_version"`.
+    The type of object. Always `"workflow_version"`.
     """
 
     id: str = pydantic.Field()
     """
     The ID of the workflow version.
-    
-    Example: `"workflow_version_Zk9mNP12Qw4-yTv8BdR3H"`
     """
 
     version: str = pydantic.Field()
     """
-    The version of the workflow version.
-    
-    Example: `"3"`
+    The version number as a string, or `"draft"` for the draft version.
     """
 
     name: typing.Optional[str] = pydantic.Field(default=None)
     """
     The name of the workflow version.
-    
-    Example: `"Invoice Processing"`
     """
+
+    steps: typing.List[WorkflowStepDefinition] = pydantic.Field()
+    """
+    The step definitions for this version.
+    """
+
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
+        alias="createdAt"
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

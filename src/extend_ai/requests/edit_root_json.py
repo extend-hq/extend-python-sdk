@@ -4,12 +4,17 @@ import typing
 
 import typing_extensions
 from ..core.serialization import FieldMetadata
+from ..types.edit_dependent_required import EditDependentRequired
+from .edit_conditional_clause import EditConditionalClauseParams
 from .edit_json import EditJsonParams
 
 
 class EditRootJsonParams(typing_extensions.TypedDict):
     """
     JSON Schema definition for editing PDF documents. The schema defines the structure and placement of fields to edit.
+    It also supports JSON Schema conditional keywords at the root level, including `dependentRequired`,
+    `if` / `then` / `else`, and logical combinators such as `allOf`, `oneOf`, `anyOf`, and `not`.
+    Conditional property constraints do not accept `extend_edit:*` keys.
     """
 
     type: typing.Literal["object"]
@@ -33,3 +38,38 @@ class EditRootJsonParams(typing_extensions.TypedDict):
     """
     Whether additional properties are allowed
     """
+
+    dependent_required: typing_extensions.NotRequired[
+        typing_extensions.Annotated[EditDependentRequired, FieldMetadata(alias="dependentRequired")]
+    ]
+    if_: typing_extensions.NotRequired[
+        typing_extensions.Annotated[EditConditionalClauseParams, FieldMetadata(alias="if")]
+    ]
+    then: typing_extensions.NotRequired[EditConditionalClauseParams]
+    else_: typing_extensions.NotRequired[
+        typing_extensions.Annotated[EditConditionalClauseParams, FieldMetadata(alias="else")]
+    ]
+    all_of: typing_extensions.NotRequired[
+        typing_extensions.Annotated[typing.Sequence[EditConditionalClauseParams], FieldMetadata(alias="allOf")]
+    ]
+    """
+    List of conditional clauses that must all match.
+    """
+
+    one_of: typing_extensions.NotRequired[
+        typing_extensions.Annotated[typing.Sequence[EditConditionalClauseParams], FieldMetadata(alias="oneOf")]
+    ]
+    """
+    List of conditional clauses where exactly one must match.
+    """
+
+    any_of: typing_extensions.NotRequired[
+        typing_extensions.Annotated[typing.Sequence[EditConditionalClauseParams], FieldMetadata(alias="anyOf")]
+    ]
+    """
+    List of conditional clauses where at least one must match.
+    """
+
+    not_: typing_extensions.NotRequired[
+        typing_extensions.Annotated[EditConditionalClauseParams, FieldMetadata(alias="not")]
+    ]

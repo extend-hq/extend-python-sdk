@@ -9,11 +9,15 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .edit_dependent_required import EditDependentRequired
 
 
 class EditRootJson(UncheckedBaseModel):
     """
     JSON Schema definition for editing PDF documents. The schema defines the structure and placement of fields to edit.
+    It also supports JSON Schema conditional keywords at the root level, including `dependentRequired`,
+    `if` / `then` / `else`, and logical combinators such as `allOf`, `oneOf`, `anyOf`, and `not`.
+    Conditional property constraints do not accept `extend_edit:*` keys.
     """
 
     type: typing.Literal["object"] = pydantic.Field(default="object")
@@ -38,6 +42,41 @@ class EditRootJson(UncheckedBaseModel):
     Whether additional properties are allowed
     """
 
+    dependent_required: typing_extensions.Annotated[
+        typing.Optional[EditDependentRequired], FieldMetadata(alias="dependentRequired")
+    ] = pydantic.Field(alias="dependentRequired", default=None)
+    if_: typing_extensions.Annotated[typing.Optional["EditConditionalClause"], FieldMetadata(alias="if")] = (
+        pydantic.Field(alias="if", default=None)
+    )
+    then: typing.Optional["EditConditionalClause"] = None
+    else_: typing_extensions.Annotated[typing.Optional["EditConditionalClause"], FieldMetadata(alias="else")] = (
+        pydantic.Field(alias="else", default=None)
+    )
+    all_of: typing_extensions.Annotated[
+        typing.Optional[typing.List["EditConditionalClause"]], FieldMetadata(alias="allOf")
+    ] = pydantic.Field(alias="allOf", default=None)
+    """
+    List of conditional clauses that must all match.
+    """
+
+    one_of: typing_extensions.Annotated[
+        typing.Optional[typing.List["EditConditionalClause"]], FieldMetadata(alias="oneOf")
+    ] = pydantic.Field(alias="oneOf", default=None)
+    """
+    List of conditional clauses where exactly one must match.
+    """
+
+    any_of: typing_extensions.Annotated[
+        typing.Optional[typing.List["EditConditionalClause"]], FieldMetadata(alias="anyOf")
+    ] = pydantic.Field(alias="anyOf", default=None)
+    """
+    List of conditional clauses where at least one must match.
+    """
+
+    not_: typing_extensions.Annotated[typing.Optional["EditConditionalClause"], FieldMetadata(alias="not")] = (
+        pydantic.Field(alias="not", default=None)
+    )
+
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
     else:
@@ -50,5 +89,8 @@ class EditRootJson(UncheckedBaseModel):
 
 from .edit_json import EditJson  # noqa: E402, I001
 from .edit_object_json import EditObjectJson  # noqa: E402, I001
+from .edit_conditional_clause import EditConditionalClause  # noqa: E402, I001
 
-update_forward_refs(EditRootJson, EditJson=EditJson, EditObjectJson=EditObjectJson)
+update_forward_refs(
+    EditRootJson, EditConditionalClause=EditConditionalClause, EditJson=EditJson, EditObjectJson=EditObjectJson
+)

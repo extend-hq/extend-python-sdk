@@ -20,7 +20,11 @@ class RawBatchProcessorRunClient:
         self._client_wrapper = client_wrapper
 
     def get(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[BatchProcessorRunGetResponse]:
         """
         Retrieve details about a batch processor run, including evaluation runs.
@@ -34,6 +38,9 @@ class RawBatchProcessorRunClient:
 
             Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -45,6 +52,9 @@ class RawBatchProcessorRunClient:
         _response = self._client_wrapper.httpx_client.request(
             f"batch_processor_runs/{jsonable_encoder(id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -101,7 +111,11 @@ class AsyncRawBatchProcessorRunClient:
         self._client_wrapper = client_wrapper
 
     async def get(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[BatchProcessorRunGetResponse]:
         """
         Retrieve details about a batch processor run, including evaluation runs.
@@ -115,6 +129,9 @@ class AsyncRawBatchProcessorRunClient:
 
             Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -126,6 +143,9 @@ class AsyncRawBatchProcessorRunClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"batch_processor_runs/{jsonable_encoder(id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:

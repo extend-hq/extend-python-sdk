@@ -3,24 +3,30 @@
 import typing
 
 import typing_extensions
+from ..core.serialization import FieldMetadata
+from ..types.created_at import CreatedAt
+from ..types.updated_at import UpdatedAt
 
 
 class WorkflowSummaryParams(typing_extensions.TypedDict):
+    """
+    A summary representation of a workflow.
+    """
+
     object: typing.Literal["workflow"]
     """
-    The type of object. In this case, it will always be `"workflow"`.
+    The type of object. Always `"workflow"`.
     """
 
     id: str
     """
     The ID of the workflow.
-    
-    Example: `"workflow_BMlfq_yWM3sT-ZzvCnA3f"`
     """
 
     name: str
     """
     The name of the workflow.
-    
-    Example: `"Invoice Processing"`
     """
+
+    created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
+    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")]

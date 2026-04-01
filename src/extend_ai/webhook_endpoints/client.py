@@ -43,6 +43,7 @@ class WebhookEndpointsClient:
         sort_dir: typing.Optional[SortDir] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WebhookEndpointsListResponse:
         """
@@ -58,6 +59,9 @@ class WebhookEndpointsClient:
         next_page_token : typing.Optional[NextPageToken]
 
         max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -83,6 +87,7 @@ class WebhookEndpointsClient:
             sort_dir=sort_dir,
             next_page_token=next_page_token,
             max_page_size=max_page_size,
+            extend_workspace_id=extend_workspace_id,
             request_options=request_options,
         )
         return _response.data
@@ -158,7 +163,13 @@ class WebhookEndpointsClient:
         )
         return _response.data
 
-    def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> WebhookEndpoint:
+    def retrieve(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> WebhookEndpoint:
         """
         Retrieve a webhook endpoint by ID.
 
@@ -168,6 +179,9 @@ class WebhookEndpointsClient:
             The ID of the webhook endpoint.
 
             Example: `"wh_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -188,13 +202,16 @@ class WebhookEndpointsClient:
             id="webhook_endpoint_id_here",
         )
         """
-        _response = self._raw_client.retrieve(id, request_options=request_options)
+        _response = self._raw_client.retrieve(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     def update(
         self,
         id: str,
         *,
+        extend_workspace_id: typing.Optional[str] = None,
         url: typing.Optional[str] = OMIT,
         name: typing.Optional[str] = OMIT,
         status: typing.Optional[WebhookEndpointStatus] = OMIT,
@@ -213,6 +230,9 @@ class WebhookEndpointsClient:
             The ID of the webhook endpoint to update.
 
             Example: `"wh_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         url : typing.Optional[str]
             The URL that webhook events will be sent to.
@@ -248,6 +268,7 @@ class WebhookEndpointsClient:
         """
         _response = self._raw_client.update(
             id,
+            extend_workspace_id=extend_workspace_id,
             url=url,
             name=name,
             status=status,
@@ -258,7 +279,11 @@ class WebhookEndpointsClient:
         return _response.data
 
     def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> WebhookEndpointsDeleteResponse:
         """
         Delete a webhook endpoint and all of its subscriptions. This operation is permanent and cannot be undone.
@@ -269,6 +294,9 @@ class WebhookEndpointsClient:
             The ID of the webhook endpoint to delete.
 
             Example: `"wh_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -289,7 +317,9 @@ class WebhookEndpointsClient:
             id="webhook_endpoint_id_here",
         )
         """
-        _response = self._raw_client.delete(id, request_options=request_options)
+        _response = self._raw_client.delete(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
 
@@ -315,6 +345,7 @@ class AsyncWebhookEndpointsClient:
         sort_dir: typing.Optional[SortDir] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WebhookEndpointsListResponse:
         """
@@ -330,6 +361,9 @@ class AsyncWebhookEndpointsClient:
         next_page_token : typing.Optional[NextPageToken]
 
         max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -363,6 +397,7 @@ class AsyncWebhookEndpointsClient:
             sort_dir=sort_dir,
             next_page_token=next_page_token,
             max_page_size=max_page_size,
+            extend_workspace_id=extend_workspace_id,
             request_options=request_options,
         )
         return _response.data
@@ -446,7 +481,13 @@ class AsyncWebhookEndpointsClient:
         )
         return _response.data
 
-    async def retrieve(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> WebhookEndpoint:
+    async def retrieve(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> WebhookEndpoint:
         """
         Retrieve a webhook endpoint by ID.
 
@@ -456,6 +497,9 @@ class AsyncWebhookEndpointsClient:
             The ID of the webhook endpoint.
 
             Example: `"wh_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -484,13 +528,16 @@ class AsyncWebhookEndpointsClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.retrieve(id, request_options=request_options)
+        _response = await self._raw_client.retrieve(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     async def update(
         self,
         id: str,
         *,
+        extend_workspace_id: typing.Optional[str] = None,
         url: typing.Optional[str] = OMIT,
         name: typing.Optional[str] = OMIT,
         status: typing.Optional[WebhookEndpointStatus] = OMIT,
@@ -509,6 +556,9 @@ class AsyncWebhookEndpointsClient:
             The ID of the webhook endpoint to update.
 
             Example: `"wh_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         url : typing.Optional[str]
             The URL that webhook events will be sent to.
@@ -552,6 +602,7 @@ class AsyncWebhookEndpointsClient:
         """
         _response = await self._raw_client.update(
             id,
+            extend_workspace_id=extend_workspace_id,
             url=url,
             name=name,
             status=status,
@@ -562,7 +613,11 @@ class AsyncWebhookEndpointsClient:
         return _response.data
 
     async def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> WebhookEndpointsDeleteResponse:
         """
         Delete a webhook endpoint and all of its subscriptions. This operation is permanent and cannot be undone.
@@ -573,6 +628,9 @@ class AsyncWebhookEndpointsClient:
             The ID of the webhook endpoint to delete.
 
             Example: `"wh_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -601,5 +659,7 @@ class AsyncWebhookEndpointsClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.delete(id, request_options=request_options)
+        _response = await self._raw_client.delete(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data

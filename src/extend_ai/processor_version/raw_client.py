@@ -28,7 +28,11 @@ class RawProcessorVersionClient:
         self._client_wrapper = client_wrapper
 
     def list(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ProcessorVersionListResponse]:
         """
         This endpoint allows you to fetch all versions of a given processor, including the current `draft` version.
@@ -43,6 +47,9 @@ class RawProcessorVersionClient:
 
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -54,6 +61,9 @@ class RawProcessorVersionClient:
         _response = self._client_wrapper.httpx_client.request(
             f"processors/{jsonable_encoder(id)}/versions",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -109,6 +119,7 @@ class RawProcessorVersionClient:
         id: str,
         *,
         release_type: ProcessorVersionCreateRequestReleaseType,
+        extend_workspace_id: typing.Optional[str] = None,
         description: typing.Optional[str] = OMIT,
         config: typing.Optional[ProcessorVersionCreateRequestConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -127,6 +138,9 @@ class RawProcessorVersionClient:
 
         release_type : ProcessorVersionCreateRequestReleaseType
             The type of release for this version. The two options are "major" and "minor", which will increment the version number accordingly.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         description : typing.Optional[str]
             A description of the changes in this version. This helps track the evolution of the processor over time.
@@ -154,6 +168,7 @@ class RawProcessorVersionClient:
             },
             headers={
                 "content-type": "application/json",
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
             omit=OMIT,
@@ -196,7 +211,12 @@ class RawProcessorVersionClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     def get(
-        self, processor_id: str, processor_version_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        processor_id: str,
+        processor_version_id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ProcessorVersionGetResponse]:
         """
         Retrieve a specific version of a processor in Extend
@@ -213,6 +233,9 @@ class RawProcessorVersionClient:
 
             Example: `"exv_QYk6jgHA_8CsO8rVWhyNC"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -224,6 +247,9 @@ class RawProcessorVersionClient:
         _response = self._client_wrapper.httpx_client.request(
             f"processors/{jsonable_encoder(processor_id)}/versions/{jsonable_encoder(processor_version_id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -280,7 +306,11 @@ class AsyncRawProcessorVersionClient:
         self._client_wrapper = client_wrapper
 
     async def list(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ProcessorVersionListResponse]:
         """
         This endpoint allows you to fetch all versions of a given processor, including the current `draft` version.
@@ -295,6 +325,9 @@ class AsyncRawProcessorVersionClient:
 
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -306,6 +339,9 @@ class AsyncRawProcessorVersionClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"processors/{jsonable_encoder(id)}/versions",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -361,6 +397,7 @@ class AsyncRawProcessorVersionClient:
         id: str,
         *,
         release_type: ProcessorVersionCreateRequestReleaseType,
+        extend_workspace_id: typing.Optional[str] = None,
         description: typing.Optional[str] = OMIT,
         config: typing.Optional[ProcessorVersionCreateRequestConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -379,6 +416,9 @@ class AsyncRawProcessorVersionClient:
 
         release_type : ProcessorVersionCreateRequestReleaseType
             The type of release for this version. The two options are "major" and "minor", which will increment the version number accordingly.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
 
         description : typing.Optional[str]
             A description of the changes in this version. This helps track the evolution of the processor over time.
@@ -406,6 +446,7 @@ class AsyncRawProcessorVersionClient:
             },
             headers={
                 "content-type": "application/json",
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
             omit=OMIT,
@@ -448,7 +489,12 @@ class AsyncRawProcessorVersionClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     async def get(
-        self, processor_id: str, processor_version_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        processor_id: str,
+        processor_version_id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ProcessorVersionGetResponse]:
         """
         Retrieve a specific version of a processor in Extend
@@ -465,6 +511,9 @@ class AsyncRawProcessorVersionClient:
 
             Example: `"exv_QYk6jgHA_8CsO8rVWhyNC"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -476,6 +525,9 @@ class AsyncRawProcessorVersionClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"processors/{jsonable_encoder(processor_id)}/versions/{jsonable_encoder(processor_version_id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:

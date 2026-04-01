@@ -8,7 +8,9 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .page_ranges import PageRanges
+from .parse_config_advanced_options_enrichment_format import ParseConfigAdvancedOptionsEnrichmentFormat
 from .parse_config_advanced_options_excel_parsing_mode import ParseConfigAdvancedOptionsExcelParsingMode
+from .parse_config_advanced_options_image_conversion_quality import ParseConfigAdvancedOptionsImageConversionQuality
 from .parse_config_advanced_options_return_ocr import ParseConfigAdvancedOptionsReturnOcr
 
 
@@ -75,6 +77,27 @@ class ParseConfigAdvancedOptions(UncheckedBaseModel):
     ] = pydantic.Field(alias="alwaysConvertToPdf", default=None)
     """
     Whether to convert supported file types (images, Word documents, PowerPoint, Excel, HTML) to PDF before parsing. This can improve parsing quality for some file types and ensures spatial output with bounding boxes.
+    """
+
+    enrichment_format: typing_extensions.Annotated[
+        typing.Optional[ParseConfigAdvancedOptionsEnrichmentFormat], FieldMetadata(alias="enrichmentFormat")
+    ] = pydantic.Field(alias="enrichmentFormat", default=None)
+    """
+    The format used for enrichment annotations in the output.
+    
+    * `xml`: Use XML-style tags for enrichment annotations, e.g. <page_number>1</page_number> or <barcode>1234567890</barcode>
+    * `bracket`: Use bracket-style notation for enrichment annotations, e.g. [page_number: 1] or [barcode: 1234567890]
+    """
+
+    image_conversion_quality: typing_extensions.Annotated[
+        typing.Optional[ParseConfigAdvancedOptionsImageConversionQuality], FieldMetadata(alias="imageConversionQuality")
+    ] = pydantic.Field(alias="imageConversionQuality", default=None)
+    """
+    Controls the quality level when converting images or documents to PDF for parsing.
+    
+    * `high`: Maximum quality, can add some latency for large/dense documents
+    * `medium`: Balanced quality and speed
+    * `low`: Lower quality, smaller file sizes, faster processing
     """
 
     if IS_PYDANTIC_V2:
