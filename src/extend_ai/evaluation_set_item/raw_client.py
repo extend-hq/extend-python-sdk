@@ -43,6 +43,7 @@ class RawEvaluationSetItemClient:
         sort_dir: typing.Optional[SortDirEnum] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[EvaluationSetItemListResponse]:
         """
@@ -67,6 +68,9 @@ class RawEvaluationSetItemClient:
 
         max_page_size : typing.Optional[MaxPageSize]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -83,6 +87,9 @@ class RawEvaluationSetItemClient:
                 "sortDir": sort_dir,
                 "nextPageToken": next_page_token,
                 "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
         )
@@ -239,6 +246,7 @@ class RawEvaluationSetItemClient:
         id: str,
         *,
         expected_output: ProvidedProcessorOutput,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[EvaluationSetItemUpdateResponse]:
         """
@@ -253,6 +261,9 @@ class RawEvaluationSetItemClient:
 
         expected_output : ProvidedProcessorOutput
             The expected output of the processor when run against the file
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -272,6 +283,7 @@ class RawEvaluationSetItemClient:
             },
             headers={
                 "content-type": "application/json",
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
             omit=OMIT,
@@ -325,7 +337,11 @@ class RawEvaluationSetItemClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[EvaluationSetItemDeleteResponse]:
         """
         Delete an evaluation set item from an evaluation set. This operation is permanent and cannot be undone.
@@ -339,6 +355,9 @@ class RawEvaluationSetItemClient:
 
             Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -350,6 +369,9 @@ class RawEvaluationSetItemClient:
         _response = self._client_wrapper.httpx_client.request(
             f"evaluation_set_items/{jsonable_encoder(id)}",
             method="DELETE",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -486,6 +508,7 @@ class AsyncRawEvaluationSetItemClient:
         sort_dir: typing.Optional[SortDirEnum] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[EvaluationSetItemListResponse]:
         """
@@ -510,6 +533,9 @@ class AsyncRawEvaluationSetItemClient:
 
         max_page_size : typing.Optional[MaxPageSize]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -526,6 +552,9 @@ class AsyncRawEvaluationSetItemClient:
                 "sortDir": sort_dir,
                 "nextPageToken": next_page_token,
                 "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
         )
@@ -682,6 +711,7 @@ class AsyncRawEvaluationSetItemClient:
         id: str,
         *,
         expected_output: ProvidedProcessorOutput,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[EvaluationSetItemUpdateResponse]:
         """
@@ -696,6 +726,9 @@ class AsyncRawEvaluationSetItemClient:
 
         expected_output : ProvidedProcessorOutput
             The expected output of the processor when run against the file
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -715,6 +748,7 @@ class AsyncRawEvaluationSetItemClient:
             },
             headers={
                 "content-type": "application/json",
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
             omit=OMIT,
@@ -768,7 +802,11 @@ class AsyncRawEvaluationSetItemClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     async def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[EvaluationSetItemDeleteResponse]:
         """
         Delete an evaluation set item from an evaluation set. This operation is permanent and cannot be undone.
@@ -782,6 +820,9 @@ class AsyncRawEvaluationSetItemClient:
 
             Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -793,6 +834,9 @@ class AsyncRawEvaluationSetItemClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"evaluation_set_items/{jsonable_encoder(id)}",
             method="DELETE",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:

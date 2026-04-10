@@ -21,6 +21,10 @@ class WebhookEventWorkflowRun(UncheckedBaseModel):
     event_type: typing_extensions.Annotated[
         typing.Optional[WebhookEventWorkflowRunEventType], FieldMetadata(alias="eventType")
     ] = pydantic.Field(alias="eventType", default=None)
+    """
+    Type of the event that occurred
+    """
+
     payload: typing.Optional[WorkflowRun] = None
     event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     """

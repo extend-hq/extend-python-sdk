@@ -74,6 +74,14 @@ Controls the format of the response chunks. Defaults to `json` if not specified.
 <dl>
 <dd>
 
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **config:** `typing.Optional[ParseConfig]` 
     
 </dd>
@@ -272,6 +280,14 @@ Example: `"invoice"`
 <dl>
 <dd>
 
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -381,6 +397,14 @@ Only available for files with a type of DOCX.
 <dl>
 <dd>
 
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -450,6 +474,14 @@ client.file.delete(
 The ID of the file to delete.
 
 Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -538,6 +570,14 @@ core.File` — See core.File for more documentation
 <dd>
 
 **convert_to_pdf:** `typing.Optional[bool]` — When true, converts the uploaded file to PDF. Supported file types include images (JPEG, PNG, TIFF, GIF, BMP, WebP, HEIC/HEIF), Word documents, PowerPoint, Excel, and HTML.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -637,6 +677,14 @@ Controls the format of the response chunks. Defaults to `json` if not specified.
 <dl>
 <dd>
 
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -706,6 +754,14 @@ client.parser_run.delete(
 The ID of the parser run to delete.
 
 Example: `"parser_run_xK9mLPqRtN3vS8wF5hB2cQ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -958,6 +1014,14 @@ Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
 <dl>
 <dd>
 
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -1027,6 +1091,110 @@ client.edit.delete(
 The ID of the edit run to delete.
 
 Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## EditSchemas
+<details><summary><code>client.edit_schemas.<a href="src/extend_ai/edit_schemas/client.py">generate</a>(...) -&gt; AsyncHttpResponse[EditSchemaGenerationResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Detect fields in a PDF form and synchronously return an edit schema payload.
+
+Use this endpoint when you want Extend to bootstrap an `EditRootJSONSchema` from an existing form, optionally mapping an existing schema onto the detected fields.
+
+This endpoint returns the generated schema directly. There are no schema generation run resources to poll or delete.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import (
+    EditSchemaGenerationConfig,
+    EditSchemaGenerationConfigAdvancedOptions,
+    Extend,
+)
+from extend_ai.edit_schemas import EditSchemasGenerateRequestFile
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.edit_schemas.generate(
+    file=EditSchemasGenerateRequestFile(
+        file_url="https://example.com/form.pdf",
+    ),
+    config=EditSchemaGenerationConfig(
+        instructions="Detect the form fields and use human-readable field names.",
+        advanced_options=EditSchemaGenerationConfigAdvancedOptions(
+            radio_enums_enabled=True,
+        ),
+    ),
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**file:** `EditSchemasGenerateRequestFile` — A file object containing either a URL or a fileId.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**config:** `typing.Optional[EditSchemaGenerationConfig]` 
     
 </dd>
 </dl>
@@ -1265,6 +1433,14 @@ Example: `"invoice"`
 <dl>
 <dd>
 
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -1463,6 +1639,14 @@ Example: `"workflow_run_8k9m-xyzAB_Pqrst-Nvw4"`
 <dl>
 <dd>
 
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -1530,6 +1714,14 @@ client.workflow_run.update(
 The ID of the WorkflowRun. This ID will start with "workflow_run". This ID can be found in the API response when creating a Workflow Run, or in the "history" tab of a workflow on the Extend platform.
 
 Example: `"workflow_run_8k9m-xyzAB_Pqrst-Nvw4"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -1635,6 +1827,14 @@ Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 <dl>
 <dd>
 
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -1704,6 +1904,14 @@ client.workflow_run.cancel(
 The ID of the workflow run to cancel.
 
 Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -1805,6 +2013,14 @@ The corrected output of the processor when run against the file.
 This should conform to the output type schema of the given processor.
 
 If this is an extraction result, you can include all fields, or just the ones that were corrected, our system will handle merges/dedupes. However, if you do include a field, we assume the value included in the final reviewed value.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -1992,6 +2208,14 @@ Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -2098,6 +2322,14 @@ Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 <dd>
 
 **max_page_size:** `typing.Optional[MaxPageSize]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -2281,6 +2513,14 @@ Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
 <dl>
 <dd>
 
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -2387,6 +2627,14 @@ Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
 <dd>
 
 **max_page_size:** `typing.Optional[MaxPageSize]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -2590,6 +2838,14 @@ Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
 <dl>
 <dd>
 
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -2659,6 +2915,14 @@ client.evaluation_set_item.delete(
 The ID of the evaluation set item to delete.
 
 Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -2949,6 +3213,14 @@ Example: `"invoice"`
 <dl>
 <dd>
 
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -3172,6 +3444,14 @@ Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -3248,6 +3528,14 @@ Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -3317,6 +3605,14 @@ client.processor_run.cancel(
 The unique identifier for the processor run to cancel.
 
 Example: `"dpr_Xj8mK2pL9nR4vT7qY5wZ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -3424,6 +3720,14 @@ client.processor.list(
 <dd>
 
 **sort_dir:** `typing.Optional[ProcessorListRequestSortDir]` — Sort direction
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -3604,6 +3908,14 @@ Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **name:** `typing.Optional[str]` — The new name for the processor
     
 </dd>
@@ -3703,6 +4015,14 @@ Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
     
 </dd>
@@ -3781,6 +4101,14 @@ Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 <dd>
 
 **release_type:** `ProcessorVersionCreateRequestReleaseType` — The type of release for this version. The two options are "major" and "minor", which will increment the version number accordingly.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -3884,6 +4212,14 @@ Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
 The ID of the specific processor version to retrieve.
 
 Example: `"dpv_QYk6jgHA_8CsO8rVWhyNC"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
     
 </dd>
 </dl>

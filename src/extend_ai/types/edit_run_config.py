@@ -26,6 +26,13 @@ class EditRunConfig(UncheckedBaseModel):
     Custom instructions for the edit operation.
     """
 
+    schema_generation_instructions: typing_extensions.Annotated[
+        typing.Optional[str], FieldMetadata(alias="schemaGenerationInstructions")
+    ] = pydantic.Field(alias="schemaGenerationInstructions", default=None)
+    """
+    Additional instructions used when generating a schema from the document.
+    """
+
     advanced_options: typing_extensions.Annotated[
         typing.Optional[EditRunConfigAdvancedOptions], FieldMetadata(alias="advancedOptions")
     ] = pydantic.Field(alias="advancedOptions", default=None)

@@ -12,35 +12,21 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 from .edit_dependent_required import EditDependentRequired
 
 
-class EditRootJsonSchema(UncheckedBaseModel):
+class EditConditionalClause(UncheckedBaseModel):
     """
-    JSON Schema definition for editing PDF documents. The schema defines the structure and placement of fields to edit.
-    It also supports JSON Schema conditional keywords at the root level, including `dependentRequired`,
-    `if` / `then` / `else`, and logical combinators such as `allOf`, `oneOf`, `anyOf`, and `not`.
-    Conditional property constraints do not accept `extend_edit:*` keys, and nested conditional clauses are
-    supported up to 8 levels to match the Studio editor.
+    Recursive conditional clause for edit schemas. Use these clauses with root-level `if` / `then` / `else`,
+    `dependentRequired`, and logical combinators to model conditional field requirements. Nested clauses are
+    supported up to 8 levels.
     """
 
-    type: typing.Literal["object"] = pydantic.Field(default="object")
+    properties: typing.Optional[typing.Dict[str, "EditConditionalPropertySchema"]] = pydantic.Field(default=None)
     """
-    Must be "object" for the root schema
-    """
-
-    properties: typing.Dict[str, "EditJsonSchema"] = pydantic.Field()
-    """
-    Map of field names to their schema definitions
+    Conditional field constraints keyed by top-level property name.
     """
 
     required: typing.Optional[typing.List[str]] = pydantic.Field(default=None)
     """
-    List of required field names
-    """
-
-    additional_properties: typing_extensions.Annotated[
-        typing.Optional[bool], FieldMetadata(alias="additionalProperties")
-    ] = pydantic.Field(alias="additionalProperties", default=None)
-    """
-    Whether additional properties are allowed
+    List of fields that must be present when this clause applies.
     """
 
     dependent_required: typing_extensions.Annotated[
@@ -57,21 +43,21 @@ class EditRootJsonSchema(UncheckedBaseModel):
         typing.Optional[typing.List["EditConditionalClause"]], FieldMetadata(alias="allOf")
     ] = pydantic.Field(alias="allOf", default=None)
     """
-    List of conditional clauses that must all match.
+    List of nested conditional clauses that must all match.
     """
 
     one_of: typing_extensions.Annotated[
         typing.Optional[typing.List["EditConditionalClause"]], FieldMetadata(alias="oneOf")
     ] = pydantic.Field(alias="oneOf", default=None)
     """
-    List of conditional clauses where exactly one must match.
+    List of nested conditional clauses where exactly one must match.
     """
 
     any_of: typing_extensions.Annotated[
         typing.Optional[typing.List["EditConditionalClause"]], FieldMetadata(alias="anyOf")
     ] = pydantic.Field(alias="anyOf", default=None)
     """
-    List of conditional clauses where at least one must match.
+    List of nested conditional clauses where at least one must match.
     """
 
     not_: typing_extensions.Annotated[typing.Optional["EditConditionalClause"], FieldMetadata(alias="not")] = (
@@ -88,13 +74,11 @@ class EditRootJsonSchema(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-from .edit_json_schema import EditJsonSchema  # noqa: E402, I001
-from .edit_object_json_schema import EditObjectJsonSchema  # noqa: E402, I001
-from .edit_conditional_clause import EditConditionalClause  # noqa: E402, I001
+from .edit_conditional_object_property_schema import EditConditionalObjectPropertySchema  # noqa: E402, I001
+from .edit_conditional_property_schema import EditConditionalPropertySchema  # noqa: E402, I001
 
 update_forward_refs(
-    EditRootJsonSchema,
-    EditConditionalClause=EditConditionalClause,
-    EditJsonSchema=EditJsonSchema,
-    EditObjectJsonSchema=EditObjectJsonSchema,
+    EditConditionalClause,
+    EditConditionalObjectPropertySchema=EditConditionalObjectPropertySchema,
+    EditConditionalPropertySchema=EditConditionalPropertySchema,
 )

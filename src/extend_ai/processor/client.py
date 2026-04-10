@@ -41,6 +41,7 @@ class ProcessorClient:
         max_page_size: typing.Optional[int] = None,
         sort_by: typing.Optional[ProcessorListRequestSortBy] = None,
         sort_dir: typing.Optional[ProcessorListRequestSortDir] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ListProcessorsResponse:
         """
@@ -62,6 +63,9 @@ class ProcessorClient:
 
         sort_dir : typing.Optional[ProcessorListRequestSortDir]
             Sort direction
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -92,6 +96,7 @@ class ProcessorClient:
             max_page_size=max_page_size,
             sort_by=sort_by,
             sort_dir=sort_dir,
+            extend_workspace_id=extend_workspace_id,
             request_options=request_options,
         )
         return _response.data
@@ -152,6 +157,7 @@ class ProcessorClient:
         self,
         id: str,
         *,
+        extend_workspace_id: typing.Optional[str] = None,
         name: typing.Optional[str] = OMIT,
         config: typing.Optional[ProcessorUpdateRequestConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -165,6 +171,9 @@ class ProcessorClient:
             The ID of the processor to update.
 
             Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             The new name for the processor
@@ -194,7 +203,9 @@ class ProcessorClient:
             id="processor_id_here",
         )
         """
-        _response = self._raw_client.update(id, name=name, config=config, request_options=request_options)
+        _response = self._raw_client.update(
+            id, extend_workspace_id=extend_workspace_id, name=name, config=config, request_options=request_options
+        )
         return _response.data
 
 
@@ -221,6 +232,7 @@ class AsyncProcessorClient:
         max_page_size: typing.Optional[int] = None,
         sort_by: typing.Optional[ProcessorListRequestSortBy] = None,
         sort_dir: typing.Optional[ProcessorListRequestSortDir] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ListProcessorsResponse:
         """
@@ -242,6 +254,9 @@ class AsyncProcessorClient:
 
         sort_dir : typing.Optional[ProcessorListRequestSortDir]
             Sort direction
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -280,6 +295,7 @@ class AsyncProcessorClient:
             max_page_size=max_page_size,
             sort_by=sort_by,
             sort_dir=sort_dir,
+            extend_workspace_id=extend_workspace_id,
             request_options=request_options,
         )
         return _response.data
@@ -348,6 +364,7 @@ class AsyncProcessorClient:
         self,
         id: str,
         *,
+        extend_workspace_id: typing.Optional[str] = None,
         name: typing.Optional[str] = OMIT,
         config: typing.Optional[ProcessorUpdateRequestConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -361,6 +378,9 @@ class AsyncProcessorClient:
             The ID of the processor to update.
 
             Example: `"dp_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             The new name for the processor
@@ -398,5 +418,7 @@ class AsyncProcessorClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.update(id, name=name, config=config, request_options=request_options)
+        _response = await self._raw_client.update(
+            id, extend_workspace_id=extend_workspace_id, name=name, config=config, request_options=request_options
+        )
         return _response.data

@@ -37,6 +37,7 @@ class RawEvaluationSetClient:
         sort_dir: typing.Optional[SortDirEnum] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[EvaluationSetListResponse]:
         """
@@ -61,6 +62,9 @@ class RawEvaluationSetClient:
 
         max_page_size : typing.Optional[MaxPageSize]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -78,6 +82,9 @@ class RawEvaluationSetClient:
                 "sortDir": sort_dir,
                 "nextPageToken": next_page_token,
                 "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
         )
@@ -203,7 +210,11 @@ class RawEvaluationSetClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     def get(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[EvaluationSetGetResponse]:
         """
         Retrieve a specific evaluation set by ID. This returns an evaluation set object, but does not include the items in the evaluation set. You can use the [List Evaluation Set Items](https://docs.extend.ai/2025-04-21/developers/api-reference/evaluation-set-endpoints/list-evaluation-set-items) endpoint to get the items in an evaluation set.
@@ -214,6 +225,9 @@ class RawEvaluationSetClient:
             The ID of the evaluation set to retrieve.
 
             Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -226,6 +240,9 @@ class RawEvaluationSetClient:
         _response = self._client_wrapper.httpx_client.request(
             f"evaluation_sets/{jsonable_encoder(id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:
@@ -289,6 +306,7 @@ class AsyncRawEvaluationSetClient:
         sort_dir: typing.Optional[SortDirEnum] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[EvaluationSetListResponse]:
         """
@@ -313,6 +331,9 @@ class AsyncRawEvaluationSetClient:
 
         max_page_size : typing.Optional[MaxPageSize]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -330,6 +351,9 @@ class AsyncRawEvaluationSetClient:
                 "sortDir": sort_dir,
                 "nextPageToken": next_page_token,
                 "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
         )
@@ -455,7 +479,11 @@ class AsyncRawEvaluationSetClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
     async def get(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[EvaluationSetGetResponse]:
         """
         Retrieve a specific evaluation set by ID. This returns an evaluation set object, but does not include the items in the evaluation set. You can use the [List Evaluation Set Items](https://docs.extend.ai/2025-04-21/developers/api-reference/evaluation-set-endpoints/list-evaluation-set-items) endpoint to get the items in an evaluation set.
@@ -466,6 +494,9 @@ class AsyncRawEvaluationSetClient:
             The ID of the evaluation set to retrieve.
 
             Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -478,6 +509,9 @@ class AsyncRawEvaluationSetClient:
         _response = await self._client_wrapper.httpx_client.request(
             f"evaluation_sets/{jsonable_encoder(id)}",
             method="GET",
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
             request_options=request_options,
         )
         try:

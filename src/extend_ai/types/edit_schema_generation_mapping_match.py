@@ -7,26 +7,23 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .webhook_event_workflow_event_type import WebhookEventWorkflowEventType
-from .workflow import Workflow
 
 
-class WebhookEventWorkflow(UncheckedBaseModel):
+class EditSchemaGenerationMappingMatch(UncheckedBaseModel):
     """
-    Webhook event for workflow related events
-    """
-
-    event_type: typing_extensions.Annotated[
-        typing.Optional[WebhookEventWorkflowEventType], FieldMetadata(alias="eventType")
-    ] = pydantic.Field(alias="eventType", default=None)
-    """
-    Type of the event that occurred
+    A successful mapping between an input schema path and a detected form field.
     """
 
-    payload: typing.Optional[Workflow] = None
-    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
+    input_path: typing_extensions.Annotated[str, FieldMetadata(alias="inputPath")] = pydantic.Field(alias="inputPath")
     """
-    Unique identifier for the event
+    The path from the provided `inputSchema`.
+    """
+
+    form_field_key: typing_extensions.Annotated[str, FieldMetadata(alias="formFieldKey")] = pydantic.Field(
+        alias="formFieldKey"
+    )
+    """
+    The detected form field key matched to the input path.
     """
 
     if IS_PYDANTIC_V2:

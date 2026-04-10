@@ -33,6 +33,7 @@ class WorkflowRunOutputClient:
         output_id: str,
         *,
         reviewed_output: ProvidedProcessorOutput,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowRunOutputUpdateResponse:
         """
@@ -54,6 +55,9 @@ class WorkflowRunOutputClient:
             This should conform to the output type schema of the given processor.
 
             If this is an extraction result, you can include all fields, or just the ones that were corrected, our system will handle merges/dedupes. However, if you do include a field, we assume the value included in the final reviewed value.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -79,7 +83,11 @@ class WorkflowRunOutputClient:
         )
         """
         _response = self._raw_client.update(
-            workflow_run_id, output_id, reviewed_output=reviewed_output, request_options=request_options
+            workflow_run_id,
+            output_id,
+            reviewed_output=reviewed_output,
+            extend_workspace_id=extend_workspace_id,
+            request_options=request_options,
         )
         return _response.data
 
@@ -105,6 +113,7 @@ class AsyncWorkflowRunOutputClient:
         output_id: str,
         *,
         reviewed_output: ProvidedProcessorOutput,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowRunOutputUpdateResponse:
         """
@@ -126,6 +135,9 @@ class AsyncWorkflowRunOutputClient:
             This should conform to the output type schema of the given processor.
 
             If this is an extraction result, you can include all fields, or just the ones that were corrected, our system will handle merges/dedupes. However, if you do include a field, we assume the value included in the final reviewed value.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -159,6 +171,10 @@ class AsyncWorkflowRunOutputClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.update(
-            workflow_run_id, output_id, reviewed_output=reviewed_output, request_options=request_options
+            workflow_run_id,
+            output_id,
+            reviewed_output=reviewed_output,
+            extend_workspace_id=extend_workspace_id,
+            request_options=request_options,
         )
         return _response.data

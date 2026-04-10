@@ -44,6 +44,7 @@ class EvaluationSetItemClient:
         sort_dir: typing.Optional[SortDirEnum] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> EvaluationSetItemListResponse:
         """
@@ -67,6 +68,9 @@ class EvaluationSetItemClient:
         next_page_token : typing.Optional[NextPageToken]
 
         max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -97,6 +101,7 @@ class EvaluationSetItemClient:
             sort_dir=sort_dir,
             next_page_token=next_page_token,
             max_page_size=max_page_size,
+            extend_workspace_id=extend_workspace_id,
             request_options=request_options,
         )
         return _response.data
@@ -176,6 +181,7 @@ class EvaluationSetItemClient:
         id: str,
         *,
         expected_output: ProvidedProcessorOutput,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> EvaluationSetItemUpdateResponse:
         """
@@ -190,6 +196,9 @@ class EvaluationSetItemClient:
 
         expected_output : ProvidedProcessorOutput
             The expected output of the processor when run against the file
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -213,11 +222,20 @@ class EvaluationSetItemClient:
             ),
         )
         """
-        _response = self._raw_client.update(id, expected_output=expected_output, request_options=request_options)
+        _response = self._raw_client.update(
+            id,
+            expected_output=expected_output,
+            extend_workspace_id=extend_workspace_id,
+            request_options=request_options,
+        )
         return _response.data
 
     def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> EvaluationSetItemDeleteResponse:
         """
         Delete an evaluation set item from an evaluation set. This operation is permanent and cannot be undone.
@@ -230,6 +248,9 @@ class EvaluationSetItemClient:
             The ID of the evaluation set item to delete.
 
             Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -250,7 +271,9 @@ class EvaluationSetItemClient:
             id="evaluation_set_item_id_here",
         )
         """
-        _response = self._raw_client.delete(id, request_options=request_options)
+        _response = self._raw_client.delete(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     def create_batch(
@@ -334,6 +357,7 @@ class AsyncEvaluationSetItemClient:
         sort_dir: typing.Optional[SortDirEnum] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> EvaluationSetItemListResponse:
         """
@@ -357,6 +381,9 @@ class AsyncEvaluationSetItemClient:
         next_page_token : typing.Optional[NextPageToken]
 
         max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -395,6 +422,7 @@ class AsyncEvaluationSetItemClient:
             sort_dir=sort_dir,
             next_page_token=next_page_token,
             max_page_size=max_page_size,
+            extend_workspace_id=extend_workspace_id,
             request_options=request_options,
         )
         return _response.data
@@ -482,6 +510,7 @@ class AsyncEvaluationSetItemClient:
         id: str,
         *,
         expected_output: ProvidedProcessorOutput,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> EvaluationSetItemUpdateResponse:
         """
@@ -496,6 +525,9 @@ class AsyncEvaluationSetItemClient:
 
         expected_output : ProvidedProcessorOutput
             The expected output of the processor when run against the file
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -527,11 +559,20 @@ class AsyncEvaluationSetItemClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.update(id, expected_output=expected_output, request_options=request_options)
+        _response = await self._raw_client.update(
+            id,
+            expected_output=expected_output,
+            extend_workspace_id=extend_workspace_id,
+            request_options=request_options,
+        )
         return _response.data
 
     async def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> EvaluationSetItemDeleteResponse:
         """
         Delete an evaluation set item from an evaluation set. This operation is permanent and cannot be undone.
@@ -544,6 +585,9 @@ class AsyncEvaluationSetItemClient:
             The ID of the evaluation set item to delete.
 
             Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -572,7 +616,9 @@ class AsyncEvaluationSetItemClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.delete(id, request_options=request_options)
+        _response = await self._raw_client.delete(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     async def create_batch(

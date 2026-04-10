@@ -40,6 +40,7 @@ class FileClient:
         sort_dir: typing.Optional[SortDirEnum] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> FileListResponse:
         """
@@ -58,6 +59,9 @@ class FileClient:
         next_page_token : typing.Optional[NextPageToken]
 
         max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -86,6 +90,7 @@ class FileClient:
             sort_dir=sort_dir,
             next_page_token=next_page_token,
             max_page_size=max_page_size,
+            extend_workspace_id=extend_workspace_id,
             request_options=request_options,
         )
         return _response.data
@@ -97,6 +102,7 @@ class FileClient:
         raw_text: typing.Optional[bool] = None,
         markdown: typing.Optional[bool] = None,
         html: typing.Optional[bool] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> FileGetResponse:
         """
@@ -122,6 +128,9 @@ class FileClient:
 
             Only available for files with a type of DOCX.
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -145,11 +154,22 @@ class FileClient:
         )
         """
         _response = self._raw_client.get(
-            id, raw_text=raw_text, markdown=markdown, html=html, request_options=request_options
+            id,
+            raw_text=raw_text,
+            markdown=markdown,
+            html=html,
+            extend_workspace_id=extend_workspace_id,
+            request_options=request_options,
         )
         return _response.data
 
-    def delete(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> FileDeleteResponse:
+    def delete(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> FileDeleteResponse:
         """
         Delete a file and all associated data from Extend. This operation is permanent and cannot be undone.
 
@@ -161,6 +181,9 @@ class FileClient:
             The ID of the file to delete.
 
             Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -181,7 +204,9 @@ class FileClient:
             id="file_id_here",
         )
         """
-        _response = self._raw_client.delete(id, request_options=request_options)
+        _response = self._raw_client.delete(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     def upload(
@@ -189,6 +214,7 @@ class FileClient:
         *,
         file: core.File,
         convert_to_pdf: typing.Optional[bool] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> FileUploadResponse:
         """
@@ -210,6 +236,9 @@ class FileClient:
         convert_to_pdf : typing.Optional[bool]
             When true, converts the uploaded file to PDF. Supported file types include images (JPEG, PNG, TIFF, GIF, BMP, WebP, HEIC/HEIF), Word documents, PowerPoint, Excel, and HTML.
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -229,7 +258,12 @@ class FileClient:
             convert_to_pdf=True,
         )
         """
-        _response = self._raw_client.upload(file=file, convert_to_pdf=convert_to_pdf, request_options=request_options)
+        _response = self._raw_client.upload(
+            file=file,
+            convert_to_pdf=convert_to_pdf,
+            extend_workspace_id=extend_workspace_id,
+            request_options=request_options,
+        )
         return _response.data
 
 
@@ -255,6 +289,7 @@ class AsyncFileClient:
         sort_dir: typing.Optional[SortDirEnum] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> FileListResponse:
         """
@@ -273,6 +308,9 @@ class AsyncFileClient:
         next_page_token : typing.Optional[NextPageToken]
 
         max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -309,6 +347,7 @@ class AsyncFileClient:
             sort_dir=sort_dir,
             next_page_token=next_page_token,
             max_page_size=max_page_size,
+            extend_workspace_id=extend_workspace_id,
             request_options=request_options,
         )
         return _response.data
@@ -320,6 +359,7 @@ class AsyncFileClient:
         raw_text: typing.Optional[bool] = None,
         markdown: typing.Optional[bool] = None,
         html: typing.Optional[bool] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> FileGetResponse:
         """
@@ -344,6 +384,9 @@ class AsyncFileClient:
             If set to true, the html content of the file will be included in the response. This is useful for indexing html content into RAG pipelines.
 
             Only available for files with a type of DOCX.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -376,11 +419,22 @@ class AsyncFileClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.get(
-            id, raw_text=raw_text, markdown=markdown, html=html, request_options=request_options
+            id,
+            raw_text=raw_text,
+            markdown=markdown,
+            html=html,
+            extend_workspace_id=extend_workspace_id,
+            request_options=request_options,
         )
         return _response.data
 
-    async def delete(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> FileDeleteResponse:
+    async def delete(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> FileDeleteResponse:
         """
         Delete a file and all associated data from Extend. This operation is permanent and cannot be undone.
 
@@ -392,6 +446,9 @@ class AsyncFileClient:
             The ID of the file to delete.
 
             Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -420,7 +477,9 @@ class AsyncFileClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.delete(id, request_options=request_options)
+        _response = await self._raw_client.delete(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     async def upload(
@@ -428,6 +487,7 @@ class AsyncFileClient:
         *,
         file: core.File,
         convert_to_pdf: typing.Optional[bool] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> FileUploadResponse:
         """
@@ -448,6 +508,9 @@ class AsyncFileClient:
 
         convert_to_pdf : typing.Optional[bool]
             When true, converts the uploaded file to PDF. Supported file types include images (JPEG, PNG, TIFF, GIF, BMP, WebP, HEIC/HEIF), Word documents, PowerPoint, Excel, and HTML.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -477,6 +540,9 @@ class AsyncFileClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.upload(
-            file=file, convert_to_pdf=convert_to_pdf, request_options=request_options
+            file=file,
+            convert_to_pdf=convert_to_pdf,
+            extend_workspace_id=extend_workspace_id,
+            request_options=request_options,
         )
         return _response.data

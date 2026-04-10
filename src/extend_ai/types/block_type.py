@@ -3,5 +3,17 @@
 import typing
 
 BlockType = typing.Union[
-    typing.Literal["text", "heading", "section_heading", "table", "figure", "table_head", "table_cell"], typing.Any
+    typing.Literal[
+        "text",
+        "heading",
+        "section_heading",
+        "table",
+        "figure",
+        "table_head",
+        "table_cell",
+        "key_value",
+        "header",
+        "footer",
+    ],
+    typing.Any,
 ]

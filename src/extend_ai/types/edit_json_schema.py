@@ -11,6 +11,7 @@ from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .edit_bounding_box import EditBoundingBox
 from .edit_json_schema_extend_edit_field_type import EditJsonSchemaExtendEditFieldType
+from .edit_json_schema_extend_edit_image import EditJsonSchemaExtendEditImage
 from .edit_text_options import EditTextOptions
 
 
@@ -87,6 +88,13 @@ class EditJsonSchema(UncheckedBaseModel):
     ] = pydantic.Field(alias="extend_edit:value", default=None)
     """
     The value to fill into this field. Can be any type. This will force the value at this field to be filled with this value. If a value is not provided, we will attempt to generate or infer one based on the instructions.
+    """
+
+    extend_edit_image: typing_extensions.Annotated[
+        typing.Optional[EditJsonSchemaExtendEditImage], FieldMetadata(alias="extend_edit:image")
+    ] = pydantic.Field(alias="extend_edit:image", default=None)
+    """
+    Image fill for signature fields. Only PNG and JPEG image URLs are supported.
     """
 
     extend_edit_row_heights: typing_extensions.Annotated[

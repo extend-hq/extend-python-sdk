@@ -23,7 +23,13 @@ class BatchProcessorRunClient:
         """
         return self._raw_client
 
-    def get(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> BatchProcessorRunGetResponse:
+    def get(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> BatchProcessorRunGetResponse:
         """
         Retrieve details about a batch processor run, including evaluation runs
 
@@ -33,6 +39,9 @@ class BatchProcessorRunClient:
             The unique identifier of the batch processor run to retrieve. The ID will always start with "bpr_".
 
             Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -53,7 +62,7 @@ class BatchProcessorRunClient:
             id="batch_processor_run_id_here",
         )
         """
-        _response = self._raw_client.get(id, request_options=request_options)
+        _response = self._raw_client.get(id, extend_workspace_id=extend_workspace_id, request_options=request_options)
         return _response.data
 
 
@@ -73,7 +82,11 @@ class AsyncBatchProcessorRunClient:
         return self._raw_client
 
     async def get(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> BatchProcessorRunGetResponse:
         """
         Retrieve details about a batch processor run, including evaluation runs
@@ -84,6 +97,9 @@ class AsyncBatchProcessorRunClient:
             The unique identifier of the batch processor run to retrieve. The ID will always start with "bpr_".
 
             Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -112,5 +128,7 @@ class AsyncBatchProcessorRunClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.get(id, request_options=request_options)
+        _response = await self._raw_client.get(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data

@@ -37,6 +37,7 @@ class RawExtend:
         *,
         file: ParseRequestFile,
         response_type: typing.Optional[ParseRequestResponseType] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         config: typing.Optional[ParseConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ParserRun]:
@@ -56,6 +57,9 @@ class RawExtend:
             Controls the format of the response chunks. Defaults to `json` if not specified.
             * `json` - Returns parsed outputs in the response body
             * `url` - Return a presigned URL to the parsed content in the response body
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         config : typing.Optional[ParseConfig]
 
@@ -83,6 +87,7 @@ class RawExtend:
             },
             headers={
                 "content-type": "application/json",
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
             omit=OMIT,
@@ -267,6 +272,7 @@ class AsyncRawExtend:
         *,
         file: ParseRequestFile,
         response_type: typing.Optional[ParseRequestResponseType] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         config: typing.Optional[ParseConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ParserRun]:
@@ -286,6 +292,9 @@ class AsyncRawExtend:
             Controls the format of the response chunks. Defaults to `json` if not specified.
             * `json` - Returns parsed outputs in the response body
             * `url` - Return a presigned URL to the parsed content in the response body
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         config : typing.Optional[ParseConfig]
 
@@ -313,6 +322,7 @@ class AsyncRawExtend:
             },
             headers={
                 "content-type": "application/json",
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
             omit=OMIT,

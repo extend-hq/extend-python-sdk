@@ -20,6 +20,7 @@ if typing.TYPE_CHECKING:
     from .batch_processor_run.client import AsyncBatchProcessorRunClient, BatchProcessorRunClient
     from .batch_workflow_run.client import AsyncBatchWorkflowRunClient, BatchWorkflowRunClient
     from .edit.client import AsyncEditClient, EditClient
+    from .edit_schemas.client import AsyncEditSchemasClient, EditSchemasClient
     from .evaluation_set.client import AsyncEvaluationSetClient, EvaluationSetClient
     from .evaluation_set_item.client import AsyncEvaluationSetItemClient, EvaluationSetItemClient
     from .file.client import AsyncFileClient, FileClient
@@ -106,6 +107,7 @@ class Extend:
         self._file: typing.Optional[FileClient] = None
         self._parser_run: typing.Optional[ParserRunClient] = None
         self._edit: typing.Optional[EditClient] = None
+        self._edit_schemas: typing.Optional[EditSchemasClient] = None
         self._workflow: typing.Optional[WorkflowClient] = None
         self._workflow_run: typing.Optional[WorkflowRunClient] = None
         self._workflow_run_output: typing.Optional[WorkflowRunOutputClient] = None
@@ -133,6 +135,7 @@ class Extend:
         *,
         file: ParseRequestFile,
         response_type: typing.Optional[ParseRequestResponseType] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         config: typing.Optional[ParseConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ParserRun:
@@ -152,6 +155,9 @@ class Extend:
             Controls the format of the response chunks. Defaults to `json` if not specified.
             * `json` - Returns parsed outputs in the response body
             * `url` - Return a presigned URL to the parsed content in the response body
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         config : typing.Optional[ParseConfig]
 
@@ -176,7 +182,11 @@ class Extend:
         )
         """
         _response = self._raw_client.parse(
-            file=file, response_type=response_type, config=config, request_options=request_options
+            file=file,
+            response_type=response_type,
+            extend_workspace_id=extend_workspace_id,
+            config=config,
+            request_options=request_options,
         )
         return _response.data
 
@@ -252,6 +262,14 @@ class Extend:
 
             self._edit = EditClient(client_wrapper=self._client_wrapper)
         return self._edit
+
+    @property
+    def edit_schemas(self):
+        if self._edit_schemas is None:
+            from .edit_schemas.client import EditSchemasClient  # noqa: E402
+
+            self._edit_schemas = EditSchemasClient(client_wrapper=self._client_wrapper)
+        return self._edit_schemas
 
     @property
     def workflow(self):
@@ -406,6 +424,7 @@ class AsyncExtend:
         self._file: typing.Optional[AsyncFileClient] = None
         self._parser_run: typing.Optional[AsyncParserRunClient] = None
         self._edit: typing.Optional[AsyncEditClient] = None
+        self._edit_schemas: typing.Optional[AsyncEditSchemasClient] = None
         self._workflow: typing.Optional[AsyncWorkflowClient] = None
         self._workflow_run: typing.Optional[AsyncWorkflowRunClient] = None
         self._workflow_run_output: typing.Optional[AsyncWorkflowRunOutputClient] = None
@@ -433,6 +452,7 @@ class AsyncExtend:
         *,
         file: ParseRequestFile,
         response_type: typing.Optional[ParseRequestResponseType] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         config: typing.Optional[ParseConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ParserRun:
@@ -452,6 +472,9 @@ class AsyncExtend:
             Controls the format of the response chunks. Defaults to `json` if not specified.
             * `json` - Returns parsed outputs in the response body
             * `url` - Return a presigned URL to the parsed content in the response body
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         config : typing.Optional[ParseConfig]
 
@@ -484,7 +507,11 @@ class AsyncExtend:
         asyncio.run(main())
         """
         _response = await self._raw_client.parse(
-            file=file, response_type=response_type, config=config, request_options=request_options
+            file=file,
+            response_type=response_type,
+            extend_workspace_id=extend_workspace_id,
+            config=config,
+            request_options=request_options,
         )
         return _response.data
 
@@ -568,6 +595,14 @@ class AsyncExtend:
 
             self._edit = AsyncEditClient(client_wrapper=self._client_wrapper)
         return self._edit
+
+    @property
+    def edit_schemas(self):
+        if self._edit_schemas is None:
+            from .edit_schemas.client import AsyncEditSchemasClient  # noqa: E402
+
+            self._edit_schemas = AsyncEditSchemasClient(client_wrapper=self._client_wrapper)
+        return self._edit_schemas
 
     @property
     def workflow(self):

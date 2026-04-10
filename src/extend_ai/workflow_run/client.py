@@ -49,6 +49,7 @@ class WorkflowRunClient:
         sort_dir: typing.Optional[SortDirEnum] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowRunListResponse:
         """
@@ -94,6 +95,9 @@ class WorkflowRunClient:
 
         max_page_size : typing.Optional[MaxPageSize]
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -131,6 +135,7 @@ class WorkflowRunClient:
             sort_dir=sort_dir,
             next_page_token=next_page_token,
             max_page_size=max_page_size,
+            extend_workspace_id=extend_workspace_id,
             request_options=request_options,
         )
         return _response.data
@@ -208,7 +213,11 @@ class WorkflowRunClient:
         return _response.data
 
     def get(
-        self, workflow_run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        workflow_run_id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowRunGetResponse:
         """
         Once a workflow has been run, you can check the status and output of a specific WorkflowRun.
@@ -219,6 +228,9 @@ class WorkflowRunClient:
             The ID of the WorkflowRun that was outputted after a Workflow was run through the API.
 
             Example: `"workflow_run_8k9m-xyzAB_Pqrst-Nvw4"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -239,13 +251,16 @@ class WorkflowRunClient:
             workflow_run_id="workflow_run_id_here",
         )
         """
-        _response = self._raw_client.get(workflow_run_id, request_options=request_options)
+        _response = self._raw_client.get(
+            workflow_run_id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     def update(
         self,
         workflow_run_id: str,
         *,
+        extend_workspace_id: typing.Optional[str] = None,
         name: typing.Optional[str] = OMIT,
         metadata: typing.Optional[JsonObject] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -259,6 +274,9 @@ class WorkflowRunClient:
             The ID of the WorkflowRun. This ID will start with "workflow_run". This ID can be found in the API response when creating a Workflow Run, or in the "history" tab of a workflow on the Extend platform.
 
             Example: `"workflow_run_8k9m-xyzAB_Pqrst-Nvw4"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             An optional name that can be assigned to a specific WorkflowRun
@@ -290,12 +308,20 @@ class WorkflowRunClient:
         )
         """
         _response = self._raw_client.update(
-            workflow_run_id, name=name, metadata=metadata, request_options=request_options
+            workflow_run_id,
+            extend_workspace_id=extend_workspace_id,
+            name=name,
+            metadata=metadata,
+            request_options=request_options,
         )
         return _response.data
 
     def delete(
-        self, workflow_run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        workflow_run_id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowRunDeleteResponse:
         """
         Delete a workflow run and all associated data from Extend. This operation is permanent and cannot be undone.
@@ -308,6 +334,9 @@ class WorkflowRunClient:
             The ID of the workflow run to delete.
 
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -328,11 +357,17 @@ class WorkflowRunClient:
             workflow_run_id="workflow_run_id_here",
         )
         """
-        _response = self._raw_client.delete(workflow_run_id, request_options=request_options)
+        _response = self._raw_client.delete(
+            workflow_run_id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     def cancel(
-        self, workflow_run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        workflow_run_id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowRunCancelResponse:
         """
         Cancel a running workflow run by its ID. This endpoint allows you to stop a workflow run that is currently in progress.
@@ -345,6 +380,9 @@ class WorkflowRunClient:
             The ID of the workflow run to cancel.
 
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -365,7 +403,9 @@ class WorkflowRunClient:
             workflow_run_id="workflow_run_id_here",
         )
         """
-        _response = self._raw_client.cancel(workflow_run_id, request_options=request_options)
+        _response = self._raw_client.cancel(
+            workflow_run_id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
 
@@ -395,6 +435,7 @@ class AsyncWorkflowRunClient:
         sort_dir: typing.Optional[SortDirEnum] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowRunListResponse:
         """
@@ -439,6 +480,9 @@ class AsyncWorkflowRunClient:
         next_page_token : typing.Optional[NextPageToken]
 
         max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -485,6 +529,7 @@ class AsyncWorkflowRunClient:
             sort_dir=sort_dir,
             next_page_token=next_page_token,
             max_page_size=max_page_size,
+            extend_workspace_id=extend_workspace_id,
             request_options=request_options,
         )
         return _response.data
@@ -570,7 +615,11 @@ class AsyncWorkflowRunClient:
         return _response.data
 
     async def get(
-        self, workflow_run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        workflow_run_id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowRunGetResponse:
         """
         Once a workflow has been run, you can check the status and output of a specific WorkflowRun.
@@ -581,6 +630,9 @@ class AsyncWorkflowRunClient:
             The ID of the WorkflowRun that was outputted after a Workflow was run through the API.
 
             Example: `"workflow_run_8k9m-xyzAB_Pqrst-Nvw4"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -609,13 +661,16 @@ class AsyncWorkflowRunClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.get(workflow_run_id, request_options=request_options)
+        _response = await self._raw_client.get(
+            workflow_run_id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     async def update(
         self,
         workflow_run_id: str,
         *,
+        extend_workspace_id: typing.Optional[str] = None,
         name: typing.Optional[str] = OMIT,
         metadata: typing.Optional[JsonObject] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -629,6 +684,9 @@ class AsyncWorkflowRunClient:
             The ID of the WorkflowRun. This ID will start with "workflow_run". This ID can be found in the API response when creating a Workflow Run, or in the "history" tab of a workflow on the Extend platform.
 
             Example: `"workflow_run_8k9m-xyzAB_Pqrst-Nvw4"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             An optional name that can be assigned to a specific WorkflowRun
@@ -668,12 +726,20 @@ class AsyncWorkflowRunClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.update(
-            workflow_run_id, name=name, metadata=metadata, request_options=request_options
+            workflow_run_id,
+            extend_workspace_id=extend_workspace_id,
+            name=name,
+            metadata=metadata,
+            request_options=request_options,
         )
         return _response.data
 
     async def delete(
-        self, workflow_run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        workflow_run_id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowRunDeleteResponse:
         """
         Delete a workflow run and all associated data from Extend. This operation is permanent and cannot be undone.
@@ -686,6 +752,9 @@ class AsyncWorkflowRunClient:
             The ID of the workflow run to delete.
 
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -714,11 +783,17 @@ class AsyncWorkflowRunClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.delete(workflow_run_id, request_options=request_options)
+        _response = await self._raw_client.delete(
+            workflow_run_id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     async def cancel(
-        self, workflow_run_id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        workflow_run_id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowRunCancelResponse:
         """
         Cancel a running workflow run by its ID. This endpoint allows you to stop a workflow run that is currently in progress.
@@ -731,6 +806,9 @@ class AsyncWorkflowRunClient:
             The ID of the workflow run to cancel.
 
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -759,5 +837,7 @@ class AsyncWorkflowRunClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.cancel(workflow_run_id, request_options=request_options)
+        _response = await self._raw_client.cancel(
+            workflow_run_id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data

@@ -6,76 +6,71 @@ from json.decoder import JSONDecodeError
 from ..core.api_error import ApiError
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.http_response import AsyncHttpResponse, HttpResponse
-from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
 from ..core.serialization import convert_and_respect_annotation_metadata
 from ..core.unchecked_base_model import construct_type
 from ..errors.bad_request_error import BadRequestError
+from ..errors.internal_server_error import InternalServerError
 from ..errors.not_found_error import NotFoundError
+from ..errors.payment_required_error import PaymentRequiredError
 from ..errors.unauthorized_error import UnauthorizedError
+from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..types.edit_schema_generation_config import EditSchemaGenerationConfig
+from ..types.edit_schema_generation_response import EditSchemaGenerationResponse
 from ..types.error import Error
-from ..types.provided_processor_output import ProvidedProcessorOutput
-from .types.workflow_run_output_update_response import WorkflowRunOutputUpdateResponse
+from ..types.extend_error import ExtendError
+from .types.edit_schemas_generate_request_file import EditSchemasGenerateRequestFile
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
 
-class RawWorkflowRunOutputClient:
+class RawEditSchemasClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def update(
+    def generate(
         self,
-        workflow_run_id: str,
-        output_id: str,
         *,
-        reviewed_output: ProvidedProcessorOutput,
-        extend_workspace_id: typing.Optional[str] = None,
+        file: EditSchemasGenerateRequestFile,
+        config: typing.Optional[EditSchemaGenerationConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[WorkflowRunOutputUpdateResponse]:
+    ) -> HttpResponse[EditSchemaGenerationResponse]:
         """
-        Use this endpoint to submit corrected outputs for a WorkflowRun for future processor evaluation and tuning in Extend.
+        Detect fields in a PDF form and synchronously return an edit schema payload.
 
-        If you are using our Human-in-the-loop workflow review, then we already will be collecting your operator submitted corrections. However, if you are receiving data via the API without human review, there could be incorrect outputs that you would like to correct for future usage in evaluation and tuning within the Extend platform. This endpoint allows you to submit corrected outputs for a WorkflowRun, by providing the correct output for a given output ID.
+        Use this endpoint when you want Extend to bootstrap an `EditRootJSONSchema` from an existing form, optionally mapping an existing schema onto the detected fields.
 
-        The output ID, would be found in a given entry within the outputs arrays of a Workflow Run payload. The ID would look something like `dpr_gwkZZNRrPgkjcq0y-***`.
+        This endpoint returns the generated schema directly. There are no schema generation run resources to poll or delete.
 
         Parameters
         ----------
-        workflow_run_id : str
+        file : EditSchemasGenerateRequestFile
+            A file object containing either a URL or a fileId.
 
-        output_id : str
-
-        reviewed_output : ProvidedProcessorOutput
-            The corrected output of the processor when run against the file.
-
-            This should conform to the output type schema of the given processor.
-
-            If this is an extraction result, you can include all fields, or just the ones that were corrected, our system will handle merges/dedupes. However, if you do include a field, we assume the value included in the final reviewed value.
-
-        extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+        config : typing.Optional[EditSchemaGenerationConfig]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        HttpResponse[WorkflowRunOutputUpdateResponse]
-            Successfully corrected workflow run output
+        HttpResponse[EditSchemaGenerationResponse]
+            Successfully generated edit schema
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"workflow_runs/{jsonable_encoder(workflow_run_id)}/outputs/{jsonable_encoder(output_id)}",
+            "edit_schemas/generate",
             method="POST",
             json={
-                "reviewedOutput": convert_and_respect_annotation_metadata(
-                    object_=reviewed_output, annotation=ProvidedProcessorOutput, direction="write"
+                "file": convert_and_respect_annotation_metadata(
+                    object_=file, annotation=EditSchemasGenerateRequestFile, direction="write"
+                ),
+                "config": convert_and_respect_annotation_metadata(
+                    object_=config, annotation=EditSchemaGenerationConfig, direction="write"
                 ),
             },
             headers={
                 "content-type": "application/json",
-                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
             omit=OMIT,
@@ -83,9 +78,9 @@ class RawWorkflowRunOutputClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    WorkflowRunOutputUpdateResponse,
+                    EditSchemaGenerationResponse,
                     construct_type(
-                        type_=WorkflowRunOutputUpdateResponse,  # type: ignore
+                        type_=EditSchemaGenerationResponse,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -112,8 +107,41 @@ class RawWorkflowRunOutputClient:
                         ),
                     ),
                 )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 404:
                 raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ExtendError,
+                        construct_type(
+                            type_=ExtendError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,
@@ -129,61 +157,52 @@ class RawWorkflowRunOutputClient:
         raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
 
 
-class AsyncRawWorkflowRunOutputClient:
+class AsyncRawEditSchemasClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    async def update(
+    async def generate(
         self,
-        workflow_run_id: str,
-        output_id: str,
         *,
-        reviewed_output: ProvidedProcessorOutput,
-        extend_workspace_id: typing.Optional[str] = None,
+        file: EditSchemasGenerateRequestFile,
+        config: typing.Optional[EditSchemaGenerationConfig] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[WorkflowRunOutputUpdateResponse]:
+    ) -> AsyncHttpResponse[EditSchemaGenerationResponse]:
         """
-        Use this endpoint to submit corrected outputs for a WorkflowRun for future processor evaluation and tuning in Extend.
+        Detect fields in a PDF form and synchronously return an edit schema payload.
 
-        If you are using our Human-in-the-loop workflow review, then we already will be collecting your operator submitted corrections. However, if you are receiving data via the API without human review, there could be incorrect outputs that you would like to correct for future usage in evaluation and tuning within the Extend platform. This endpoint allows you to submit corrected outputs for a WorkflowRun, by providing the correct output for a given output ID.
+        Use this endpoint when you want Extend to bootstrap an `EditRootJSONSchema` from an existing form, optionally mapping an existing schema onto the detected fields.
 
-        The output ID, would be found in a given entry within the outputs arrays of a Workflow Run payload. The ID would look something like `dpr_gwkZZNRrPgkjcq0y-***`.
+        This endpoint returns the generated schema directly. There are no schema generation run resources to poll or delete.
 
         Parameters
         ----------
-        workflow_run_id : str
+        file : EditSchemasGenerateRequestFile
+            A file object containing either a URL or a fileId.
 
-        output_id : str
-
-        reviewed_output : ProvidedProcessorOutput
-            The corrected output of the processor when run against the file.
-
-            This should conform to the output type schema of the given processor.
-
-            If this is an extraction result, you can include all fields, or just the ones that were corrected, our system will handle merges/dedupes. However, if you do include a field, we assume the value included in the final reviewed value.
-
-        extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+        config : typing.Optional[EditSchemaGenerationConfig]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
         Returns
         -------
-        AsyncHttpResponse[WorkflowRunOutputUpdateResponse]
-            Successfully corrected workflow run output
+        AsyncHttpResponse[EditSchemaGenerationResponse]
+            Successfully generated edit schema
         """
         _response = await self._client_wrapper.httpx_client.request(
-            f"workflow_runs/{jsonable_encoder(workflow_run_id)}/outputs/{jsonable_encoder(output_id)}",
+            "edit_schemas/generate",
             method="POST",
             json={
-                "reviewedOutput": convert_and_respect_annotation_metadata(
-                    object_=reviewed_output, annotation=ProvidedProcessorOutput, direction="write"
+                "file": convert_and_respect_annotation_metadata(
+                    object_=file, annotation=EditSchemasGenerateRequestFile, direction="write"
+                ),
+                "config": convert_and_respect_annotation_metadata(
+                    object_=config, annotation=EditSchemaGenerationConfig, direction="write"
                 ),
             },
             headers={
                 "content-type": "application/json",
-                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
             },
             request_options=request_options,
             omit=OMIT,
@@ -191,9 +210,9 @@ class AsyncRawWorkflowRunOutputClient:
         try:
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    WorkflowRunOutputUpdateResponse,
+                    EditSchemaGenerationResponse,
                     construct_type(
-                        type_=WorkflowRunOutputUpdateResponse,  # type: ignore
+                        type_=EditSchemaGenerationResponse,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -220,8 +239,41 @@ class AsyncRawWorkflowRunOutputClient:
                         ),
                     ),
                 )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
             if _response.status_code == 404:
                 raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        ExtendError,
+                        construct_type(
+                            type_=ExtendError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
                     headers=dict(_response.headers),
                     body=typing.cast(
                         typing.Any,

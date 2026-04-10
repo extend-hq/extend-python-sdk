@@ -44,6 +44,9 @@ class Block(UncheckedBaseModel):
     * `"table_head"` - Table header cells
     * `"table_cell"` - Table body cells
     * `"figure"` - Images, charts, diagrams, or logos
+    * `"key_value"` - Key-value pair content (e.g., form field labels and values)
+    * `"header"` - Page header content
+    * `"footer"` - Page footer content
     """
 
     content: str = pydantic.Field()

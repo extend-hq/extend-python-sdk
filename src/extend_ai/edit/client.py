@@ -123,7 +123,13 @@ class EditClient:
         _response = self._raw_client.create_async(file=file, config=config, request_options=request_options)
         return _response.data
 
-    def get(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> EditGetResponse:
+    def get(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> EditGetResponse:
         """
         Retrieve the status and results of an edit run.
 
@@ -137,6 +143,9 @@ class EditClient:
             The unique identifier for the edit run.
 
             Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -157,10 +166,16 @@ class EditClient:
             id="edit_run_id_here",
         )
         """
-        _response = self._raw_client.get(id, request_options=request_options)
+        _response = self._raw_client.get(id, extend_workspace_id=extend_workspace_id, request_options=request_options)
         return _response.data
 
-    def delete(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> EditDeleteResponse:
+    def delete(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> EditDeleteResponse:
         """
         Delete an edit run and all associated data from Extend. This operation is permanent and cannot be undone.
 
@@ -172,6 +187,9 @@ class EditClient:
             The ID of the edit run to delete.
 
             Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -192,7 +210,9 @@ class EditClient:
             id="edit_run_id_here",
         )
         """
-        _response = self._raw_client.delete(id, request_options=request_options)
+        _response = self._raw_client.delete(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
 
@@ -317,7 +337,13 @@ class AsyncEditClient:
         _response = await self._raw_client.create_async(file=file, config=config, request_options=request_options)
         return _response.data
 
-    async def get(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> EditGetResponse:
+    async def get(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> EditGetResponse:
         """
         Retrieve the status and results of an edit run.
 
@@ -331,6 +357,9 @@ class AsyncEditClient:
             The unique identifier for the edit run.
 
             Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -359,10 +388,18 @@ class AsyncEditClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.get(id, request_options=request_options)
+        _response = await self._raw_client.get(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
-    async def delete(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> EditDeleteResponse:
+    async def delete(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> EditDeleteResponse:
         """
         Delete an edit run and all associated data from Extend. This operation is permanent and cannot be undone.
 
@@ -374,6 +411,9 @@ class AsyncEditClient:
             The ID of the edit run to delete.
 
             Example: `"edit_run_xK9mLPqRtN3vS8wF5hB2cQ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -402,5 +442,7 @@ class AsyncEditClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.delete(id, request_options=request_options)
+        _response = await self._raw_client.delete(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data

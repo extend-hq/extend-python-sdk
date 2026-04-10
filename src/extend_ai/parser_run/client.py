@@ -30,6 +30,7 @@ class ParserRunClient:
         id: str,
         *,
         response_type: typing.Optional[ParserRunGetRequestResponseType] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ParserRunGetResponse:
         """
@@ -51,6 +52,9 @@ class ParserRunClient:
             * `json` - Returns chunks with inline content
             * `url` - Returns chunks with presigned URLs to content instead of inline data
 
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -71,10 +75,18 @@ class ParserRunClient:
             response_type="json",
         )
         """
-        _response = self._raw_client.get(id, response_type=response_type, request_options=request_options)
+        _response = self._raw_client.get(
+            id, response_type=response_type, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
-    def delete(self, id: str, *, request_options: typing.Optional[RequestOptions] = None) -> ParserRunDeleteResponse:
+    def delete(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ParserRunDeleteResponse:
         """
         Delete a parser run and all associated data from Extend. This operation is permanent and cannot be undone.
 
@@ -86,6 +98,9 @@ class ParserRunClient:
             The ID of the parser run to delete.
 
             Example: `"parser_run_xK9mLPqRtN3vS8wF5hB2cQ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -106,7 +121,9 @@ class ParserRunClient:
             id="parser_run_id_here",
         )
         """
-        _response = self._raw_client.delete(id, request_options=request_options)
+        _response = self._raw_client.delete(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
 
@@ -130,6 +147,7 @@ class AsyncParserRunClient:
         id: str,
         *,
         response_type: typing.Optional[ParserRunGetRequestResponseType] = None,
+        extend_workspace_id: typing.Optional[str] = None,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ParserRunGetResponse:
         """
@@ -150,6 +168,9 @@ class AsyncParserRunClient:
             Controls the format of the response chunks. Defaults to `json` if not specified.
             * `json` - Returns chunks with inline content
             * `url` - Returns chunks with presigned URLs to content instead of inline data
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -179,11 +200,17 @@ class AsyncParserRunClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.get(id, response_type=response_type, request_options=request_options)
+        _response = await self._raw_client.get(
+            id, response_type=response_type, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data
 
     async def delete(
-        self, id: str, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
     ) -> ParserRunDeleteResponse:
         """
         Delete a parser run and all associated data from Extend. This operation is permanent and cannot be undone.
@@ -196,6 +223,9 @@ class AsyncParserRunClient:
             The ID of the parser run to delete.
 
             Example: `"parser_run_xK9mLPqRtN3vS8wF5hB2cQ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2025-04-21/developers/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -224,5 +254,7 @@ class AsyncParserRunClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.delete(id, request_options=request_options)
+        _response = await self._raw_client.delete(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
         return _response.data

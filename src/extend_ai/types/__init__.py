@@ -41,10 +41,15 @@ if typing.TYPE_CHECKING:
     from .classify_optimizer_options import ClassifyOptimizerOptions
     from .document_processor_run_credits import DocumentProcessorRunCredits
     from .edit_bounding_box import EditBoundingBox
+    from .edit_conditional_clause import EditConditionalClause
+    from .edit_conditional_object_property_schema import EditConditionalObjectPropertySchema
+    from .edit_conditional_property_schema import EditConditionalPropertySchema
+    from .edit_dependent_required import EditDependentRequired
     from .edit_error import EditError
     from .edit_error_code import EditErrorCode
     from .edit_json_schema import EditJsonSchema
     from .edit_json_schema_extend_edit_field_type import EditJsonSchemaExtendEditFieldType
+    from .edit_json_schema_extend_edit_image import EditJsonSchemaExtendEditImage
     from .edit_object_json_schema import EditObjectJsonSchema
     from .edit_root_json_schema import EditRootJsonSchema
     from .edit_run import EditRun
@@ -55,6 +60,11 @@ if typing.TYPE_CHECKING:
     from .edit_run_status import EditRunStatus
     from .edit_run_status_status import EditRunStatusStatus
     from .edit_run_usage import EditRunUsage
+    from .edit_schema_generation_config import EditSchemaGenerationConfig
+    from .edit_schema_generation_config_advanced_options import EditSchemaGenerationConfigAdvancedOptions
+    from .edit_schema_generation_mapping_match import EditSchemaGenerationMappingMatch
+    from .edit_schema_generation_mapping_result import EditSchemaGenerationMappingResult
+    from .edit_schema_generation_response import EditSchemaGenerationResponse
     from .edit_text_options import EditTextOptions
     from .empty_block_details import EmptyBlockDetails
     from .enum import Enum
@@ -105,6 +115,7 @@ if typing.TYPE_CHECKING:
     from .json_output_metadata_value import JsonOutputMetadataValue
     from .json_output_metadata_value_citations_item import JsonOutputMetadataValueCitationsItem
     from .json_output_metadata_value_citations_item_polygon_item import JsonOutputMetadataValueCitationsItemPolygonItem
+    from .key_value_details import KeyValueDetails
     from .list_processors_processor import ListProcessorsProcessor
     from .list_processors_processor_version import ListProcessorsProcessorVersion
     from .list_processors_response import ListProcessorsResponse
@@ -261,10 +272,15 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ClassifyOptimizerOptions": ".classify_optimizer_options",
     "DocumentProcessorRunCredits": ".document_processor_run_credits",
     "EditBoundingBox": ".edit_bounding_box",
+    "EditConditionalClause": ".edit_conditional_clause",
+    "EditConditionalObjectPropertySchema": ".edit_conditional_object_property_schema",
+    "EditConditionalPropertySchema": ".edit_conditional_property_schema",
+    "EditDependentRequired": ".edit_dependent_required",
     "EditError": ".edit_error",
     "EditErrorCode": ".edit_error_code",
     "EditJsonSchema": ".edit_json_schema",
     "EditJsonSchemaExtendEditFieldType": ".edit_json_schema_extend_edit_field_type",
+    "EditJsonSchemaExtendEditImage": ".edit_json_schema_extend_edit_image",
     "EditObjectJsonSchema": ".edit_object_json_schema",
     "EditRootJsonSchema": ".edit_root_json_schema",
     "EditRun": ".edit_run",
@@ -275,6 +291,11 @@ _dynamic_imports: typing.Dict[str, str] = {
     "EditRunStatus": ".edit_run_status",
     "EditRunStatusStatus": ".edit_run_status_status",
     "EditRunUsage": ".edit_run_usage",
+    "EditSchemaGenerationConfig": ".edit_schema_generation_config",
+    "EditSchemaGenerationConfigAdvancedOptions": ".edit_schema_generation_config_advanced_options",
+    "EditSchemaGenerationMappingMatch": ".edit_schema_generation_mapping_match",
+    "EditSchemaGenerationMappingResult": ".edit_schema_generation_mapping_result",
+    "EditSchemaGenerationResponse": ".edit_schema_generation_response",
     "EditTextOptions": ".edit_text_options",
     "EmptyBlockDetails": ".empty_block_details",
     "Enum": ".enum",
@@ -323,6 +344,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "JsonOutputMetadataValue": ".json_output_metadata_value",
     "JsonOutputMetadataValueCitationsItem": ".json_output_metadata_value_citations_item",
     "JsonOutputMetadataValueCitationsItemPolygonItem": ".json_output_metadata_value_citations_item_polygon_item",
+    "KeyValueDetails": ".key_value_details",
     "ListProcessorsProcessor": ".list_processors_processor",
     "ListProcessorsProcessorVersion": ".list_processors_processor_version",
     "ListProcessorsResponse": ".list_processors_response",
@@ -497,10 +519,15 @@ __all__ = [
     "ClassifyOptimizerOptions",
     "DocumentProcessorRunCredits",
     "EditBoundingBox",
+    "EditConditionalClause",
+    "EditConditionalObjectPropertySchema",
+    "EditConditionalPropertySchema",
+    "EditDependentRequired",
     "EditError",
     "EditErrorCode",
     "EditJsonSchema",
     "EditJsonSchemaExtendEditFieldType",
+    "EditJsonSchemaExtendEditImage",
     "EditObjectJsonSchema",
     "EditRootJsonSchema",
     "EditRun",
@@ -511,6 +538,11 @@ __all__ = [
     "EditRunStatus",
     "EditRunStatusStatus",
     "EditRunUsage",
+    "EditSchemaGenerationConfig",
+    "EditSchemaGenerationConfigAdvancedOptions",
+    "EditSchemaGenerationMappingMatch",
+    "EditSchemaGenerationMappingResult",
+    "EditSchemaGenerationResponse",
     "EditTextOptions",
     "EmptyBlockDetails",
     "Enum",
@@ -559,6 +591,7 @@ __all__ = [
     "JsonOutputMetadataValue",
     "JsonOutputMetadataValueCitationsItem",
     "JsonOutputMetadataValueCitationsItemPolygonItem",
+    "KeyValueDetails",
     "ListProcessorsProcessor",
     "ListProcessorsProcessorVersion",
     "ListProcessorsResponse",
