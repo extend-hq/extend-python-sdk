@@ -11,7 +11,7 @@ from .legacy_list_processors_processor import LegacyListProcessorsProcessor
 
 
 class LegacyListProcessorsResponse(UncheckedBaseModel):
-    success: bool = pydantic.Field()
+    success: typing.Literal[True] = pydantic.Field(default=True)
     """
     Indicates the request was successful
     """

@@ -5,6 +5,7 @@ import typing
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
 from ..requests.split_config import SplitConfigParams
+from ..types.batch_run import BatchRun
 from ..types.max_page_size import MaxPageSize
 from ..types.next_page_token import NextPageToken
 from ..types.processor_run_status import ProcessorRunStatus
@@ -16,6 +17,8 @@ from ..types.sort_by import SortBy
 from ..types.sort_dir import SortDir
 from ..types.split_run import SplitRun
 from .raw_client import AsyncRawSplitRunsClient, RawSplitRunsClient
+from .requests.split_runs_create_batch_request_inputs_item import SplitRunsCreateBatchRequestInputsItemParams
+from .requests.split_runs_create_batch_request_splitter import SplitRunsCreateBatchRequestSplitterParams
 from .requests.split_runs_create_request_file import SplitRunsCreateRequestFileParams
 from .requests.split_runs_create_request_splitter import SplitRunsCreateRequestSplitterParams
 from .types.split_runs_delete_response import SplitRunsDeleteResponse
@@ -45,6 +48,7 @@ class SplitRunsClient:
         *,
         status: typing.Optional[ProcessorRunStatus] = None,
         splitter_id: typing.Optional[str] = None,
+        batch_id: typing.Optional[str] = None,
         source_id: typing.Optional[RunSourceId] = None,
         source: typing.Optional[RunSource] = None,
         file_name_contains: typing.Optional[str] = None,
@@ -68,6 +72,11 @@ class SplitRunsClient:
             Filters split runs by the splitter ID. If not provided, all split runs are returned.
 
             Example: `"spl_BMdfq_yWM3sT-ZzvCnA3f"`
+
+        batch_id : typing.Optional[str]
+            Filters runs by the batch they belong to. Only returns runs created as part of the specified batch.
+
+            Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         source_id : typing.Optional[RunSourceId]
             Filters runs by the source ID.
@@ -115,6 +124,7 @@ class SplitRunsClient:
         _response = self._raw_client.list(
             status=status,
             splitter_id=splitter_id,
+            batch_id=batch_id,
             source_id=source_id,
             source=source,
             file_name_contains=file_name_contains,
@@ -323,6 +333,77 @@ class SplitRunsClient:
         )
         return _response.data
 
+    def create_batch(
+        self,
+        *,
+        splitter: SplitRunsCreateBatchRequestSplitterParams,
+        inputs: typing.Sequence[SplitRunsCreateBatchRequestInputsItemParams],
+        priority: typing.Optional[RunPriority] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> BatchRun:
+        """
+        Submit up to **1,000 files** for splitting in a single request. Each file is processed as an independent split run using the same splitter and configuration.
+
+        Unlike the single [Split File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/split/create-split-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+
+        **Monitoring results:**
+        - **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /split_runs?batchId={id}`.
+        - **Polling:** Call `GET /batch_runs/{id}` to check the overall batch status, and use `GET /split_runs` filtered by `batchId` to retrieve individual run results.
+
+        **Notes:**
+        - A processor reference (`splitter.id`) is required — inline `config` is not supported for batch requests.
+        - `inputs` must contain between 1 and 1,000 items.
+        - All inputs in a batch use the same splitter version and override config.
+        - Raw text input (`FileFromText`) is not supported for split runs. Use a URL or file ID.
+
+        Parameters
+        ----------
+        splitter : SplitRunsCreateBatchRequestSplitterParams
+            Reference to the splitter to run against every input in this batch.
+
+        inputs : typing.Sequence[SplitRunsCreateBatchRequestInputsItemParams]
+            An array of inputs to process. Each item produces one split run. Must contain between 1 and 1,000 items. Raw text input is not supported — use a URL or file ID.
+
+        priority : typing.Optional[RunPriority]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        BatchRun
+            Successfully queued batch split run
+
+        Examples
+        --------
+        from extend_ai import Extend
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.split_runs.create_batch(
+            splitter={"id": "spl_xK9mLPqRtN3vS8wF5hB2cQ"},
+            inputs=[
+                {
+                    "file": {"url": "https://example.com/multi-doc1.pdf"},
+                    "metadata": {"customerId": "cust_abc123"},
+                },
+                {
+                    "file": {"url": "https://example.com/multi-doc2.pdf"},
+                    "metadata": {"customerId": "cust_def456"},
+                },
+                {
+                    "file": {"url": "https://example.com/multi-doc3.pdf"},
+                    "metadata": {"customerId": "cust_ghi789"},
+                },
+            ],
+        )
+        """
+        _response = self._raw_client.create_batch(
+            splitter=splitter, inputs=inputs, priority=priority, request_options=request_options
+        )
+        return _response.data
+
 
 class AsyncSplitRunsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -344,6 +425,7 @@ class AsyncSplitRunsClient:
         *,
         status: typing.Optional[ProcessorRunStatus] = None,
         splitter_id: typing.Optional[str] = None,
+        batch_id: typing.Optional[str] = None,
         source_id: typing.Optional[RunSourceId] = None,
         source: typing.Optional[RunSource] = None,
         file_name_contains: typing.Optional[str] = None,
@@ -367,6 +449,11 @@ class AsyncSplitRunsClient:
             Filters split runs by the splitter ID. If not provided, all split runs are returned.
 
             Example: `"spl_BMdfq_yWM3sT-ZzvCnA3f"`
+
+        batch_id : typing.Optional[str]
+            Filters runs by the batch they belong to. Only returns runs created as part of the specified batch.
+
+            Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         source_id : typing.Optional[RunSourceId]
             Filters runs by the source ID.
@@ -422,6 +509,7 @@ class AsyncSplitRunsClient:
         _response = await self._raw_client.list(
             status=status,
             splitter_id=splitter_id,
+            batch_id=batch_id,
             source_id=source_id,
             source=source,
             file_name_contains=file_name_contains,
@@ -659,5 +747,84 @@ class AsyncSplitRunsClient:
         """
         _response = await self._raw_client.cancel(
             id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def create_batch(
+        self,
+        *,
+        splitter: SplitRunsCreateBatchRequestSplitterParams,
+        inputs: typing.Sequence[SplitRunsCreateBatchRequestInputsItemParams],
+        priority: typing.Optional[RunPriority] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> BatchRun:
+        """
+        Submit up to **1,000 files** for splitting in a single request. Each file is processed as an independent split run using the same splitter and configuration.
+
+        Unlike the single [Split File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/split/create-split-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+
+        **Monitoring results:**
+        - **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /split_runs?batchId={id}`.
+        - **Polling:** Call `GET /batch_runs/{id}` to check the overall batch status, and use `GET /split_runs` filtered by `batchId` to retrieve individual run results.
+
+        **Notes:**
+        - A processor reference (`splitter.id`) is required — inline `config` is not supported for batch requests.
+        - `inputs` must contain between 1 and 1,000 items.
+        - All inputs in a batch use the same splitter version and override config.
+        - Raw text input (`FileFromText`) is not supported for split runs. Use a URL or file ID.
+
+        Parameters
+        ----------
+        splitter : SplitRunsCreateBatchRequestSplitterParams
+            Reference to the splitter to run against every input in this batch.
+
+        inputs : typing.Sequence[SplitRunsCreateBatchRequestInputsItemParams]
+            An array of inputs to process. Each item produces one split run. Must contain between 1 and 1,000 items. Raw text input is not supported — use a URL or file ID.
+
+        priority : typing.Optional[RunPriority]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        BatchRun
+            Successfully queued batch split run
+
+        Examples
+        --------
+        import asyncio
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.split_runs.create_batch(
+                splitter={"id": "spl_xK9mLPqRtN3vS8wF5hB2cQ"},
+                inputs=[
+                    {
+                        "file": {"url": "https://example.com/multi-doc1.pdf"},
+                        "metadata": {"customerId": "cust_abc123"},
+                    },
+                    {
+                        "file": {"url": "https://example.com/multi-doc2.pdf"},
+                        "metadata": {"customerId": "cust_def456"},
+                    },
+                    {
+                        "file": {"url": "https://example.com/multi-doc3.pdf"},
+                        "metadata": {"customerId": "cust_ghi789"},
+                    },
+                ],
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.create_batch(
+            splitter=splitter, inputs=inputs, priority=priority, request_options=request_options
         )
         return _response.data

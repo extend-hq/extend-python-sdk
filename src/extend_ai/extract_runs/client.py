@@ -5,6 +5,7 @@ import typing
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
 from ..requests.extract_config_json import ExtractConfigJsonParams
+from ..types.batch_run import BatchRun
 from ..types.extract_run import ExtractRun
 from ..types.max_page_size import MaxPageSize
 from ..types.next_page_token import NextPageToken
@@ -16,6 +17,8 @@ from ..types.run_source_id import RunSourceId
 from ..types.sort_by import SortBy
 from ..types.sort_dir import SortDir
 from .raw_client import AsyncRawExtractRunsClient, RawExtractRunsClient
+from .requests.extract_runs_create_batch_request_extractor import ExtractRunsCreateBatchRequestExtractorParams
+from .requests.extract_runs_create_batch_request_inputs_item import ExtractRunsCreateBatchRequestInputsItemParams
 from .requests.extract_runs_create_request_extractor import ExtractRunsCreateRequestExtractorParams
 from .requests.extract_runs_create_request_file import ExtractRunsCreateRequestFileParams
 from .types.extract_runs_delete_response import ExtractRunsDeleteResponse
@@ -45,6 +48,7 @@ class ExtractRunsClient:
         *,
         status: typing.Optional[ProcessorRunStatus] = None,
         extractor_id: typing.Optional[str] = None,
+        batch_id: typing.Optional[str] = None,
         source_id: typing.Optional[RunSourceId] = None,
         source: typing.Optional[RunSource] = None,
         file_name_contains: typing.Optional[str] = None,
@@ -68,6 +72,11 @@ class ExtractRunsClient:
             Filters extract runs by the extractor ID. If not provided, all extract runs are returned.
 
             Example: `"ex_BMdfq_yWM3sT-ZzvCnA3f"`
+
+        batch_id : typing.Optional[str]
+            Filters runs by the batch they belong to. Only returns runs created as part of the specified batch.
+
+            Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         source_id : typing.Optional[RunSourceId]
             Filters runs by the source ID.
@@ -115,6 +124,7 @@ class ExtractRunsClient:
         _response = self._raw_client.list(
             status=status,
             extractor_id=extractor_id,
+            batch_id=batch_id,
             source_id=source_id,
             source=source,
             file_name_contains=file_name_contains,
@@ -323,6 +333,76 @@ class ExtractRunsClient:
         )
         return _response.data
 
+    def create_batch(
+        self,
+        *,
+        extractor: ExtractRunsCreateBatchRequestExtractorParams,
+        inputs: typing.Sequence[ExtractRunsCreateBatchRequestInputsItemParams],
+        priority: typing.Optional[RunPriority] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> BatchRun:
+        """
+        Submit up to **1,000 files** for extraction in a single request. Each file is processed as an independent extract run using the same extractor and configuration.
+
+        Unlike the single [Extract File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/create-extract-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+
+        **Monitoring results:**
+        - **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /extract_runs?batchId={id}`.
+        - **Polling:** Call `GET /batch_runs/{id}` to check the overall batch status, and use `GET /extract_runs` filtered by `batchId` to retrieve individual run results.
+
+        **Notes:**
+        - A processor reference (`extractor.id`) is required — inline `config` is not supported for batch requests.
+        - `inputs` must contain between 1 and 1,000 items.
+        - All inputs in a batch use the same extractor version and override config.
+
+        Parameters
+        ----------
+        extractor : ExtractRunsCreateBatchRequestExtractorParams
+            Reference to the extractor to run against every input in this batch.
+
+        inputs : typing.Sequence[ExtractRunsCreateBatchRequestInputsItemParams]
+            An array of inputs to process. Each item produces one extract run. Must contain between 1 and 1,000 items.
+
+        priority : typing.Optional[RunPriority]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        BatchRun
+            Successfully queued batch extract run
+
+        Examples
+        --------
+        from extend_ai import Extend
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.extract_runs.create_batch(
+            extractor={"id": "ex_xK9mLPqRtN3vS8wF5hB2cQ"},
+            inputs=[
+                {
+                    "file": {"url": "https://example.com/invoice1.pdf"},
+                    "metadata": {"customerId": "cust_abc123"},
+                },
+                {
+                    "file": {"url": "https://example.com/invoice2.pdf"},
+                    "metadata": {"customerId": "cust_def456"},
+                },
+                {
+                    "file": {"url": "https://example.com/invoice3.pdf"},
+                    "metadata": {"customerId": "cust_ghi789"},
+                },
+            ],
+        )
+        """
+        _response = self._raw_client.create_batch(
+            extractor=extractor, inputs=inputs, priority=priority, request_options=request_options
+        )
+        return _response.data
+
 
 class AsyncExtractRunsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -344,6 +424,7 @@ class AsyncExtractRunsClient:
         *,
         status: typing.Optional[ProcessorRunStatus] = None,
         extractor_id: typing.Optional[str] = None,
+        batch_id: typing.Optional[str] = None,
         source_id: typing.Optional[RunSourceId] = None,
         source: typing.Optional[RunSource] = None,
         file_name_contains: typing.Optional[str] = None,
@@ -367,6 +448,11 @@ class AsyncExtractRunsClient:
             Filters extract runs by the extractor ID. If not provided, all extract runs are returned.
 
             Example: `"ex_BMdfq_yWM3sT-ZzvCnA3f"`
+
+        batch_id : typing.Optional[str]
+            Filters runs by the batch they belong to. Only returns runs created as part of the specified batch.
+
+            Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         source_id : typing.Optional[RunSourceId]
             Filters runs by the source ID.
@@ -422,6 +508,7 @@ class AsyncExtractRunsClient:
         _response = await self._raw_client.list(
             status=status,
             extractor_id=extractor_id,
+            batch_id=batch_id,
             source_id=source_id,
             source=source,
             file_name_contains=file_name_contains,
@@ -659,5 +746,83 @@ class AsyncExtractRunsClient:
         """
         _response = await self._raw_client.cancel(
             id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def create_batch(
+        self,
+        *,
+        extractor: ExtractRunsCreateBatchRequestExtractorParams,
+        inputs: typing.Sequence[ExtractRunsCreateBatchRequestInputsItemParams],
+        priority: typing.Optional[RunPriority] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> BatchRun:
+        """
+        Submit up to **1,000 files** for extraction in a single request. Each file is processed as an independent extract run using the same extractor and configuration.
+
+        Unlike the single [Extract File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/create-extract-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+
+        **Monitoring results:**
+        - **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /extract_runs?batchId={id}`.
+        - **Polling:** Call `GET /batch_runs/{id}` to check the overall batch status, and use `GET /extract_runs` filtered by `batchId` to retrieve individual run results.
+
+        **Notes:**
+        - A processor reference (`extractor.id`) is required — inline `config` is not supported for batch requests.
+        - `inputs` must contain between 1 and 1,000 items.
+        - All inputs in a batch use the same extractor version and override config.
+
+        Parameters
+        ----------
+        extractor : ExtractRunsCreateBatchRequestExtractorParams
+            Reference to the extractor to run against every input in this batch.
+
+        inputs : typing.Sequence[ExtractRunsCreateBatchRequestInputsItemParams]
+            An array of inputs to process. Each item produces one extract run. Must contain between 1 and 1,000 items.
+
+        priority : typing.Optional[RunPriority]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        BatchRun
+            Successfully queued batch extract run
+
+        Examples
+        --------
+        import asyncio
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.extract_runs.create_batch(
+                extractor={"id": "ex_xK9mLPqRtN3vS8wF5hB2cQ"},
+                inputs=[
+                    {
+                        "file": {"url": "https://example.com/invoice1.pdf"},
+                        "metadata": {"customerId": "cust_abc123"},
+                    },
+                    {
+                        "file": {"url": "https://example.com/invoice2.pdf"},
+                        "metadata": {"customerId": "cust_def456"},
+                    },
+                    {
+                        "file": {"url": "https://example.com/invoice3.pdf"},
+                        "metadata": {"customerId": "cust_ghi789"},
+                    },
+                ],
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.create_batch(
+            extractor=extractor, inputs=inputs, priority=priority, request_options=request_options
         )
         return _response.data

@@ -32,6 +32,7 @@ from .types.split_run import SplitRun
 
 if typing.TYPE_CHECKING:
     from .batch_processor_run.client import AsyncBatchProcessorRunClient, BatchProcessorRunClient
+    from .batch_runs.client import AsyncBatchRunsClient, BatchRunsClient
     from .classifier_versions.client import AsyncClassifierVersionsClient, ClassifierVersionsClient
     from .classifiers.client import AsyncClassifiersClient, ClassifiersClient
     from .classify_runs.client import AsyncClassifyRunsClient, ClassifyRunsClient
@@ -149,6 +150,7 @@ class Extend:
         self._processor: typing.Optional[ProcessorClient] = None
         self._processor_version: typing.Optional[ProcessorVersionClient] = None
         self._batch_processor_run: typing.Optional[BatchProcessorRunClient] = None
+        self._batch_runs: typing.Optional[BatchRunsClient] = None
         self._evaluation_sets: typing.Optional[EvaluationSetsClient] = None
         self._evaluation_set_items: typing.Optional[EvaluationSetItemsClient] = None
         self._evaluation_set_runs: typing.Optional[EvaluationSetRunsClient] = None
@@ -668,6 +670,14 @@ class Extend:
         return self._batch_processor_run
 
     @property
+    def batch_runs(self):
+        if self._batch_runs is None:
+            from .batch_runs.client import BatchRunsClient  # noqa: E402
+
+            self._batch_runs = BatchRunsClient(client_wrapper=self._client_wrapper)
+        return self._batch_runs
+
+    @property
     def evaluation_sets(self):
         if self._evaluation_sets is None:
             from .evaluation_sets.client import EvaluationSetsClient  # noqa: E402
@@ -797,6 +807,7 @@ class AsyncExtend:
         self._processor: typing.Optional[AsyncProcessorClient] = None
         self._processor_version: typing.Optional[AsyncProcessorVersionClient] = None
         self._batch_processor_run: typing.Optional[AsyncBatchProcessorRunClient] = None
+        self._batch_runs: typing.Optional[AsyncBatchRunsClient] = None
         self._evaluation_sets: typing.Optional[AsyncEvaluationSetsClient] = None
         self._evaluation_set_items: typing.Optional[AsyncEvaluationSetItemsClient] = None
         self._evaluation_set_runs: typing.Optional[AsyncEvaluationSetRunsClient] = None
@@ -1354,6 +1365,14 @@ class AsyncExtend:
 
             self._batch_processor_run = AsyncBatchProcessorRunClient(client_wrapper=self._client_wrapper)
         return self._batch_processor_run
+
+    @property
+    def batch_runs(self):
+        if self._batch_runs is None:
+            from .batch_runs.client import AsyncBatchRunsClient  # noqa: E402
+
+            self._batch_runs = AsyncBatchRunsClient(client_wrapper=self._client_wrapper)
+        return self._batch_runs
 
     @property
     def evaluation_sets(self):

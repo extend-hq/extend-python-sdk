@@ -7,18 +7,30 @@ from importlib import import_module
 
 if typing.TYPE_CHECKING:
     from .types import (
+        SplitRunsCreateBatchRequestInputsItem,
+        SplitRunsCreateBatchRequestInputsItemFile,
+        SplitRunsCreateBatchRequestSplitter,
         SplitRunsCreateRequestFile,
         SplitRunsCreateRequestSplitter,
         SplitRunsDeleteResponse,
         SplitRunsListResponse,
     )
     from .requests import (
+        SplitRunsCreateBatchRequestInputsItemFileParams,
+        SplitRunsCreateBatchRequestInputsItemParams,
+        SplitRunsCreateBatchRequestSplitterParams,
         SplitRunsCreateRequestFileParams,
         SplitRunsCreateRequestSplitterParams,
         SplitRunsDeleteResponseParams,
         SplitRunsListResponseParams,
     )
 _dynamic_imports: typing.Dict[str, str] = {
+    "SplitRunsCreateBatchRequestInputsItem": ".types",
+    "SplitRunsCreateBatchRequestInputsItemFile": ".types",
+    "SplitRunsCreateBatchRequestInputsItemFileParams": ".requests",
+    "SplitRunsCreateBatchRequestInputsItemParams": ".requests",
+    "SplitRunsCreateBatchRequestSplitter": ".types",
+    "SplitRunsCreateBatchRequestSplitterParams": ".requests",
     "SplitRunsCreateRequestFile": ".types",
     "SplitRunsCreateRequestFileParams": ".requests",
     "SplitRunsCreateRequestSplitter": ".types",
@@ -52,6 +64,12 @@ def __dir__():
 
 
 __all__ = [
+    "SplitRunsCreateBatchRequestInputsItem",
+    "SplitRunsCreateBatchRequestInputsItemFile",
+    "SplitRunsCreateBatchRequestInputsItemFileParams",
+    "SplitRunsCreateBatchRequestInputsItemParams",
+    "SplitRunsCreateBatchRequestSplitter",
+    "SplitRunsCreateBatchRequestSplitterParams",
     "SplitRunsCreateRequestFile",
     "SplitRunsCreateRequestFileParams",
     "SplitRunsCreateRequestSplitter",

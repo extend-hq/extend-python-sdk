@@ -6,42 +6,31 @@ import typing_extensions
 from ..core.serialization import FieldMetadata
 from ..types.batch_run_status import BatchRunStatus
 from ..types.created_at import CreatedAt
-from ..types.updated_at import UpdatedAt
-from .batch_run_entity import BatchRunEntityParams
-from .batch_run_entity_version import BatchRunEntityVersionParams
-from .batch_run_metrics import BatchRunMetricsParams
 
 
 class BatchRunParams(typing_extensions.TypedDict):
+    """
+    A batch run represents a batch of files submitted for processing via one of the batch endpoints (`POST /extract_runs/batch`, `POST /classify_runs/batch`, or `POST /split_runs/batch`). Use `GET /batch_runs/{id}` to poll the status.
+
+    **Note:** This object is not used for workflow batch runs. See `POST /workflow_runs/batch` for workflow batching.
+    """
+
     object: typing.Literal["batch_run"]
     """
-    The type of object. In this case, it will always be `"batch_run"`.
+    The type of object. Always `"batch_run"`.
     """
 
     id: str
     """
     The unique identifier for this batch run.
     
-    Example: `"batch_run_Xj8mK2pL9nR4vT7qY5wZ"`
-    """
-
-    entity: typing.Optional[BatchRunEntityParams]
-    """
-    The extractor, classifier, or splitter that was run.
-    
-    **Availability:** Present when an entity was provided when creating the batch run.
-    """
-
-    entity_version: typing_extensions.Annotated[
-        typing.Optional[BatchRunEntityVersionParams], FieldMetadata(alias="entityVersion")
-    ]
-    """
-    The version of the extractor, classifier, or splitter that was run.
-    
-    **Availability:** Present when an entity was provided when creating the batch run.
+    Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
     status: BatchRunStatus
-    metrics: BatchRunMetricsParams
+    run_count: typing_extensions.Annotated[int, FieldMetadata(alias="runCount")]
+    """
+    The number of individual runs in this batch.
+    """
+
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
-    updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")]

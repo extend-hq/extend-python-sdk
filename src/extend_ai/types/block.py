@@ -47,6 +47,7 @@ class Block(UncheckedBaseModel):
     * `"key_value"` - Key-value pairs (e.g., form regions, key-val groups, etc)
     * `"page_number"` - Page number indicators
     * `"barcode"` - Barcodes and QR codes
+    * `"formula"` - Mathematical formulas and equations
     * `"header"` - Page headers
     * `"footer"` - Page footers
     """

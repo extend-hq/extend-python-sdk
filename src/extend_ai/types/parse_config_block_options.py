@@ -9,6 +9,7 @@ from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .parse_config_block_options_barcodes import ParseConfigBlockOptionsBarcodes
 from .parse_config_block_options_figures import ParseConfigBlockOptionsFigures
+from .parse_config_block_options_formulas import ParseConfigBlockOptionsFormulas
 from .parse_config_block_options_key_value import ParseConfigBlockOptionsKeyValue
 from .parse_config_block_options_tables import ParseConfigBlockOptionsTables
 from .parse_config_block_options_text import ParseConfigBlockOptionsText
@@ -44,6 +45,11 @@ class ParseConfigBlockOptions(UncheckedBaseModel):
     barcodes: typing.Optional[ParseConfigBlockOptionsBarcodes] = pydantic.Field(default=None)
     """
     Options for barcode blocks.
+    """
+
+    formulas: typing.Optional[ParseConfigBlockOptionsFormulas] = pydantic.Field(default=None)
+    """
+    Options for formula blocks.
     """
 
     if IS_PYDANTIC_V2:

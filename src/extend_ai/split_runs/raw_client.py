@@ -20,6 +20,7 @@ from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
 from ..requests.split_config import SplitConfigParams
 from ..types.api_error import ApiError as types_api_error_ApiError
+from ..types.batch_run import BatchRun
 from ..types.max_page_size import MaxPageSize
 from ..types.next_page_token import NextPageToken
 from ..types.processor_run_status import ProcessorRunStatus
@@ -30,6 +31,8 @@ from ..types.run_source_id import RunSourceId
 from ..types.sort_by import SortBy
 from ..types.sort_dir import SortDir
 from ..types.split_run import SplitRun
+from .requests.split_runs_create_batch_request_inputs_item import SplitRunsCreateBatchRequestInputsItemParams
+from .requests.split_runs_create_batch_request_splitter import SplitRunsCreateBatchRequestSplitterParams
 from .requests.split_runs_create_request_file import SplitRunsCreateRequestFileParams
 from .requests.split_runs_create_request_splitter import SplitRunsCreateRequestSplitterParams
 from .types.split_runs_delete_response import SplitRunsDeleteResponse
@@ -48,6 +51,7 @@ class RawSplitRunsClient:
         *,
         status: typing.Optional[ProcessorRunStatus] = None,
         splitter_id: typing.Optional[str] = None,
+        batch_id: typing.Optional[str] = None,
         source_id: typing.Optional[RunSourceId] = None,
         source: typing.Optional[RunSource] = None,
         file_name_contains: typing.Optional[str] = None,
@@ -71,6 +75,11 @@ class RawSplitRunsClient:
             Filters split runs by the splitter ID. If not provided, all split runs are returned.
 
             Example: `"spl_BMdfq_yWM3sT-ZzvCnA3f"`
+
+        batch_id : typing.Optional[str]
+            Filters runs by the batch they belong to. Only returns runs created as part of the specified batch.
+
+            Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         source_id : typing.Optional[RunSourceId]
             Filters runs by the source ID.
@@ -110,6 +119,7 @@ class RawSplitRunsClient:
             params={
                 "status": status,
                 "splitterId": splitter_id,
+                "batchId": batch_id,
                 "sourceId": source_id,
                 "source": source,
                 "fileNameContains": file_name_contains,
@@ -830,6 +840,174 @@ class RawSplitRunsClient:
             status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
         )
 
+    def create_batch(
+        self,
+        *,
+        splitter: SplitRunsCreateBatchRequestSplitterParams,
+        inputs: typing.Sequence[SplitRunsCreateBatchRequestInputsItemParams],
+        priority: typing.Optional[RunPriority] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[BatchRun]:
+        """
+        Submit up to **1,000 files** for splitting in a single request. Each file is processed as an independent split run using the same splitter and configuration.
+
+        Unlike the single [Split File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/split/create-split-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+
+        **Monitoring results:**
+        - **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /split_runs?batchId={id}`.
+        - **Polling:** Call `GET /batch_runs/{id}` to check the overall batch status, and use `GET /split_runs` filtered by `batchId` to retrieve individual run results.
+
+        **Notes:**
+        - A processor reference (`splitter.id`) is required — inline `config` is not supported for batch requests.
+        - `inputs` must contain between 1 and 1,000 items.
+        - All inputs in a batch use the same splitter version and override config.
+        - Raw text input (`FileFromText`) is not supported for split runs. Use a URL or file ID.
+
+        Parameters
+        ----------
+        splitter : SplitRunsCreateBatchRequestSplitterParams
+            Reference to the splitter to run against every input in this batch.
+
+        inputs : typing.Sequence[SplitRunsCreateBatchRequestInputsItemParams]
+            An array of inputs to process. Each item produces one split run. Must contain between 1 and 1,000 items. Raw text input is not supported — use a URL or file ID.
+
+        priority : typing.Optional[RunPriority]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[BatchRun]
+            Successfully queued batch split run
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "split_runs/batch",
+            method="POST",
+            json={
+                "splitter": convert_and_respect_annotation_metadata(
+                    object_=splitter, annotation=SplitRunsCreateBatchRequestSplitterParams, direction="write"
+                ),
+                "inputs": convert_and_respect_annotation_metadata(
+                    object_=inputs,
+                    annotation=typing.Sequence[SplitRunsCreateBatchRequestInputsItemParams],
+                    direction="write",
+                ),
+                "priority": priority,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    BatchRun,
+                    construct_type(
+                        type_=BatchRun,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise core_api_error_ApiError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+            )
+        raise core_api_error_ApiError(
+            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
+        )
+
 
 class AsyncRawSplitRunsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -840,6 +1018,7 @@ class AsyncRawSplitRunsClient:
         *,
         status: typing.Optional[ProcessorRunStatus] = None,
         splitter_id: typing.Optional[str] = None,
+        batch_id: typing.Optional[str] = None,
         source_id: typing.Optional[RunSourceId] = None,
         source: typing.Optional[RunSource] = None,
         file_name_contains: typing.Optional[str] = None,
@@ -863,6 +1042,11 @@ class AsyncRawSplitRunsClient:
             Filters split runs by the splitter ID. If not provided, all split runs are returned.
 
             Example: `"spl_BMdfq_yWM3sT-ZzvCnA3f"`
+
+        batch_id : typing.Optional[str]
+            Filters runs by the batch they belong to. Only returns runs created as part of the specified batch.
+
+            Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         source_id : typing.Optional[RunSourceId]
             Filters runs by the source ID.
@@ -902,6 +1086,7 @@ class AsyncRawSplitRunsClient:
             params={
                 "status": status,
                 "splitterId": splitter_id,
+                "batchId": batch_id,
                 "sourceId": source_id,
                 "source": source,
                 "fileNameContains": file_name_contains,
@@ -1521,6 +1706,174 @@ class AsyncRawSplitRunsClient:
                     SplitRun,
                     construct_type(
                         type_=SplitRun,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise core_api_error_ApiError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+            )
+        raise core_api_error_ApiError(
+            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
+        )
+
+    async def create_batch(
+        self,
+        *,
+        splitter: SplitRunsCreateBatchRequestSplitterParams,
+        inputs: typing.Sequence[SplitRunsCreateBatchRequestInputsItemParams],
+        priority: typing.Optional[RunPriority] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[BatchRun]:
+        """
+        Submit up to **1,000 files** for splitting in a single request. Each file is processed as an independent split run using the same splitter and configuration.
+
+        Unlike the single [Split File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/split/create-split-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+
+        **Monitoring results:**
+        - **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /split_runs?batchId={id}`.
+        - **Polling:** Call `GET /batch_runs/{id}` to check the overall batch status, and use `GET /split_runs` filtered by `batchId` to retrieve individual run results.
+
+        **Notes:**
+        - A processor reference (`splitter.id`) is required — inline `config` is not supported for batch requests.
+        - `inputs` must contain between 1 and 1,000 items.
+        - All inputs in a batch use the same splitter version and override config.
+        - Raw text input (`FileFromText`) is not supported for split runs. Use a URL or file ID.
+
+        Parameters
+        ----------
+        splitter : SplitRunsCreateBatchRequestSplitterParams
+            Reference to the splitter to run against every input in this batch.
+
+        inputs : typing.Sequence[SplitRunsCreateBatchRequestInputsItemParams]
+            An array of inputs to process. Each item produces one split run. Must contain between 1 and 1,000 items. Raw text input is not supported — use a URL or file ID.
+
+        priority : typing.Optional[RunPriority]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[BatchRun]
+            Successfully queued batch split run
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "split_runs/batch",
+            method="POST",
+            json={
+                "splitter": convert_and_respect_annotation_metadata(
+                    object_=splitter, annotation=SplitRunsCreateBatchRequestSplitterParams, direction="write"
+                ),
+                "inputs": convert_and_respect_annotation_metadata(
+                    object_=inputs,
+                    annotation=typing.Sequence[SplitRunsCreateBatchRequestInputsItemParams],
+                    direction="write",
+                ),
+                "priority": priority,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    BatchRun,
+                    construct_type(
+                        type_=BatchRun,  # type: ignore
                         object_=_response.json(),
                     ),
                 )

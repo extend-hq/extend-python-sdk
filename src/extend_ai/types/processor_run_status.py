@@ -10,12 +10,14 @@ T_Result = typing.TypeVar("T_Result")
 class ProcessorRunStatus(enum.StrEnum):
     """
     The status of a processor run (extract, classify, or split):
+    * `"PENDING"` - The run has been created and is waiting to be processed
     * `"PROCESSING"` - The run is in progress
     * `"PROCESSED"` - The run completed successfully
     * `"FAILED"` - The run failed
     * `"CANCELLED"` - The run was cancelled
     """
 
+    PENDING = "PENDING"
     PROCESSING = "PROCESSING"
     PROCESSED = "PROCESSED"
     FAILED = "FAILED"
@@ -33,12 +35,15 @@ class ProcessorRunStatus(enum.StrEnum):
 
     def visit(
         self,
+        pending: typing.Callable[[], T_Result],
         processing: typing.Callable[[], T_Result],
         processed: typing.Callable[[], T_Result],
         failed: typing.Callable[[], T_Result],
         cancelled: typing.Callable[[], T_Result],
         _unknown_member: typing.Callable[[str], T_Result],
     ) -> T_Result:
+        if self is ProcessorRunStatus.PENDING:
+            return pending()
         if self is ProcessorRunStatus.PROCESSING:
             return processing()
         if self is ProcessorRunStatus.PROCESSED:

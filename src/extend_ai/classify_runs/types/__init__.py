@@ -6,11 +6,17 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
+    from .classify_runs_create_batch_request_classifier import ClassifyRunsCreateBatchRequestClassifier
+    from .classify_runs_create_batch_request_inputs_item import ClassifyRunsCreateBatchRequestInputsItem
+    from .classify_runs_create_batch_request_inputs_item_file import ClassifyRunsCreateBatchRequestInputsItemFile
     from .classify_runs_create_request_classifier import ClassifyRunsCreateRequestClassifier
     from .classify_runs_create_request_file import ClassifyRunsCreateRequestFile
     from .classify_runs_delete_response import ClassifyRunsDeleteResponse
     from .classify_runs_list_response import ClassifyRunsListResponse
 _dynamic_imports: typing.Dict[str, str] = {
+    "ClassifyRunsCreateBatchRequestClassifier": ".classify_runs_create_batch_request_classifier",
+    "ClassifyRunsCreateBatchRequestInputsItem": ".classify_runs_create_batch_request_inputs_item",
+    "ClassifyRunsCreateBatchRequestInputsItemFile": ".classify_runs_create_batch_request_inputs_item_file",
     "ClassifyRunsCreateRequestClassifier": ".classify_runs_create_request_classifier",
     "ClassifyRunsCreateRequestFile": ".classify_runs_create_request_file",
     "ClassifyRunsDeleteResponse": ".classify_runs_delete_response",
@@ -40,6 +46,9 @@ def __dir__():
 
 
 __all__ = [
+    "ClassifyRunsCreateBatchRequestClassifier",
+    "ClassifyRunsCreateBatchRequestInputsItem",
+    "ClassifyRunsCreateBatchRequestInputsItemFile",
     "ClassifyRunsCreateRequestClassifier",
     "ClassifyRunsCreateRequestFile",
     "ClassifyRunsDeleteResponse",

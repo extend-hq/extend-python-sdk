@@ -11,25 +11,9 @@ if typing.TYPE_CHECKING:
     from .array_strategy import ArrayStrategy
     from .array_strategy_type import ArrayStrategyType
     from .barcode_details import BarcodeDetails
-    from .batch_processor_run import BatchProcessorRun
-    from .batch_processor_run_metrics import BatchProcessorRunMetrics
-    from .batch_processor_run_options import BatchProcessorRunOptions
-    from .batch_processor_run_source import BatchProcessorRunSource
-    from .batch_processor_run_status import BatchProcessorRunStatus
+    from .batch_processor_run_completed_webhook_event import BatchProcessorRunCompletedWebhookEvent
+    from .batch_processor_run_failed_webhook_event import BatchProcessorRunFailedWebhookEvent
     from .batch_run import BatchRun
-    from .batch_run_entity import (
-        BatchRunEntity,
-        BatchRunEntity_Classifier,
-        BatchRunEntity_Extractor,
-        BatchRunEntity_Splitter,
-    )
-    from .batch_run_entity_version import (
-        BatchRunEntityVersion,
-        BatchRunEntityVersion_ClassifierVersion,
-        BatchRunEntityVersion_ExtractorVersion,
-        BatchRunEntityVersion_SplitterVersion,
-    )
-    from .batch_run_metrics import BatchRunMetrics
     from .batch_run_status import BatchRunStatus
     from .block import Block
     from .block_details import BlockDetails
@@ -232,6 +216,7 @@ if typing.TYPE_CHECKING:
     from .file_metadata import FileMetadata
     from .file_summary import FileSummary
     from .file_type import FileType
+    from .formula_details import FormulaDetails
     from .human_review_step_definition import HumanReviewStepDefinition
     from .insight import Insight
     from .json_object import JsonObject
@@ -341,11 +326,15 @@ if typing.TYPE_CHECKING:
     from .parse_config_advanced_options import ParseConfigAdvancedOptions
     from .parse_config_advanced_options_enrichment_format import ParseConfigAdvancedOptionsEnrichmentFormat
     from .parse_config_advanced_options_excel_parsing_mode import ParseConfigAdvancedOptionsExcelParsingMode
+    from .parse_config_advanced_options_formatting_detection_item import (
+        ParseConfigAdvancedOptionsFormattingDetectionItem,
+    )
     from .parse_config_advanced_options_image_conversion_quality import ParseConfigAdvancedOptionsImageConversionQuality
     from .parse_config_advanced_options_return_ocr import ParseConfigAdvancedOptionsReturnOcr
     from .parse_config_block_options import ParseConfigBlockOptions
     from .parse_config_block_options_barcodes import ParseConfigBlockOptionsBarcodes
     from .parse_config_block_options_figures import ParseConfigBlockOptionsFigures
+    from .parse_config_block_options_formulas import ParseConfigBlockOptionsFormulas
     from .parse_config_block_options_key_value import ParseConfigBlockOptionsKeyValue
     from .parse_config_block_options_tables import ParseConfigBlockOptionsTables
     from .parse_config_block_options_tables_agentic import ParseConfigBlockOptionsTablesAgentic
@@ -448,6 +437,8 @@ if typing.TYPE_CHECKING:
     from .webhook_endpoint_status import WebhookEndpointStatus
     from .webhook_event import (
         WebhookEvent,
+        WebhookEvent_BatchProcessorRunFailed,
+        WebhookEvent_BatchProcessorRunProcessed,
         WebhookEvent_ClassifierCreated,
         WebhookEvent_ClassifierDeleted,
         WebhookEvent_ClassifierDraftUpdated,
@@ -530,21 +521,9 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ArrayStrategy": ".array_strategy",
     "ArrayStrategyType": ".array_strategy_type",
     "BarcodeDetails": ".barcode_details",
-    "BatchProcessorRun": ".batch_processor_run",
-    "BatchProcessorRunMetrics": ".batch_processor_run_metrics",
-    "BatchProcessorRunOptions": ".batch_processor_run_options",
-    "BatchProcessorRunSource": ".batch_processor_run_source",
-    "BatchProcessorRunStatus": ".batch_processor_run_status",
+    "BatchProcessorRunCompletedWebhookEvent": ".batch_processor_run_completed_webhook_event",
+    "BatchProcessorRunFailedWebhookEvent": ".batch_processor_run_failed_webhook_event",
     "BatchRun": ".batch_run",
-    "BatchRunEntity": ".batch_run_entity",
-    "BatchRunEntityVersion": ".batch_run_entity_version",
-    "BatchRunEntityVersion_ClassifierVersion": ".batch_run_entity_version",
-    "BatchRunEntityVersion_ExtractorVersion": ".batch_run_entity_version",
-    "BatchRunEntityVersion_SplitterVersion": ".batch_run_entity_version",
-    "BatchRunEntity_Classifier": ".batch_run_entity",
-    "BatchRunEntity_Extractor": ".batch_run_entity",
-    "BatchRunEntity_Splitter": ".batch_run_entity",
-    "BatchRunMetrics": ".batch_run_metrics",
     "BatchRunStatus": ".batch_run_status",
     "Block": ".block",
     "BlockDetails": ".block_details",
@@ -725,6 +704,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "FileMetadata": ".file_metadata",
     "FileSummary": ".file_summary",
     "FileType": ".file_type",
+    "FormulaDetails": ".formula_details",
     "HumanReviewStepDefinition": ".human_review_step_definition",
     "Insight": ".insight",
     "JsonObject": ".json_object",
@@ -822,11 +802,13 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ParseConfigAdvancedOptions": ".parse_config_advanced_options",
     "ParseConfigAdvancedOptionsEnrichmentFormat": ".parse_config_advanced_options_enrichment_format",
     "ParseConfigAdvancedOptionsExcelParsingMode": ".parse_config_advanced_options_excel_parsing_mode",
+    "ParseConfigAdvancedOptionsFormattingDetectionItem": ".parse_config_advanced_options_formatting_detection_item",
     "ParseConfigAdvancedOptionsImageConversionQuality": ".parse_config_advanced_options_image_conversion_quality",
     "ParseConfigAdvancedOptionsReturnOcr": ".parse_config_advanced_options_return_ocr",
     "ParseConfigBlockOptions": ".parse_config_block_options",
     "ParseConfigBlockOptionsBarcodes": ".parse_config_block_options_barcodes",
     "ParseConfigBlockOptionsFigures": ".parse_config_block_options_figures",
+    "ParseConfigBlockOptionsFormulas": ".parse_config_block_options_formulas",
     "ParseConfigBlockOptionsKeyValue": ".parse_config_block_options_key_value",
     "ParseConfigBlockOptionsTables": ".parse_config_block_options_tables",
     "ParseConfigBlockOptionsTablesAgentic": ".parse_config_block_options_tables_agentic",
@@ -928,6 +910,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WebhookEndpointEventType": ".webhook_endpoint_event_type",
     "WebhookEndpointStatus": ".webhook_endpoint_status",
     "WebhookEvent": ".webhook_event",
+    "WebhookEvent_BatchProcessorRunFailed": ".webhook_event",
+    "WebhookEvent_BatchProcessorRunProcessed": ".webhook_event",
     "WebhookEvent_ClassifierCreated": ".webhook_event",
     "WebhookEvent_ClassifierDeleted": ".webhook_event",
     "WebhookEvent_ClassifierDraftUpdated": ".webhook_event",
@@ -1031,21 +1015,9 @@ __all__ = [
     "ArrayStrategy",
     "ArrayStrategyType",
     "BarcodeDetails",
-    "BatchProcessorRun",
-    "BatchProcessorRunMetrics",
-    "BatchProcessorRunOptions",
-    "BatchProcessorRunSource",
-    "BatchProcessorRunStatus",
+    "BatchProcessorRunCompletedWebhookEvent",
+    "BatchProcessorRunFailedWebhookEvent",
     "BatchRun",
-    "BatchRunEntity",
-    "BatchRunEntityVersion",
-    "BatchRunEntityVersion_ClassifierVersion",
-    "BatchRunEntityVersion_ExtractorVersion",
-    "BatchRunEntityVersion_SplitterVersion",
-    "BatchRunEntity_Classifier",
-    "BatchRunEntity_Extractor",
-    "BatchRunEntity_Splitter",
-    "BatchRunMetrics",
     "BatchRunStatus",
     "Block",
     "BlockDetails",
@@ -1226,6 +1198,7 @@ __all__ = [
     "FileMetadata",
     "FileSummary",
     "FileType",
+    "FormulaDetails",
     "HumanReviewStepDefinition",
     "Insight",
     "JsonObject",
@@ -1323,11 +1296,13 @@ __all__ = [
     "ParseConfigAdvancedOptions",
     "ParseConfigAdvancedOptionsEnrichmentFormat",
     "ParseConfigAdvancedOptionsExcelParsingMode",
+    "ParseConfigAdvancedOptionsFormattingDetectionItem",
     "ParseConfigAdvancedOptionsImageConversionQuality",
     "ParseConfigAdvancedOptionsReturnOcr",
     "ParseConfigBlockOptions",
     "ParseConfigBlockOptionsBarcodes",
     "ParseConfigBlockOptionsFigures",
+    "ParseConfigBlockOptionsFormulas",
     "ParseConfigBlockOptionsKeyValue",
     "ParseConfigBlockOptionsTables",
     "ParseConfigBlockOptionsTablesAgentic",
@@ -1429,6 +1404,8 @@ __all__ = [
     "WebhookEndpointEventType",
     "WebhookEndpointStatus",
     "WebhookEvent",
+    "WebhookEvent_BatchProcessorRunFailed",
+    "WebhookEvent_BatchProcessorRunProcessed",
     "WebhookEvent_ClassifierCreated",
     "WebhookEvent_ClassifierDeleted",
     "WebhookEvent_ClassifierDraftUpdated",

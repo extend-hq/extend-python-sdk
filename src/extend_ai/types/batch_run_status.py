@@ -9,17 +9,19 @@ T_Result = typing.TypeVar("T_Result")
 
 class BatchRunStatus(enum.StrEnum):
     """
-    The status of a run:
-    * `"PENDING"` - The run has not started yet
-    * `"PROCESSING"` - The run is in progress
-    * `"PROCESSED"` - The run completed successfully
-    * `"FAILED"` - The run failed
+    The status of a batch run:
+    * `"PENDING"` - The batch has been created and is waiting to be processed
+    * `"PROCESSING"` - The batch is currently being processed
+    * `"PROCESSED"` - All runs in the batch have completed successfully
+    * `"FAILED"` - The batch failed to process
+    * `"CANCELLED"` - The batch was cancelled
     """
 
     PENDING = "PENDING"
     PROCESSING = "PROCESSING"
     PROCESSED = "PROCESSED"
     FAILED = "FAILED"
+    CANCELLED = "CANCELLED"
     _UNKNOWN = "__BATCHRUNSTATUS_UNKNOWN__"
     """
     This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
@@ -37,6 +39,7 @@ class BatchRunStatus(enum.StrEnum):
         processing: typing.Callable[[], T_Result],
         processed: typing.Callable[[], T_Result],
         failed: typing.Callable[[], T_Result],
+        cancelled: typing.Callable[[], T_Result],
         _unknown_member: typing.Callable[[str], T_Result],
     ) -> T_Result:
         if self is BatchRunStatus.PENDING:
@@ -47,4 +50,6 @@ class BatchRunStatus(enum.StrEnum):
             return processed()
         if self is BatchRunStatus.FAILED:
             return failed()
+        if self is BatchRunStatus.CANCELLED:
+            return cancelled()
         return _unknown_member(self._value_)

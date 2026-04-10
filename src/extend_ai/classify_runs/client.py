@@ -5,6 +5,7 @@ import typing
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
 from ..requests.classify_config import ClassifyConfigParams
+from ..types.batch_run import BatchRun
 from ..types.classify_run import ClassifyRun
 from ..types.max_page_size import MaxPageSize
 from ..types.next_page_token import NextPageToken
@@ -16,6 +17,8 @@ from ..types.run_source_id import RunSourceId
 from ..types.sort_by import SortBy
 from ..types.sort_dir import SortDir
 from .raw_client import AsyncRawClassifyRunsClient, RawClassifyRunsClient
+from .requests.classify_runs_create_batch_request_classifier import ClassifyRunsCreateBatchRequestClassifierParams
+from .requests.classify_runs_create_batch_request_inputs_item import ClassifyRunsCreateBatchRequestInputsItemParams
 from .requests.classify_runs_create_request_classifier import ClassifyRunsCreateRequestClassifierParams
 from .requests.classify_runs_create_request_file import ClassifyRunsCreateRequestFileParams
 from .types.classify_runs_delete_response import ClassifyRunsDeleteResponse
@@ -45,6 +48,7 @@ class ClassifyRunsClient:
         *,
         status: typing.Optional[ProcessorRunStatus] = None,
         classifier_id: typing.Optional[str] = None,
+        batch_id: typing.Optional[str] = None,
         source_id: typing.Optional[RunSourceId] = None,
         source: typing.Optional[RunSource] = None,
         file_name_contains: typing.Optional[str] = None,
@@ -68,6 +72,11 @@ class ClassifyRunsClient:
             Filters classify runs by the classifier ID. If not provided, all classify runs are returned.
 
             Example: `"cl_BMdfq_yWM3sT-ZzvCnA3f"`
+
+        batch_id : typing.Optional[str]
+            Filters runs by the batch they belong to. Only returns runs created as part of the specified batch.
+
+            Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         source_id : typing.Optional[RunSourceId]
             Filters runs by the source ID.
@@ -115,6 +124,7 @@ class ClassifyRunsClient:
         _response = self._raw_client.list(
             status=status,
             classifier_id=classifier_id,
+            batch_id=batch_id,
             source_id=source_id,
             source=source,
             file_name_contains=file_name_contains,
@@ -323,6 +333,76 @@ class ClassifyRunsClient:
         )
         return _response.data
 
+    def create_batch(
+        self,
+        *,
+        classifier: ClassifyRunsCreateBatchRequestClassifierParams,
+        inputs: typing.Sequence[ClassifyRunsCreateBatchRequestInputsItemParams],
+        priority: typing.Optional[RunPriority] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> BatchRun:
+        """
+        Submit up to **1,000 files** for classification in a single request. Each file is processed as an independent classify run using the same classifier and configuration.
+
+        Unlike the single [Classify File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/classify/create-classify-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+
+        **Monitoring results:**
+        - **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /classify_runs?batchId={id}`.
+        - **Polling:** Call `GET /batch_runs/{id}` to check the overall batch status, and use `GET /classify_runs` filtered by `batchId` to retrieve individual run results.
+
+        **Notes:**
+        - A processor reference (`classifier.id`) is required — inline `config` is not supported for batch requests.
+        - `inputs` must contain between 1 and 1,000 items.
+        - All inputs in a batch use the same classifier version and override config.
+
+        Parameters
+        ----------
+        classifier : ClassifyRunsCreateBatchRequestClassifierParams
+            Reference to the classifier to run against every input in this batch.
+
+        inputs : typing.Sequence[ClassifyRunsCreateBatchRequestInputsItemParams]
+            An array of inputs to process. Each item produces one classify run. Must contain between 1 and 1,000 items.
+
+        priority : typing.Optional[RunPriority]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        BatchRun
+            Successfully queued batch classify run
+
+        Examples
+        --------
+        from extend_ai import Extend
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.classify_runs.create_batch(
+            classifier={"id": "cl_xK9mLPqRtN3vS8wF5hB2cQ"},
+            inputs=[
+                {
+                    "file": {"url": "https://example.com/document1.pdf"},
+                    "metadata": {"customerId": "cust_abc123"},
+                },
+                {
+                    "file": {"url": "https://example.com/document2.pdf"},
+                    "metadata": {"customerId": "cust_def456"},
+                },
+                {
+                    "file": {"url": "https://example.com/document3.pdf"},
+                    "metadata": {"customerId": "cust_ghi789"},
+                },
+            ],
+        )
+        """
+        _response = self._raw_client.create_batch(
+            classifier=classifier, inputs=inputs, priority=priority, request_options=request_options
+        )
+        return _response.data
+
 
 class AsyncClassifyRunsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -344,6 +424,7 @@ class AsyncClassifyRunsClient:
         *,
         status: typing.Optional[ProcessorRunStatus] = None,
         classifier_id: typing.Optional[str] = None,
+        batch_id: typing.Optional[str] = None,
         source_id: typing.Optional[RunSourceId] = None,
         source: typing.Optional[RunSource] = None,
         file_name_contains: typing.Optional[str] = None,
@@ -367,6 +448,11 @@ class AsyncClassifyRunsClient:
             Filters classify runs by the classifier ID. If not provided, all classify runs are returned.
 
             Example: `"cl_BMdfq_yWM3sT-ZzvCnA3f"`
+
+        batch_id : typing.Optional[str]
+            Filters runs by the batch they belong to. Only returns runs created as part of the specified batch.
+
+            Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         source_id : typing.Optional[RunSourceId]
             Filters runs by the source ID.
@@ -422,6 +508,7 @@ class AsyncClassifyRunsClient:
         _response = await self._raw_client.list(
             status=status,
             classifier_id=classifier_id,
+            batch_id=batch_id,
             source_id=source_id,
             source=source,
             file_name_contains=file_name_contains,
@@ -659,5 +746,83 @@ class AsyncClassifyRunsClient:
         """
         _response = await self._raw_client.cancel(
             id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def create_batch(
+        self,
+        *,
+        classifier: ClassifyRunsCreateBatchRequestClassifierParams,
+        inputs: typing.Sequence[ClassifyRunsCreateBatchRequestInputsItemParams],
+        priority: typing.Optional[RunPriority] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> BatchRun:
+        """
+        Submit up to **1,000 files** for classification in a single request. Each file is processed as an independent classify run using the same classifier and configuration.
+
+        Unlike the single [Classify File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/classify/create-classify-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+
+        **Monitoring results:**
+        - **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /classify_runs?batchId={id}`.
+        - **Polling:** Call `GET /batch_runs/{id}` to check the overall batch status, and use `GET /classify_runs` filtered by `batchId` to retrieve individual run results.
+
+        **Notes:**
+        - A processor reference (`classifier.id`) is required — inline `config` is not supported for batch requests.
+        - `inputs` must contain between 1 and 1,000 items.
+        - All inputs in a batch use the same classifier version and override config.
+
+        Parameters
+        ----------
+        classifier : ClassifyRunsCreateBatchRequestClassifierParams
+            Reference to the classifier to run against every input in this batch.
+
+        inputs : typing.Sequence[ClassifyRunsCreateBatchRequestInputsItemParams]
+            An array of inputs to process. Each item produces one classify run. Must contain between 1 and 1,000 items.
+
+        priority : typing.Optional[RunPriority]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        BatchRun
+            Successfully queued batch classify run
+
+        Examples
+        --------
+        import asyncio
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.classify_runs.create_batch(
+                classifier={"id": "cl_xK9mLPqRtN3vS8wF5hB2cQ"},
+                inputs=[
+                    {
+                        "file": {"url": "https://example.com/document1.pdf"},
+                        "metadata": {"customerId": "cust_abc123"},
+                    },
+                    {
+                        "file": {"url": "https://example.com/document2.pdf"},
+                        "metadata": {"customerId": "cust_def456"},
+                    },
+                    {
+                        "file": {"url": "https://example.com/document3.pdf"},
+                        "metadata": {"customerId": "cust_ghi789"},
+                    },
+                ],
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.create_batch(
+            classifier=classifier, inputs=inputs, priority=priority, request_options=request_options
         )
         return _response.data

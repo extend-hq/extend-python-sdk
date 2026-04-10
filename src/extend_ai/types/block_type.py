@@ -20,6 +20,7 @@ class BlockType(enum.StrEnum):
     * `"key_value"` - Key-value pairs (e.g., form regions, key-val groups, etc)
     * `"page_number"` - Page number indicators
     * `"barcode"` - Barcodes and QR codes
+    * `"formula"` - Mathematical formulas and equations
     * `"header"` - Page headers
     * `"footer"` - Page footers
     """
@@ -34,6 +35,7 @@ class BlockType(enum.StrEnum):
     KEY_VALUE = "key_value"
     PAGE_NUMBER = "page_number"
     BARCODE = "barcode"
+    FORMULA = "formula"
     HEADER = "header"
     FOOTER = "footer"
     _UNKNOWN = "__BLOCKTYPE_UNKNOWN__"
@@ -59,6 +61,7 @@ class BlockType(enum.StrEnum):
         key_value: typing.Callable[[], T_Result],
         page_number: typing.Callable[[], T_Result],
         barcode: typing.Callable[[], T_Result],
+        formula: typing.Callable[[], T_Result],
         header: typing.Callable[[], T_Result],
         footer: typing.Callable[[], T_Result],
         _unknown_member: typing.Callable[[str], T_Result],
@@ -83,6 +86,8 @@ class BlockType(enum.StrEnum):
             return page_number()
         if self is BlockType.BARCODE:
             return barcode()
+        if self is BlockType.FORMULA:
+            return formula()
         if self is BlockType.HEADER:
             return header()
         if self is BlockType.FOOTER:

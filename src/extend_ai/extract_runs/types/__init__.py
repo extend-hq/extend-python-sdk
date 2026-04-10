@@ -6,11 +6,17 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
+    from .extract_runs_create_batch_request_extractor import ExtractRunsCreateBatchRequestExtractor
+    from .extract_runs_create_batch_request_inputs_item import ExtractRunsCreateBatchRequestInputsItem
+    from .extract_runs_create_batch_request_inputs_item_file import ExtractRunsCreateBatchRequestInputsItemFile
     from .extract_runs_create_request_extractor import ExtractRunsCreateRequestExtractor
     from .extract_runs_create_request_file import ExtractRunsCreateRequestFile
     from .extract_runs_delete_response import ExtractRunsDeleteResponse
     from .extract_runs_list_response import ExtractRunsListResponse
 _dynamic_imports: typing.Dict[str, str] = {
+    "ExtractRunsCreateBatchRequestExtractor": ".extract_runs_create_batch_request_extractor",
+    "ExtractRunsCreateBatchRequestInputsItem": ".extract_runs_create_batch_request_inputs_item",
+    "ExtractRunsCreateBatchRequestInputsItemFile": ".extract_runs_create_batch_request_inputs_item_file",
     "ExtractRunsCreateRequestExtractor": ".extract_runs_create_request_extractor",
     "ExtractRunsCreateRequestFile": ".extract_runs_create_request_file",
     "ExtractRunsDeleteResponse": ".extract_runs_delete_response",
@@ -40,6 +46,9 @@ def __dir__():
 
 
 __all__ = [
+    "ExtractRunsCreateBatchRequestExtractor",
+    "ExtractRunsCreateBatchRequestInputsItem",
+    "ExtractRunsCreateBatchRequestInputsItemFile",
     "ExtractRunsCreateRequestExtractor",
     "ExtractRunsCreateRequestFile",
     "ExtractRunsDeleteResponse",

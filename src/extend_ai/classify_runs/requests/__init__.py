@@ -6,11 +6,17 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
+    from .classify_runs_create_batch_request_classifier import ClassifyRunsCreateBatchRequestClassifierParams
+    from .classify_runs_create_batch_request_inputs_item import ClassifyRunsCreateBatchRequestInputsItemParams
+    from .classify_runs_create_batch_request_inputs_item_file import ClassifyRunsCreateBatchRequestInputsItemFileParams
     from .classify_runs_create_request_classifier import ClassifyRunsCreateRequestClassifierParams
     from .classify_runs_create_request_file import ClassifyRunsCreateRequestFileParams
     from .classify_runs_delete_response import ClassifyRunsDeleteResponseParams
     from .classify_runs_list_response import ClassifyRunsListResponseParams
 _dynamic_imports: typing.Dict[str, str] = {
+    "ClassifyRunsCreateBatchRequestClassifierParams": ".classify_runs_create_batch_request_classifier",
+    "ClassifyRunsCreateBatchRequestInputsItemFileParams": ".classify_runs_create_batch_request_inputs_item_file",
+    "ClassifyRunsCreateBatchRequestInputsItemParams": ".classify_runs_create_batch_request_inputs_item",
     "ClassifyRunsCreateRequestClassifierParams": ".classify_runs_create_request_classifier",
     "ClassifyRunsCreateRequestFileParams": ".classify_runs_create_request_file",
     "ClassifyRunsDeleteResponseParams": ".classify_runs_delete_response",
@@ -40,6 +46,9 @@ def __dir__():
 
 
 __all__ = [
+    "ClassifyRunsCreateBatchRequestClassifierParams",
+    "ClassifyRunsCreateBatchRequestInputsItemFileParams",
+    "ClassifyRunsCreateBatchRequestInputsItemParams",
     "ClassifyRunsCreateRequestClassifierParams",
     "ClassifyRunsCreateRequestFileParams",
     "ClassifyRunsDeleteResponseParams",
