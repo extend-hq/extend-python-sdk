@@ -7,18 +7,30 @@ from importlib import import_module
 
 if typing.TYPE_CHECKING:
     from .types import (
+        ClassifyRunsCreateBatchRequestClassifier,
+        ClassifyRunsCreateBatchRequestInputsItem,
+        ClassifyRunsCreateBatchRequestInputsItemFile,
         ClassifyRunsCreateRequestClassifier,
         ClassifyRunsCreateRequestFile,
         ClassifyRunsDeleteResponse,
         ClassifyRunsListResponse,
     )
     from .requests import (
+        ClassifyRunsCreateBatchRequestClassifierParams,
+        ClassifyRunsCreateBatchRequestInputsItemFileParams,
+        ClassifyRunsCreateBatchRequestInputsItemParams,
         ClassifyRunsCreateRequestClassifierParams,
         ClassifyRunsCreateRequestFileParams,
         ClassifyRunsDeleteResponseParams,
         ClassifyRunsListResponseParams,
     )
 _dynamic_imports: typing.Dict[str, str] = {
+    "ClassifyRunsCreateBatchRequestClassifier": ".types",
+    "ClassifyRunsCreateBatchRequestClassifierParams": ".requests",
+    "ClassifyRunsCreateBatchRequestInputsItem": ".types",
+    "ClassifyRunsCreateBatchRequestInputsItemFile": ".types",
+    "ClassifyRunsCreateBatchRequestInputsItemFileParams": ".requests",
+    "ClassifyRunsCreateBatchRequestInputsItemParams": ".requests",
     "ClassifyRunsCreateRequestClassifier": ".types",
     "ClassifyRunsCreateRequestClassifierParams": ".requests",
     "ClassifyRunsCreateRequestFile": ".types",
@@ -52,6 +64,12 @@ def __dir__():
 
 
 __all__ = [
+    "ClassifyRunsCreateBatchRequestClassifier",
+    "ClassifyRunsCreateBatchRequestClassifierParams",
+    "ClassifyRunsCreateBatchRequestInputsItem",
+    "ClassifyRunsCreateBatchRequestInputsItemFile",
+    "ClassifyRunsCreateBatchRequestInputsItemFileParams",
+    "ClassifyRunsCreateBatchRequestInputsItemParams",
     "ClassifyRunsCreateRequestClassifier",
     "ClassifyRunsCreateRequestClassifierParams",
     "ClassifyRunsCreateRequestFile",

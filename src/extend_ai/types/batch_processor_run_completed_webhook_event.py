@@ -7,22 +7,16 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .batch_run import BatchRun
 
 
-class BatchRunMetrics(UncheckedBaseModel):
-    num_files: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="numFiles")] = pydantic.Field(
-        alias="numFiles", default=None
-    )
+class BatchProcessorRunCompletedWebhookEvent(UncheckedBaseModel):
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     """
-    The total number of files processed in this batch run
+    Unique identifier for the event
     """
 
-    num_pages: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="numPages")] = pydantic.Field(
-        alias="numPages", default=None
-    )
-    """
-    The total number of pages processed in this batch run
-    """
+    payload: BatchRun
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

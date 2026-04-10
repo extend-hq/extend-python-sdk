@@ -4,6 +4,7 @@ import typing_extensions
 from ..core.serialization import FieldMetadata
 from .parse_config_block_options_barcodes import ParseConfigBlockOptionsBarcodesParams
 from .parse_config_block_options_figures import ParseConfigBlockOptionsFiguresParams
+from .parse_config_block_options_formulas import ParseConfigBlockOptionsFormulasParams
 from .parse_config_block_options_key_value import ParseConfigBlockOptionsKeyValueParams
 from .parse_config_block_options_tables import ParseConfigBlockOptionsTablesParams
 from .parse_config_block_options_text import ParseConfigBlockOptionsTextParams
@@ -39,4 +40,9 @@ class ParseConfigBlockOptionsParams(typing_extensions.TypedDict):
     barcodes: typing_extensions.NotRequired[ParseConfigBlockOptionsBarcodesParams]
     """
     Options for barcode blocks.
+    """
+
+    formulas: typing_extensions.NotRequired[ParseConfigBlockOptionsFormulasParams]
+    """
+    Options for formula blocks.
     """

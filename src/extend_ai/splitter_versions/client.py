@@ -176,9 +176,12 @@ class SplitterVersionsClient:
             Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
 
         version_id : str
-            The ID of the specific splitter version.
+            The version to retrieve. Accepts any of the following:
 
-            Example: `"splv_QYk6jgHA_8CsO8rVWhyNC"`
+            - `"draft"` — returns the current draft version
+            - `"latest"` — returns the latest published version (falls back to draft if none published)
+            - A version number (e.g. `"0.1"`, `"1.0"`) — returns that specific published version
+            - A version ID (e.g. `"splv_QYk6jgHA_8CsO8rVWhyNC"`) — returns that specific version by ID
 
         extend_workspace_id : typing.Optional[str]
             The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
@@ -200,7 +203,7 @@ class SplitterVersionsClient:
         )
         client.splitter_versions.retrieve(
             splitter_id="splitter_id_here",
-            version_id="splitter_version_id_here",
+            version_id="draft",
         )
         """
         _response = self._raw_client.retrieve(
@@ -383,9 +386,12 @@ class AsyncSplitterVersionsClient:
             Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
 
         version_id : str
-            The ID of the specific splitter version.
+            The version to retrieve. Accepts any of the following:
 
-            Example: `"splv_QYk6jgHA_8CsO8rVWhyNC"`
+            - `"draft"` — returns the current draft version
+            - `"latest"` — returns the latest published version (falls back to draft if none published)
+            - A version number (e.g. `"0.1"`, `"1.0"`) — returns that specific published version
+            - A version ID (e.g. `"splv_QYk6jgHA_8CsO8rVWhyNC"`) — returns that specific version by ID
 
         extend_workspace_id : typing.Optional[str]
             The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
@@ -412,7 +418,7 @@ class AsyncSplitterVersionsClient:
         async def main() -> None:
             await client.splitter_versions.retrieve(
                 splitter_id="splitter_id_here",
-                version_id="splitter_version_id_here",
+                version_id="draft",
             )
 
 

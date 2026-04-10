@@ -6,6 +6,7 @@ import typing
 
 import typing_extensions
 from ..core.serialization import FieldMetadata
+from .batch_run import BatchRunParams
 from .classifier import ClassifierParams
 from .classifier_version import ClassifierVersionParams
 from .classify_run import ClassifyRunParams
@@ -96,6 +97,22 @@ class WebhookEvent_SplitRunFailedParams(typing_extensions.TypedDict):
     event_type: typing_extensions.Annotated[typing.Literal["split_run.failed"], FieldMetadata(alias="eventType")]
     event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
     payload: SplitRunParams
+
+
+class WebhookEvent_BatchProcessorRunProcessedParams(typing_extensions.TypedDict):
+    event_type: typing_extensions.Annotated[
+        typing.Literal["batch_processor_run.processed"], FieldMetadata(alias="eventType")
+    ]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    payload: BatchRunParams
+
+
+class WebhookEvent_BatchProcessorRunFailedParams(typing_extensions.TypedDict):
+    event_type: typing_extensions.Annotated[
+        typing.Literal["batch_processor_run.failed"], FieldMetadata(alias="eventType")
+    ]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    payload: BatchRunParams
 
 
 class WebhookEvent_ParseRunProcessedParams(typing_extensions.TypedDict):
@@ -251,6 +268,8 @@ WebhookEventParams = typing.Union[
     WebhookEvent_ClassifyRunFailedParams,
     WebhookEvent_SplitRunProcessedParams,
     WebhookEvent_SplitRunFailedParams,
+    WebhookEvent_BatchProcessorRunProcessedParams,
+    WebhookEvent_BatchProcessorRunFailedParams,
     WebhookEvent_ParseRunProcessedParams,
     WebhookEvent_ParseRunFailedParams,
     WebhookEvent_EditRunProcessedParams,

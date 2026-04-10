@@ -9,23 +9,9 @@ if typing.TYPE_CHECKING:
     from .api_error import ApiErrorParams
     from .array_strategy import ArrayStrategyParams
     from .barcode_details import BarcodeDetailsParams
-    from .batch_processor_run import BatchProcessorRunParams
-    from .batch_processor_run_metrics import BatchProcessorRunMetricsParams
-    from .batch_processor_run_options import BatchProcessorRunOptionsParams
+    from .batch_processor_run_completed_webhook_event import BatchProcessorRunCompletedWebhookEventParams
+    from .batch_processor_run_failed_webhook_event import BatchProcessorRunFailedWebhookEventParams
     from .batch_run import BatchRunParams
-    from .batch_run_entity import (
-        BatchRunEntityParams,
-        BatchRunEntity_ClassifierParams,
-        BatchRunEntity_ExtractorParams,
-        BatchRunEntity_SplitterParams,
-    )
-    from .batch_run_entity_version import (
-        BatchRunEntityVersionParams,
-        BatchRunEntityVersion_ClassifierVersionParams,
-        BatchRunEntityVersion_ExtractorVersionParams,
-        BatchRunEntityVersion_SplitterVersionParams,
-    )
-    from .batch_run_metrics import BatchRunMetricsParams
     from .block import BlockParams
     from .block_details import BlockDetailsParams
     from .block_metadata import BlockMetadataParams
@@ -191,6 +177,7 @@ if typing.TYPE_CHECKING:
     from .file_from_url_settings import FileFromUrlSettingsParams
     from .file_metadata import FileMetadataParams
     from .file_summary import FileSummaryParams
+    from .formula_details import FormulaDetailsParams
     from .human_review_step_definition import HumanReviewStepDefinitionParams
     from .insight import InsightParams
     from .key_value_details import KeyValueDetailsParams
@@ -264,10 +251,14 @@ if typing.TYPE_CHECKING:
     from .parent_split import ParentSplitParams
     from .parse_config import ParseConfigParams
     from .parse_config_advanced_options import ParseConfigAdvancedOptionsParams
+    from .parse_config_advanced_options_formatting_detection_item import (
+        ParseConfigAdvancedOptionsFormattingDetectionItemParams,
+    )
     from .parse_config_advanced_options_return_ocr import ParseConfigAdvancedOptionsReturnOcrParams
     from .parse_config_block_options import ParseConfigBlockOptionsParams
     from .parse_config_block_options_barcodes import ParseConfigBlockOptionsBarcodesParams
     from .parse_config_block_options_figures import ParseConfigBlockOptionsFiguresParams
+    from .parse_config_block_options_formulas import ParseConfigBlockOptionsFormulasParams
     from .parse_config_block_options_key_value import ParseConfigBlockOptionsKeyValueParams
     from .parse_config_block_options_tables import ParseConfigBlockOptionsTablesParams
     from .parse_config_block_options_tables_agentic import ParseConfigBlockOptionsTablesAgenticParams
@@ -344,6 +335,8 @@ if typing.TYPE_CHECKING:
     from .webhook_endpoint_create import WebhookEndpointCreateParams
     from .webhook_event import (
         WebhookEventParams,
+        WebhookEvent_BatchProcessorRunFailedParams,
+        WebhookEvent_BatchProcessorRunProcessedParams,
         WebhookEvent_ClassifierCreatedParams,
         WebhookEvent_ClassifierDeletedParams,
         WebhookEvent_ClassifierDraftUpdatedParams,
@@ -420,18 +413,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ApiErrorParams": ".api_error",
     "ArrayStrategyParams": ".array_strategy",
     "BarcodeDetailsParams": ".barcode_details",
-    "BatchProcessorRunMetricsParams": ".batch_processor_run_metrics",
-    "BatchProcessorRunOptionsParams": ".batch_processor_run_options",
-    "BatchProcessorRunParams": ".batch_processor_run",
-    "BatchRunEntityParams": ".batch_run_entity",
-    "BatchRunEntityVersionParams": ".batch_run_entity_version",
-    "BatchRunEntityVersion_ClassifierVersionParams": ".batch_run_entity_version",
-    "BatchRunEntityVersion_ExtractorVersionParams": ".batch_run_entity_version",
-    "BatchRunEntityVersion_SplitterVersionParams": ".batch_run_entity_version",
-    "BatchRunEntity_ClassifierParams": ".batch_run_entity",
-    "BatchRunEntity_ExtractorParams": ".batch_run_entity",
-    "BatchRunEntity_SplitterParams": ".batch_run_entity",
-    "BatchRunMetricsParams": ".batch_run_metrics",
+    "BatchProcessorRunCompletedWebhookEventParams": ".batch_processor_run_completed_webhook_event",
+    "BatchProcessorRunFailedWebhookEventParams": ".batch_processor_run_failed_webhook_event",
     "BatchRunParams": ".batch_run",
     "BlockDetailsParams": ".block_details",
     "BlockMetadataPageParams": ".block_metadata_page",
@@ -586,6 +569,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "FileMetadataParams": ".file_metadata",
     "FileParams": ".file",
     "FileSummaryParams": ".file_summary",
+    "FormulaDetailsParams": ".formula_details",
     "HumanReviewStepDefinitionParams": ".human_review_step_definition",
     "InsightParams": ".insight",
     "KeyValueDetailsParams": ".key_value_details",
@@ -651,10 +635,12 @@ _dynamic_imports: typing.Dict[str, str] = {
     "PageRangesItemParams": ".page_ranges_item",
     "PageRangesParams": ".page_ranges",
     "ParentSplitParams": ".parent_split",
+    "ParseConfigAdvancedOptionsFormattingDetectionItemParams": ".parse_config_advanced_options_formatting_detection_item",
     "ParseConfigAdvancedOptionsParams": ".parse_config_advanced_options",
     "ParseConfigAdvancedOptionsReturnOcrParams": ".parse_config_advanced_options_return_ocr",
     "ParseConfigBlockOptionsBarcodesParams": ".parse_config_block_options_barcodes",
     "ParseConfigBlockOptionsFiguresParams": ".parse_config_block_options_figures",
+    "ParseConfigBlockOptionsFormulasParams": ".parse_config_block_options_formulas",
     "ParseConfigBlockOptionsKeyValueParams": ".parse_config_block_options_key_value",
     "ParseConfigBlockOptionsParams": ".parse_config_block_options",
     "ParseConfigBlockOptionsTablesAgenticParams": ".parse_config_block_options_tables_agentic",
@@ -732,6 +718,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WebhookEndpointCreateParams": ".webhook_endpoint_create",
     "WebhookEndpointParams": ".webhook_endpoint",
     "WebhookEventParams": ".webhook_event",
+    "WebhookEvent_BatchProcessorRunFailedParams": ".webhook_event",
+    "WebhookEvent_BatchProcessorRunProcessedParams": ".webhook_event",
     "WebhookEvent_ClassifierCreatedParams": ".webhook_event",
     "WebhookEvent_ClassifierDeletedParams": ".webhook_event",
     "WebhookEvent_ClassifierDraftUpdatedParams": ".webhook_event",
@@ -829,18 +817,8 @@ __all__ = [
     "ApiErrorParams",
     "ArrayStrategyParams",
     "BarcodeDetailsParams",
-    "BatchProcessorRunMetricsParams",
-    "BatchProcessorRunOptionsParams",
-    "BatchProcessorRunParams",
-    "BatchRunEntityParams",
-    "BatchRunEntityVersionParams",
-    "BatchRunEntityVersion_ClassifierVersionParams",
-    "BatchRunEntityVersion_ExtractorVersionParams",
-    "BatchRunEntityVersion_SplitterVersionParams",
-    "BatchRunEntity_ClassifierParams",
-    "BatchRunEntity_ExtractorParams",
-    "BatchRunEntity_SplitterParams",
-    "BatchRunMetricsParams",
+    "BatchProcessorRunCompletedWebhookEventParams",
+    "BatchProcessorRunFailedWebhookEventParams",
     "BatchRunParams",
     "BlockDetailsParams",
     "BlockMetadataPageParams",
@@ -995,6 +973,7 @@ __all__ = [
     "FileMetadataParams",
     "FileParams",
     "FileSummaryParams",
+    "FormulaDetailsParams",
     "HumanReviewStepDefinitionParams",
     "InsightParams",
     "KeyValueDetailsParams",
@@ -1060,10 +1039,12 @@ __all__ = [
     "PageRangesItemParams",
     "PageRangesParams",
     "ParentSplitParams",
+    "ParseConfigAdvancedOptionsFormattingDetectionItemParams",
     "ParseConfigAdvancedOptionsParams",
     "ParseConfigAdvancedOptionsReturnOcrParams",
     "ParseConfigBlockOptionsBarcodesParams",
     "ParseConfigBlockOptionsFiguresParams",
+    "ParseConfigBlockOptionsFormulasParams",
     "ParseConfigBlockOptionsKeyValueParams",
     "ParseConfigBlockOptionsParams",
     "ParseConfigBlockOptionsTablesAgenticParams",
@@ -1141,6 +1122,8 @@ __all__ = [
     "WebhookEndpointCreateParams",
     "WebhookEndpointParams",
     "WebhookEventParams",
+    "WebhookEvent_BatchProcessorRunFailedParams",
+    "WebhookEvent_BatchProcessorRunProcessedParams",
     "WebhookEvent_ClassifierCreatedParams",
     "WebhookEvent_ClassifierDeletedParams",
     "WebhookEvent_ClassifierDraftUpdatedParams",

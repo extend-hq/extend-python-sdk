@@ -6,11 +6,17 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
+    from .split_runs_create_batch_request_inputs_item import SplitRunsCreateBatchRequestInputsItemParams
+    from .split_runs_create_batch_request_inputs_item_file import SplitRunsCreateBatchRequestInputsItemFileParams
+    from .split_runs_create_batch_request_splitter import SplitRunsCreateBatchRequestSplitterParams
     from .split_runs_create_request_file import SplitRunsCreateRequestFileParams
     from .split_runs_create_request_splitter import SplitRunsCreateRequestSplitterParams
     from .split_runs_delete_response import SplitRunsDeleteResponseParams
     from .split_runs_list_response import SplitRunsListResponseParams
 _dynamic_imports: typing.Dict[str, str] = {
+    "SplitRunsCreateBatchRequestInputsItemFileParams": ".split_runs_create_batch_request_inputs_item_file",
+    "SplitRunsCreateBatchRequestInputsItemParams": ".split_runs_create_batch_request_inputs_item",
+    "SplitRunsCreateBatchRequestSplitterParams": ".split_runs_create_batch_request_splitter",
     "SplitRunsCreateRequestFileParams": ".split_runs_create_request_file",
     "SplitRunsCreateRequestSplitterParams": ".split_runs_create_request_splitter",
     "SplitRunsDeleteResponseParams": ".split_runs_delete_response",
@@ -40,6 +46,9 @@ def __dir__():
 
 
 __all__ = [
+    "SplitRunsCreateBatchRequestInputsItemFileParams",
+    "SplitRunsCreateBatchRequestInputsItemParams",
+    "SplitRunsCreateBatchRequestSplitterParams",
     "SplitRunsCreateRequestFileParams",
     "SplitRunsCreateRequestSplitterParams",
     "SplitRunsDeleteResponseParams",

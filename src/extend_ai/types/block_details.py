@@ -5,10 +5,11 @@ import typing
 from .barcode_details import BarcodeDetails
 from .empty_block_details import EmptyBlockDetails
 from .figure_details import FigureDetails
+from .formula_details import FormulaDetails
 from .key_value_details import KeyValueDetails
 from .table_cell_details import TableCellDetails
 from .table_details import TableDetails
 
 BlockDetails = typing.Union[
-    TableDetails, TableCellDetails, FigureDetails, BarcodeDetails, KeyValueDetails, EmptyBlockDetails
+    TableDetails, TableCellDetails, FigureDetails, BarcodeDetails, FormulaDetails, KeyValueDetails, EmptyBlockDetails
 ]

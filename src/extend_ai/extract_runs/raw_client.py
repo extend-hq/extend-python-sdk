@@ -20,6 +20,7 @@ from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
 from ..requests.extract_config_json import ExtractConfigJsonParams
 from ..types.api_error import ApiError as types_api_error_ApiError
+from ..types.batch_run import BatchRun
 from ..types.extract_run import ExtractRun
 from ..types.max_page_size import MaxPageSize
 from ..types.next_page_token import NextPageToken
@@ -30,6 +31,8 @@ from ..types.run_source import RunSource
 from ..types.run_source_id import RunSourceId
 from ..types.sort_by import SortBy
 from ..types.sort_dir import SortDir
+from .requests.extract_runs_create_batch_request_extractor import ExtractRunsCreateBatchRequestExtractorParams
+from .requests.extract_runs_create_batch_request_inputs_item import ExtractRunsCreateBatchRequestInputsItemParams
 from .requests.extract_runs_create_request_extractor import ExtractRunsCreateRequestExtractorParams
 from .requests.extract_runs_create_request_file import ExtractRunsCreateRequestFileParams
 from .types.extract_runs_delete_response import ExtractRunsDeleteResponse
@@ -48,6 +51,7 @@ class RawExtractRunsClient:
         *,
         status: typing.Optional[ProcessorRunStatus] = None,
         extractor_id: typing.Optional[str] = None,
+        batch_id: typing.Optional[str] = None,
         source_id: typing.Optional[RunSourceId] = None,
         source: typing.Optional[RunSource] = None,
         file_name_contains: typing.Optional[str] = None,
@@ -71,6 +75,11 @@ class RawExtractRunsClient:
             Filters extract runs by the extractor ID. If not provided, all extract runs are returned.
 
             Example: `"ex_BMdfq_yWM3sT-ZzvCnA3f"`
+
+        batch_id : typing.Optional[str]
+            Filters runs by the batch they belong to. Only returns runs created as part of the specified batch.
+
+            Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         source_id : typing.Optional[RunSourceId]
             Filters runs by the source ID.
@@ -110,6 +119,7 @@ class RawExtractRunsClient:
             params={
                 "status": status,
                 "extractorId": extractor_id,
+                "batchId": batch_id,
                 "sourceId": source_id,
                 "source": source,
                 "fileNameContains": file_name_contains,
@@ -830,6 +840,173 @@ class RawExtractRunsClient:
             status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
         )
 
+    def create_batch(
+        self,
+        *,
+        extractor: ExtractRunsCreateBatchRequestExtractorParams,
+        inputs: typing.Sequence[ExtractRunsCreateBatchRequestInputsItemParams],
+        priority: typing.Optional[RunPriority] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[BatchRun]:
+        """
+        Submit up to **1,000 files** for extraction in a single request. Each file is processed as an independent extract run using the same extractor and configuration.
+
+        Unlike the single [Extract File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/create-extract-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+
+        **Monitoring results:**
+        - **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /extract_runs?batchId={id}`.
+        - **Polling:** Call `GET /batch_runs/{id}` to check the overall batch status, and use `GET /extract_runs` filtered by `batchId` to retrieve individual run results.
+
+        **Notes:**
+        - A processor reference (`extractor.id`) is required — inline `config` is not supported for batch requests.
+        - `inputs` must contain between 1 and 1,000 items.
+        - All inputs in a batch use the same extractor version and override config.
+
+        Parameters
+        ----------
+        extractor : ExtractRunsCreateBatchRequestExtractorParams
+            Reference to the extractor to run against every input in this batch.
+
+        inputs : typing.Sequence[ExtractRunsCreateBatchRequestInputsItemParams]
+            An array of inputs to process. Each item produces one extract run. Must contain between 1 and 1,000 items.
+
+        priority : typing.Optional[RunPriority]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[BatchRun]
+            Successfully queued batch extract run
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "extract_runs/batch",
+            method="POST",
+            json={
+                "extractor": convert_and_respect_annotation_metadata(
+                    object_=extractor, annotation=ExtractRunsCreateBatchRequestExtractorParams, direction="write"
+                ),
+                "inputs": convert_and_respect_annotation_metadata(
+                    object_=inputs,
+                    annotation=typing.Sequence[ExtractRunsCreateBatchRequestInputsItemParams],
+                    direction="write",
+                ),
+                "priority": priority,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    BatchRun,
+                    construct_type(
+                        type_=BatchRun,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise core_api_error_ApiError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+            )
+        raise core_api_error_ApiError(
+            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
+        )
+
 
 class AsyncRawExtractRunsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
@@ -840,6 +1017,7 @@ class AsyncRawExtractRunsClient:
         *,
         status: typing.Optional[ProcessorRunStatus] = None,
         extractor_id: typing.Optional[str] = None,
+        batch_id: typing.Optional[str] = None,
         source_id: typing.Optional[RunSourceId] = None,
         source: typing.Optional[RunSource] = None,
         file_name_contains: typing.Optional[str] = None,
@@ -863,6 +1041,11 @@ class AsyncRawExtractRunsClient:
             Filters extract runs by the extractor ID. If not provided, all extract runs are returned.
 
             Example: `"ex_BMdfq_yWM3sT-ZzvCnA3f"`
+
+        batch_id : typing.Optional[str]
+            Filters runs by the batch they belong to. Only returns runs created as part of the specified batch.
+
+            Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         source_id : typing.Optional[RunSourceId]
             Filters runs by the source ID.
@@ -902,6 +1085,7 @@ class AsyncRawExtractRunsClient:
             params={
                 "status": status,
                 "extractorId": extractor_id,
+                "batchId": batch_id,
                 "sourceId": source_id,
                 "source": source,
                 "fileNameContains": file_name_contains,
@@ -1521,6 +1705,173 @@ class AsyncRawExtractRunsClient:
                     ExtractRun,
                     construct_type(
                         type_=ExtractRun,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise core_api_error_ApiError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+            )
+        raise core_api_error_ApiError(
+            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
+        )
+
+    async def create_batch(
+        self,
+        *,
+        extractor: ExtractRunsCreateBatchRequestExtractorParams,
+        inputs: typing.Sequence[ExtractRunsCreateBatchRequestInputsItemParams],
+        priority: typing.Optional[RunPriority] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[BatchRun]:
+        """
+        Submit up to **1,000 files** for extraction in a single request. Each file is processed as an independent extract run using the same extractor and configuration.
+
+        Unlike the single [Extract File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/create-extract-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+
+        **Monitoring results:**
+        - **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /extract_runs?batchId={id}`.
+        - **Polling:** Call `GET /batch_runs/{id}` to check the overall batch status, and use `GET /extract_runs` filtered by `batchId` to retrieve individual run results.
+
+        **Notes:**
+        - A processor reference (`extractor.id`) is required — inline `config` is not supported for batch requests.
+        - `inputs` must contain between 1 and 1,000 items.
+        - All inputs in a batch use the same extractor version and override config.
+
+        Parameters
+        ----------
+        extractor : ExtractRunsCreateBatchRequestExtractorParams
+            Reference to the extractor to run against every input in this batch.
+
+        inputs : typing.Sequence[ExtractRunsCreateBatchRequestInputsItemParams]
+            An array of inputs to process. Each item produces one extract run. Must contain between 1 and 1,000 items.
+
+        priority : typing.Optional[RunPriority]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[BatchRun]
+            Successfully queued batch extract run
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "extract_runs/batch",
+            method="POST",
+            json={
+                "extractor": convert_and_respect_annotation_metadata(
+                    object_=extractor, annotation=ExtractRunsCreateBatchRequestExtractorParams, direction="write"
+                ),
+                "inputs": convert_and_respect_annotation_metadata(
+                    object_=inputs,
+                    annotation=typing.Sequence[ExtractRunsCreateBatchRequestInputsItemParams],
+                    direction="write",
+                ),
+                "priority": priority,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    BatchRun,
+                    construct_type(
+                        type_=BatchRun,  # type: ignore
                         object_=_response.json(),
                     ),
                 )

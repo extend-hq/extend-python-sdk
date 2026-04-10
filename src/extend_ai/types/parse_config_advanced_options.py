@@ -10,6 +10,7 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 from .page_ranges import PageRanges
 from .parse_config_advanced_options_enrichment_format import ParseConfigAdvancedOptionsEnrichmentFormat
 from .parse_config_advanced_options_excel_parsing_mode import ParseConfigAdvancedOptionsExcelParsingMode
+from .parse_config_advanced_options_formatting_detection_item import ParseConfigAdvancedOptionsFormattingDetectionItem
 from .parse_config_advanced_options_image_conversion_quality import ParseConfigAdvancedOptionsImageConversionQuality
 from .parse_config_advanced_options_return_ocr import ParseConfigAdvancedOptionsReturnOcr
 
@@ -98,6 +99,20 @@ class ParseConfigAdvancedOptions(UncheckedBaseModel):
     * `high`: Maximum quality, can add some latency for large/dense documents
     * `medium`: Balanced quality and speed
     * `low`: Lower quality, smaller file sizes, faster processing
+    """
+
+    formatting_detection: typing_extensions.Annotated[
+        typing.Optional[typing.List[ParseConfigAdvancedOptionsFormattingDetectionItem]],
+        FieldMetadata(alias="formattingDetection"),
+    ] = pydantic.Field(alias="formattingDetection", default=None)
+    """
+    Enable detection of formatting-based annotations in the document. Currently supports change tracking detection.
+    
+    When enabled, detected changes are represented inline within the `content` field of applicable blocks using standard HTML change-tracking elements: [`<ins>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ins) for insertions and [`<del>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/del) for deletions, grouped inside a `<change>` wrapper.
+    
+    Affected block types: `text`, `heading`, `section_heading`, `header`, `footer`.
+    
+    **Note:** Requires `engine: "parse_performance"` with `engineVersion >= "2.0.0"`.
     """
 
     if IS_PYDANTIC_V2:

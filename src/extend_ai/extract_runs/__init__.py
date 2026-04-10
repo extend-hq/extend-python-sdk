@@ -7,18 +7,30 @@ from importlib import import_module
 
 if typing.TYPE_CHECKING:
     from .types import (
+        ExtractRunsCreateBatchRequestExtractor,
+        ExtractRunsCreateBatchRequestInputsItem,
+        ExtractRunsCreateBatchRequestInputsItemFile,
         ExtractRunsCreateRequestExtractor,
         ExtractRunsCreateRequestFile,
         ExtractRunsDeleteResponse,
         ExtractRunsListResponse,
     )
     from .requests import (
+        ExtractRunsCreateBatchRequestExtractorParams,
+        ExtractRunsCreateBatchRequestInputsItemFileParams,
+        ExtractRunsCreateBatchRequestInputsItemParams,
         ExtractRunsCreateRequestExtractorParams,
         ExtractRunsCreateRequestFileParams,
         ExtractRunsDeleteResponseParams,
         ExtractRunsListResponseParams,
     )
 _dynamic_imports: typing.Dict[str, str] = {
+    "ExtractRunsCreateBatchRequestExtractor": ".types",
+    "ExtractRunsCreateBatchRequestExtractorParams": ".requests",
+    "ExtractRunsCreateBatchRequestInputsItem": ".types",
+    "ExtractRunsCreateBatchRequestInputsItemFile": ".types",
+    "ExtractRunsCreateBatchRequestInputsItemFileParams": ".requests",
+    "ExtractRunsCreateBatchRequestInputsItemParams": ".requests",
     "ExtractRunsCreateRequestExtractor": ".types",
     "ExtractRunsCreateRequestExtractorParams": ".requests",
     "ExtractRunsCreateRequestFile": ".types",
@@ -52,6 +64,12 @@ def __dir__():
 
 
 __all__ = [
+    "ExtractRunsCreateBatchRequestExtractor",
+    "ExtractRunsCreateBatchRequestExtractorParams",
+    "ExtractRunsCreateBatchRequestInputsItem",
+    "ExtractRunsCreateBatchRequestInputsItemFile",
+    "ExtractRunsCreateBatchRequestInputsItemFileParams",
+    "ExtractRunsCreateBatchRequestInputsItemParams",
     "ExtractRunsCreateRequestExtractor",
     "ExtractRunsCreateRequestExtractorParams",
     "ExtractRunsCreateRequestFile",

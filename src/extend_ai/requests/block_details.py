@@ -5,6 +5,7 @@ import typing
 from ..types.empty_block_details import EmptyBlockDetails
 from .barcode_details import BarcodeDetailsParams
 from .figure_details import FigureDetailsParams
+from .formula_details import FormulaDetailsParams
 from .key_value_details import KeyValueDetailsParams
 from .table_cell_details import TableCellDetailsParams
 from .table_details import TableDetailsParams
@@ -14,6 +15,7 @@ BlockDetailsParams = typing.Union[
     TableCellDetailsParams,
     FigureDetailsParams,
     BarcodeDetailsParams,
+    FormulaDetailsParams,
     KeyValueDetailsParams,
     EmptyBlockDetails,
 ]

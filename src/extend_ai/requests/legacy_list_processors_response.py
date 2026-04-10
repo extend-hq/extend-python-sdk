@@ -8,7 +8,7 @@ from .legacy_list_processors_processor import LegacyListProcessorsProcessorParam
 
 
 class LegacyListProcessorsResponseParams(typing_extensions.TypedDict):
-    success: bool
+    success: typing.Literal[True]
     """
     Indicates the request was successful
     """

@@ -378,9 +378,12 @@ class RawExtractorVersionsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         version_id : str
-            The ID of the specific extractor version.
+            The version to retrieve. Accepts any of the following:
 
-            Example: `"extv_QYk6jgHA_8CsO8rVWhyNC"`
+            - `"draft"` — returns the current draft version
+            - `"latest"` — returns the latest published version (falls back to draft if none published)
+            - A version number (e.g. `"0.1"`, `"1.0"`) — returns that specific published version
+            - A version ID (e.g. `"extv_QYk6jgHA_8CsO8rVWhyNC"`) — returns that specific version by ID
 
         extend_workspace_id : typing.Optional[str]
             The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
@@ -855,9 +858,12 @@ class AsyncRawExtractorVersionsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         version_id : str
-            The ID of the specific extractor version.
+            The version to retrieve. Accepts any of the following:
 
-            Example: `"extv_QYk6jgHA_8CsO8rVWhyNC"`
+            - `"draft"` — returns the current draft version
+            - `"latest"` — returns the latest published version (falls back to draft if none published)
+            - A version number (e.g. `"0.1"`, `"1.0"`) — returns that specific published version
+            - A version ID (e.g. `"extv_QYk6jgHA_8CsO8rVWhyNC"`) — returns that specific version by ID
 
         extend_workspace_id : typing.Optional[str]
             The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.

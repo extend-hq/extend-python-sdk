@@ -6,11 +6,17 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
+    from .split_runs_create_batch_request_inputs_item import SplitRunsCreateBatchRequestInputsItem
+    from .split_runs_create_batch_request_inputs_item_file import SplitRunsCreateBatchRequestInputsItemFile
+    from .split_runs_create_batch_request_splitter import SplitRunsCreateBatchRequestSplitter
     from .split_runs_create_request_file import SplitRunsCreateRequestFile
     from .split_runs_create_request_splitter import SplitRunsCreateRequestSplitter
     from .split_runs_delete_response import SplitRunsDeleteResponse
     from .split_runs_list_response import SplitRunsListResponse
 _dynamic_imports: typing.Dict[str, str] = {
+    "SplitRunsCreateBatchRequestInputsItem": ".split_runs_create_batch_request_inputs_item",
+    "SplitRunsCreateBatchRequestInputsItemFile": ".split_runs_create_batch_request_inputs_item_file",
+    "SplitRunsCreateBatchRequestSplitter": ".split_runs_create_batch_request_splitter",
     "SplitRunsCreateRequestFile": ".split_runs_create_request_file",
     "SplitRunsCreateRequestSplitter": ".split_runs_create_request_splitter",
     "SplitRunsDeleteResponse": ".split_runs_delete_response",
@@ -40,6 +46,9 @@ def __dir__():
 
 
 __all__ = [
+    "SplitRunsCreateBatchRequestInputsItem",
+    "SplitRunsCreateBatchRequestInputsItemFile",
+    "SplitRunsCreateBatchRequestSplitter",
     "SplitRunsCreateRequestFile",
     "SplitRunsCreateRequestSplitter",
     "SplitRunsDeleteResponse",

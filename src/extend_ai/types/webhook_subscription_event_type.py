@@ -11,9 +11,9 @@ class WebhookSubscriptionEventType(enum.StrEnum):
     """
     Event types available for resource-scoped webhook subscriptions. The valid subset depends on the `resourceType`:
 
-    - **extractor**: `extract_run.processed`, `extract_run.failed`
-    - **classifier**: `classify_run.processed`, `classify_run.failed`
-    - **splitter**: `split_run.processed`, `split_run.failed`
+    - **extractor**: `extract_run.processed`, `extract_run.failed`, `batch_processor_run.processed`, `batch_processor_run.failed`
+    - **classifier**: `classify_run.processed`, `classify_run.failed`, `batch_processor_run.processed`, `batch_processor_run.failed`
+    - **splitter**: `split_run.processed`, `split_run.failed`, `batch_processor_run.processed`, `batch_processor_run.failed`
     - **workflow**: `workflow_run.completed`, `workflow_run.failed`, `workflow_run.needs_review`, `workflow_run.rejected`, `workflow_run.cancelled`, `workflow_run.step_run.processed`
     """
 
@@ -23,6 +23,8 @@ class WebhookSubscriptionEventType(enum.StrEnum):
     CLASSIFY_RUN_FAILED = "classify_run.failed"
     SPLIT_RUN_PROCESSED = "split_run.processed"
     SPLIT_RUN_FAILED = "split_run.failed"
+    BATCH_PROCESSOR_RUN_PROCESSED = "batch_processor_run.processed"
+    BATCH_PROCESSOR_RUN_FAILED = "batch_processor_run.failed"
     WORKFLOW_RUN_COMPLETED = "workflow_run.completed"
     WORKFLOW_RUN_FAILED = "workflow_run.failed"
     WORKFLOW_RUN_NEEDS_REVIEW = "workflow_run.needs_review"
@@ -48,6 +50,8 @@ class WebhookSubscriptionEventType(enum.StrEnum):
         classify_run_failed: typing.Callable[[], T_Result],
         split_run_processed: typing.Callable[[], T_Result],
         split_run_failed: typing.Callable[[], T_Result],
+        batch_processor_run_processed: typing.Callable[[], T_Result],
+        batch_processor_run_failed: typing.Callable[[], T_Result],
         workflow_run_completed: typing.Callable[[], T_Result],
         workflow_run_failed: typing.Callable[[], T_Result],
         workflow_run_needs_review: typing.Callable[[], T_Result],
@@ -68,6 +72,10 @@ class WebhookSubscriptionEventType(enum.StrEnum):
             return split_run_processed()
         if self is WebhookSubscriptionEventType.SPLIT_RUN_FAILED:
             return split_run_failed()
+        if self is WebhookSubscriptionEventType.BATCH_PROCESSOR_RUN_PROCESSED:
+            return batch_processor_run_processed()
+        if self is WebhookSubscriptionEventType.BATCH_PROCESSOR_RUN_FAILED:
+            return batch_processor_run_failed()
         if self is WebhookSubscriptionEventType.WORKFLOW_RUN_COMPLETED:
             return workflow_run_completed()
         if self is WebhookSubscriptionEventType.WORKFLOW_RUN_FAILED:

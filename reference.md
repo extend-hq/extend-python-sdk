@@ -1667,6 +1667,18 @@ Example: `"ex_BMdfq_yWM3sT-ZzvCnA3f"`
 <dl>
 <dd>
 
+**batch_id:** `typing.Optional[str]` 
+
+Filters runs by the batch they belong to. Only returns runs created as part of the specified batch.
+
+Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **source_id:** `typing.Optional[RunSourceId]` — Filters runs by the source ID.
     
 </dd>
@@ -2081,6 +2093,117 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 <dd>
 
 **extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.extract_runs.<a href="src/extend_ai/extract_runs/client.py">create_batch</a>(...) -&gt; AsyncHttpResponse[BatchRun]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Submit up to **1,000 files** for extraction in a single request. Each file is processed as an independent extract run using the same extractor and configuration.
+
+Unlike the single [Extract File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/create-extract-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+
+**Monitoring results:**
+- **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /extract_runs?batchId={id}`.
+- **Polling:** Call `GET /batch_runs/{id}` to check the overall batch status, and use `GET /extract_runs` filtered by `batchId` to retrieve individual run results.
+
+**Notes:**
+- A processor reference (`extractor.id`) is required — inline `config` is not supported for batch requests.
+- `inputs` must contain between 1 and 1,000 items.
+- All inputs in a batch use the same extractor version and override config.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.extract_runs.create_batch(
+    extractor={"id": "ex_xK9mLPqRtN3vS8wF5hB2cQ"},
+    inputs=[
+        {
+            "file": {"url": "https://example.com/invoice1.pdf"},
+            "metadata": {"customerId": "cust_abc123"},
+        },
+        {
+            "file": {"url": "https://example.com/invoice2.pdf"},
+            "metadata": {"customerId": "cust_def456"},
+        },
+        {
+            "file": {"url": "https://example.com/invoice3.pdf"},
+            "metadata": {"customerId": "cust_ghi789"},
+        },
+    ],
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**extractor:** `ExtractRunsCreateBatchRequestExtractorParams` — Reference to the extractor to run against every input in this batch.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**inputs:** `typing.Sequence[ExtractRunsCreateBatchRequestInputsItemParams]` — An array of inputs to process. Each item produces one extract run. Must contain between 1 and 1,000 items.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**priority:** `typing.Optional[RunPriority]` 
     
 </dd>
 </dl>
@@ -2749,7 +2872,7 @@ client = Extend(
 )
 client.extractor_versions.retrieve(
     extractor_id="extractor_id_here",
-    version_id="extractor_version_id_here",
+    version_id="draft",
 )
 
 ```
@@ -2780,9 +2903,12 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
 **version_id:** `str` 
 
-The ID of the specific extractor version.
+The version to retrieve. Accepts any of the following:
 
-Example: `"extv_QYk6jgHA_8CsO8rVWhyNC"`
+- `"draft"` — returns the current draft version
+- `"latest"` — returns the latest published version (falls back to draft if none published)
+- A version number (e.g. `"0.1"`, `"1.0"`) — returns that specific published version
+- A version ID (e.g. `"extv_QYk6jgHA_8CsO8rVWhyNC"`) — returns that specific version by ID
     
 </dd>
 </dl>
@@ -2876,6 +3002,18 @@ client.classify_runs.list(
 Filters classify runs by the classifier ID. If not provided, all classify runs are returned.
 
 Example: `"cl_BMdfq_yWM3sT-ZzvCnA3f"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**batch_id:** `typing.Optional[str]` 
+
+Filters runs by the batch they belong to. Only returns runs created as part of the specified batch.
+
+Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
     
 </dd>
 </dl>
@@ -3297,6 +3435,117 @@ Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
 <dd>
 
 **extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.classify_runs.<a href="src/extend_ai/classify_runs/client.py">create_batch</a>(...) -&gt; AsyncHttpResponse[BatchRun]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Submit up to **1,000 files** for classification in a single request. Each file is processed as an independent classify run using the same classifier and configuration.
+
+Unlike the single [Classify File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/classify/create-classify-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+
+**Monitoring results:**
+- **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /classify_runs?batchId={id}`.
+- **Polling:** Call `GET /batch_runs/{id}` to check the overall batch status, and use `GET /classify_runs` filtered by `batchId` to retrieve individual run results.
+
+**Notes:**
+- A processor reference (`classifier.id`) is required — inline `config` is not supported for batch requests.
+- `inputs` must contain between 1 and 1,000 items.
+- All inputs in a batch use the same classifier version and override config.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.classify_runs.create_batch(
+    classifier={"id": "cl_xK9mLPqRtN3vS8wF5hB2cQ"},
+    inputs=[
+        {
+            "file": {"url": "https://example.com/document1.pdf"},
+            "metadata": {"customerId": "cust_abc123"},
+        },
+        {
+            "file": {"url": "https://example.com/document2.pdf"},
+            "metadata": {"customerId": "cust_def456"},
+        },
+        {
+            "file": {"url": "https://example.com/document3.pdf"},
+            "metadata": {"customerId": "cust_ghi789"},
+        },
+    ],
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**classifier:** `ClassifyRunsCreateBatchRequestClassifierParams` — Reference to the classifier to run against every input in this batch.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**inputs:** `typing.Sequence[ClassifyRunsCreateBatchRequestInputsItemParams]` — An array of inputs to process. Each item produces one classify run. Must contain between 1 and 1,000 items.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**priority:** `typing.Optional[RunPriority]` 
     
 </dd>
 </dl>
@@ -3965,7 +4214,7 @@ client = Extend(
 )
 client.classifier_versions.retrieve(
     classifier_id="classifier_id_here",
-    version_id="classifier_version_id_here",
+    version_id="draft",
 )
 
 ```
@@ -3996,9 +4245,12 @@ Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
 
 **version_id:** `str` 
 
-The ID of the specific classifier version.
+The version to retrieve. Accepts any of the following:
 
-Example: `"clsv_QYk6jgHA_8CsO8rVWhyNC"`
+- `"draft"` — returns the current draft version
+- `"latest"` — returns the latest published version (falls back to draft if none published)
+- A version number (e.g. `"0.1"`, `"1.0"`) — returns that specific published version
+- A version ID (e.g. `"clsv_QYk6jgHA_8CsO8rVWhyNC"`) — returns that specific version by ID
     
 </dd>
 </dl>
@@ -4092,6 +4344,18 @@ client.split_runs.list(
 Filters split runs by the splitter ID. If not provided, all split runs are returned.
 
 Example: `"spl_BMdfq_yWM3sT-ZzvCnA3f"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**batch_id:** `typing.Optional[str]` 
+
+Filters runs by the batch they belong to. Only returns runs created as part of the specified batch.
+
+Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
     
 </dd>
 </dl>
@@ -4513,6 +4777,118 @@ Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
 <dd>
 
 **extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.split_runs.<a href="src/extend_ai/split_runs/client.py">create_batch</a>(...) -&gt; AsyncHttpResponse[BatchRun]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Submit up to **1,000 files** for splitting in a single request. Each file is processed as an independent split run using the same splitter and configuration.
+
+Unlike the single [Split File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/split/create-split-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+
+**Monitoring results:**
+- **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /split_runs?batchId={id}`.
+- **Polling:** Call `GET /batch_runs/{id}` to check the overall batch status, and use `GET /split_runs` filtered by `batchId` to retrieve individual run results.
+
+**Notes:**
+- A processor reference (`splitter.id`) is required — inline `config` is not supported for batch requests.
+- `inputs` must contain between 1 and 1,000 items.
+- All inputs in a batch use the same splitter version and override config.
+- Raw text input (`FileFromText`) is not supported for split runs. Use a URL or file ID.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.split_runs.create_batch(
+    splitter={"id": "spl_xK9mLPqRtN3vS8wF5hB2cQ"},
+    inputs=[
+        {
+            "file": {"url": "https://example.com/multi-doc1.pdf"},
+            "metadata": {"customerId": "cust_abc123"},
+        },
+        {
+            "file": {"url": "https://example.com/multi-doc2.pdf"},
+            "metadata": {"customerId": "cust_def456"},
+        },
+        {
+            "file": {"url": "https://example.com/multi-doc3.pdf"},
+            "metadata": {"customerId": "cust_ghi789"},
+        },
+    ],
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**splitter:** `SplitRunsCreateBatchRequestSplitterParams` — Reference to the splitter to run against every input in this batch.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**inputs:** `typing.Sequence[SplitRunsCreateBatchRequestInputsItemParams]` — An array of inputs to process. Each item produces one split run. Must contain between 1 and 1,000 items. Raw text input is not supported — use a URL or file ID.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**priority:** `typing.Optional[RunPriority]` 
     
 </dd>
 </dl>
@@ -5183,7 +5559,7 @@ client = Extend(
 )
 client.splitter_versions.retrieve(
     splitter_id="splitter_id_here",
-    version_id="splitter_version_id_here",
+    version_id="draft",
 )
 
 ```
@@ -5214,9 +5590,12 @@ Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
 
 **version_id:** `str` 
 
-The ID of the specific splitter version.
+The version to retrieve. Accepts any of the following:
 
-Example: `"splv_QYk6jgHA_8CsO8rVWhyNC"`
+- `"draft"` — returns the current draft version
+- `"latest"` — returns the latest published version (falls back to draft if none published)
+- A version number (e.g. `"0.1"`, `"1.0"`) — returns that specific published version
+- A version ID (e.g. `"splv_QYk6jgHA_8CsO8rVWhyNC"`) — returns that specific version by ID
     
 </dd>
 </dl>
@@ -5804,11 +6183,6 @@ See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/
 <dd>
 
 Get a specific version of a workflow, including its step definitions.
-
-The `versionId` parameter accepts:
-- `"draft"` — returns the current draft version
-- A version number (e.g. `"1"`, `"2"`) — returns that deployed version
-- An internal version ID (e.g. `"workflow_version_abc123"`) — returns that specific version
 </dd>
 </dl>
 </dd>
@@ -5855,7 +6229,14 @@ client.workflow_versions.retrieve(
 <dl>
 <dd>
 
-**version_id:** `str` — The version to retrieve. Use `"draft"` for the draft, a number like `"1"` for a deployed version, or the internal version ID.
+**version_id:** `str` 
+
+The version to retrieve. Accepts any of the following:
+
+- `"draft"` — returns the current draft version
+- `"latest"` — returns the latest published version (falls back to draft if none published)
+- A version number (e.g. `"1"`, `"2"`) — returns that specific published version
+- A version ID (e.g. `"workflow_version_abc123"`) — returns that specific version by ID
     
 </dd>
 </dl>
@@ -7845,6 +8226,96 @@ Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 <dd>
 
 **extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## BatchRuns
+<details><summary><code>client.batch_runs.<a href="src/extend_ai/batch_runs/client.py">get</a>(...) -&gt; AsyncHttpResponse[BatchRun]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the status of a batch run by its ID. The `status` field reflects the aggregate state of the batch.
+
+This is a unified endpoint that works for batches created via any of the batch submission endpoints (`POST /extract_runs/batch`, `POST /classify_runs/batch`, `POST /split_runs/batch`).
+
+| Status | Meaning |
+|---|---|
+| `PENDING` | Queued, not yet started |
+| `PROCESSING` | Runs are actively being processed |
+| `PROCESSED` | All runs have completed |
+| `FAILED` | The batch encountered a fatal error |
+| `CANCELLED` | The batch was cancelled |
+
+To retrieve individual run results, use the List endpoint for the relevant processor type filtered by `batchId`:
+- `GET /extract_runs?batchId={id}`
+- `GET /classify_runs?batchId={id}`
+- `GET /split_runs?batchId={id}`
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.batch_runs.get(
+    id="bpr_Xj8mK2pL9nR4vT7qY5wZ",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The unique identifier of the batch processor run to retrieve.
+
+Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
     
 </dd>
 </dl>
