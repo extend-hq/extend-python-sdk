@@ -11,6 +11,8 @@ if typing.TYPE_CHECKING:
     from .array_strategy import ArrayStrategy
     from .array_strategy_type import ArrayStrategyType
     from .barcode_details import BarcodeDetails
+    from .batch_parse_run_completed_webhook_event import BatchParseRunCompletedWebhookEvent
+    from .batch_parse_run_failed_webhook_event import BatchParseRunFailedWebhookEvent
     from .batch_processor_run_completed_webhook_event import BatchProcessorRunCompletedWebhookEvent
     from .batch_processor_run_failed_webhook_event import BatchProcessorRunFailedWebhookEvent
     from .batch_run import BatchRun
@@ -437,6 +439,8 @@ if typing.TYPE_CHECKING:
     from .webhook_endpoint_status import WebhookEndpointStatus
     from .webhook_event import (
         WebhookEvent,
+        WebhookEvent_BatchParseRunFailed,
+        WebhookEvent_BatchParseRunProcessed,
         WebhookEvent_BatchProcessorRunFailed,
         WebhookEvent_BatchProcessorRunProcessed,
         WebhookEvent_ClassifierCreated,
@@ -521,6 +525,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ArrayStrategy": ".array_strategy",
     "ArrayStrategyType": ".array_strategy_type",
     "BarcodeDetails": ".barcode_details",
+    "BatchParseRunCompletedWebhookEvent": ".batch_parse_run_completed_webhook_event",
+    "BatchParseRunFailedWebhookEvent": ".batch_parse_run_failed_webhook_event",
     "BatchProcessorRunCompletedWebhookEvent": ".batch_processor_run_completed_webhook_event",
     "BatchProcessorRunFailedWebhookEvent": ".batch_processor_run_failed_webhook_event",
     "BatchRun": ".batch_run",
@@ -910,6 +916,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WebhookEndpointEventType": ".webhook_endpoint_event_type",
     "WebhookEndpointStatus": ".webhook_endpoint_status",
     "WebhookEvent": ".webhook_event",
+    "WebhookEvent_BatchParseRunFailed": ".webhook_event",
+    "WebhookEvent_BatchParseRunProcessed": ".webhook_event",
     "WebhookEvent_BatchProcessorRunFailed": ".webhook_event",
     "WebhookEvent_BatchProcessorRunProcessed": ".webhook_event",
     "WebhookEvent_ClassifierCreated": ".webhook_event",
@@ -1015,6 +1023,8 @@ __all__ = [
     "ArrayStrategy",
     "ArrayStrategyType",
     "BarcodeDetails",
+    "BatchParseRunCompletedWebhookEvent",
+    "BatchParseRunFailedWebhookEvent",
     "BatchProcessorRunCompletedWebhookEvent",
     "BatchProcessorRunFailedWebhookEvent",
     "BatchRun",
@@ -1404,6 +1414,8 @@ __all__ = [
     "WebhookEndpointEventType",
     "WebhookEndpointStatus",
     "WebhookEvent",
+    "WebhookEvent_BatchParseRunFailed",
+    "WebhookEvent_BatchParseRunProcessed",
     "WebhookEvent_BatchProcessorRunFailed",
     "WebhookEvent_BatchProcessorRunProcessed",
     "WebhookEvent_ClassifierCreated",

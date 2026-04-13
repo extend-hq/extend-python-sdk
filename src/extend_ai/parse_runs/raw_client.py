@@ -20,10 +20,17 @@ from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
 from ..requests.parse_config import ParseConfigParams
 from ..types.api_error import ApiError as types_api_error_ApiError
+from ..types.batch_run import BatchRun
+from ..types.max_page_size import MaxPageSize
+from ..types.next_page_token import NextPageToken
 from ..types.parse_run import ParseRun
 from ..types.run_metadata import RunMetadata
+from ..types.run_priority import RunPriority
+from .requests.parse_runs_create_batch_request_inputs_item import ParseRunsCreateBatchRequestInputsItemParams
 from .requests.parse_runs_create_request_file import ParseRunsCreateRequestFileParams
 from .types.parse_runs_delete_response import ParseRunsDeleteResponse
+from .types.parse_runs_list_request_status import ParseRunsListRequestStatus
+from .types.parse_runs_list_response import ParseRunsListResponse
 from .types.parse_runs_retrieve_request_response_type import ParseRunsRetrieveRequestResponseType
 
 # this is used as the default value for optional parameters
@@ -33,6 +40,174 @@ OMIT = typing.cast(typing.Any, ...)
 class RawParseRunsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
+
+    def list(
+        self,
+        *,
+        status: typing.Optional[ParseRunsListRequestStatus] = None,
+        batch_id: typing.Optional[str] = None,
+        file_name_contains: typing.Optional[str] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[ParseRunsListResponse]:
+        """
+        List parse runs, with optional filters for status, batch ID, and file name.
+
+        Returns a paginated list of parse runs. Use `GET /parse_runs/{id}` to retrieve the full result including output for a specific run.
+
+        Parameters
+        ----------
+        status : typing.Optional[ParseRunsListRequestStatus]
+            Filter parse runs by status.
+
+        batch_id : typing.Optional[str]
+            Filter parse runs by the batch they belong to. Use this after submitting a batch via `POST /parse_runs/batch` to retrieve individual run results.
+
+            Example: `"bpar_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        file_name_contains : typing.Optional[str]
+            Filters runs by the name of the file. Only returns runs where the file name contains this string.
+
+            Example: `"invoice"`
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[ParseRunsListResponse]
+            Successfully retrieved parse runs
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "parse_runs",
+            method="GET",
+            params={
+                "status": status,
+                "batchId": batch_id,
+                "fileNameContains": file_name_contains,
+                "nextPageToken": next_page_token,
+                "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ParseRunsListResponse,
+                    construct_type(
+                        type_=ParseRunsListResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise core_api_error_ApiError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+            )
+        raise core_api_error_ApiError(
+            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
+        )
 
     def create(
         self,
@@ -490,10 +665,344 @@ class RawParseRunsClient:
             status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
         )
 
+    def create_batch(
+        self,
+        *,
+        inputs: typing.Sequence[ParseRunsCreateBatchRequestInputsItemParams],
+        config: typing.Optional[ParseConfigParams] = OMIT,
+        priority: typing.Optional[RunPriority] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[BatchRun]:
+        """
+        Submit up to **1,000 files** for parsing in a single request. Each file is processed as an independent parse run using the same configuration.
+
+        Unlike the single [Parse File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/parse/create-parse-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+
+        **Monitoring results:**
+        - **Webhooks (recommended):** Subscribe to `batch_parse_run.processed` and `batch_parse_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /parse_runs?batchId={id}`.
+        - **Polling:** Call `GET /batch_runs/{id}` to check the overall batch status, and use `GET /parse_runs?batchId={id}` to retrieve individual run results.
+
+        **Notes:**
+        - `inputs` must contain between 1 and 1,000 items.
+        - File input supports URLs, Extend file IDs, and raw text strings.
+
+        Parameters
+        ----------
+        inputs : typing.Sequence[ParseRunsCreateBatchRequestInputsItemParams]
+            An array of inputs to parse. Each item produces one parse run. Must contain between 1 and 1,000 items.
+
+        config : typing.Optional[ParseConfigParams]
+            Optional parsing configuration applied to every run in this batch. If omitted, default parse settings are used.
+
+        priority : typing.Optional[RunPriority]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[BatchRun]
+            Successfully queued batch parse run
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "parse_runs/batch",
+            method="POST",
+            json={
+                "inputs": convert_and_respect_annotation_metadata(
+                    object_=inputs,
+                    annotation=typing.Sequence[ParseRunsCreateBatchRequestInputsItemParams],
+                    direction="write",
+                ),
+                "config": convert_and_respect_annotation_metadata(
+                    object_=config, annotation=ParseConfigParams, direction="write"
+                ),
+                "priority": priority,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    BatchRun,
+                    construct_type(
+                        type_=BatchRun,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise core_api_error_ApiError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+            )
+        raise core_api_error_ApiError(
+            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
+        )
+
 
 class AsyncRawParseRunsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
+
+    async def list(
+        self,
+        *,
+        status: typing.Optional[ParseRunsListRequestStatus] = None,
+        batch_id: typing.Optional[str] = None,
+        file_name_contains: typing.Optional[str] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[ParseRunsListResponse]:
+        """
+        List parse runs, with optional filters for status, batch ID, and file name.
+
+        Returns a paginated list of parse runs. Use `GET /parse_runs/{id}` to retrieve the full result including output for a specific run.
+
+        Parameters
+        ----------
+        status : typing.Optional[ParseRunsListRequestStatus]
+            Filter parse runs by status.
+
+        batch_id : typing.Optional[str]
+            Filter parse runs by the batch they belong to. Use this after submitting a batch via `POST /parse_runs/batch` to retrieve individual run results.
+
+            Example: `"bpar_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        file_name_contains : typing.Optional[str]
+            Filters runs by the name of the file. Only returns runs where the file name contains this string.
+
+            Example: `"invoice"`
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[ParseRunsListResponse]
+            Successfully retrieved parse runs
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "parse_runs",
+            method="GET",
+            params={
+                "status": status,
+                "batchId": batch_id,
+                "fileNameContains": file_name_contains,
+                "nextPageToken": next_page_token,
+                "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    ParseRunsListResponse,
+                    construct_type(
+                        type_=ParseRunsListResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise core_api_error_ApiError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+            )
+        raise core_api_error_ApiError(
+            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
+        )
 
     async def create(
         self,
@@ -850,6 +1359,172 @@ class AsyncRawParseRunsClient:
                     ParseRunsDeleteResponse,
                     construct_type(
                         type_=ParseRunsDeleteResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise core_api_error_ApiError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+            )
+        raise core_api_error_ApiError(
+            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
+        )
+
+    async def create_batch(
+        self,
+        *,
+        inputs: typing.Sequence[ParseRunsCreateBatchRequestInputsItemParams],
+        config: typing.Optional[ParseConfigParams] = OMIT,
+        priority: typing.Optional[RunPriority] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[BatchRun]:
+        """
+        Submit up to **1,000 files** for parsing in a single request. Each file is processed as an independent parse run using the same configuration.
+
+        Unlike the single [Parse File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/parse/create-parse-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+
+        **Monitoring results:**
+        - **Webhooks (recommended):** Subscribe to `batch_parse_run.processed` and `batch_parse_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /parse_runs?batchId={id}`.
+        - **Polling:** Call `GET /batch_runs/{id}` to check the overall batch status, and use `GET /parse_runs?batchId={id}` to retrieve individual run results.
+
+        **Notes:**
+        - `inputs` must contain between 1 and 1,000 items.
+        - File input supports URLs, Extend file IDs, and raw text strings.
+
+        Parameters
+        ----------
+        inputs : typing.Sequence[ParseRunsCreateBatchRequestInputsItemParams]
+            An array of inputs to parse. Each item produces one parse run. Must contain between 1 and 1,000 items.
+
+        config : typing.Optional[ParseConfigParams]
+            Optional parsing configuration applied to every run in this batch. If omitted, default parse settings are used.
+
+        priority : typing.Optional[RunPriority]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[BatchRun]
+            Successfully queued batch parse run
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "parse_runs/batch",
+            method="POST",
+            json={
+                "inputs": convert_and_respect_annotation_metadata(
+                    object_=inputs,
+                    annotation=typing.Sequence[ParseRunsCreateBatchRequestInputsItemParams],
+                    direction="write",
+                ),
+                "config": convert_and_respect_annotation_metadata(
+                    object_=config, annotation=ParseConfigParams, direction="write"
+                ),
+                "priority": priority,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    BatchRun,
+                    construct_type(
+                        type_=BatchRun,  # type: ignore
                         object_=_response.json(),
                     ),
                 )

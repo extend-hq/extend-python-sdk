@@ -9,6 +9,8 @@ if typing.TYPE_CHECKING:
     from .api_error import ApiErrorParams
     from .array_strategy import ArrayStrategyParams
     from .barcode_details import BarcodeDetailsParams
+    from .batch_parse_run_completed_webhook_event import BatchParseRunCompletedWebhookEventParams
+    from .batch_parse_run_failed_webhook_event import BatchParseRunFailedWebhookEventParams
     from .batch_processor_run_completed_webhook_event import BatchProcessorRunCompletedWebhookEventParams
     from .batch_processor_run_failed_webhook_event import BatchProcessorRunFailedWebhookEventParams
     from .batch_run import BatchRunParams
@@ -335,6 +337,8 @@ if typing.TYPE_CHECKING:
     from .webhook_endpoint_create import WebhookEndpointCreateParams
     from .webhook_event import (
         WebhookEventParams,
+        WebhookEvent_BatchParseRunFailedParams,
+        WebhookEvent_BatchParseRunProcessedParams,
         WebhookEvent_BatchProcessorRunFailedParams,
         WebhookEvent_BatchProcessorRunProcessedParams,
         WebhookEvent_ClassifierCreatedParams,
@@ -413,6 +417,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ApiErrorParams": ".api_error",
     "ArrayStrategyParams": ".array_strategy",
     "BarcodeDetailsParams": ".barcode_details",
+    "BatchParseRunCompletedWebhookEventParams": ".batch_parse_run_completed_webhook_event",
+    "BatchParseRunFailedWebhookEventParams": ".batch_parse_run_failed_webhook_event",
     "BatchProcessorRunCompletedWebhookEventParams": ".batch_processor_run_completed_webhook_event",
     "BatchProcessorRunFailedWebhookEventParams": ".batch_processor_run_failed_webhook_event",
     "BatchRunParams": ".batch_run",
@@ -718,6 +724,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WebhookEndpointCreateParams": ".webhook_endpoint_create",
     "WebhookEndpointParams": ".webhook_endpoint",
     "WebhookEventParams": ".webhook_event",
+    "WebhookEvent_BatchParseRunFailedParams": ".webhook_event",
+    "WebhookEvent_BatchParseRunProcessedParams": ".webhook_event",
     "WebhookEvent_BatchProcessorRunFailedParams": ".webhook_event",
     "WebhookEvent_BatchProcessorRunProcessedParams": ".webhook_event",
     "WebhookEvent_ClassifierCreatedParams": ".webhook_event",
@@ -817,6 +825,8 @@ __all__ = [
     "ApiErrorParams",
     "ArrayStrategyParams",
     "BarcodeDetailsParams",
+    "BatchParseRunCompletedWebhookEventParams",
+    "BatchParseRunFailedWebhookEventParams",
     "BatchProcessorRunCompletedWebhookEventParams",
     "BatchProcessorRunFailedWebhookEventParams",
     "BatchRunParams",
@@ -1122,6 +1132,8 @@ __all__ = [
     "WebhookEndpointCreateParams",
     "WebhookEndpointParams",
     "WebhookEventParams",
+    "WebhookEvent_BatchParseRunFailedParams",
+    "WebhookEvent_BatchParseRunProcessedParams",
     "WebhookEvent_BatchProcessorRunFailedParams",
     "WebhookEvent_BatchProcessorRunProcessedParams",
     "WebhookEvent_ClassifierCreatedParams",
