@@ -28,7 +28,7 @@ class RawBatchRunsClient:
         """
         Retrieve the status of a batch run by its ID. The `status` field reflects the aggregate state of the batch.
 
-        This is a unified endpoint that works for batches created via any of the batch submission endpoints (`POST /extract_runs/batch`, `POST /classify_runs/batch`, `POST /split_runs/batch`).
+        This is a unified endpoint that works for batches created via any of the batch submission endpoints (`POST /parse_runs/batch`, `POST /extract_runs/batch`, `POST /classify_runs/batch`, `POST /split_runs/batch`).
 
         | Status | Meaning |
         |---|---|
@@ -38,7 +38,8 @@ class RawBatchRunsClient:
         | `FAILED` | The batch encountered a fatal error |
         | `CANCELLED` | The batch was cancelled |
 
-        To retrieve individual run results, use the List endpoint for the relevant processor type filtered by `batchId`:
+        To retrieve individual run results, use the List endpoint for the relevant type filtered by `batchId`:
+        - `GET /parse_runs?batchId={id}`
         - `GET /extract_runs?batchId={id}`
         - `GET /classify_runs?batchId={id}`
         - `GET /split_runs?batchId={id}`
@@ -170,7 +171,7 @@ class AsyncRawBatchRunsClient:
         """
         Retrieve the status of a batch run by its ID. The `status` field reflects the aggregate state of the batch.
 
-        This is a unified endpoint that works for batches created via any of the batch submission endpoints (`POST /extract_runs/batch`, `POST /classify_runs/batch`, `POST /split_runs/batch`).
+        This is a unified endpoint that works for batches created via any of the batch submission endpoints (`POST /parse_runs/batch`, `POST /extract_runs/batch`, `POST /classify_runs/batch`, `POST /split_runs/batch`).
 
         | Status | Meaning |
         |---|---|
@@ -180,7 +181,8 @@ class AsyncRawBatchRunsClient:
         | `FAILED` | The batch encountered a fatal error |
         | `CANCELLED` | The batch was cancelled |
 
-        To retrieve individual run results, use the List endpoint for the relevant processor type filtered by `batchId`:
+        To retrieve individual run results, use the List endpoint for the relevant type filtered by `batchId`:
+        - `GET /parse_runs?batchId={id}`
         - `GET /extract_runs?batchId={id}`
         - `GET /classify_runs?batchId={id}`
         - `GET /split_runs?batchId={id}`

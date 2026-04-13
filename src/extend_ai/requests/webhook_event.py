@@ -115,6 +115,20 @@ class WebhookEvent_BatchProcessorRunFailedParams(typing_extensions.TypedDict):
     payload: BatchRunParams
 
 
+class WebhookEvent_BatchParseRunProcessedParams(typing_extensions.TypedDict):
+    event_type: typing_extensions.Annotated[
+        typing.Literal["batch_parse_run.processed"], FieldMetadata(alias="eventType")
+    ]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    payload: BatchRunParams
+
+
+class WebhookEvent_BatchParseRunFailedParams(typing_extensions.TypedDict):
+    event_type: typing_extensions.Annotated[typing.Literal["batch_parse_run.failed"], FieldMetadata(alias="eventType")]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    payload: BatchRunParams
+
+
 class WebhookEvent_ParseRunProcessedParams(typing_extensions.TypedDict):
     event_type: typing_extensions.Annotated[typing.Literal["parse_run.processed"], FieldMetadata(alias="eventType")]
     event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
@@ -270,6 +284,8 @@ WebhookEventParams = typing.Union[
     WebhookEvent_SplitRunFailedParams,
     WebhookEvent_BatchProcessorRunProcessedParams,
     WebhookEvent_BatchProcessorRunFailedParams,
+    WebhookEvent_BatchParseRunProcessedParams,
+    WebhookEvent_BatchParseRunFailedParams,
     WebhookEvent_ParseRunProcessedParams,
     WebhookEvent_ParseRunFailedParams,
     WebhookEvent_EditRunProcessedParams,

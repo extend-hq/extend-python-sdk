@@ -2,31 +2,23 @@
 
 import typing
 
-from ..core import enum
+from ...core import enum
 
 T_Result = typing.TypeVar("T_Result")
 
 
-class ParseRunStatusEnum(enum.StrEnum):
-    """
-    The status of the parse run:
-    * `"PENDING"` - The run has been created and is waiting to be processed. Only applies to runs created via `POST /parse_runs/batch`.
-    * `"PROCESSING"` - The file is still being processed
-    * `"PROCESSED"` - The file was successfully processed
-    * `"FAILED"` - The processing failed (see `failureReason` for details)
-    """
-
+class ParseRunsListRequestStatus(enum.StrEnum):
     PENDING = "PENDING"
     PROCESSING = "PROCESSING"
     PROCESSED = "PROCESSED"
     FAILED = "FAILED"
-    _UNKNOWN = "__PARSERUNSTATUSENUM_UNKNOWN__"
+    _UNKNOWN = "__PARSERUNSLISTREQUESTSTATUS_UNKNOWN__"
     """
     This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
     """
 
     @classmethod
-    def _missing_(cls, value: typing.Any) -> "ParseRunStatusEnum":
+    def _missing_(cls, value: typing.Any) -> "ParseRunsListRequestStatus":
         unknown = cls._UNKNOWN
         unknown._value_ = value
         return unknown
@@ -39,12 +31,12 @@ class ParseRunStatusEnum(enum.StrEnum):
         failed: typing.Callable[[], T_Result],
         _unknown_member: typing.Callable[[str], T_Result],
     ) -> T_Result:
-        if self is ParseRunStatusEnum.PENDING:
+        if self is ParseRunsListRequestStatus.PENDING:
             return pending()
-        if self is ParseRunStatusEnum.PROCESSING:
+        if self is ParseRunsListRequestStatus.PROCESSING:
             return processing()
-        if self is ParseRunStatusEnum.PROCESSED:
+        if self is ParseRunsListRequestStatus.PROCESSED:
             return processed()
-        if self is ParseRunStatusEnum.FAILED:
+        if self is ParseRunsListRequestStatus.FAILED:
             return failed()
         return _unknown_member(self._value_)

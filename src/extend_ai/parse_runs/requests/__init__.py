@@ -6,11 +6,17 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
+    from .parse_runs_create_batch_request_inputs_item import ParseRunsCreateBatchRequestInputsItemParams
+    from .parse_runs_create_batch_request_inputs_item_file import ParseRunsCreateBatchRequestInputsItemFileParams
     from .parse_runs_create_request_file import ParseRunsCreateRequestFileParams
     from .parse_runs_delete_response import ParseRunsDeleteResponseParams
+    from .parse_runs_list_response import ParseRunsListResponseParams
 _dynamic_imports: typing.Dict[str, str] = {
+    "ParseRunsCreateBatchRequestInputsItemFileParams": ".parse_runs_create_batch_request_inputs_item_file",
+    "ParseRunsCreateBatchRequestInputsItemParams": ".parse_runs_create_batch_request_inputs_item",
     "ParseRunsCreateRequestFileParams": ".parse_runs_create_request_file",
     "ParseRunsDeleteResponseParams": ".parse_runs_delete_response",
+    "ParseRunsListResponseParams": ".parse_runs_list_response",
 }
 
 
@@ -35,4 +41,10 @@ def __dir__():
     return sorted(lazy_attrs)
 
 
-__all__ = ["ParseRunsCreateRequestFileParams", "ParseRunsDeleteResponseParams"]
+__all__ = [
+    "ParseRunsCreateBatchRequestInputsItemFileParams",
+    "ParseRunsCreateBatchRequestInputsItemParams",
+    "ParseRunsCreateRequestFileParams",
+    "ParseRunsDeleteResponseParams",
+    "ParseRunsListResponseParams",
+]

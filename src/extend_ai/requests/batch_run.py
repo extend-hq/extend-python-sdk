@@ -10,7 +10,7 @@ from ..types.created_at import CreatedAt
 
 class BatchRunParams(typing_extensions.TypedDict):
     """
-    A batch run represents a batch of files submitted for processing via one of the batch endpoints (`POST /extract_runs/batch`, `POST /classify_runs/batch`, or `POST /split_runs/batch`). Use `GET /batch_runs/{id}` to poll the status.
+    A batch run represents a batch of files submitted for processing via one of the batch endpoints (`POST /parse_runs/batch`, `POST /extract_runs/batch`, `POST /classify_runs/batch`, or `POST /split_runs/batch`). Use `GET /batch_runs/{id}` to poll the status.
 
     **Note:** This object is not used for workflow batch runs. See `POST /workflow_runs/batch` for workflow batching.
     """

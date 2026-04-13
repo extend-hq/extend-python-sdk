@@ -24,6 +24,8 @@ class WebhookEndpointEventType(enum.StrEnum):
     SPLIT_RUN_FAILED = "split_run.failed"
     BATCH_PROCESSOR_RUN_PROCESSED = "batch_processor_run.processed"
     BATCH_PROCESSOR_RUN_FAILED = "batch_processor_run.failed"
+    BATCH_PARSE_RUN_PROCESSED = "batch_parse_run.processed"
+    BATCH_PARSE_RUN_FAILED = "batch_parse_run.failed"
     EXTRACTOR_CREATED = "extractor.created"
     EXTRACTOR_UPDATED = "extractor.updated"
     EXTRACTOR_DELETED = "extractor.deleted"
@@ -67,6 +69,8 @@ class WebhookEndpointEventType(enum.StrEnum):
         split_run_failed: typing.Callable[[], T_Result],
         batch_processor_run_processed: typing.Callable[[], T_Result],
         batch_processor_run_failed: typing.Callable[[], T_Result],
+        batch_parse_run_processed: typing.Callable[[], T_Result],
+        batch_parse_run_failed: typing.Callable[[], T_Result],
         extractor_created: typing.Callable[[], T_Result],
         extractor_updated: typing.Callable[[], T_Result],
         extractor_deleted: typing.Callable[[], T_Result],
@@ -111,6 +115,10 @@ class WebhookEndpointEventType(enum.StrEnum):
             return batch_processor_run_processed()
         if self is WebhookEndpointEventType.BATCH_PROCESSOR_RUN_FAILED:
             return batch_processor_run_failed()
+        if self is WebhookEndpointEventType.BATCH_PARSE_RUN_PROCESSED:
+            return batch_parse_run_processed()
+        if self is WebhookEndpointEventType.BATCH_PARSE_RUN_FAILED:
+            return batch_parse_run_failed()
         if self is WebhookEndpointEventType.EXTRACTOR_CREATED:
             return extractor_created()
         if self is WebhookEndpointEventType.EXTRACTOR_UPDATED:

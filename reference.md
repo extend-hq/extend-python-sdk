@@ -977,6 +977,126 @@ core.File` — See core.File for more documentation
 </details>
 
 ## ParseRuns
+<details><summary><code>client.parse_runs.<a href="src/extend_ai/parse_runs/client.py">list</a>(...) -&gt; AsyncHttpResponse[ParseRunsListResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List parse runs, with optional filters for status, batch ID, and file name.
+
+Returns a paginated list of parse runs. Use `GET /parse_runs/{id}` to retrieve the full result including output for a specific run.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.parse_runs.list(
+    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**status:** `typing.Optional[ParseRunsListRequestStatus]` — Filter parse runs by status.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**batch_id:** `typing.Optional[str]` 
+
+Filter parse runs by the batch they belong to. Use this after submitting a batch via `POST /parse_runs/batch` to retrieve individual run results.
+
+Example: `"bpar_Xj8mK2pL9nR4vT7qY5wZ"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**file_name_contains:** `typing.Optional[str]` 
+
+Filters runs by the name of the file. Only returns runs where the file name contains this string.
+
+Example: `"invoice"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**next_page_token:** `typing.Optional[NextPageToken]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**max_page_size:** `typing.Optional[MaxPageSize]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.parse_runs.<a href="src/extend_ai/parse_runs/client.py">create</a>(...) -&gt; AsyncHttpResponse[ParseRun]</code></summary>
 <dl>
 <dd>
@@ -1231,6 +1351,115 @@ Example: `"pr_xK9mLPqRtN3vS8wF5hB2cQ"`
 <dd>
 
 **extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.parse_runs.<a href="src/extend_ai/parse_runs/client.py">create_batch</a>(...) -&gt; AsyncHttpResponse[BatchRun]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Submit up to **1,000 files** for parsing in a single request. Each file is processed as an independent parse run using the same configuration.
+
+Unlike the single [Parse File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/parse/create-parse-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+
+**Monitoring results:**
+- **Webhooks (recommended):** Subscribe to `batch_parse_run.processed` and `batch_parse_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /parse_runs?batchId={id}`.
+- **Polling:** Call `GET /batch_runs/{id}` to check the overall batch status, and use `GET /parse_runs?batchId={id}` to retrieve individual run results.
+
+**Notes:**
+- `inputs` must contain between 1 and 1,000 items.
+- File input supports URLs, Extend file IDs, and raw text strings.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.parse_runs.create_batch(
+    inputs=[
+        {
+            "file": {"url": "https://example.com/document1.pdf"},
+            "metadata": {"customerId": "cust_abc123"},
+        },
+        {
+            "file": {"url": "https://example.com/document2.pdf"},
+            "metadata": {"customerId": "cust_def456"},
+        },
+        {
+            "file": {"text": "This is some raw text to parse."},
+            "metadata": {"source": "manual-entry"},
+        },
+    ],
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**inputs:** `typing.Sequence[ParseRunsCreateBatchRequestInputsItemParams]` — An array of inputs to parse. Each item produces one parse run. Must contain between 1 and 1,000 items.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**config:** `typing.Optional[ParseConfigParams]` — Optional parsing configuration applied to every run in this batch. If omitted, default parse settings are used.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**priority:** `typing.Optional[RunPriority]` 
     
 </dd>
 </dl>
@@ -8260,7 +8489,7 @@ Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
 Retrieve the status of a batch run by its ID. The `status` field reflects the aggregate state of the batch.
 
-This is a unified endpoint that works for batches created via any of the batch submission endpoints (`POST /extract_runs/batch`, `POST /classify_runs/batch`, `POST /split_runs/batch`).
+This is a unified endpoint that works for batches created via any of the batch submission endpoints (`POST /parse_runs/batch`, `POST /extract_runs/batch`, `POST /classify_runs/batch`, `POST /split_runs/batch`).
 
 | Status | Meaning |
 |---|---|
@@ -8270,7 +8499,8 @@ This is a unified endpoint that works for batches created via any of the batch s
 | `FAILED` | The batch encountered a fatal error |
 | `CANCELLED` | The batch was cancelled |
 
-To retrieve individual run results, use the List endpoint for the relevant processor type filtered by `batchId`:
+To retrieve individual run results, use the List endpoint for the relevant type filtered by `batchId`:
+- `GET /parse_runs?batchId={id}`
 - `GET /extract_runs?batchId={id}`
 - `GET /classify_runs?batchId={id}`
 - `GET /split_runs?batchId={id}`

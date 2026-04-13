@@ -558,6 +558,82 @@ class WebhookEvent_BatchProcessorRunFailed(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
+class WebhookEvent_BatchParseRunProcessed(UncheckedBaseModel):
+    """
+    Union of all webhook event types. Use `eventType` as the discriminator
+    to determine the specific event type and narrow the `payload` type.
+
+    Example usage in TypeScript:
+    ```typescript
+    function handleWebhook(event: Extend.WebhookEvent) {
+      switch (event.eventType) {
+        case "workflow_run.completed":
+          // event.payload is typed as WorkflowRun
+          console.log(event.payload.status);
+          break;
+        case "extract_run.processed":
+          // event.payload is typed as ExtractRun
+          console.log(event.payload.output);
+          break;
+      }
+    }
+    ```
+    """
+
+    event_type: typing_extensions.Annotated[
+        typing.Literal["batch_parse_run.processed"], FieldMetadata(alias="eventType")
+    ] = pydantic.Field(alias="eventType", default="batch_parse_run.processed")
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
+    payload: BatchRun
+
+    if IS_PYDANTIC_V2:
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+    else:
+
+        class Config:
+            frozen = True
+            smart_union = True
+            extra = pydantic.Extra.allow
+
+
+class WebhookEvent_BatchParseRunFailed(UncheckedBaseModel):
+    """
+    Union of all webhook event types. Use `eventType` as the discriminator
+    to determine the specific event type and narrow the `payload` type.
+
+    Example usage in TypeScript:
+    ```typescript
+    function handleWebhook(event: Extend.WebhookEvent) {
+      switch (event.eventType) {
+        case "workflow_run.completed":
+          // event.payload is typed as WorkflowRun
+          console.log(event.payload.status);
+          break;
+        case "extract_run.processed":
+          // event.payload is typed as ExtractRun
+          console.log(event.payload.output);
+          break;
+      }
+    }
+    ```
+    """
+
+    event_type: typing_extensions.Annotated[
+        typing.Literal["batch_parse_run.failed"], FieldMetadata(alias="eventType")
+    ] = pydantic.Field(alias="eventType", default="batch_parse_run.failed")
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
+    payload: BatchRun
+
+    if IS_PYDANTIC_V2:
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+    else:
+
+        class Config:
+            frozen = True
+            smart_union = True
+            extra = pydantic.Extra.allow
+
+
 class WebhookEvent_ParseRunProcessed(UncheckedBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
@@ -1410,6 +1486,8 @@ WebhookEvent = typing_extensions.Annotated[
         WebhookEvent_SplitRunFailed,
         WebhookEvent_BatchProcessorRunProcessed,
         WebhookEvent_BatchProcessorRunFailed,
+        WebhookEvent_BatchParseRunProcessed,
+        WebhookEvent_BatchParseRunFailed,
         WebhookEvent_ParseRunProcessed,
         WebhookEvent_ParseRunFailed,
         WebhookEvent_EditRunProcessed,
