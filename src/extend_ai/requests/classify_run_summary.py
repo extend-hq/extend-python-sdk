@@ -11,7 +11,7 @@ from ..types.updated_at import UpdatedAt
 from .classifier_summary import ClassifierSummaryParams
 from .classifier_version_summary import ClassifierVersionSummaryParams
 from .file_summary import FileSummaryParams
-from .run_usage import RunUsageParams
+from .run_usage_summary import RunUsageSummaryParams
 
 
 class ClassifyRunSummaryParams(typing_extensions.TypedDict):
@@ -94,13 +94,11 @@ class ClassifyRunSummaryParams(typing_extensions.TypedDict):
     The URL to view the classify run in the Extend dashboard.
     """
 
-    usage: typing.Optional[RunUsageParams]
+    usage: typing.Optional[RunUsageSummaryParams]
     """
-    Usage credits consumed by this run.
+    Usage credits consumed by this classify run. Omits `breakdown` — fetch the full classify run by id to see the per-line items.
     
-    **Availability:** This field will not be returned for:
-    * Runs created before October 7, 2025
-    * Customers on legacy billing systems
+    **Availability:** Present when `status` is `"PROCESSED"`. Will not be returned for runs created before October 7, 2025 or for customers on legacy billing systems.
     """
 
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]

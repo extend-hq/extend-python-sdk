@@ -25,7 +25,7 @@ class EditConfigAdvancedOptions(UncheckedBaseModel):
         alias="flattenPdf", default=None
     )
     """
-    Whether to flatten the PDF (form widgets will not be editable with a PDF edit). Defaults to `true`.
+    Whether to flatten PDF forms after editing (makes form fields non-editable). Defaults to `true`.
     """
 
     radio_enums_enabled: typing_extensions.Annotated[

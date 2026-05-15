@@ -9,7 +9,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .created_at import CreatedAt
-from .run_usage import RunUsage
+from .run_usage_summary import RunUsageSummary
 from .updated_at import UpdatedAt
 from .workflow_run_status import WorkflowRunStatus
 from .workflow_summary import WorkflowSummary
@@ -112,7 +112,12 @@ class WorkflowRunSummary(UncheckedBaseModel):
     updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")] = pydantic.Field(
         alias="updatedAt"
     )
-    usage: typing.Optional[RunUsage] = None
+    usage: typing.Optional[RunUsageSummary] = pydantic.Field(default=None)
+    """
+    Usage credits consumed by this workflow run. Omits `breakdown` — fetch the full workflow run by id to see the per-line items for every contributing child run.
+    
+    **Availability:** Will not be returned for runs created before October 7, 2025 or for customers on legacy billing systems.
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

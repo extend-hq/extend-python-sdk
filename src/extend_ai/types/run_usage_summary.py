@@ -7,12 +7,11 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .run_usage_breakdown_entry import RunUsageBreakdownEntry
 
 
-class RunUsage(UncheckedBaseModel):
+class RunUsageSummary(UncheckedBaseModel):
     """
-    Usage credits consumed by a run.
+    Usage credits consumed by a run. Omits `breakdown` - fetch the full resource by id when you need the breakdown.
 
     **Availability:** This field will not be returned for:
     * Runs created before October 7, 2025
@@ -30,14 +29,7 @@ class RunUsage(UncheckedBaseModel):
         pydantic.Field(alias="totalCredits", default=None)
     )
     """
-    The total credits accounted for under this run, including any other runs it was responsible for creating. For example, an extract run on a fresh upload triggers a parse run, so `totalCredits` includes both line items. For runs that didn't trigger any other work — like `parse_run`, `edit_run` and `workflow_run` — `totalCredits` equals `credits`.
-    
-    **Availability:** Present on runs persisted on or after May 14, 2026. Runs persisted before that date will omit this field.
-    """
-
-    breakdown: typing.Optional[typing.List[RunUsageBreakdownEntry]] = pydantic.Field(default=None)
-    """
-    The chargeable resources that make up `totalCredits`, including this run itself when it has its own line item. For `workflow_run`, lists every contributing child run sorted by creation time (the workflow itself isn't chargeable and has no line item).
+    The total credits accounted for under this run, including any other runs it was responsible for creating. For example, an extract run on a fresh upload triggers a parse run, so `totalCredits` includes both line items. For runs that didn't trigger any other work — like `parse_run`, `edit_run`, and `workflow_run` — `totalCredits` equals `credits`.
     
     **Availability:** Present on runs persisted on or after May 14, 2026. Runs persisted before that date will omit this field.
     """

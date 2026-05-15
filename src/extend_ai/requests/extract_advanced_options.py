@@ -37,6 +37,13 @@ class ExtractAdvancedOptionsParams(typing_extensions.TypedDict):
     Whether to enable citations in the output.
     """
 
+    current_date_enabled: typing_extensions.NotRequired[
+        typing_extensions.Annotated[bool, FieldMetadata(alias="currentDateEnabled")]
+    ]
+    """
+    Whether to include the current date as context for the model during extraction. Defaults to `false`.
+    """
+
     array_citation_strategy: typing_extensions.NotRequired[
         typing_extensions.Annotated[
             ExtractAdvancedOptionsArrayCitationStrategy, FieldMetadata(alias="arrayCitationStrategy")

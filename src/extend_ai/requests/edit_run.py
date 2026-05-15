@@ -92,7 +92,7 @@ class EditRunParams(typing_extensions.TypedDict):
 
     usage: typing.Optional[RunUsageParams]
     """
-    Usage credits consumed by this run.
+    Usage credits consumed by this edit run.
     
     **Availability:** Present when `status` is `"PROCESSED"`, the run was created after October 7, 2025, and the customer is on the current billing system.
     """

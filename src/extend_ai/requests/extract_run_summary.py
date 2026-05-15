@@ -11,7 +11,7 @@ from ..types.updated_at import UpdatedAt
 from .extractor_summary import ExtractorSummaryParams
 from .extractor_version_summary import ExtractorVersionSummaryParams
 from .file_summary import FileSummaryParams
-from .run_usage import RunUsageParams
+from .run_usage_summary import RunUsageSummaryParams
 
 
 class ExtractRunSummaryParams(typing_extensions.TypedDict):
@@ -94,11 +94,11 @@ class ExtractRunSummaryParams(typing_extensions.TypedDict):
     The URL to view the extract run in the Extend dashboard.
     """
 
-    usage: typing.Optional[RunUsageParams]
+    usage: typing.Optional[RunUsageSummaryParams]
     """
-    Usage credits consumed by this run.
+    Usage credits consumed by this extract run. Omits `breakdown` — fetch the full extract run by id to see the per-line items.
     
-    **Availability:** Present when `status` is `"PROCESSED"`.
+    **Availability:** Present when `status` is `"PROCESSED"`. Will not be returned for runs created before October 7, 2025 or for customers on legacy billing systems.
     """
 
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]

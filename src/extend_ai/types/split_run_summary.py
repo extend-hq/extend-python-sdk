@@ -11,7 +11,7 @@ from .created_at import CreatedAt
 from .file_summary import FileSummary
 from .processor_run_status import ProcessorRunStatus
 from .run_metadata import RunMetadata
-from .run_usage import RunUsage
+from .run_usage_summary import RunUsageSummary
 from .splitter_summary import SplitterSummary
 from .splitter_version_summary import SplitterVersionSummary
 from .updated_at import UpdatedAt
@@ -105,11 +105,11 @@ class SplitRunSummary(UncheckedBaseModel):
     The URL to view the split run in the Extend dashboard.
     """
 
-    usage: typing.Optional[RunUsage] = pydantic.Field(default=None)
+    usage: typing.Optional[RunUsageSummary] = pydantic.Field(default=None)
     """
-    Usage credits consumed by this run.
+    Usage credits consumed by this split run. Omits `breakdown` — fetch the full split run by id to see the per-line items.
     
-    **Availability:** Present when `status` is `"PROCESSED"`.
+    **Availability:** Present when `status` is `"PROCESSED"`. Will not be returned for runs created before October 7, 2025 or for customers on legacy billing systems.
     """
 
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(

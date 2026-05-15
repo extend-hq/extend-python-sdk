@@ -145,7 +145,12 @@ class WorkflowRun(UncheckedBaseModel):
     An array of WorkflowStepRun objects. Each WorkflowStepRun represents a single run of a WorkflowStep and contains details about the step's execution and result.
     """
 
-    usage: typing.Optional[RunUsage] = None
+    usage: typing.Optional[RunUsage] = pydantic.Field(default=None)
+    """
+    Usage credits consumed by this workflow run, including a breakdown of every contributing child run.
+    
+    **Availability:** Will not be returned for runs created before October 7, 2025 or for customers on legacy billing systems.
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

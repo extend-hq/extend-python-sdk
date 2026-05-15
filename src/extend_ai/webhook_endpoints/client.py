@@ -137,7 +137,7 @@ class WebhookEndpointsClient:
 
         Examples
         --------
-        from extend_ai import ApiVersionEnum, Extend, WebhookEndpointEventType
+        from extend_ai import Extend, WebhookEndpointEventType
 
         client = Extend(
             token="YOUR_TOKEN",
@@ -149,7 +149,7 @@ class WebhookEndpointsClient:
                 WebhookEndpointEventType.EXTRACT_RUN_PROCESSED,
                 WebhookEndpointEventType.WORKFLOW_CREATED,
             ],
-            api_version=ApiVersionEnum.TWO_THOUSAND_TWENTY_SIX0209,
+            api_version="apiVersion",
         )
         """
         _response = self._raw_client.create(
@@ -449,7 +449,7 @@ class AsyncWebhookEndpointsClient:
         --------
         import asyncio
 
-        from extend_ai import ApiVersionEnum, AsyncExtend, WebhookEndpointEventType
+        from extend_ai import AsyncExtend, WebhookEndpointEventType
 
         client = AsyncExtend(
             token="YOUR_TOKEN",
@@ -464,7 +464,7 @@ class AsyncWebhookEndpointsClient:
                     WebhookEndpointEventType.EXTRACT_RUN_PROCESSED,
                     WebhookEndpointEventType.WORKFLOW_CREATED,
                 ],
-                api_version=ApiVersionEnum.TWO_THOUSAND_TWENTY_SIX0209,
+                api_version="apiVersion",
             )
 
 

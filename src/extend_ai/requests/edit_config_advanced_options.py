@@ -18,7 +18,7 @@ class EditConfigAdvancedOptionsParams(typing_extensions.TypedDict):
 
     flatten_pdf: typing_extensions.NotRequired[typing_extensions.Annotated[bool, FieldMetadata(alias="flattenPdf")]]
     """
-    Whether to flatten the PDF (form widgets will not be editable with a PDF edit). Defaults to `true`.
+    Whether to flatten PDF forms after editing (makes form fields non-editable). Defaults to `true`.
     """
 
     radio_enums_enabled: typing_extensions.NotRequired[
