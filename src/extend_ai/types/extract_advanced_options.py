@@ -38,6 +38,13 @@ class ExtractAdvancedOptions(UncheckedBaseModel):
     Whether to enable citations in the output.
     """
 
+    current_date_enabled: typing_extensions.Annotated[
+        typing.Optional[bool], FieldMetadata(alias="currentDateEnabled")
+    ] = pydantic.Field(alias="currentDateEnabled", default=None)
+    """
+    Whether to include the current date as context for the model during extraction. Defaults to `false`.
+    """
+
     array_citation_strategy: typing_extensions.Annotated[
         typing.Optional[ExtractAdvancedOptionsArrayCitationStrategy], FieldMetadata(alias="arrayCitationStrategy")
     ] = pydantic.Field(alias="arrayCitationStrategy", default=None)

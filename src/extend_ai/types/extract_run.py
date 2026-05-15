@@ -170,9 +170,9 @@ class ExtractRun(UncheckedBaseModel):
 
     usage: typing.Optional[RunUsage] = pydantic.Field(default=None)
     """
-    Usage credits consumed by this run.
+    Usage credits consumed by this extract run.
     
-    **Availability:** Present when `status` is `"PROCESSED"`.
+    **Availability:** Present when `status` is `"PROCESSED"`. Will not be returned for runs created before October 7, 2025 or for customers on legacy billing systems.
     """
 
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(

@@ -124,7 +124,7 @@ class ParseRun(UncheckedBaseModel):
 
     usage: typing.Optional[RunUsage] = pydantic.Field(default=None)
     """
-    Usage credits consumed by this run.
+    Usage credits consumed by this parse run.
     
     **Availability:** Present when `status` is `"PROCESSED"`, the run was created after October 7, 2025, and the customer is on the current billing system.
     """

@@ -8,7 +8,7 @@ from ..core.serialization import FieldMetadata
 from ..types.created_at import CreatedAt
 from ..types.updated_at import UpdatedAt
 from ..types.workflow_run_status import WorkflowRunStatus
-from .run_usage import RunUsageParams
+from .run_usage_summary import RunUsageSummaryParams
 from .workflow_summary import WorkflowSummaryParams
 from .workflow_version_summary import WorkflowVersionSummaryParams
 
@@ -87,4 +87,9 @@ class WorkflowRunSummaryParams(typing_extensions.TypedDict):
 
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
     updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")]
-    usage: typing.Optional[RunUsageParams]
+    usage: typing.Optional[RunUsageSummaryParams]
+    """
+    Usage credits consumed by this workflow run. Omits `breakdown` — fetch the full workflow run by id to see the per-line items for every contributing child run.
+    
+    **Availability:** Will not be returned for runs created before October 7, 2025 or for customers on legacy billing systems.
+    """

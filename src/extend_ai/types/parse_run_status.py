@@ -8,6 +8,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .parse_run_status_status import ParseRunStatusStatus
+from .run_metadata import RunMetadata
 
 
 class ParseRunStatus(UncheckedBaseModel):
@@ -52,6 +53,13 @@ class ParseRunStatus(UncheckedBaseModel):
     A human-readable description of the failure.
     
     **Availability:** Present when `status` is `"FAILED"`.
+    """
+
+    metadata: typing.Optional[RunMetadata] = pydantic.Field(default=None)
+    """
+    Any metadata that was provided when creating the parse run.
+    
+    **Availability:** Present when metadata was provided during creation.
     """
 
     if IS_PYDANTIC_V2:

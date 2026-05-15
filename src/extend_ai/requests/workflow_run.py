@@ -117,3 +117,8 @@ class WorkflowRunParams(typing_extensions.TypedDict):
     """
 
     usage: typing.Optional[RunUsageParams]
+    """
+    Usage credits consumed by this workflow run, including a breakdown of every contributing child run.
+    
+    **Availability:** Will not be returned for runs created before October 7, 2025 or for customers on legacy billing systems.
+    """

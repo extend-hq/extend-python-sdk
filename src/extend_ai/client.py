@@ -38,6 +38,7 @@ if typing.TYPE_CHECKING:
     from .classify_runs.client import AsyncClassifyRunsClient, ClassifyRunsClient
     from .edit_runs.client import AsyncEditRunsClient, EditRunsClient
     from .edit_schemas.client import AsyncEditSchemasClient, EditSchemasClient
+    from .edit_templates.client import AsyncEditTemplatesClient, EditTemplatesClient
     from .evaluation_set_items.client import AsyncEvaluationSetItemsClient, EvaluationSetItemsClient
     from .evaluation_set_runs.client import AsyncEvaluationSetRunsClient, EvaluationSetRunsClient
     from .evaluation_sets.client import AsyncEvaluationSetsClient, EvaluationSetsClient
@@ -133,6 +134,7 @@ class Extend:
         self._files: typing.Optional[FilesClient] = None
         self._parse_runs: typing.Optional[ParseRunsClient] = None
         self._edit_runs: typing.Optional[EditRunsClient] = None
+        self._edit_templates: typing.Optional[EditTemplatesClient] = None
         self._edit_schemas: typing.Optional[EditSchemasClient] = None
         self._extract_runs: typing.Optional[ExtractRunsClient] = None
         self._extractors: typing.Optional[ExtractorsClient] = None
@@ -534,6 +536,14 @@ class Extend:
         return self._edit_runs
 
     @property
+    def edit_templates(self):
+        if self._edit_templates is None:
+            from .edit_templates.client import EditTemplatesClient  # noqa: E402
+
+            self._edit_templates = EditTemplatesClient(client_wrapper=self._client_wrapper)
+        return self._edit_templates
+
+    @property
     def edit_schemas(self):
         if self._edit_schemas is None:
             from .edit_schemas.client import EditSchemasClient  # noqa: E402
@@ -790,6 +800,7 @@ class AsyncExtend:
         self._files: typing.Optional[AsyncFilesClient] = None
         self._parse_runs: typing.Optional[AsyncParseRunsClient] = None
         self._edit_runs: typing.Optional[AsyncEditRunsClient] = None
+        self._edit_templates: typing.Optional[AsyncEditTemplatesClient] = None
         self._edit_schemas: typing.Optional[AsyncEditSchemasClient] = None
         self._extract_runs: typing.Optional[AsyncExtractRunsClient] = None
         self._extractors: typing.Optional[AsyncExtractorsClient] = None
@@ -1229,6 +1240,14 @@ class AsyncExtend:
 
             self._edit_runs = AsyncEditRunsClient(client_wrapper=self._client_wrapper)
         return self._edit_runs
+
+    @property
+    def edit_templates(self):
+        if self._edit_templates is None:
+            from .edit_templates.client import AsyncEditTemplatesClient  # noqa: E402
+
+            self._edit_templates = AsyncEditTemplatesClient(client_wrapper=self._client_wrapper)
+        return self._edit_templates
 
     @property
     def edit_schemas(self):

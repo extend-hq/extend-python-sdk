@@ -9,8 +9,10 @@ from ..types.batch_run import BatchRun
 from ..types.max_page_size import MaxPageSize
 from ..types.next_page_token import NextPageToken
 from ..types.parse_run import ParseRun
+from ..types.parse_run_source import ParseRunSource
 from ..types.run_metadata import RunMetadata
 from ..types.run_priority import RunPriority
+from ..types.run_source_id import RunSourceId
 from .raw_client import AsyncRawParseRunsClient, RawParseRunsClient
 from .requests.parse_runs_create_batch_request_inputs_item import ParseRunsCreateBatchRequestInputsItemParams
 from .requests.parse_runs_create_request_file import ParseRunsCreateRequestFileParams
@@ -43,6 +45,8 @@ class ParseRunsClient:
         *,
         status: typing.Optional[ParseRunsListRequestStatus] = None,
         batch_id: typing.Optional[str] = None,
+        source: typing.Optional[ParseRunSource] = None,
+        source_id: typing.Optional[RunSourceId] = None,
         file_name_contains: typing.Optional[str] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
@@ -50,7 +54,7 @@ class ParseRunsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ParseRunsListResponse:
         """
-        List parse runs, with optional filters for status, batch ID, and file name.
+        List parse runs, with optional filters for status, batch ID, source, and file name.
 
         Returns a paginated list of parse runs. Use `GET /parse_runs/{id}` to retrieve the full result including output for a specific run.
 
@@ -63,6 +67,14 @@ class ParseRunsClient:
             Filter parse runs by the batch they belong to. Use this after submitting a batch via `POST /parse_runs/batch` to retrieve individual run results.
 
             Example: `"bpar_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        source : typing.Optional[ParseRunSource]
+            Filters parse runs by the source that created them. If not provided, runs from all sources are returned.
+
+            **Note:** When `batchId` is provided, it takes precedence and this filter is ignored.
+
+        source_id : typing.Optional[RunSourceId]
+            Filters runs by the source ID.
 
         file_name_contains : typing.Optional[str]
             Filters runs by the name of the file. Only returns runs where the file name contains this string.
@@ -98,6 +110,8 @@ class ParseRunsClient:
         _response = self._raw_client.list(
             status=status,
             batch_id=batch_id,
+            source=source,
+            source_id=source_id,
             file_name_contains=file_name_contains,
             next_page_token=next_page_token,
             max_page_size=max_page_size,
@@ -344,6 +358,8 @@ class AsyncParseRunsClient:
         *,
         status: typing.Optional[ParseRunsListRequestStatus] = None,
         batch_id: typing.Optional[str] = None,
+        source: typing.Optional[ParseRunSource] = None,
+        source_id: typing.Optional[RunSourceId] = None,
         file_name_contains: typing.Optional[str] = None,
         next_page_token: typing.Optional[NextPageToken] = None,
         max_page_size: typing.Optional[MaxPageSize] = None,
@@ -351,7 +367,7 @@ class AsyncParseRunsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ParseRunsListResponse:
         """
-        List parse runs, with optional filters for status, batch ID, and file name.
+        List parse runs, with optional filters for status, batch ID, source, and file name.
 
         Returns a paginated list of parse runs. Use `GET /parse_runs/{id}` to retrieve the full result including output for a specific run.
 
@@ -364,6 +380,14 @@ class AsyncParseRunsClient:
             Filter parse runs by the batch they belong to. Use this after submitting a batch via `POST /parse_runs/batch` to retrieve individual run results.
 
             Example: `"bpar_Xj8mK2pL9nR4vT7qY5wZ"`
+
+        source : typing.Optional[ParseRunSource]
+            Filters parse runs by the source that created them. If not provided, runs from all sources are returned.
+
+            **Note:** When `batchId` is provided, it takes precedence and this filter is ignored.
+
+        source_id : typing.Optional[RunSourceId]
+            Filters runs by the source ID.
 
         file_name_contains : typing.Optional[str]
             Filters runs by the name of the file. Only returns runs where the file name contains this string.
@@ -407,6 +431,8 @@ class AsyncParseRunsClient:
         _response = await self._raw_client.list(
             status=status,
             batch_id=batch_id,
+            source=source,
+            source_id=source_id,
             file_name_contains=file_name_contains,
             next_page_token=next_page_token,
             max_page_size=max_page_size,

@@ -5,6 +5,7 @@ import typing
 import typing_extensions
 from ..core.serialization import FieldMetadata
 from ..types.parse_run_status_status import ParseRunStatusStatus
+from ..types.run_metadata import RunMetadata
 
 
 class ParseRunStatusParams(typing_extensions.TypedDict):
@@ -47,4 +48,11 @@ class ParseRunStatusParams(typing_extensions.TypedDict):
     A human-readable description of the failure.
     
     **Availability:** Present when `status` is `"FAILED"`.
+    """
+
+    metadata: typing_extensions.NotRequired[typing.Optional[RunMetadata]]
+    """
+    Any metadata that was provided when creating the parse run.
+    
+    **Availability:** Present when metadata was provided during creation.
     """

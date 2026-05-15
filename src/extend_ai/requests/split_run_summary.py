@@ -9,7 +9,7 @@ from ..types.processor_run_status import ProcessorRunStatus
 from ..types.run_metadata import RunMetadata
 from ..types.updated_at import UpdatedAt
 from .file_summary import FileSummaryParams
-from .run_usage import RunUsageParams
+from .run_usage_summary import RunUsageSummaryParams
 from .splitter_summary import SplitterSummaryParams
 from .splitter_version_summary import SplitterVersionSummaryParams
 
@@ -94,11 +94,11 @@ class SplitRunSummaryParams(typing_extensions.TypedDict):
     The URL to view the split run in the Extend dashboard.
     """
 
-    usage: typing.Optional[RunUsageParams]
+    usage: typing.Optional[RunUsageSummaryParams]
     """
-    Usage credits consumed by this run.
+    Usage credits consumed by this split run. Omits `breakdown` — fetch the full split run by id to see the per-line items.
     
-    **Availability:** Present when `status` is `"PROCESSED"`.
+    **Availability:** Present when `status` is `"PROCESSED"`. Will not be returned for runs created before October 7, 2025 or for customers on legacy billing systems.
     """
 
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
