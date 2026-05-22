@@ -8,6 +8,7 @@ from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.http_response import AsyncHttpResponse, HttpResponse
 from ..core.jsonable_encoder import jsonable_encoder
 from ..core.request_options import RequestOptions
+from ..core.serialization import convert_and_respect_annotation_metadata
 from ..core.unchecked_base_model import construct_type
 from ..errors.bad_request_error import BadRequestError
 from ..errors.forbidden_error import ForbiddenError
@@ -19,11 +20,175 @@ from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
 from ..types.api_error import ApiError as types_api_error_ApiError
 from ..types.evaluation_set_run import EvaluationSetRun
+from .requests.evaluation_set_runs_create_request_entity import EvaluationSetRunsCreateRequestEntityParams
+
+# this is used as the default value for optional parameters
+OMIT = typing.cast(typing.Any, ...)
 
 
 class RawEvaluationSetRunsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
+
+    def create(
+        self,
+        *,
+        evaluation_set_id: str,
+        extend_workspace_id: typing.Optional[str] = None,
+        entity: typing.Optional[EvaluationSetRunsCreateRequestEntityParams] = OMIT,
+        evaluation_set_item_ids: typing.Optional[typing.Sequence[str]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[EvaluationSetRun]:
+        """
+        Create and start an async evaluation set run. The response returns the evaluation set run object with its initial status; use `GET /evaluation_set_runs/{id}` to poll for completion.
+
+        Evaluation set runs are currently supported for document processor evaluation sets.
+
+        Parameters
+        ----------
+        evaluation_set_id : str
+            The ID of the evaluation set to run.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
+        entity : typing.Optional[EvaluationSetRunsCreateRequestEntityParams]
+            Optional processor and version to run against the evaluation set. If omitted, the evaluation set's processor is run at its draft version.
+
+        evaluation_set_item_ids : typing.Optional[typing.Sequence[str]]
+            Optional list of evaluation set item IDs to run. If omitted, all items in the evaluation set are run.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[EvaluationSetRun]
+            Evaluation set run created successfully
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "evaluation_set_runs",
+            method="POST",
+            json={
+                "evaluationSetId": evaluation_set_id,
+                "entity": convert_and_respect_annotation_metadata(
+                    object_=entity, annotation=EvaluationSetRunsCreateRequestEntityParams, direction="write"
+                ),
+                "evaluationSetItemIds": evaluation_set_item_ids,
+            },
+            headers={
+                "content-type": "application/json",
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    EvaluationSetRun,
+                    construct_type(
+                        type_=EvaluationSetRun,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise core_api_error_ApiError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+            )
+        raise core_api_error_ApiError(
+            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
+        )
 
     def retrieve(
         self,
@@ -172,6 +337,166 @@ class RawEvaluationSetRunsClient:
 class AsyncRawEvaluationSetRunsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
+
+    async def create(
+        self,
+        *,
+        evaluation_set_id: str,
+        extend_workspace_id: typing.Optional[str] = None,
+        entity: typing.Optional[EvaluationSetRunsCreateRequestEntityParams] = OMIT,
+        evaluation_set_item_ids: typing.Optional[typing.Sequence[str]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[EvaluationSetRun]:
+        """
+        Create and start an async evaluation set run. The response returns the evaluation set run object with its initial status; use `GET /evaluation_set_runs/{id}` to poll for completion.
+
+        Evaluation set runs are currently supported for document processor evaluation sets.
+
+        Parameters
+        ----------
+        evaluation_set_id : str
+            The ID of the evaluation set to run.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+
+        entity : typing.Optional[EvaluationSetRunsCreateRequestEntityParams]
+            Optional processor and version to run against the evaluation set. If omitted, the evaluation set's processor is run at its draft version.
+
+        evaluation_set_item_ids : typing.Optional[typing.Sequence[str]]
+            Optional list of evaluation set item IDs to run. If omitted, all items in the evaluation set are run.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[EvaluationSetRun]
+            Evaluation set run created successfully
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "evaluation_set_runs",
+            method="POST",
+            json={
+                "evaluationSetId": evaluation_set_id,
+                "entity": convert_and_respect_annotation_metadata(
+                    object_=entity, annotation=EvaluationSetRunsCreateRequestEntityParams, direction="write"
+                ),
+                "evaluationSetItemIds": evaluation_set_item_ids,
+            },
+            headers={
+                "content-type": "application/json",
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    EvaluationSetRun,
+                    construct_type(
+                        type_=EvaluationSetRun,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise core_api_error_ApiError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+            )
+        raise core_api_error_ApiError(
+            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
+        )
 
     async def retrieve(
         self,

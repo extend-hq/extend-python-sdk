@@ -2675,6 +2675,8 @@ client.extractors.list(
 <dd>
 
 Create a new extractor.
+
+You can optionally provide a `generate` object to automatically generate an extraction schema from sample documents using AI. `generate` is mutually exclusive with `config` and `cloneExtractorId`.
 </dd>
 </dl>
 </dd>
@@ -2696,24 +2698,9 @@ client = Extend(
 )
 client.extractors.create(
     name="Invoice Extractor",
-    config={
-        "schema": {
-            "type": "object",
-            "properties": {
-                "vendor_name": {
-                    "type": "string",
-                    "description": "The name of the vendor",
-                },
-                "invoice_number": {
-                    "type": "string",
-                    "description": "The invoice number",
-                },
-                "total_amount": {
-                    "type": "number",
-                    "description": "The total amount due",
-                },
-            },
-        }
+    generate={
+        "files": [{"url": "https://example.com/sample-invoice.pdf"}],
+        "instructions": "US tax invoice with line items, vendor details, and total amount",
     },
 )
 
@@ -2741,7 +2728,7 @@ client.extractors.create(
 
 **clone_extractor_id:** `typing.Optional[str]` 
 
-The ID of an existing extractor to clone. If provided, the new extractor will be created with the same config as the extractor with this ID. Cannot be provided together with `config`.
+The ID of an existing extractor to clone. If provided, the new extractor will be created with the same config as the extractor with this ID. Cannot be provided together with `config` or `generate`.
 
 Example: `"ex_BMdfq_yWM3sT-ZzvCnA3f"`
     
@@ -2751,7 +2738,19 @@ Example: `"ex_BMdfq_yWM3sT-ZzvCnA3f"`
 <dl>
 <dd>
 
-**config:** `typing.Optional[ExtractConfigJsonParams]` — The configuration for the extractor. Cannot be provided together with `cloneExtractorId`.
+**config:** `typing.Optional[ExtractConfigJsonParams]` — The configuration for the extractor. Cannot be provided together with `cloneExtractorId` or `generate`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**generate:** `typing.Optional[ExtractorsCreateRequestGenerateParams]` 
+
+If provided, an extraction schema is automatically generated from the supplied sample documents and applied to the extractor's draft. The response includes the extractor with the generated schema already in place.
+
+Cannot be provided together with `config` or `cloneExtractorId`.
     
 </dd>
 </dl>
@@ -9495,6 +9494,103 @@ Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
 </details>
 
 ## EvaluationSetRuns
+<details><summary><code>client.evaluation_set_runs.<a href="src/extend_ai/evaluation_set_runs/client.py">create</a>(...) -&gt; AsyncHttpResponse[EvaluationSetRun]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create and start an async evaluation set run. The response returns the evaluation set run object with its initial status; use `GET /evaluation_set_runs/{id}` to poll for completion.
+
+Evaluation set runs are currently supported for document processor evaluation sets.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.evaluation_set_runs.create(
+    evaluation_set_id="ev_2LcgeY_mp2T5yPaEuq5Lw",
+    evaluation_set_item_ids=["evi_kR9mNP12Qw4yTv8BdR3H"],
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**evaluation_set_id:** `str` — The ID of the evaluation set to run.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**entity:** `typing.Optional[EvaluationSetRunsCreateRequestEntityParams]` — Optional processor and version to run against the evaluation set. If omitted, the evaluation set's processor is run at its draft version.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**evaluation_set_item_ids:** `typing.Optional[typing.Sequence[str]]` — Optional list of evaluation set item IDs to run. If omitted, all items in the evaluation set are run.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.evaluation_set_runs.<a href="src/extend_ai/evaluation_set_runs/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[EvaluationSetRun]</code></summary>
 <dl>
 <dd>

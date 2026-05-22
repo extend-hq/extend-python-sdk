@@ -36,6 +36,14 @@ class SplitRun(UncheckedBaseModel):
     Example: `"splr_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
+    status: ProcessorRunStatus
+    output: typing.Optional[SplitOutput] = pydantic.Field(default=None)
+    """
+    The final output, either reviewed or initial.
+    
+    **Availability:** Present when `status` is `"PROCESSED"`.
+    """
+
     splitter: typing.Optional[SplitterSummary] = pydantic.Field(default=None)
     """
     The splitter that was used for this run.
@@ -50,14 +58,6 @@ class SplitRun(UncheckedBaseModel):
     The version of the splitter that was used for this run.
     
     **Availability:** Present when a splitter reference was provided. Not present when using inline `config`.
-    """
-
-    status: ProcessorRunStatus
-    output: typing.Optional[SplitOutput] = pydantic.Field(default=None)
-    """
-    The final output, either reviewed or initial.
-    
-    **Availability:** Present when `status` is `"PROCESSED"`.
     """
 
     initial_output: typing_extensions.Annotated[typing.Optional[SplitOutput], FieldMetadata(alias="initialOutput")] = (

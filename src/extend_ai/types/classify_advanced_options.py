@@ -24,6 +24,13 @@ class ClassifyAdvancedOptions(UncheckedBaseModel):
     Enable advanced multimodal processing for better handling of visual elements during classification.
     """
 
+    memory_enabled: typing_extensions.Annotated[typing.Optional[bool], FieldMetadata(alias="memoryEnabled")] = (
+        pydantic.Field(alias="memoryEnabled", default=None)
+    )
+    """
+    Enable memory for enhanced processing by learning from past successful classifications.
+    """
+
     page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = (
         pydantic.Field(alias="pageRanges", default=None)
     )
