@@ -22,3 +22,6 @@ src/extend_ai/py.typed
 # Protect custom tests
 tests/custom/
 tests/wrapper/
+.fern/replay.lock
+.fern/replay.yml
+.gitattributes

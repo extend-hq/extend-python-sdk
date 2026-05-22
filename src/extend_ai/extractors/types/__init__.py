@@ -6,8 +6,14 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
+    from .extractors_create_request_generate import ExtractorsCreateRequestGenerate
+    from .extractors_create_request_generate_files_item import ExtractorsCreateRequestGenerateFilesItem
     from .extractors_list_response import ExtractorsListResponse
-_dynamic_imports: typing.Dict[str, str] = {"ExtractorsListResponse": ".extractors_list_response"}
+_dynamic_imports: typing.Dict[str, str] = {
+    "ExtractorsCreateRequestGenerate": ".extractors_create_request_generate",
+    "ExtractorsCreateRequestGenerateFilesItem": ".extractors_create_request_generate_files_item",
+    "ExtractorsListResponse": ".extractors_list_response",
+}
 
 
 def __getattr__(attr_name: str) -> typing.Any:
@@ -31,4 +37,4 @@ def __dir__():
     return sorted(lazy_attrs)
 
 
-__all__ = ["ExtractorsListResponse"]
+__all__ = ["ExtractorsCreateRequestGenerate", "ExtractorsCreateRequestGenerateFilesItem", "ExtractorsListResponse"]

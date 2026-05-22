@@ -34,22 +34,6 @@ class ExtractRunParams(typing_extensions.TypedDict):
     Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
-    extractor: typing.Optional[ExtractorSummaryParams]
-    """
-    The extractor that was used for this run.
-    
-    **Availability:** Present when an extractor reference was provided. Not present when using inline `config`.
-    """
-
-    extractor_version: typing_extensions.Annotated[
-        typing.Optional[ExtractorVersionSummaryParams], FieldMetadata(alias="extractorVersion")
-    ]
-    """
-    The version of the extractor that was used for this run.
-    
-    **Availability:** Present when an extractor reference was provided. Not present when using inline `config`.
-    """
-
     status: ProcessorRunStatus
     output: typing.Optional[ExtractOutputParams]
     """
@@ -136,6 +120,22 @@ class ExtractRunParams(typing_extensions.TypedDict):
     
     - **[JSON Schema config](https://docs.extend.ai/2026-02-09/product/extraction/schema):** The current config format. All runs created through this API version use this shape.
     - **[Legacy config](https://docs.extend.ai/2025-04-21/product/legacy/legacy-schema):** A fields-array config from a previous API version. This shape is only returned when retrieving runs that were originally created with the legacy format. This API version does not support creating runs with legacy configs.
+    """
+
+    extractor: typing.Optional[ExtractorSummaryParams]
+    """
+    The extractor that was used for this run.
+    
+    **Availability:** Present when an extractor reference was provided. Not present when using inline `config`.
+    """
+
+    extractor_version: typing_extensions.Annotated[
+        typing.Optional[ExtractorVersionSummaryParams], FieldMetadata(alias="extractorVersion")
+    ]
+    """
+    The version of the extractor that was used for this run.
+    
+    **Availability:** Present when an extractor reference was provided. Not present when using inline `config`.
     """
 
     file: FileSummaryParams

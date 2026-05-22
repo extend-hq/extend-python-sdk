@@ -19,6 +19,13 @@ class ClassifyAdvancedOptionsParams(typing_extensions.TypedDict):
     Enable advanced multimodal processing for better handling of visual elements during classification.
     """
 
+    memory_enabled: typing_extensions.NotRequired[
+        typing_extensions.Annotated[bool, FieldMetadata(alias="memoryEnabled")]
+    ]
+    """
+    Enable memory for enhanced processing by learning from past successful classifications.
+    """
+
     page_ranges: typing_extensions.NotRequired[
         typing_extensions.Annotated[PageRangesParams, FieldMetadata(alias="pageRanges")]
     ]

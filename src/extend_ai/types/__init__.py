@@ -154,6 +154,7 @@ if typing.TYPE_CHECKING:
     from .external_data_validation_step_run_step import ExternalDataValidationStepRunStep
     from .extract_advanced_options import ExtractAdvancedOptions
     from .extract_advanced_options_array_citation_strategy import ExtractAdvancedOptionsArrayCitationStrategy
+    from .extract_advanced_options_citation_mode import ExtractAdvancedOptionsCitationMode
     from .extract_advanced_options_excel_sheet_selection_strategy import (
         ExtractAdvancedOptionsExcelSheetSelectionStrategy,
     )
@@ -428,7 +429,17 @@ if typing.TYPE_CHECKING:
     from .splitter_version import SplitterVersion
     from .splitter_version_published_webhook_event import SplitterVersionPublishedWebhookEvent
     from .splitter_version_summary import SplitterVersionSummary
-    from .step_run import StepRun
+    from .step_run import (
+        StepRun,
+        StepRun_Classify,
+        StepRun_ConditionalExtract,
+        StepRun_ExternalDataValidation,
+        StepRun_Extract,
+        StepRun_MergeExtract,
+        StepRun_Parse,
+        StepRun_RuleValidation,
+        StepRun_Split,
+    )
     from .step_run_base import StepRunBase
     from .step_run_base_status import StepRunBaseStatus
     from .table_cell_details import TableCellDetails
@@ -655,6 +666,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ExternalDataValidationStepRunStep": ".external_data_validation_step_run_step",
     "ExtractAdvancedOptions": ".extract_advanced_options",
     "ExtractAdvancedOptionsArrayCitationStrategy": ".extract_advanced_options_array_citation_strategy",
+    "ExtractAdvancedOptionsCitationMode": ".extract_advanced_options_citation_mode",
     "ExtractAdvancedOptionsExcelSheetSelectionStrategy": ".extract_advanced_options_excel_sheet_selection_strategy",
     "ExtractAdvancedOptionsReviewAgent": ".extract_advanced_options_review_agent",
     "ExtractBaseProcessor": ".extract_base_processor",
@@ -914,6 +926,14 @@ _dynamic_imports: typing.Dict[str, str] = {
     "StepRun": ".step_run",
     "StepRunBase": ".step_run_base",
     "StepRunBaseStatus": ".step_run_base_status",
+    "StepRun_Classify": ".step_run",
+    "StepRun_ConditionalExtract": ".step_run",
+    "StepRun_ExternalDataValidation": ".step_run",
+    "StepRun_Extract": ".step_run",
+    "StepRun_MergeExtract": ".step_run",
+    "StepRun_Parse": ".step_run",
+    "StepRun_RuleValidation": ".step_run",
+    "StepRun_Split": ".step_run",
     "TableCellDetails": ".table_cell_details",
     "TableDetails": ".table_details",
     "TooManyRequestsErrorBody": ".too_many_requests_error_body",
@@ -1158,6 +1178,7 @@ __all__ = [
     "ExternalDataValidationStepRunStep",
     "ExtractAdvancedOptions",
     "ExtractAdvancedOptionsArrayCitationStrategy",
+    "ExtractAdvancedOptionsCitationMode",
     "ExtractAdvancedOptionsExcelSheetSelectionStrategy",
     "ExtractAdvancedOptionsReviewAgent",
     "ExtractBaseProcessor",
@@ -1417,6 +1438,14 @@ __all__ = [
     "StepRun",
     "StepRunBase",
     "StepRunBaseStatus",
+    "StepRun_Classify",
+    "StepRun_ConditionalExtract",
+    "StepRun_ExternalDataValidation",
+    "StepRun_Extract",
+    "StepRun_MergeExtract",
+    "StepRun_Parse",
+    "StepRun_RuleValidation",
+    "StepRun_Split",
     "TableCellDetails",
     "TableDetails",
     "TooManyRequestsErrorBody",

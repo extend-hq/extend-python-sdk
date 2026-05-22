@@ -329,7 +329,17 @@ if typing.TYPE_CHECKING:
     from .splitter_version import SplitterVersionParams
     from .splitter_version_published_webhook_event import SplitterVersionPublishedWebhookEventParams
     from .splitter_version_summary import SplitterVersionSummaryParams
-    from .step_run import StepRunParams
+    from .step_run import (
+        StepRunParams,
+        StepRun_ClassifyParams,
+        StepRun_ConditionalExtractParams,
+        StepRun_ExternalDataValidationParams,
+        StepRun_ExtractParams,
+        StepRun_MergeExtractParams,
+        StepRun_ParseParams,
+        StepRun_RuleValidationParams,
+        StepRun_SplitParams,
+    )
     from .step_run_base import StepRunBaseParams
     from .table_cell_details import TableCellDetailsParams
     from .table_details import TableDetailsParams
@@ -722,6 +732,14 @@ _dynamic_imports: typing.Dict[str, str] = {
     "SplitterVersionSummaryParams": ".splitter_version_summary",
     "StepRunBaseParams": ".step_run_base",
     "StepRunParams": ".step_run",
+    "StepRun_ClassifyParams": ".step_run",
+    "StepRun_ConditionalExtractParams": ".step_run",
+    "StepRun_ExternalDataValidationParams": ".step_run",
+    "StepRun_ExtractParams": ".step_run",
+    "StepRun_MergeExtractParams": ".step_run",
+    "StepRun_ParseParams": ".step_run",
+    "StepRun_RuleValidationParams": ".step_run",
+    "StepRun_SplitParams": ".step_run",
     "TableCellDetailsParams": ".table_cell_details",
     "TableDetailsParams": ".table_details",
     "TooManyRequestsErrorBodyParams": ".too_many_requests_error_body",
@@ -1133,6 +1151,14 @@ __all__ = [
     "SplitterVersionSummaryParams",
     "StepRunBaseParams",
     "StepRunParams",
+    "StepRun_ClassifyParams",
+    "StepRun_ConditionalExtractParams",
+    "StepRun_ExternalDataValidationParams",
+    "StepRun_ExtractParams",
+    "StepRun_MergeExtractParams",
+    "StepRun_ParseParams",
+    "StepRun_RuleValidationParams",
+    "StepRun_SplitParams",
     "TableCellDetailsParams",
     "TableDetailsParams",
     "TooManyRequestsErrorBodyParams",
