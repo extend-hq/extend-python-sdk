@@ -22,6 +22,20 @@ class ChunkMetadata(UncheckedBaseModel):
     The page range this chunk covers. Often will just be a partial page, in which cases `start` and `end` will be the same.
     """
 
+    min_ocr_confidence: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="minOcrConfidence")] = (
+        pydantic.Field(alias="minOcrConfidence", default=None)
+    )
+    """
+    Lowest per-word OCR confidence across words in this chunk, or `null` when word-level confidence is unavailable.
+    """
+
+    avg_ocr_confidence: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="avgOcrConfidence")] = (
+        pydantic.Field(alias="avgOcrConfidence", default=None)
+    )
+    """
+    Average per-word OCR confidence across words in this chunk, or `null` when word-level confidence is unavailable.
+    """
+
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
     else:
