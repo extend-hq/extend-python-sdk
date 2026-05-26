@@ -28,6 +28,20 @@ class BlockMetadata(UncheckedBaseModel):
     Text direction for this block's content ("ltr" for left-to-right, "rtl" for right-to-left).
     """
 
+    min_ocr_confidence: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="minOcrConfidence")] = (
+        pydantic.Field(alias="minOcrConfidence", default=None)
+    )
+    """
+    Lowest per-word OCR confidence across words in this block, or `null` when word-level confidence is unavailable.
+    """
+
+    avg_ocr_confidence: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="avgOcrConfidence")] = (
+        pydantic.Field(alias="avgOcrConfidence", default=None)
+    )
+    """
+    Average per-word OCR confidence across words in this block, or `null` when word-level confidence is unavailable.
+    """
+
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
     else:
