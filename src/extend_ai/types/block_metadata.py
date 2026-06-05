@@ -8,6 +8,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .block_metadata_page import BlockMetadataPage
+from .block_metadata_sheet import BlockMetadataSheet
 from .block_metadata_text_direction import BlockMetadataTextDirection
 
 
@@ -19,6 +20,11 @@ class BlockMetadata(UncheckedBaseModel):
     page: typing.Optional[BlockMetadataPage] = pydantic.Field(default=None)
     """
     Information about the page this block appears on.
+    """
+
+    sheet: typing.Optional[BlockMetadataSheet] = pydantic.Field(default=None)
+    """
+    Spreadsheet sheet metadata. Present for blocks parsed from spreadsheet files, such as Excel workbooks.
     """
 
     text_direction: typing_extensions.Annotated[

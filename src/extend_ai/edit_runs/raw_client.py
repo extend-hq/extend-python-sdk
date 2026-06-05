@@ -195,7 +195,7 @@ class RawEditRunsClient:
         """
         Retrieve the status and results of an edit run.
 
-        Use this endpoint to get results for an edit run that has already completed, or to check on the status of an edit run initiated via the [Create Edit Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/edit/create-edit-run) endpoint.
+        Use this endpoint to get results for an edit run that has already completed, or to check on the status of an edit run initiated via the [Create Edit Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/edit/create-edit-run) endpoint.
 
         Parameters
         ----------
@@ -205,7 +205,7 @@ class RawEditRunsClient:
             Example: `"edr_xK9mLPqRtN3vS8wF5hB2cQ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -350,7 +350,7 @@ class RawEditRunsClient:
             Example: `"edr_xK9mLPqRtN3vS8wF5hB2cQ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -643,7 +643,7 @@ class AsyncRawEditRunsClient:
         """
         Retrieve the status and results of an edit run.
 
-        Use this endpoint to get results for an edit run that has already completed, or to check on the status of an edit run initiated via the [Create Edit Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/edit/create-edit-run) endpoint.
+        Use this endpoint to get results for an edit run that has already completed, or to check on the status of an edit run initiated via the [Create Edit Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/edit/create-edit-run) endpoint.
 
         Parameters
         ----------
@@ -653,7 +653,7 @@ class AsyncRawEditRunsClient:
             Example: `"edr_xK9mLPqRtN3vS8wF5hB2cQ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -798,7 +798,7 @@ class AsyncRawEditRunsClient:
             Example: `"edr_xK9mLPqRtN3vS8wF5hB2cQ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.

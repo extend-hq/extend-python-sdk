@@ -24,7 +24,7 @@ class ConditionalStepDefinitionConfigConditionsItem(UncheckedBaseModel):
     """
     The comparison operation for this branch.
     
-    See the [Conditional step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#conditional-step).
+    See the [Conditional step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#conditional).
     """
 
     left_operand: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="leftOperand")] = (
@@ -33,7 +33,7 @@ class ConditionalStepDefinitionConfigConditionsItem(UncheckedBaseModel):
     """
     The left operand expression. This is typically a workflow variable or dynamic expression.
     
-    See the [Conditional step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#conditional-step).
+    See the [Conditional step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#conditional).
     """
 
     right_operand: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="rightOperand")] = (
@@ -42,7 +42,7 @@ class ConditionalStepDefinitionConfigConditionsItem(UncheckedBaseModel):
     """
     The right operand value. This is typically a literal comparison value and is omitted for fallback branches like `ELSE`.
     
-    See the [Conditional step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#conditional-step).
+    See the [Conditional step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#conditional).
     """
 
     if IS_PYDANTIC_V2:

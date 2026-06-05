@@ -44,7 +44,7 @@ class ExtractRun(UncheckedBaseModel):
     """
     The final output, either reviewed or initial. This is a union of two possible shapes:
     
-    - **[JSON Schema output](https://docs.extend.ai/2026-02-09/product/extraction/output-types):** The current output format, returned for runs created with a JSON Schema config.
+    - **[JSON Schema output](https://docs.extend.ai/2026-02-09/extraction/response-format):** The current output format, returned for runs created with a JSON Schema config.
     - **[Legacy output](https://docs.extend.ai/2025-04-21/product/legacy/output-type-legacy):** A legacy output format from a previous API version. This shape is only returned for runs that were originally created with a legacy config.
     
     **Availability:** Present when `status` is `"PROCESSED"`.
@@ -127,7 +127,7 @@ class ExtractRun(UncheckedBaseModel):
     """
     The configuration used for this extract run. This is a union of two possible shapes:
     
-    - **[JSON Schema config](https://docs.extend.ai/2026-02-09/product/extraction/schema):** The current config format. All runs created through this API version use this shape.
+    - **[JSON Schema config](https://docs.extend.ai/2026-02-09/extraction/schema):** The current config format. All runs created through this API version use this shape.
     - **[Legacy config](https://docs.extend.ai/2025-04-21/product/legacy/legacy-schema):** A fields-array config from a previous API version. This shape is only returned when retrieving runs that were originally created with the legacy format. This API version does not support creating runs with legacy configs.
     """
 
@@ -147,9 +147,9 @@ class ExtractRun(UncheckedBaseModel):
     **Availability:** Present when an extractor reference was provided. Not present when using inline `config`.
     """
 
-    file: FileSummary = pydantic.Field()
+    file: typing.Optional[FileSummary] = pydantic.Field(default=None)
     """
-    The file that was processed.
+    The file that was processed. `null` when the file could not be accessed or processed (for example a run that failed during file ingestion, or a multi-file batch run).
     """
 
     parse_run_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parseRunId")] = pydantic.Field(

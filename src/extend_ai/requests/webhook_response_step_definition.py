@@ -7,7 +7,7 @@ class WebhookResponseStepDefinitionParams(typing_extensions.TypedDict):
     """
     A terminal step that triggers webhook delivery of the workflow results.
 
-    See the [Webhook Response step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#webhook-response-step).
+    See the [Webhook Response step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#webhook-response).
     """
 
     name: str

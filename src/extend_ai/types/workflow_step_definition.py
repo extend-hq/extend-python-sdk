@@ -28,7 +28,7 @@ class WorkflowStepDefinition_Trigger(UncheckedBaseModel):
     """
     A workflow step definition used when creating, updating, deploying, and retrieving workflow versions.
 
-    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for routing patterns and examples.
+    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for routing patterns and examples.
     """
 
     type: typing.Literal["TRIGGER"] = "TRIGGER"
@@ -49,7 +49,7 @@ class WorkflowStepDefinition_Parse(UncheckedBaseModel):
     """
     A workflow step definition used when creating, updating, deploying, and retrieving workflow versions.
 
-    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for routing patterns and examples.
+    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for routing patterns and examples.
     """
 
     type: typing.Literal["PARSE"] = "PARSE"
@@ -71,7 +71,7 @@ class WorkflowStepDefinition_Extract(UncheckedBaseModel):
     """
     A workflow step definition used when creating, updating, deploying, and retrieving workflow versions.
 
-    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for routing patterns and examples.
+    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for routing patterns and examples.
     """
 
     type: typing.Literal["EXTRACT"] = "EXTRACT"
@@ -93,7 +93,7 @@ class WorkflowStepDefinition_Classify(UncheckedBaseModel):
     """
     A workflow step definition used when creating, updating, deploying, and retrieving workflow versions.
 
-    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for routing patterns and examples.
+    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for routing patterns and examples.
     """
 
     type: typing.Literal["CLASSIFY"] = "CLASSIFY"
@@ -115,7 +115,7 @@ class WorkflowStepDefinition_Split(UncheckedBaseModel):
     """
     A workflow step definition used when creating, updating, deploying, and retrieving workflow versions.
 
-    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for routing patterns and examples.
+    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for routing patterns and examples.
     """
 
     type: typing.Literal["SPLIT"] = "SPLIT"
@@ -137,7 +137,7 @@ class WorkflowStepDefinition_MergeExtract(UncheckedBaseModel):
     """
     A workflow step definition used when creating, updating, deploying, and retrieving workflow versions.
 
-    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for routing patterns and examples.
+    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for routing patterns and examples.
     """
 
     type: typing.Literal["MERGE_EXTRACT"] = "MERGE_EXTRACT"
@@ -159,7 +159,7 @@ class WorkflowStepDefinition_Conditional(UncheckedBaseModel):
     """
     A workflow step definition used when creating, updating, deploying, and retrieving workflow versions.
 
-    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for routing patterns and examples.
+    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for routing patterns and examples.
     """
 
     type: typing.Literal["CONDITIONAL"] = "CONDITIONAL"
@@ -181,7 +181,7 @@ class WorkflowStepDefinition_ConditionalExtract(UncheckedBaseModel):
     """
     A workflow step definition used when creating, updating, deploying, and retrieving workflow versions.
 
-    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for routing patterns and examples.
+    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for routing patterns and examples.
     """
 
     type: typing.Literal["CONDITIONAL_EXTRACT"] = "CONDITIONAL_EXTRACT"
@@ -203,7 +203,7 @@ class WorkflowStepDefinition_ExternalDataValidation(UncheckedBaseModel):
     """
     A workflow step definition used when creating, updating, deploying, and retrieving workflow versions.
 
-    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for routing patterns and examples.
+    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for routing patterns and examples.
     """
 
     type: typing.Literal["EXTERNAL_DATA_VALIDATION"] = "EXTERNAL_DATA_VALIDATION"
@@ -225,7 +225,7 @@ class WorkflowStepDefinition_WebhookResponse(UncheckedBaseModel):
     """
     A workflow step definition used when creating, updating, deploying, and retrieving workflow versions.
 
-    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for routing patterns and examples.
+    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for routing patterns and examples.
     """
 
     type: typing.Literal["WEBHOOK_RESPONSE"] = "WEBHOOK_RESPONSE"
@@ -245,7 +245,7 @@ class WorkflowStepDefinition_RuleValidation(UncheckedBaseModel):
     """
     A workflow step definition used when creating, updating, deploying, and retrieving workflow versions.
 
-    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for routing patterns and examples.
+    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for routing patterns and examples.
     """
 
     type: typing.Literal["RULE_VALIDATION"] = "RULE_VALIDATION"
@@ -267,7 +267,7 @@ class WorkflowStepDefinition_HumanReview(UncheckedBaseModel):
     """
     A workflow step definition used when creating, updating, deploying, and retrieving workflow versions.
 
-    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for routing patterns and examples.
+    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for routing patterns and examples.
     """
 
     type: typing.Literal["HUMAN_REVIEW"] = "HUMAN_REVIEW"
@@ -288,7 +288,7 @@ class WorkflowStepDefinition_Collect(UncheckedBaseModel):
     """
     A workflow step definition used when creating, updating, deploying, and retrieving workflow versions.
 
-    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for routing patterns and examples.
+    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for routing patterns and examples.
     """
 
     type: typing.Literal["COLLECT"] = "COLLECT"
@@ -309,7 +309,7 @@ class WorkflowStepDefinition_FileConversion(UncheckedBaseModel):
     """
     A workflow step definition used when creating, updating, deploying, and retrieving workflow versions.
 
-    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for routing patterns and examples.
+    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for routing patterns and examples.
     """
 
     type: typing.Literal["FILE_CONVERSION"] = "FILE_CONVERSION"

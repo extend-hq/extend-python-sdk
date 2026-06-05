@@ -59,7 +59,7 @@ class ExtractorsClient:
         sort_dir : typing.Optional[SortDir]
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -152,8 +152,14 @@ class ExtractorsClient:
                             "description": "The invoice number",
                         },
                         "total_amount": {
-                            "type": ["number", "null"],
+                            "type": "object",
+                            "extend:type": "currency",
                             "description": "The total amount due",
+                            "properties": {
+                                "amount": {"type": ["number", "null"]},
+                                "iso_4217_currency_code": {"type": ["string", "null"]},
+                            },
+                            "required": ["amount", "iso_4217_currency_code"],
                         },
                     },
                 }
@@ -187,7 +193,7 @@ class ExtractorsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -233,7 +239,7 @@ class ExtractorsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             The new name of the extractor.
@@ -308,7 +314,7 @@ class AsyncExtractorsClient:
         sort_dir : typing.Optional[SortDir]
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -414,8 +420,16 @@ class AsyncExtractorsClient:
                                 "description": "The invoice number",
                             },
                             "total_amount": {
-                                "type": ["number", "null"],
+                                "type": "object",
+                                "extend:type": "currency",
                                 "description": "The total amount due",
+                                "properties": {
+                                    "amount": {"type": ["number", "null"]},
+                                    "iso_4217_currency_code": {
+                                        "type": ["string", "null"]
+                                    },
+                                },
+                                "required": ["amount", "iso_4217_currency_code"],
                             },
                         },
                     }
@@ -452,7 +466,7 @@ class AsyncExtractorsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -506,7 +520,7 @@ class AsyncExtractorsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             The new name of the extractor.

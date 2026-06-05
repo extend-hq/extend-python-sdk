@@ -12,7 +12,7 @@ class HumanReviewStepDefinition(UncheckedBaseModel):
     """
     Pauses the workflow for human review in the dashboard.
 
-    See the [Human Review step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#human-review-step).
+    See the [Human Review step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#human-review).
     """
 
     name: str

@@ -15,7 +15,7 @@ class ExtractStepDefinition(UncheckedBaseModel):
 
     The extractor reference must include an explicit `version`. Valid values are `"latest"`, `"draft"`, or a specific semver string (e.g. `"1.0"`).
 
-    See the [Extract step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#extract-step).
+    See the [Extract step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#extract).
     """
 
     name: str

@@ -17,7 +17,7 @@ class ConditionalExtractStepDefinitionConfig(UncheckedBaseModel):
     """
     Formula-based extractor rules for this step. Each rule pairs a formula with an extractor reference. The last rule must have `formula: "TRUE"` as a default catch-all.
     
-    See the [Conditional Extract step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#conditional-extract-step).
+    See the [Conditional Extract step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#conditional-extract).
     """
 
     if IS_PYDANTIC_V2:

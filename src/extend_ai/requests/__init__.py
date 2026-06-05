@@ -18,6 +18,7 @@ if typing.TYPE_CHECKING:
     from .block_details import BlockDetailsParams
     from .block_metadata import BlockMetadataParams
     from .block_metadata_page import BlockMetadataPageParams
+    from .block_metadata_sheet import BlockMetadataSheetParams
     from .block_polygon_item import BlockPolygonItemParams
     from .bounding_box import BoundingBoxParams
     from .chunk import ChunkParams
@@ -438,6 +439,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "BlockDetailsParams": ".block_details",
     "BlockMetadataPageParams": ".block_metadata_page",
     "BlockMetadataParams": ".block_metadata",
+    "BlockMetadataSheetParams": ".block_metadata_sheet",
     "BlockParams": ".block",
     "BlockPolygonItemParams": ".block_polygon_item",
     "BoundingBoxParams": ".bounding_box",
@@ -857,6 +859,7 @@ __all__ = [
     "BlockDetailsParams",
     "BlockMetadataPageParams",
     "BlockMetadataParams",
+    "BlockMetadataSheetParams",
     "BlockParams",
     "BlockPolygonItemParams",
     "BoundingBoxParams",

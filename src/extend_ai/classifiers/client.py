@@ -58,7 +58,7 @@ class ClassifiersClient:
         sort_dir : typing.Optional[SortDir]
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -174,7 +174,7 @@ class ClassifiersClient:
             Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -220,7 +220,7 @@ class ClassifiersClient:
             Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             The new name of the classifier.
@@ -295,7 +295,7 @@ class AsyncClassifiersClient:
         sort_dir : typing.Optional[SortDir]
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -427,7 +427,7 @@ class AsyncClassifiersClient:
             Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -481,7 +481,7 @@ class AsyncClassifiersClient:
             Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             The new name of the classifier.

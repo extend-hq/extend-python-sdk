@@ -11,7 +11,7 @@ class RuleValidationStepDefinitionParams(typing_extensions.TypedDict):
     """
     Validates extraction outputs against formula-based rules. Routes to pass/fail next steps.
 
-    See the [Rule Validation step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#rule-validation-step).
+    See the [Rule Validation step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#rule-validation).
     """
 
     name: str
@@ -24,5 +24,5 @@ class RuleValidationStepDefinitionParams(typing_extensions.TypedDict):
     """
     Can only be set when `config` is present. Each entry must include a `result` of `"pass"` or `"fail"` to route based on whether all validation rules passed.
     
-    See the [Rule Validation step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#rule-validation-step).
+    See the [Rule Validation step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#rule-validation).
     """

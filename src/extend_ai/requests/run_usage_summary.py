@@ -12,7 +12,7 @@ class RunUsageSummaryParams(typing_extensions.TypedDict):
     * Runs created before October 7, 2025
     * Customers on legacy billing systems
 
-    For more details on how credits work, see our [Credits Guide](https://docs.extend.ai/2026-02-09/product/general/how-credits-work).
+    For more details on how credits work, see our [Credits Guide](https://docs.extend.ai/2026-02-09/general/how-credits-work).
     """
 
     credits: float

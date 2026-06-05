@@ -15,12 +15,12 @@ class ExtractConfigLegacyParams(typing_extensions.TypedDict):
         typing_extensions.Annotated[ExtractConfigLegacyBaseProcessor, FieldMetadata(alias="baseProcessor")]
     ]
     """
-    The base processor to use. For extractors, this can be either `"extraction_performance"` or `"extraction_light"`. Defaults to `"extraction_performance"` if not provided. See [Extraction Changelog](https://docs.extend.ai/2026-02-09/changelog/extraction/extraction-performance) for more details.
+    The base processor to use. For extractors, this can be either `"extraction_performance"` or `"extraction_light"`. Defaults to `"extraction_performance"` if not provided. See [Extraction Changelog](https://docs.extend.ai/2026-02-09/model-versioning/extraction/extraction-performance) for more details.
     """
 
     base_version: typing_extensions.NotRequired[typing_extensions.Annotated[str, FieldMetadata(alias="baseVersion")]]
     """
-    The version of the `"extraction_performance"` or `"extraction_light"` processor to use. If not provided, the latest stable version for the selected `baseProcessor` will be used automatically. See [Extraction Changelog](https://docs.extend.ai/2026-02-09/changelog/extraction/extraction-performance) for more details.
+    The version of the `"extraction_performance"` or `"extraction_light"` processor to use. If not provided, the latest stable version for the selected `baseProcessor` will be used automatically. See [Extraction Changelog](https://docs.extend.ai/2026-02-09/model-versioning/extraction/extraction-performance) for more details.
     """
 
     extraction_rules: typing_extensions.NotRequired[

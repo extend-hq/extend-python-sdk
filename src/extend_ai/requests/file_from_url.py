@@ -9,7 +9,7 @@ class FileFromUrlParams(typing_extensions.TypedDict):
     """
     A URL to download the file. For production use cases, we recommend using presigned URLs with a 5-15 minute expiration time.
     
-    Supported file types can be found [here](https://docs.extend.ai/2026-02-09/product/general/supported-file-types).
+    Supported file types can be found [here](https://docs.extend.ai/2026-02-09/general/supported-file-types).
     """
 
     name: typing_extensions.NotRequired[str]

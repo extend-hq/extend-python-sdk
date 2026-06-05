@@ -124,9 +124,9 @@ class ClassifyRunParams(typing_extensions.TypedDict):
     The configuration used for this classify run.
     """
 
-    file: FileSummaryParams
+    file: typing.Optional[FileSummaryParams]
     """
-    The file that was processed.
+    The file that was processed. `null` when the file could not be accessed or processed (for example a run that failed during file ingestion, or a multi-file batch run).
     """
 
     parse_run_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parseRunId")]

@@ -13,11 +13,11 @@
 
 Parse a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
 
-**Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /parse_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/developers/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
+**Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /parse_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/general/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
 
 The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
 
-For more details, see the [Parse File guide](https://docs.extend.ai/2026-02-09/product/parsing/parse).
+For more details, see the [Parse File guide](https://docs.extend.ai/2026-02-09/parsing/overview).
 </dd>
 </dl>
 </dd>
@@ -78,7 +78,7 @@ Controls the format of the response chunks. Defaults to `json` if not specified.
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -128,11 +128,11 @@ Controls the format of the response chunks. Defaults to `json` if not specified.
 
 Edit a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
 
-**Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /edit_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/developers/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
+**Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /edit_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/general/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
 
 The Edit endpoint allows you to detect and fill form fields in PDF documents.
 
-For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/product/editing/edit).
+For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/editing/edit).
 </dd>
 </dl>
 </dd>
@@ -216,11 +216,11 @@ client.edit(
 
 Extract structured data from a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
 
-**Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /extract_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/developers/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
+**Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /extract_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/general/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
 
 The Extract endpoint allows you to extract structured data from files using an existing extractor or an inline configuration.
 
-For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/product/extraction/quick-start-5-minutes).
+For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/extraction/overview).
 </dd>
 </dl>
 </dd>
@@ -254,8 +254,14 @@ client.extract(
                     "description": "The invoice number",
                 },
                 "total_amount": {
-                    "type": "number",
+                    "type": "object",
+                    "extend:type": "currency",
                     "description": "The total amount due",
+                    "properties": {
+                        "amount": {"type": ["number", "null"]},
+                        "iso_4217_currency_code": {"type": ["string", "null"]},
+                    },
+                    "required": ["amount", "iso_4217_currency_code"],
                 },
             },
         }
@@ -335,11 +341,11 @@ client.extract(
 
 Classify a document synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
 
-**Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /classify_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/developers/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
+**Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /classify_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/general/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
 
 The Classify endpoint allows you to classify documents using an existing classifier or an inline configuration.
 
-For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/product/classification/configuring-a-classifier).
+For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/classification/configuring-a-classifier).
 </dd>
 </dl>
 </dd>
@@ -454,11 +460,11 @@ client.classify(
 
 Split a document synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
 
-**Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /split_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/developers/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
+**Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /split_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/general/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
 
 The Split endpoint allows you to split documents into multiple parts using an existing splitter or an inline configuration.
 
-For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/product/splitting/configuring-a-splitter).
+For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/splitting/configuring-a-splitter).
 </dd>
 </dl>
 </dd>
@@ -648,7 +654,7 @@ Example: `"invoice"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -770,7 +776,7 @@ Only available for files with a type of DOCX.
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -854,7 +860,7 @@ Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -888,11 +894,11 @@ Example: `"file_xK9mLPqRtN3vS8wF5hB2cQ"`
 
 Upload and create a new file in Extend.
 
-This endpoint accepts file contents and registers them as a File in Extend, which can be used for [running workflows](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/create-workflow-run), [creating evaluation set items](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/evaluation/create-evaluation-set-item), [parsing](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/parse/parse-file), etc.
+This endpoint accepts file contents and registers them as a File in Extend, which can be used for [running workflows](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/create-workflow-run), [creating evaluation set items](https://docs.extend.ai/2026-02-09/api-reference/endpoints/evaluation/create-evaluation-set-item), [parsing](https://docs.extend.ai/2026-02-09/api-reference/endpoints/parse/parse-file), etc.
 
 If an uploaded file is detected as a Word or PowerPoint document, it will be automatically converted to a PDF.
 
-Supported file types can be found [here](https://docs.extend.ai/2026-02-09/product/general/supported-file-types).
+Supported file types can be found [here](https://docs.extend.ai/2026-02-09/general/supported-file-types).
 
 This endpoint requires multipart form encoding. Most HTTP clients will handle this encoding automatically (see the examples).
 </dd>
@@ -948,7 +954,7 @@ core.File` — See core.File for more documentation
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -1097,7 +1103,7 @@ Example: `"invoice"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -1224,7 +1230,7 @@ client.parse_runs.create(
 
 Retrieve the status and results of a parse run.
 
-Use this endpoint to get results for a parse run that has already completed, or to check on the status of a parse run initiated by the [Create Parse Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/parse/create-parse-run) endpoint.
+Use this endpoint to get results for a parse run that has already completed, or to check on the status of a parse run initiated by the [Create Parse Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/parse/create-parse-run) endpoint.
 </dd>
 </dl>
 </dd>
@@ -1286,7 +1292,7 @@ Controls how the output is delivered. Defaults to `inline`.
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -1370,7 +1376,7 @@ Example: `"pr_xK9mLPqRtN3vS8wF5hB2cQ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -1404,7 +1410,7 @@ Example: `"pr_xK9mLPqRtN3vS8wF5hB2cQ"`
 
 Submit up to **1,000 files** for parsing in a single request. Each file is processed as an independent parse run using the same configuration.
 
-Unlike the single [Parse File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/parse/create-parse-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+Unlike the single [Parse File (Async)](https://docs.extend.ai/2026-02-09/api-reference/endpoints/parse/create-parse-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
 
 **Monitoring results:**
 - **Webhooks (recommended):** Subscribe to `batch_parse_run.processed` and `batch_parse_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /parse_runs?batchId={id}`.
@@ -1600,7 +1606,7 @@ client.edit_runs.create(
 
 Retrieve the status and results of an edit run.
 
-Use this endpoint to get results for an edit run that has already completed, or to check on the status of an edit run initiated via the [Create Edit Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/edit/create-edit-run) endpoint.
+Use this endpoint to get results for an edit run that has already completed, or to check on the status of an edit run initiated via the [Create Edit Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/edit/create-edit-run) endpoint.
 </dd>
 </dl>
 </dd>
@@ -1650,7 +1656,7 @@ Example: `"edr_xK9mLPqRtN3vS8wF5hB2cQ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -1734,7 +1740,7 @@ Example: `"edr_xK9mLPqRtN3vS8wF5hB2cQ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -1819,7 +1825,7 @@ Example: `"edt_xK9mLPqRtN3vS8wF5hB2cQ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -1858,7 +1864,7 @@ Use this endpoint when you want Extend to bootstrap an `EditRootJSON` schema fro
 
 This endpoint returns the generated schema directly. There are no schema generation run resources to poll or delete.
 
-For more details, see the [Generate Edit Schema guide](https://docs.extend.ai/2026-02-09/product/editing/generate-edit-schema) and the [Edit File guide](https://docs.extend.ai/2026-02-09/product/editing/edit).
+For more details, see the [Generate Edit Schema guide](https://docs.extend.ai/2026-02-09/editing/generate-edit-schema) and the [Edit File guide](https://docs.extend.ai/2026-02-09/editing/edit).
 </dd>
 </dl>
 </dd>
@@ -2073,7 +2079,7 @@ Example: `"invoice"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -2212,7 +2218,7 @@ client.extract_runs.create(
 
 Retrieve details about a specific extract run, including its status, outputs, and any edits made during review.
 
-A common use case for this endpoint is to poll for the status and final output of an extract run when using the [Create Extract Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/create-extract-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
+A common use case for this endpoint is to poll for the status and final output of an extract run when using the [Create Extract Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/extract/create-extract-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
 </dd>
 </dl>
 </dd>
@@ -2262,7 +2268,7 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -2342,7 +2348,7 @@ client.extract_runs.delete(
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -2426,7 +2432,7 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -2460,7 +2466,7 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
 Submit up to **1,000 files** for extraction in a single request. Each file is processed as an independent extract run using the same extractor and configuration.
 
-Unlike the single [Extract File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/create-extract-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+Unlike the single [Extract File (Async)](https://docs.extend.ai/2026-02-09/api-reference/endpoints/extract/create-extract-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
 
 **Monitoring results:**
 - **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /extract_runs?batchId={id}`.
@@ -2642,7 +2648,7 @@ client.extractors.list(
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -2832,7 +2838,7 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -2915,7 +2921,7 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -3041,7 +3047,7 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -3135,7 +3141,7 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -3249,7 +3255,7 @@ The version to retrieve. Accepts any of the following:
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -3414,7 +3420,7 @@ Example: `"invoice"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -3553,7 +3559,7 @@ client.classify_runs.create(
 
 Retrieve details about a specific classify run, including its status and outputs.
 
-A common use case for this endpoint is to poll for the status and final output of a classify run when using the [Create Classify Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/classify/create-classify-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
+A common use case for this endpoint is to poll for the status and final output of a classify run when using the [Create Classify Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/classify/create-classify-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
 </dd>
 </dl>
 </dd>
@@ -3603,7 +3609,7 @@ Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -3683,7 +3689,7 @@ client.classify_runs.delete(
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -3767,7 +3773,7 @@ Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -3801,7 +3807,7 @@ Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
 
 Submit up to **1,000 files** for classification in a single request. Each file is processed as an independent classify run using the same classifier and configuration.
 
-Unlike the single [Classify File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/classify/create-classify-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+Unlike the single [Classify File (Async)](https://docs.extend.ai/2026-02-09/api-reference/endpoints/classify/create-classify-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
 
 **Monitoring results:**
 - **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /classify_runs?batchId={id}`.
@@ -3983,7 +3989,7 @@ client.classifiers.list(
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -4174,7 +4180,7 @@ Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -4257,7 +4263,7 @@ Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -4383,7 +4389,7 @@ Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -4477,7 +4483,7 @@ Example: `"cl_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -4591,7 +4597,7 @@ The version to retrieve. Accepts any of the following:
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -4756,7 +4762,7 @@ Example: `"invoice"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -4895,7 +4901,7 @@ client.split_runs.create(
 
 Retrieve details about a specific split run, including its status and outputs.
 
-A common use case for this endpoint is to poll for the status and final output of a split run when using the [Create Split Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/split/create-split-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
+A common use case for this endpoint is to poll for the status and final output of a split run when using the [Create Split Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/split/create-split-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
 </dd>
 </dl>
 </dd>
@@ -4945,7 +4951,7 @@ Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -5025,7 +5031,7 @@ client.split_runs.delete(
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -5109,7 +5115,7 @@ Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -5143,7 +5149,7 @@ Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
 
 Submit up to **1,000 files** for splitting in a single request. Each file is processed as an independent split run using the same splitter and configuration.
 
-Unlike the single [Split File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/split/create-split-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+Unlike the single [Split File (Async)](https://docs.extend.ai/2026-02-09/api-reference/endpoints/split/create-split-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
 
 **Monitoring results:**
 - **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /split_runs?batchId={id}`.
@@ -5326,7 +5332,7 @@ client.splitters.list(
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -5519,7 +5525,7 @@ Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -5602,7 +5608,7 @@ Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -5728,7 +5734,7 @@ Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -5822,7 +5828,7 @@ Example: `"spl_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -5936,7 +5942,7 @@ The version to retrieve. Accepts any of the following:
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -6127,7 +6133,7 @@ The steps that define the workflow's processing graph. Each step has a `type`, a
 
 When omitted, the workflow is created with default steps (`TRIGGER` → `PARSE`). The default steps may change in the future.
 
-See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for step definitions, branching patterns, and examples.
+See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for step definitions, branching patterns, and examples.
     
 </dd>
 </dl>
@@ -6293,7 +6299,7 @@ client.workflows.update(
 
 The new step definitions for the draft version. Replaces all existing draft steps.
 
-See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for step definitions, branching patterns, and examples.
+See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for step definitions, branching patterns, and examples.
     
 </dd>
 </dl>
@@ -6483,7 +6489,7 @@ Optional step definitions. When provided, these steps are deployed directly with
 
 All configurable steps (`EXTRACT`, `CLASSIFY`, `SPLIT`, `CONDITIONAL_EXTRACT`, `RULE_VALIDATION`, `EXTERNAL_DATA_VALIDATION`) must include `config` when deploying. Unconfigured steps are rejected with a 400.
 
-See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for step definitions, branching patterns, and examples.
+See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for step definitions, branching patterns, and examples.
     
 </dd>
 </dl>
@@ -6662,7 +6668,7 @@ Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
 **batch_id:** `typing.Optional[str]` 
 
-Filters workflow runs by the batch ID. This is useful for fetching all runs for a given batch created via the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
+Filters workflow runs by the batch ID. This is useful for fetching all runs for a given batch created via the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
 
 Example: `"batch_7Ws31-F5"`
     
@@ -6716,7 +6722,7 @@ Example: `"invoice"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -6797,7 +6803,7 @@ client.workflow_runs.create(
 <dl>
 <dd>
 
-**file:** `WorkflowRunsCreateRequestFileParams` — The file to be processed. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/product/general/supported-file-types). Files can be provided as a URL, an Extend file ID, or raw text. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
+**file:** `WorkflowRunsCreateRequestFileParams` — The file to be processed. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/general/supported-file-types). Files can be provided as a URL, an Extend file ID, or raw text. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
     
 </dd>
 </dl>
@@ -6911,7 +6917,7 @@ Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -6995,7 +7001,7 @@ Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -7101,7 +7107,7 @@ Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -7185,7 +7191,7 @@ Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -7219,17 +7225,17 @@ Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 
 This endpoint allows you to efficiently initiate large batches of workflow runs in a single request (up to 1,000 in a single request, but you can queue up multiple batches in rapid succession). It accepts an array of inputs, each containing a file and metadata pair. The primary use case for this endpoint is for doing large bulk runs of >1000 files at a time that can process over the course of a few hours without needing to manage rate limits that would likely occur using the primary run endpoint.
 
-Unlike the single [Run Workflow](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/create-workflow-run) endpoint which returns the details of the created workflow runs immediately, this batch endpoint returns a `batchId`.
+Unlike the single [Run Workflow](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/create-workflow-run) endpoint which returns the details of the created workflow runs immediately, this batch endpoint returns a `batchId`.
 
-Our recommended usage pattern is to integrate with [Webhooks](https://docs.extend.ai/2026-02-09/product/webhooks/configuration) for consuming results, using the `metadata` and `batchId` to match up results to the original inputs in your downstream systems. However, you can integrate in a polling mechanism by using a combination of the [List Workflow Runs](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/list-workflow-runs) endpoint to fetch all runs via a batch, and then [Get Workflow Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/get-workflow-run) to fetch the full outputs each run.
+Our recommended usage pattern is to integrate with [Webhooks](https://docs.extend.ai/2026-02-09/webhooks/configuration) for consuming results, using the `metadata` and `batchId` to match up results to the original inputs in your downstream systems. However, you can integrate in a polling mechanism by using a combination of the [List Workflow Runs](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/list-workflow-runs) endpoint to fetch all runs via a batch, and then [Get Workflow Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/get-workflow-run) to fetch the full outputs each run.
 
 **Priority:** All workflow runs created through this batch endpoint are automatically assigned a priority of 90.
 
 **Processing and Monitoring:**
 Upon successful submission, the endpoint returns a `batchId`. The individual workflow runs are then queued for processing.
 
-- **Monitoring:** Track the progress and consume results of individual runs using [Webhooks](https://docs.extend.ai/2026-02-09/product/webhooks/configuration). Subscribe to events like `workflow_run.completed`, `workflow_run.failed`, etc. The webhook payload for these events will include the corresponding `batchId` and the `metadata` you provided for each input.
-- **Fetching Results:** You can also use the [List Workflow Runs](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/list-workflow-runs) endpoint and filter using the `batchId` query param.
+- **Monitoring:** Track the progress and consume results of individual runs using [Webhooks](https://docs.extend.ai/2026-02-09/webhooks/configuration). Subscribe to events like `workflow_run.completed`, `workflow_run.failed`, etc. The webhook payload for these events will include the corresponding `batchId` and the `metadata` you provided for each input.
+- **Fetching Results:** You can also use the [List Workflow Runs](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/list-workflow-runs) endpoint and filter using the `batchId` query param.
 </dd>
 </dl>
 </dd>
@@ -7472,7 +7478,7 @@ Example: `"invoice"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -7511,8 +7517,8 @@ Run processors (extraction, classification, splitting, etc.) on a given document
 - **Synchronous**: Set `sync: true` to wait for completion and get final results in the response (5-minute timeout).
 
 **For asynchronous processing:**
-- You can [configure webhooks](https://docs.extend.ai/2026-02-09/product/webhooks/configuration) to receive notifications when a processor run is complete or failed.
-- Or you can [poll the get endpoint](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/legacy/get-processor-run) for updates on the status of the processor run.
+- You can [configure webhooks](https://docs.extend.ai/2026-02-09/webhooks/configuration) to receive notifications when a processor run is complete or failed.
+- Or you can [poll the get endpoint](https://docs.extend.ai/2026-02-09/api-reference/endpoints/legacy/get-processor-run) for updates on the status of the processor run.
 </dd>
 </dl>
 </dd>
@@ -7571,7 +7577,7 @@ An optional version of the processor to use. When not supplied, the most recent 
 <dl>
 <dd>
 
-**file:** `typing.Optional[LegacyProcessorRunFileInputParams]` — The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/product/general/supported-file-types).
+**file:** `typing.Optional[LegacyProcessorRunFileInputParams]` — The file to be processed. One of `file` or `rawText` must be provided. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/general/supported-file-types).
     
 </dd>
 </dl>
@@ -7589,7 +7595,7 @@ An optional version of the processor to use. When not supplied, the most recent 
 
 **sync:** `typing.Optional[bool]` 
 
-Whether to run the processor synchronously. When `true`, the request will wait for the processor run to complete and return the final results. When `false` (default), the request returns immediately with a `PROCESSING` status, and you can poll for completion or use webhooks. For production use cases, we recommending leaving sync off and building around an async integration for more resiliency, unless your use case is predictably fast (e.g. sub < 30 seconds) run time or otherwise have integration constraints that require a synchronous API. See [Async Processing](https://docs.extend.ai/2026-02-09/developers/async-processing) for more details.
+Whether to run the processor synchronously. When `true`, the request will wait for the processor run to complete and return the final results. When `false` (default), the request returns immediately with a `PROCESSING` status, and you can poll for completion or use webhooks. For production use cases, we recommending leaving sync off and building around an async integration for more resiliency, unless your use case is predictably fast (e.g. sub < 30 seconds) run time or otherwise have integration constraints that require a synchronous API. See [Async Processing](https://docs.extend.ai/2026-02-09/general/async-processing) for more details.
 
 **Timeout**: Synchronous requests have a 5-minute timeout. If the processor run takes longer, it will continue processing asynchronously and you can retrieve the results via the GET endpoint.
     
@@ -7653,7 +7659,7 @@ To categorize processor runs for billing and usage tracking, include `extend:usa
 
 Retrieve details about a specific processor run, including its status, outputs, and any edits made during review.
 
-A common use case for this endpoint is to poll for the status and final output of an async processor run when using the [Run Processor](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/legacy/create-processor-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
+A common use case for this endpoint is to poll for the status and final output of an async processor run when using the [Run Processor](https://docs.extend.ai/2026-02-09/api-reference/endpoints/legacy/create-processor-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
 </dd>
 </dl>
 </dd>
@@ -7703,7 +7709,7 @@ Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -7787,7 +7793,7 @@ Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -7871,7 +7877,7 @@ Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -7980,7 +7986,7 @@ client.processor.list()
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -8161,7 +8167,7 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -8268,7 +8274,7 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -8362,7 +8368,7 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -8473,7 +8479,7 @@ Example: `"exv_QYk6jgHA_8CsO8rVWhyNC"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -8508,7 +8514,7 @@ Example: `"exv_QYk6jgHA_8CsO8rVWhyNC"`
 
 Retrieve details about a batch processor run, including evaluation runs.
 
-**Deprecated:** This endpoint is maintained for backwards compatibility only and will be replaced in a future API version. Use [Get Evaluation Set Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/evaluation/get-evaluation-set-run) for interacting with evaluation set runs.
+**Deprecated:** This endpoint is maintained for backwards compatibility only and will be replaced in a future API version. Use [Get Evaluation Set Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/evaluation/get-evaluation-set-run) for interacting with evaluation set runs.
 </dd>
 </dl>
 </dd>
@@ -8558,7 +8564,7 @@ Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -8765,7 +8771,7 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -8797,9 +8803,9 @@ Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-Evaluation sets are collections of files and expected outputs that are used to evaluate the performance of a given extractor, classifier, or splitter. This endpoint will create a new evaluation set, which items can be added to using the [Create Evaluation Set Item](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/evaluation/create-evaluation-set-item) endpoint.
+Evaluation sets are collections of files and expected outputs that are used to evaluate the performance of a given extractor, classifier, or splitter. This endpoint will create a new evaluation set, which items can be added to using the [Create Evaluation Set Item](https://docs.extend.ai/2026-02-09/api-reference/endpoints/evaluation/create-evaluation-set-item) endpoint.
 
-Note: It is not necessary to create an evaluation set via API. You can also create an evaluation set via the Extend dashboard and take the ID from there. To learn more about how to create evaluation sets, see the [Evaluation Sets](https://docs.extend.ai/2026-02-09/product/evaluation/overview) product page.
+Note: It is not necessary to create an evaluation set via API. You can also create an evaluation set via the Extend dashboard and take the ID from there. To learn more about how to create evaluation sets, see the [Evaluation Sets](https://docs.extend.ai/2026-02-09/evaluation/overview) product page.
 </dd>
 </dl>
 </dd>
@@ -8899,7 +8905,7 @@ Example: `"Q4 2023 vendor invoices"`
 <dl>
 <dd>
 
-Retrieve a specific evaluation set by ID. This returns an evaluation set object, but does not include the items in the evaluation set. You can use the [List Evaluation Set Items](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/evaluation/list-evaluation-set-items) endpoint to get the items in an evaluation set.
+Retrieve a specific evaluation set by ID. This returns an evaluation set object, but does not include the items in the evaluation set. You can use the [List Evaluation Set Items](https://docs.extend.ai/2026-02-09/api-reference/endpoints/evaluation/list-evaluation-set-items) endpoint to get the items in an evaluation set.
 </dd>
 </dl>
 </dd>
@@ -8949,7 +8955,7 @@ Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -8984,7 +8990,7 @@ Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
 
 List items in a specific evaluation set.
 
-Returns a summary of each evaluation set item. Use the [Get Evaluation Set Item](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/evaluation/get-evaluation-set-item) endpoint to get the full details of an evaluation set item.
+Returns a summary of each evaluation set item. Use the [Get Evaluation Set Item](https://docs.extend.ai/2026-02-09/api-reference/endpoints/evaluation/get-evaluation-set-item) endpoint to get the full details of an evaluation set item.
 </dd>
 </dl>
 </dd>
@@ -9067,7 +9073,7 @@ Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -9103,7 +9109,7 @@ Evaluation set items are the individual files and expected outputs that are used
 
 **Limit:** You can create up to 100 items at a time.
 
-Learn more about how to create evaluation set items in the [Evaluation Sets](https://docs.extend.ai/2026-02-09/product/evaluation/overview) product page.
+Learn more about how to create evaluation set items in the [Evaluation Sets](https://docs.extend.ai/2026-02-09/evaluation/overview) product page.
 </dd>
 </dl>
 </dd>
@@ -9173,7 +9179,7 @@ Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -9268,7 +9274,7 @@ Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -9378,7 +9384,7 @@ Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -9473,7 +9479,7 @@ Example: `"evi_kR9mNP12Qw4yTv8BdR3H"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -9555,7 +9561,7 @@ client.evaluation_set_runs.create(
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -9624,7 +9630,7 @@ client = Extend(
     token="YOUR_TOKEN",
 )
 client.evaluation_set_runs.retrieve(
-    id="evaluation_set_run_id_here",
+    id="bpr_Xj8mK2pL9nR4vT7qY5wZ",
 )
 
 ```
@@ -9645,7 +9651,7 @@ client.evaluation_set_runs.retrieve(
 
 The ID of the evaluation set run.
 
-Example: `"evr_Xj8mK2pL9nR4vT7qY5wZ"`
+Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
     
 </dd>
 </dl>
@@ -9653,7 +9659,7 @@ Example: `"evr_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -9756,7 +9762,7 @@ client.webhook_endpoints.list(
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -9790,9 +9796,9 @@ client.webhook_endpoints.list(
 
 Create a new webhook endpoint. The response includes a `signingSecret` that is only returned once — store it securely for verifying webhook signatures.
 
-The `enabledEvents` array specifies which global event types this endpoint should receive. Use the [Webhook Events](https://docs.extend.ai/2026-02-09/developers/api-reference/webhook-events) reference to see available event types.
+The `enabledEvents` array specifies which global event types this endpoint should receive. Use the [Webhook Events](https://docs.extend.ai/2026-02-09/api-reference/webhook-events) reference to see available event types.
 
-To subscribe to events scoped to a specific resource (e.g., a single extractor or workflow), use [Create Webhook Subscription](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/webhook/create-webhook-subscription) after creating the endpoint.
+To subscribe to events scoped to a specific resource (e.g., a single extractor or workflow), use [Create Webhook Subscription](https://docs.extend.ai/2026-02-09/api-reference/endpoints/webhook/create-webhook-subscription) after creating the endpoint.
 </dd>
 </dl>
 </dd>
@@ -9958,7 +9964,7 @@ Example: `"wh_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -10042,7 +10048,7 @@ Example: `"wh_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -10164,7 +10170,7 @@ Example: `"wh_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -10275,7 +10281,7 @@ client.webhook_subscriptions.list(
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -10465,7 +10471,7 @@ Example: `"whes_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -10556,7 +10562,7 @@ Example: `"whes_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
@@ -10638,7 +10644,7 @@ Example: `"whes_Xj8mK2pL9nR4vT7qY5wZ"`
 <dl>
 <dd>
 
-**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+**extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>

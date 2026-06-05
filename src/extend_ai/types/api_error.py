@@ -13,7 +13,7 @@ class ApiError(UncheckedBaseModel):
     """
     Standard error response format for all Extend API errors.
 
-    See the [Error Codes documentation](https://docs.extend.ai/2026-02-09/developers/error-codes) for error handling recommendations.
+    See the [Error Codes documentation](https://docs.extend.ai/2026-02-09/api-reference/error-handling) for error handling recommendations.
     """
 
     code: str = pydantic.Field()

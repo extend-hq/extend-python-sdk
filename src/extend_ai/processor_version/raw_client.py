@@ -48,7 +48,7 @@ class RawProcessorVersionClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -140,7 +140,7 @@ class RawProcessorVersionClient:
             The type of release for this version. The two options are "major" and "minor", which will increment the version number accordingly.
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         description : typing.Optional[str]
             A description of the changes in this version. This helps track the evolution of the processor over time.
@@ -234,7 +234,7 @@ class RawProcessorVersionClient:
             Example: `"exv_QYk6jgHA_8CsO8rVWhyNC"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -326,7 +326,7 @@ class AsyncRawProcessorVersionClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -418,7 +418,7 @@ class AsyncRawProcessorVersionClient:
             The type of release for this version. The two options are "major" and "minor", which will increment the version number accordingly.
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         description : typing.Optional[str]
             A description of the changes in this version. This helps track the evolution of the processor over time.
@@ -512,7 +512,7 @@ class AsyncRawProcessorVersionClient:
             Example: `"exv_QYk6jgHA_8CsO8rVWhyNC"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.

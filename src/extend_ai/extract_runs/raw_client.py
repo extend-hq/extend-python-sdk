@@ -101,7 +101,7 @@ class RawExtractRunsClient:
         max_page_size : typing.Optional[MaxPageSize]
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -111,7 +111,7 @@ class RawExtractRunsClient:
         HttpResponse[ExtractRunsListResponse]
             You will get a list of summaries for each extract run. These are shortened versions of the full extract run object.
 
-            To get the full object, use the [Get Extract Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/get-extract-run) endpoint.
+            To get the full object, use the [Get Extract Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/extract/get-extract-run) endpoint.
         """
         _response = self._client_wrapper.httpx_client.request(
             "extract_runs",
@@ -417,7 +417,7 @@ class RawExtractRunsClient:
         """
         Retrieve details about a specific extract run, including its status, outputs, and any edits made during review.
 
-        A common use case for this endpoint is to poll for the status and final output of an extract run when using the [Create Extract Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/create-extract-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
+        A common use case for this endpoint is to poll for the status and final output of an extract run when using the [Create Extract Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/extract/create-extract-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
 
         Parameters
         ----------
@@ -427,7 +427,7 @@ class RawExtractRunsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -570,7 +570,7 @@ class RawExtractRunsClient:
             The ID of the extract run.
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -715,7 +715,7 @@ class RawExtractRunsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -851,7 +851,7 @@ class RawExtractRunsClient:
         """
         Submit up to **1,000 files** for extraction in a single request. Each file is processed as an independent extract run using the same extractor and configuration.
 
-        Unlike the single [Extract File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/create-extract-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+        Unlike the single [Extract File (Async)](https://docs.extend.ai/2026-02-09/api-reference/endpoints/extract/create-extract-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
 
         **Monitoring results:**
         - **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /extract_runs?batchId={id}`.
@@ -1067,7 +1067,7 @@ class AsyncRawExtractRunsClient:
         max_page_size : typing.Optional[MaxPageSize]
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1077,7 +1077,7 @@ class AsyncRawExtractRunsClient:
         AsyncHttpResponse[ExtractRunsListResponse]
             You will get a list of summaries for each extract run. These are shortened versions of the full extract run object.
 
-            To get the full object, use the [Get Extract Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/get-extract-run) endpoint.
+            To get the full object, use the [Get Extract Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/extract/get-extract-run) endpoint.
         """
         _response = await self._client_wrapper.httpx_client.request(
             "extract_runs",
@@ -1383,7 +1383,7 @@ class AsyncRawExtractRunsClient:
         """
         Retrieve details about a specific extract run, including its status, outputs, and any edits made during review.
 
-        A common use case for this endpoint is to poll for the status and final output of an extract run when using the [Create Extract Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/create-extract-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
+        A common use case for this endpoint is to poll for the status and final output of an extract run when using the [Create Extract Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/extract/create-extract-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
 
         Parameters
         ----------
@@ -1393,7 +1393,7 @@ class AsyncRawExtractRunsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1536,7 +1536,7 @@ class AsyncRawExtractRunsClient:
             The ID of the extract run.
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1681,7 +1681,7 @@ class AsyncRawExtractRunsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1817,7 +1817,7 @@ class AsyncRawExtractRunsClient:
         """
         Submit up to **1,000 files** for extraction in a single request. Each file is processed as an independent extract run using the same extractor and configuration.
 
-        Unlike the single [Extract File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/create-extract-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+        Unlike the single [Extract File (Async)](https://docs.extend.ai/2026-02-09/api-reference/endpoints/extract/create-extract-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
 
         **Monitoring results:**
         - **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /extract_runs?batchId={id}`.
