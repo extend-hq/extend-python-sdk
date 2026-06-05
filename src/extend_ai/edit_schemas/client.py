@@ -42,7 +42,7 @@ class EditSchemasClient:
 
         This endpoint returns the generated schema directly. There are no schema generation run resources to poll or delete.
 
-        For more details, see the [Generate Edit Schema guide](https://docs.extend.ai/2026-02-09/product/editing/generate-edit-schema) and the [Edit File guide](https://docs.extend.ai/2026-02-09/product/editing/edit).
+        For more details, see the [Generate Edit Schema guide](https://docs.extend.ai/2026-02-09/editing/generate-edit-schema) and the [Edit File guide](https://docs.extend.ai/2026-02-09/editing/edit).
 
         Parameters
         ----------
@@ -107,7 +107,7 @@ class AsyncEditSchemasClient:
 
         This endpoint returns the generated schema directly. There are no schema generation run resources to poll or delete.
 
-        For more details, see the [Generate Edit Schema guide](https://docs.extend.ai/2026-02-09/product/editing/generate-edit-schema) and the [Edit File guide](https://docs.extend.ai/2026-02-09/product/editing/edit).
+        For more details, see the [Generate Edit Schema guide](https://docs.extend.ai/2026-02-09/editing/generate-edit-schema) and the [Edit File guide](https://docs.extend.ai/2026-02-09/editing/edit).
 
         Parameters
         ----------

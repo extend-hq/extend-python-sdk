@@ -26,7 +26,7 @@ class SplitOverrideConfig(UncheckedBaseModel):
         pydantic.Field(alias="baseVersion", default=None)
     )
     """
-    The version of the `"splitting_performance"` or `"splitting_light"` processor to use. If not provided, the latest stable version for the selected `baseProcessor` will be used automatically. See [Splitting Changelog](https://docs.extend.ai/2026-02-09/changelog/splitting/splitting-performance) for more details.
+    The version of the `"splitting_performance"` or `"splitting_light"` processor to use. If not provided, the latest stable version for the selected `baseProcessor` will be used automatically. See [Splitting Changelog](https://docs.extend.ai/2026-02-09/model-versioning/splitting/splitting-performance) for more details.
     """
 
     split_classifications: typing_extensions.Annotated[

@@ -11,7 +11,7 @@ class ExternalDataValidationStepDefinitionConfigRequestOptionsContentType(enum.S
     """
     Content type of the request body sent to the external endpoint.
 
-    See the [External Data Validation step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#external-data-validation-step).
+    See the [External Data Validation step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#external-data-validation).
     """
 
     APPLICATION_JSON = "application/json"

@@ -14,7 +14,7 @@ class ConditionalExtractStepDefinitionConfigRulesItem(UncheckedBaseModel):
     """
     The formula that determines when this extractor runs.
     
-    See the [Conditional Extract step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#conditional-extract-step) and [Formulas](https://docs.extend.ai/2026-02-09/product/workflows/formulas).
+    See the [Conditional Extract step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#conditional-extract) and [Formulas](https://docs.extend.ai/2026-02-09/workflows/formulas).
     """
 
     extractor: ExtractorRef

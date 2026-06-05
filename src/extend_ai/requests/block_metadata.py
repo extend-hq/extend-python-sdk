@@ -6,6 +6,7 @@ import typing_extensions
 from ..core.serialization import FieldMetadata
 from ..types.block_metadata_text_direction import BlockMetadataTextDirection
 from .block_metadata_page import BlockMetadataPageParams
+from .block_metadata_sheet import BlockMetadataSheetParams
 
 
 class BlockMetadataParams(typing_extensions.TypedDict):
@@ -16,6 +17,11 @@ class BlockMetadataParams(typing_extensions.TypedDict):
     page: typing_extensions.NotRequired[BlockMetadataPageParams]
     """
     Information about the page this block appears on.
+    """
+
+    sheet: typing_extensions.NotRequired[BlockMetadataSheetParams]
+    """
+    Spreadsheet sheet metadata. Present for blocks parsed from spreadsheet files, such as Excel workbooks.
     """
 
     text_direction: typing_extensions.NotRequired[

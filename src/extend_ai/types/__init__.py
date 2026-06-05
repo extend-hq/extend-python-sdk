@@ -21,6 +21,7 @@ if typing.TYPE_CHECKING:
     from .block_details import BlockDetails
     from .block_metadata import BlockMetadata
     from .block_metadata_page import BlockMetadataPage
+    from .block_metadata_sheet import BlockMetadataSheet
     from .block_metadata_text_direction import BlockMetadataTextDirection
     from .block_polygon_item import BlockPolygonItem
     from .block_type import BlockType
@@ -551,6 +552,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "BlockDetails": ".block_details",
     "BlockMetadata": ".block_metadata",
     "BlockMetadataPage": ".block_metadata_page",
+    "BlockMetadataSheet": ".block_metadata_sheet",
     "BlockMetadataTextDirection": ".block_metadata_text_direction",
     "BlockPolygonItem": ".block_polygon_item",
     "BlockType": ".block_type",
@@ -1063,6 +1065,7 @@ __all__ = [
     "BlockDetails",
     "BlockMetadata",
     "BlockMetadataPage",
+    "BlockMetadataSheet",
     "BlockMetadataTextDirection",
     "BlockPolygonItem",
     "BlockType",

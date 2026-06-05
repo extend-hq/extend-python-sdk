@@ -12,7 +12,7 @@ class TriggerStepDefinition(UncheckedBaseModel):
     """
     The entry point of the workflow. Every workflow must have exactly one trigger step, and it must route to exactly one `PARSE` step.
 
-    See the [Trigger step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#trigger-step).
+    See the [Trigger step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#trigger).
     """
 
     name: str = pydantic.Field()

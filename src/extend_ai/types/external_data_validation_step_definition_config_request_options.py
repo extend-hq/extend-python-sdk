@@ -19,7 +19,7 @@ class ExternalDataValidationStepDefinitionConfigRequestOptions(UncheckedBaseMode
     """
     HTTP request configuration for the external validation call.
 
-    See the [External Data Validation step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#external-data-validation-step).
+    See the [External Data Validation step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#external-data-validation).
     """
 
     url: str = pydantic.Field()
@@ -32,7 +32,7 @@ class ExternalDataValidationStepDefinitionConfigRequestOptions(UncheckedBaseMode
     """
     Optional HTTP headers to include on the external validation request.
     
-    See the [External Data Validation step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#external-data-validation-step).
+    See the [External Data Validation step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#external-data-validation).
     """
 
     content_type: typing_extensions.Annotated[
@@ -42,7 +42,7 @@ class ExternalDataValidationStepDefinitionConfigRequestOptions(UncheckedBaseMode
     """
     Content type of the request body sent to the external endpoint.
     
-    See the [External Data Validation step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#external-data-validation-step).
+    See the [External Data Validation step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#external-data-validation).
     """
 
     if IS_PYDANTIC_V2:

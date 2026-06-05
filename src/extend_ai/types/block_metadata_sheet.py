@@ -5,20 +5,22 @@ import typing
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .merge_extract_step_definition_config import MergeExtractStepDefinitionConfig
-from .simple_next_entry import SimpleNextEntry
 
 
-class MergeExtractStepDefinition(UncheckedBaseModel):
+class BlockMetadataSheet(UncheckedBaseModel):
     """
-    Merges extraction outputs from multiple upstream extract steps.
-
-    See the [Merge Extract step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#merge-extract).
+    Spreadsheet sheet metadata. Present for blocks parsed from spreadsheet files, such as Excel workbooks.
     """
 
-    name: str
-    config: typing.Optional[MergeExtractStepDefinitionConfig] = None
-    next: typing.Optional[typing.List[SimpleNextEntry]] = None
+    index: int = pydantic.Field()
+    """
+    The zero-based index of the sheet in the original workbook.
+    """
+
+    name: str = pydantic.Field()
+    """
+    The name of the sheet in the original workbook.
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

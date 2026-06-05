@@ -21,7 +21,7 @@ class ExternalDataValidationStepDefinitionConfigParams(typing_extensions.TypedDi
     """
     HTTP request configuration for the external validation call.
     
-    See the [External Data Validation step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#external-data-validation-step).
+    See the [External Data Validation step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#external-data-validation).
     """
 
     failure_behavior: typing_extensions.NotRequired[
@@ -32,5 +32,5 @@ class ExternalDataValidationStepDefinitionConfigParams(typing_extensions.TypedDi
     """
     Whether to continue or exit the workflow on validation failure. Defaults to `CONTINUE`.
     
-    See the [External Data Validation step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#external-data-validation-step).
+    See the [External Data Validation step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#external-data-validation).
     """

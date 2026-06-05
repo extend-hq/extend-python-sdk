@@ -50,7 +50,7 @@ class RawEvaluationSetRunsClient:
             The ID of the evaluation set to run.
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         entity : typing.Optional[EvaluationSetRunsCreateRequestEntityParams]
             Optional processor and version to run against the evaluation set. If omitted, the evaluation set's processor is run at its draft version.
@@ -205,10 +205,10 @@ class RawEvaluationSetRunsClient:
         id : str
             The ID of the evaluation set run.
 
-            Example: `"evr_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -358,7 +358,7 @@ class AsyncRawEvaluationSetRunsClient:
             The ID of the evaluation set to run.
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         entity : typing.Optional[EvaluationSetRunsCreateRequestEntityParams]
             Optional processor and version to run against the evaluation set. If omitted, the evaluation set's processor is run at its draft version.
@@ -513,10 +513,10 @@ class AsyncRawEvaluationSetRunsClient:
         id : str
             The ID of the evaluation set run.
 
-            Example: `"evr_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.

@@ -93,7 +93,7 @@ class ExtractAdvancedOptions(UncheckedBaseModel):
     and may include additional `insights` of type `issue` or `review_summary` to help identify
     fields that may need manual review.
     
-    To learn more, view the [Review Agent Documentation](https://docs.extend.ai/2026-02-09/product/extraction/review-agent)
+    To learn more, view the [Review Agent Documentation](https://docs.extend.ai/2026-02-09/extraction/review-agent)
     """
 
     current_date_enabled: typing_extensions.Annotated[

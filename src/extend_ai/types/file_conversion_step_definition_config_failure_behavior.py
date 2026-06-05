@@ -11,7 +11,7 @@ class FileConversionStepDefinitionConfigFailureBehavior(enum.StrEnum):
     """
     Whether to continue or exit the workflow if file conversion fails. Defaults to `EXIT`.
 
-    See the [File Conversion step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#file-conversion-step).
+    See the [File Conversion step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#file-conversion).
     """
 
     CONTINUE = "CONTINUE"
