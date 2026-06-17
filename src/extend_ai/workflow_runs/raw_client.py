@@ -997,6 +997,7 @@ class RawWorkflowRunsClient:
         *,
         workflow: WorkflowReferenceParams,
         inputs: typing.Sequence[WorkflowRunsCreateBatchRequestInputsItemParams],
+        priority: typing.Optional[int] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[WorkflowRunsCreateBatchResponse]:
         """
@@ -1006,7 +1007,7 @@ class RawWorkflowRunsClient:
 
         Our recommended usage pattern is to integrate with [Webhooks](https://docs.extend.ai/2026-02-09/webhooks/configuration) for consuming results, using the `metadata` and `batchId` to match up results to the original inputs in your downstream systems. However, you can integrate in a polling mechanism by using a combination of the [List Workflow Runs](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/list-workflow-runs) endpoint to fetch all runs via a batch, and then [Get Workflow Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/get-workflow-run) to fetch the full outputs each run.
 
-        **Priority:** All workflow runs created through this batch endpoint are automatically assigned a priority of 90.
+        **Priority:** By default, workflow runs created through this batch endpoint are assigned a priority of 90. You can override this by passing an optional `priority` value (1–100) in the request body — lower values run first.
 
         **Processing and Monitoring:**
         Upon successful submission, the endpoint returns a `batchId`. The individual workflow runs are then queued for processing.
@@ -1020,6 +1021,9 @@ class RawWorkflowRunsClient:
 
         inputs : typing.Sequence[WorkflowRunsCreateBatchRequestInputsItemParams]
             An array of input objects to be processed by the workflow. Each object represents a single workflow run to be created. The array must contain at least 1 input and at most 1000 inputs.
+
+        priority : typing.Optional[int]
+            An optional value used to determine the relative order of runs when rate limiting is in effect. Lower values will be prioritized before higher values. Defaults to 90 if not specified.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1041,6 +1045,7 @@ class RawWorkflowRunsClient:
                     annotation=typing.Sequence[WorkflowRunsCreateBatchRequestInputsItemParams],
                     direction="write",
                 ),
+                "priority": priority,
             },
             headers={
                 "content-type": "application/json",
@@ -2113,6 +2118,7 @@ class AsyncRawWorkflowRunsClient:
         *,
         workflow: WorkflowReferenceParams,
         inputs: typing.Sequence[WorkflowRunsCreateBatchRequestInputsItemParams],
+        priority: typing.Optional[int] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[WorkflowRunsCreateBatchResponse]:
         """
@@ -2122,7 +2128,7 @@ class AsyncRawWorkflowRunsClient:
 
         Our recommended usage pattern is to integrate with [Webhooks](https://docs.extend.ai/2026-02-09/webhooks/configuration) for consuming results, using the `metadata` and `batchId` to match up results to the original inputs in your downstream systems. However, you can integrate in a polling mechanism by using a combination of the [List Workflow Runs](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/list-workflow-runs) endpoint to fetch all runs via a batch, and then [Get Workflow Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/get-workflow-run) to fetch the full outputs each run.
 
-        **Priority:** All workflow runs created through this batch endpoint are automatically assigned a priority of 90.
+        **Priority:** By default, workflow runs created through this batch endpoint are assigned a priority of 90. You can override this by passing an optional `priority` value (1–100) in the request body — lower values run first.
 
         **Processing and Monitoring:**
         Upon successful submission, the endpoint returns a `batchId`. The individual workflow runs are then queued for processing.
@@ -2136,6 +2142,9 @@ class AsyncRawWorkflowRunsClient:
 
         inputs : typing.Sequence[WorkflowRunsCreateBatchRequestInputsItemParams]
             An array of input objects to be processed by the workflow. Each object represents a single workflow run to be created. The array must contain at least 1 input and at most 1000 inputs.
+
+        priority : typing.Optional[int]
+            An optional value used to determine the relative order of runs when rate limiting is in effect. Lower values will be prioritized before higher values. Defaults to 90 if not specified.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -2157,6 +2166,7 @@ class AsyncRawWorkflowRunsClient:
                     annotation=typing.Sequence[WorkflowRunsCreateBatchRequestInputsItemParams],
                     direction="write",
                 ),
+                "priority": priority,
             },
             headers={
                 "content-type": "application/json",

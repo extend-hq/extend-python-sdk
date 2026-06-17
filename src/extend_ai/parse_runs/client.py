@@ -269,6 +269,52 @@ class ParseRunsClient:
         )
         return _response.data
 
+    def cancel(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ParseRun:
+        """
+        Cancel an in-progress parse run.
+
+        Note: Only parse runs with a status of `"PROCESSING"` can be cancelled. Parse runs that have already completed, failed, or been cancelled cannot be cancelled again.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the parse run to cancel.
+
+            Example: `"pr_xK9mLPqRtN3vS8wF5hB2cQ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ParseRun
+            Parse run cancelled successfully
+
+        Examples
+        --------
+        from extend_ai import Extend
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.parse_runs.cancel(
+            id="parse_run_id_here",
+        )
+        """
+        _response = self._raw_client.cancel(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
+        return _response.data
+
     def create_batch(
         self,
         *,
@@ -610,6 +656,60 @@ class AsyncParseRunsClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.delete(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
+        return _response.data
+
+    async def cancel(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ParseRun:
+        """
+        Cancel an in-progress parse run.
+
+        Note: Only parse runs with a status of `"PROCESSING"` can be cancelled. Parse runs that have already completed, failed, or been cancelled cannot be cancelled again.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the parse run to cancel.
+
+            Example: `"pr_xK9mLPqRtN3vS8wF5hB2cQ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ParseRun
+            Parse run cancelled successfully
+
+        Examples
+        --------
+        import asyncio
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.parse_runs.cancel(
+                id="parse_run_id_here",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.cancel(
             id, extend_workspace_id=extend_workspace_id, request_options=request_options
         )
         return _response.data

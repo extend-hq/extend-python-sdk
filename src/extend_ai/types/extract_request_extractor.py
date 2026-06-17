@@ -13,7 +13,7 @@ from .processor_version_string import ProcessorVersionString
 
 class ExtractRequestExtractor(UncheckedBaseModel):
     """
-    Reference to an existing extractor. One of `extractor` or `config` must be provided.
+    Reference to an existing extractor. Mutually exclusive with `config` — provide one or the other, or omit both to have Extend infer a schema from the document.
     """
 
     id: str = pydantic.Field()

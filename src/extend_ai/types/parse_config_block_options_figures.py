@@ -33,6 +33,13 @@ class ParseConfigBlockOptionsFigures(UncheckedBaseModel):
     Whether to enable advanced chart extraction using vision models for improved data extraction from charts.
     """
 
+    custom_instructions: typing_extensions.Annotated[
+        typing.Optional[str], FieldMetadata(alias="customInstructions")
+    ] = pydantic.Field(alias="customInstructions", default=None)
+    """
+    Custom instructions injected into the vision model prompt used to analyze and summarize figures. Use to steer figure descriptions toward your use case (e.g. domain terminology, details to always capture). Requires `enabled: true`. Available on `parse_performance` >= `2.0.0` and `parse_light` >= `1.0.0`.
+    """
+
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
     else:

@@ -261,10 +261,10 @@ class RawExtractRunsClient:
             The file to be extracted from. Files can be provided as a URL, Extend file ID, or raw text.
 
         extractor : typing.Optional[ExtractRunsCreateRequestExtractorParams]
-            Reference to an existing extractor. One of `extractor` or `config` must be provided.
+            Reference to an existing extractor. Mutually exclusive with `config` — provide one or the other, or omit both to have Extend infer a schema from the document.
 
         config : typing.Optional[ExtractConfigJsonParams]
-            Inline extract configuration. One of `extractor` or `config` must be provided.
+            Inline extract configuration. Mutually exclusive with `extractor` — provide one or the other, or omit both to have Extend infer a schema from the document.
 
         priority : typing.Optional[RunPriority]
 
@@ -1227,10 +1227,10 @@ class AsyncRawExtractRunsClient:
             The file to be extracted from. Files can be provided as a URL, Extend file ID, or raw text.
 
         extractor : typing.Optional[ExtractRunsCreateRequestExtractorParams]
-            Reference to an existing extractor. One of `extractor` or `config` must be provided.
+            Reference to an existing extractor. Mutually exclusive with `config` — provide one or the other, or omit both to have Extend infer a schema from the document.
 
         config : typing.Optional[ExtractConfigJsonParams]
-            Inline extract configuration. One of `extractor` or `config` must be provided.
+            Inline extract configuration. Mutually exclusive with `extractor` — provide one or the other, or omit both to have Extend infer a schema from the document.
 
         priority : typing.Optional[RunPriority]
 
