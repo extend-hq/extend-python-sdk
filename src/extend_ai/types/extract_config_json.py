@@ -29,11 +29,15 @@ class ExtractConfigJson(UncheckedBaseModel):
     )
     """
     Custom rules to guide the extraction process in natural language.
+    
+    When `schema` is omitted, `extractionRules` also serves as schema generation instructions — for example, `"Invoice with vendor name, line items, and total due"`. Providing focused instructions produces a more targeted inferred schema.
     """
 
-    schema_: typing_extensions.Annotated[JsonObject, FieldMetadata(alias="schema")] = pydantic.Field(alias="schema")
+    schema_: typing_extensions.Annotated[typing.Optional[JsonObject], FieldMetadata(alias="schema")] = pydantic.Field(
+        alias="schema", default=None
+    )
     """
-    JSON Schema definition of the data to extract.
+    JSON Schema definition of the data to extract. **Optional** — if omitted, Extend automatically infers a schema from the document before running extraction. No extractor is required.
     
     See the [JSON Schema guide](https://docs.extend.ai/2026-02-09/extraction/schema) for details and examples of schema configuration.
     """

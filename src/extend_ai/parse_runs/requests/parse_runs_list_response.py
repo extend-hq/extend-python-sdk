@@ -4,13 +4,13 @@ import typing
 
 import typing_extensions
 from ...core.serialization import FieldMetadata
-from ...requests.parse_run import ParseRunParams
+from ...requests.parse_run_summary import ParseRunSummaryParams
 from ...types.next_page_token import NextPageToken
 
 
 class ParseRunsListResponseParams(typing_extensions.TypedDict):
     object: typing.Literal["list"]
-    data: typing.Sequence[ParseRunParams]
+    data: typing.Sequence[ParseRunSummaryParams]
     next_page_token: typing_extensions.NotRequired[
         typing_extensions.Annotated[NextPageToken, FieldMetadata(alias="nextPageToken")]
     ]

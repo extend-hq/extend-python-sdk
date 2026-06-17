@@ -5,12 +5,13 @@ import typing
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .run_usage_breakdown_charge import RunUsageBreakdownCharge
 from .run_usage_breakdown_entry_object import RunUsageBreakdownEntryObject
 
 
 class RunUsageBreakdownEntry(UncheckedBaseModel):
     """
-    One line item in a run's `usage.breakdown`. Each entry corresponds to a concrete chargeable resource that contributed credits to the parent operation.
+    One line item in a run's `usage.breakdown`. Each entry corresponds to a concrete chargeable resource that contributed credits to the parent operation. When `charges` is present, it itemizes the cost drivers behind this entry's `credits`.
     """
 
     object: RunUsageBreakdownEntryObject = pydantic.Field()
@@ -26,6 +27,13 @@ class RunUsageBreakdownEntry(UncheckedBaseModel):
     credits: float = pydantic.Field()
     """
     Credits charged to the contributing resource.
+    """
+
+    charges: typing.Optional[typing.List[RunUsageBreakdownCharge]] = pydantic.Field(default=None)
+    """
+    Itemized cost drivers that make up this entry's `credits`. When present, `sum(charges[].credits) === credits`.
+    
+    **Availability:** Present on runs persisted on or after June 10, 2026. Runs persisted before that date will omit this field.
     """
 
     if IS_PYDANTIC_V2:
