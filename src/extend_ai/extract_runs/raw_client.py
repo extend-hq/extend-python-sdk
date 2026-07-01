@@ -19,6 +19,7 @@ from ..errors.too_many_requests_error import TooManyRequestsError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
 from ..requests.extract_config_json import ExtractConfigJsonParams
+from ..requests.multi_file_run_package import MultiFileRunPackageParams
 from ..types.api_error import ApiError as types_api_error_ApiError
 from ..types.batch_run import BatchRun
 from ..types.extract_run import ExtractRun
@@ -243,9 +244,10 @@ class RawExtractRunsClient:
     def create(
         self,
         *,
-        file: ExtractRunsCreateRequestFileParams,
         extractor: typing.Optional[ExtractRunsCreateRequestExtractorParams] = OMIT,
         config: typing.Optional[ExtractConfigJsonParams] = OMIT,
+        file: typing.Optional[ExtractRunsCreateRequestFileParams] = OMIT,
+        package: typing.Optional[MultiFileRunPackageParams] = OMIT,
         priority: typing.Optional[RunPriority] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -257,14 +259,21 @@ class RawExtractRunsClient:
 
         Parameters
         ----------
-        file : ExtractRunsCreateRequestFileParams
-            The file to be extracted from. Files can be provided as a URL, Extend file ID, or raw text.
-
         extractor : typing.Optional[ExtractRunsCreateRequestExtractorParams]
             Reference to an existing extractor. Mutually exclusive with `config` — provide one or the other, or omit both to have Extend infer a schema from the document.
 
         config : typing.Optional[ExtractConfigJsonParams]
             Inline extract configuration. Mutually exclusive with `extractor` — provide one or the other, or omit both to have Extend infer a schema from the document.
+
+        file : typing.Optional[ExtractRunsCreateRequestFileParams]
+            The file to be extracted from. Mutually exclusive with `package` — provide one or the other.
+
+            Files can be provided as a URL, Extend file ID, or raw text.
+
+        package : typing.Optional[MultiFileRunPackageParams]
+            A collection of files to extract from together in a single run. Mutually exclusive with `file` — provide one or the other.
+
+            See [Multifile Extraction](https://docs.extend.ai/2026-02-09/extraction/multifile) for details.
 
         priority : typing.Optional[RunPriority]
 
@@ -290,6 +299,9 @@ class RawExtractRunsClient:
                 ),
                 "file": convert_and_respect_annotation_metadata(
                     object_=file, annotation=ExtractRunsCreateRequestFileParams, direction="write"
+                ),
+                "package": convert_and_respect_annotation_metadata(
+                    object_=package, annotation=MultiFileRunPackageParams, direction="write"
                 ),
                 "priority": priority,
                 "metadata": metadata,
@@ -1209,9 +1221,10 @@ class AsyncRawExtractRunsClient:
     async def create(
         self,
         *,
-        file: ExtractRunsCreateRequestFileParams,
         extractor: typing.Optional[ExtractRunsCreateRequestExtractorParams] = OMIT,
         config: typing.Optional[ExtractConfigJsonParams] = OMIT,
+        file: typing.Optional[ExtractRunsCreateRequestFileParams] = OMIT,
+        package: typing.Optional[MultiFileRunPackageParams] = OMIT,
         priority: typing.Optional[RunPriority] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -1223,14 +1236,21 @@ class AsyncRawExtractRunsClient:
 
         Parameters
         ----------
-        file : ExtractRunsCreateRequestFileParams
-            The file to be extracted from. Files can be provided as a URL, Extend file ID, or raw text.
-
         extractor : typing.Optional[ExtractRunsCreateRequestExtractorParams]
             Reference to an existing extractor. Mutually exclusive with `config` — provide one or the other, or omit both to have Extend infer a schema from the document.
 
         config : typing.Optional[ExtractConfigJsonParams]
             Inline extract configuration. Mutually exclusive with `extractor` — provide one or the other, or omit both to have Extend infer a schema from the document.
+
+        file : typing.Optional[ExtractRunsCreateRequestFileParams]
+            The file to be extracted from. Mutually exclusive with `package` — provide one or the other.
+
+            Files can be provided as a URL, Extend file ID, or raw text.
+
+        package : typing.Optional[MultiFileRunPackageParams]
+            A collection of files to extract from together in a single run. Mutually exclusive with `file` — provide one or the other.
+
+            See [Multifile Extraction](https://docs.extend.ai/2026-02-09/extraction/multifile) for details.
 
         priority : typing.Optional[RunPriority]
 
@@ -1256,6 +1276,9 @@ class AsyncRawExtractRunsClient:
                 ),
                 "file": convert_and_respect_annotation_metadata(
                     object_=file, annotation=ExtractRunsCreateRequestFileParams, direction="write"
+                ),
+                "package": convert_and_respect_annotation_metadata(
+                    object_=package, annotation=MultiFileRunPackageParams, direction="write"
                 ),
                 "priority": priority,
                 "metadata": metadata,
