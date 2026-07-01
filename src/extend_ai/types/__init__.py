@@ -323,6 +323,8 @@ if typing.TYPE_CHECKING:
     from .merge_extract_step_definition_config_merge_order import MergeExtractStepDefinitionConfigMergeOrder
     from .merge_extract_step_run import MergeExtractStepRun
     from .merge_extract_step_run_step import MergeExtractStepRunStep
+    from .multi_file_run_package import MultiFileRunPackage
+    from .multi_file_run_package_files_item import MultiFileRunPackageFilesItem
     from .next_page_token import NextPageToken
     from .page_ranges import PageRanges
     from .page_ranges_item import PageRangesItem
@@ -824,6 +826,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "MergeExtractStepDefinitionConfigMergeOrder": ".merge_extract_step_definition_config_merge_order",
     "MergeExtractStepRun": ".merge_extract_step_run",
     "MergeExtractStepRunStep": ".merge_extract_step_run_step",
+    "MultiFileRunPackage": ".multi_file_run_package",
+    "MultiFileRunPackageFilesItem": ".multi_file_run_package_files_item",
     "NextPageToken": ".next_page_token",
     "PageRanges": ".page_ranges",
     "PageRangesItem": ".page_ranges_item",
@@ -1341,6 +1345,8 @@ __all__ = [
     "MergeExtractStepDefinitionConfigMergeOrder",
     "MergeExtractStepRun",
     "MergeExtractStepRunStep",
+    "MultiFileRunPackage",
+    "MultiFileRunPackageFilesItem",
     "NextPageToken",
     "PageRanges",
     "PageRangesItem",

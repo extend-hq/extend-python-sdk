@@ -220,6 +220,8 @@ Extract structured data from a file synchronously, waiting for the result before
 
 The Extract endpoint allows you to extract structured data from files using an existing extractor, an inline configuration, or no configuration at all. When neither is provided, Extend automatically infers a schema from the document before extraction — no extractor or schema is required.
 
+Pass `file` for a single document, or `package` to extract from multiple files in a single run. Exactly one of `file` or `package` must be provided.
+
 For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/extraction/overview).
 </dd>
 </dl>
@@ -283,14 +285,6 @@ client.extract(
 <dl>
 <dd>
 
-**file:** `ExtractRequestFileParams` — The file to be extracted from. Files can be provided as a URL, Extend file ID, or raw text.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
 **extractor:** `typing.Optional[ExtractRequestExtractorParams]` — Reference to an existing extractor. Mutually exclusive with `config` — provide one or the other, or omit both to have Extend infer a schema from the document.
     
 </dd>
@@ -300,6 +294,30 @@ client.extract(
 <dd>
 
 **config:** `typing.Optional[ExtractConfigJsonParams]` — Inline extract configuration. Mutually exclusive with `extractor` — provide one or the other, or omit both to have Extend infer a schema from the document.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**file:** `typing.Optional[ExtractRequestFileParams]` 
+
+The file to be extracted from. Mutually exclusive with `package` — provide one or the other.
+
+Files can be provided as a URL, Extend file ID, or raw text.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**package:** `typing.Optional[MultiFileRunPackageParams]` 
+
+A collection of files to extract from together in a single run. Mutually exclusive with `file` — provide one or the other.
+
+See [Multifile Extraction](https://docs.extend.ai/2026-02-09/extraction/multifile) for details.
     
 </dd>
 </dl>
@@ -2219,7 +2237,12 @@ client = Extend(
 )
 client.extract_runs.create(
     extractor={"id": "ex_1234567890"},
-    file={"url": "https://example.com/invoice.pdf"},
+    package={
+        "files": [
+            {"url": "https://example.com/invoice1.pdf"},
+            {"url": "https://example.com/invoice2.pdf"},
+        ]
+    },
 )
 
 ```
@@ -2236,14 +2259,6 @@ client.extract_runs.create(
 <dl>
 <dd>
 
-**file:** `ExtractRunsCreateRequestFileParams` — The file to be extracted from. Files can be provided as a URL, Extend file ID, or raw text.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
 **extractor:** `typing.Optional[ExtractRunsCreateRequestExtractorParams]` — Reference to an existing extractor. Mutually exclusive with `config` — provide one or the other, or omit both to have Extend infer a schema from the document.
     
 </dd>
@@ -2253,6 +2268,30 @@ client.extract_runs.create(
 <dd>
 
 **config:** `typing.Optional[ExtractConfigJsonParams]` — Inline extract configuration. Mutually exclusive with `extractor` — provide one or the other, or omit both to have Extend infer a schema from the document.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**file:** `typing.Optional[ExtractRunsCreateRequestFileParams]` 
+
+The file to be extracted from. Mutually exclusive with `package` — provide one or the other.
+
+Files can be provided as a URL, Extend file ID, or raw text.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**package:** `typing.Optional[MultiFileRunPackageParams]` 
+
+A collection of files to extract from together in a single run. Mutually exclusive with `file` — provide one or the other.
+
+See [Multifile Extraction](https://docs.extend.ai/2026-02-09/extraction/multifile) for details.
     
 </dd>
 </dl>

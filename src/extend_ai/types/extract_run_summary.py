@@ -100,7 +100,14 @@ class ExtractRunSummary(UncheckedBaseModel):
 
     file: typing.Optional[FileSummary] = pydantic.Field(default=None)
     """
-    The file that was processed. `null` when the file could not be accessed or processed (for example a run that failed during file ingestion, or a multi-file batch run).
+    The file that was processed. `null` for multifile runs (use `files` instead), and `null` when the file could not be accessed or processed (for example, a run that failed during file ingestion).
+    """
+
+    files: typing.Optional[typing.List[FileSummary]] = pydantic.Field(default=None)
+    """
+    The files that were processed, in the order they were submitted. Only populated for multifile runs (created with `package`).
+    
+    For single-file runs, this is `null` — use `file` instead.
     """
 
     parse_run_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parseRunId")] = pydantic.Field(

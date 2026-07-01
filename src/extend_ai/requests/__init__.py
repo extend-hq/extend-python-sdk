@@ -250,6 +250,8 @@ if typing.TYPE_CHECKING:
     from .merge_extract_step_definition_config import MergeExtractStepDefinitionConfigParams
     from .merge_extract_step_run import MergeExtractStepRunParams
     from .merge_extract_step_run_step import MergeExtractStepRunStepParams
+    from .multi_file_run_package import MultiFileRunPackageParams
+    from .multi_file_run_package_files_item import MultiFileRunPackageFilesItemParams
     from .page_ranges import PageRangesParams
     from .page_ranges_item import PageRangesItemParams
     from .parent_split import ParentSplitParams
@@ -657,6 +659,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "MergeExtractStepDefinitionParams": ".merge_extract_step_definition",
     "MergeExtractStepRunParams": ".merge_extract_step_run",
     "MergeExtractStepRunStepParams": ".merge_extract_step_run_step",
+    "MultiFileRunPackageFilesItemParams": ".multi_file_run_package_files_item",
+    "MultiFileRunPackageParams": ".multi_file_run_package",
     "PageRangesItemParams": ".page_ranges_item",
     "PageRangesParams": ".page_ranges",
     "ParentSplitParams": ".parent_split",
@@ -1080,6 +1084,8 @@ __all__ = [
     "MergeExtractStepDefinitionParams",
     "MergeExtractStepRunParams",
     "MergeExtractStepRunStepParams",
+    "MultiFileRunPackageFilesItemParams",
+    "MultiFileRunPackageParams",
     "PageRangesItemParams",
     "PageRangesParams",
     "ParentSplitParams",
