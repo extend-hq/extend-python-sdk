@@ -150,6 +150,34 @@ class TestExtractRunsClientCreateAndPoll:
         assert result.status == "PROCESSED"
         assert self.wrapper.retrieve.call_count == 3
 
+    def test_supports_package_for_multifile_extraction(self):
+        """Should accept package instead of file and pass it through to create."""
+        self.wrapper.create.return_value = create_mock_create_response("PROCESSING")
+        self.wrapper.retrieve.return_value = create_mock_retrieve_response("PROCESSED")
+
+        package = {"files": [{"id": "file_1"}, {"id": "file_2"}]}
+        result = self.wrapper.create_and_poll(
+            package=package,
+            extractor=MagicMock(),
+        )
+
+        assert result.status == "PROCESSED"
+        create_kwargs = self.wrapper.create.call_args.kwargs
+        assert create_kwargs["package"] == package
+        assert "file" not in create_kwargs
+
+    def test_passes_file_through_to_create(self):
+        """Should pass file through to create and omit package when not given."""
+        self.wrapper.create.return_value = create_mock_create_response("PROCESSING")
+        self.wrapper.retrieve.return_value = create_mock_retrieve_response("PROCESSED")
+
+        file = {"id": "file_1"}
+        self.wrapper.create_and_poll(file=file, extractor=MagicMock())
+
+        create_kwargs = self.wrapper.create.call_args.kwargs
+        assert create_kwargs["file"] == file
+        assert "package" not in create_kwargs
+
     def test_continues_polling_during_cancelling(self):
         """Should continue polling during CANCELLING status."""
         self.wrapper.create.return_value = create_mock_create_response("PROCESSING")
