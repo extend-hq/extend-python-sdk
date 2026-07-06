@@ -28,6 +28,7 @@ Example:
     event = client.webhooks.verify_and_parse(body, headers, secret)
 """
 
+import os
 import typing
 
 import httpx
@@ -87,8 +88,8 @@ class Extend(GeneratedExtend):
         The environment to use for requests from the client.
         Defaults to ExtendEnvironment.PRODUCTION
 
-    token : typing.Union[str, typing.Callable[[], str]]
-        Your Extend API token.
+    token : typing.Optional[typing.Union[str, typing.Callable[[], str]]]
+        Your Extend API token. Defaults to the EXTEND_API_KEY environment variable.
 
     headers : typing.Optional[typing.Dict[str, str]]
         Additional headers to send with every request.
@@ -127,13 +128,18 @@ class Extend(GeneratedExtend):
         *,
         base_url: typing.Optional[str] = None,
         environment: ExtendEnvironment = ExtendEnvironment.PRODUCTION,
-        token: typing.Union[str, typing.Callable[[], str]],
+        token: typing.Optional[typing.Union[str, typing.Callable[[], str]]] = None,
         headers: typing.Optional[typing.Dict[str, str]] = None,
         timeout: typing.Optional[float] = None,
         follow_redirects: typing.Optional[bool] = True,
         httpx_client: typing.Optional[httpx.Client] = None,
         extend_api_version: typing.Optional[str] = None,
     ):
+        # Fall back to the environment like the generated client and the other
+        # SDKs; the generated __init__ raises a descriptive ApiError if the
+        # token is still missing.
+        if token is None:
+            token = os.getenv("EXTEND_API_KEY")
         super().__init__(
             base_url=base_url,
             environment=environment,
@@ -310,13 +316,18 @@ class AsyncExtend(GeneratedAsyncExtend):
         *,
         base_url: typing.Optional[str] = None,
         environment: ExtendEnvironment = ExtendEnvironment.PRODUCTION,
-        token: typing.Union[str, typing.Callable[[], str]],
+        token: typing.Optional[typing.Union[str, typing.Callable[[], str]]] = None,
         headers: typing.Optional[typing.Dict[str, str]] = None,
         timeout: typing.Optional[float] = None,
         follow_redirects: typing.Optional[bool] = True,
         httpx_client: typing.Optional[httpx.AsyncClient] = None,
         extend_api_version: typing.Optional[str] = None,
     ):
+        # Fall back to the environment like the generated client and the other
+        # SDKs; the generated __init__ raises a descriptive ApiError if the
+        # token is still missing.
+        if token is None:
+            token = os.getenv("EXTEND_API_KEY")
         super().__init__(
             base_url=base_url,
             environment=environment,

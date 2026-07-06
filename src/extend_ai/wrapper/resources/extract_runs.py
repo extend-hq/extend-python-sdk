@@ -24,6 +24,7 @@ from ...extract_runs.client import ExtractRunsClient as GeneratedExtractRunsClie
 from ...extract_runs.requests.extract_runs_create_request_extractor import ExtractRunsCreateRequestExtractorParams
 from ...extract_runs.requests.extract_runs_create_request_file import ExtractRunsCreateRequestFileParams
 from ...requests.extract_config_json import ExtractConfigJsonParams
+from ...requests.multi_file_run_package import MultiFileRunPackageParams
 from ...types.extract_run import ExtractRun
 from ...types.run_metadata import RunMetadata
 from ...types.run_priority import RunPriority
@@ -58,7 +59,8 @@ class ExtractRunsClient(GeneratedExtractRunsClient):
     def create_and_poll(
         self,
         *,
-        file: ExtractRunsCreateRequestFileParams,
+        file: Optional[ExtractRunsCreateRequestFileParams] = None,
+        package: Optional[MultiFileRunPackageParams] = None,
         extractor: Optional[ExtractRunsCreateRequestExtractorParams] = None,
         config: Optional[ExtractConfigJsonParams] = None,
         priority: Optional[RunPriority] = None,
@@ -74,7 +76,10 @@ class ExtractRunsClient(GeneratedExtractRunsClient):
         Terminal states: PROCESSED, FAILED, CANCELLED
 
         Args:
-            file: The file to be extracted from.
+            file: The file to be extracted from. Mutually exclusive with
+                `package` — provide one or the other.
+            package: A package of files for multi-file extraction. Mutually
+                exclusive with `file` — provide one or the other.
             extractor: Reference to an existing extractor.
             config: Inline extract configuration.
             priority: Priority of the run.
@@ -97,7 +102,11 @@ class ExtractRunsClient(GeneratedExtractRunsClient):
                 print(result.output)
         """
         # Build kwargs, only including non-None values to avoid passing null
-        kwargs: Dict[str, Any] = {"file": file}
+        kwargs: Dict[str, Any] = {}
+        if file is not None:
+            kwargs["file"] = file
+        if package is not None:
+            kwargs["package"] = package
         if extractor is not None:
             kwargs["extractor"] = extractor
         if config is not None:
@@ -130,7 +139,8 @@ class AsyncExtractRunsClient(GeneratedAsyncExtractRunsClient):
     async def create_and_poll(
         self,
         *,
-        file: ExtractRunsCreateRequestFileParams,
+        file: Optional[ExtractRunsCreateRequestFileParams] = None,
+        package: Optional[MultiFileRunPackageParams] = None,
         extractor: Optional[ExtractRunsCreateRequestExtractorParams] = None,
         config: Optional[ExtractConfigJsonParams] = None,
         priority: Optional[RunPriority] = None,
@@ -139,9 +149,15 @@ class AsyncExtractRunsClient(GeneratedAsyncExtractRunsClient):
     ) -> ExtractRun:
         """
         Creates an extract run and polls until it reaches a terminal state (async version).
+
+        `file` and `package` are mutually exclusive — provide one or the other.
         """
         # Build kwargs, only including non-None values to avoid passing null
-        kwargs: Dict[str, Any] = {"file": file}
+        kwargs: Dict[str, Any] = {}
+        if file is not None:
+            kwargs["file"] = file
+        if package is not None:
+            kwargs["package"] = package
         if extractor is not None:
             kwargs["extractor"] = extractor
         if config is not None:
