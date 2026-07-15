@@ -10,6 +10,8 @@ class ExtractAdvancedOptionsReviewAgentParams(typing_extensions.TypedDict):
     and may include additional `insights` of type `issue` or `review_summary` to help identify
     fields that may need manual review.
 
+    Enabling the review agent incurs additional credits.
+
     To learn more, view the [Review Agent Documentation](https://docs.extend.ai/2026-02-09/extraction/review-agent)
     """
 

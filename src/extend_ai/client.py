@@ -14,8 +14,11 @@ from .raw_client import AsyncRawExtend, RawExtend
 from .requests.classify_config import ClassifyConfigParams
 from .requests.classify_request_classifier import ClassifyRequestClassifierParams
 from .requests.classify_request_file import ClassifyRequestFileParams
+from .requests.data_retention import DataRetentionParams
+from .requests.detect_form_request_file import DetectFormRequestFileParams
 from .requests.edit_config import EditConfigParams
 from .requests.edit_request_file import EditRequestFileParams
+from .requests.edit_schema_generation_config import EditSchemaGenerationConfigParams
 from .requests.extract_config_json import ExtractConfigJsonParams
 from .requests.extract_request_extractor import ExtractRequestExtractorParams
 from .requests.extract_request_file import ExtractRequestFileParams
@@ -28,6 +31,7 @@ from .requests.split_request_splitter import SplitRequestSplitterParams
 from .types.classify_run import ClassifyRun
 from .types.edit_run import EditRun
 from .types.extract_run import ExtractRun
+from .types.form_detection_run import FormDetectionRun
 from .types.parse_request_response_type import ParseRequestResponseType
 from .types.parse_run import ParseRun
 from .types.run_metadata import RunMetadata
@@ -49,6 +53,7 @@ if typing.TYPE_CHECKING:
     from .extractor_versions.client import AsyncExtractorVersionsClient, ExtractorVersionsClient
     from .extractors.client import AsyncExtractorsClient, ExtractorsClient
     from .files.client import AsyncFilesClient, FilesClient
+    from .form_detection_runs.client import AsyncFormDetectionRunsClient, FormDetectionRunsClient
     from .parse_runs.client import AsyncParseRunsClient, ParseRunsClient
     from .processor.client import AsyncProcessorClient, ProcessorClient
     from .processor_run.client import AsyncProcessorRunClient, ProcessorRunClient
@@ -141,6 +146,7 @@ class Extend:
         self._edit_runs: typing.Optional[EditRunsClient] = None
         self._edit_templates: typing.Optional[EditTemplatesClient] = None
         self._edit_schemas: typing.Optional[EditSchemasClient] = None
+        self._form_detection_runs: typing.Optional[FormDetectionRunsClient] = None
         self._extract_runs: typing.Optional[ExtractRunsClient] = None
         self._extractors: typing.Optional[ExtractorsClient] = None
         self._extractor_versions: typing.Optional[ExtractorVersionsClient] = None
@@ -183,6 +189,7 @@ class Extend:
         extend_workspace_id: typing.Optional[str] = None,
         config: typing.Optional[ParseConfigParams] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
+        data_retention: typing.Optional[DataRetentionParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ParseRun:
         """
@@ -210,6 +217,8 @@ class Extend:
         config : typing.Optional[ParseConfigParams]
 
         metadata : typing.Optional[RunMetadata]
+
+        data_retention : typing.Optional[DataRetentionParams]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -239,6 +248,7 @@ class Extend:
             extend_workspace_id=extend_workspace_id,
             config=config,
             metadata=metadata,
+            data_retention=data_retention,
             request_options=request_options,
         )
         return _response.data
@@ -257,7 +267,7 @@ class Extend:
 
         The Edit endpoint allows you to detect and fill form fields in PDF documents.
 
-        For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/editing/edit).
+        For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/editing/overview). See [Editing Error Handling](https://docs.extend.ai/2026-02-09/editing/error-handling) for HTTP errors and run failure reasons.
 
         Parameters
         ----------
@@ -290,6 +300,51 @@ class Extend:
         )
         """
         _response = self._raw_client.edit(file=file, config=config, request_options=request_options)
+        return _response.data
+
+    def detect_form(
+        self,
+        *,
+        file: DetectFormRequestFileParams,
+        config: typing.Optional[EditSchemaGenerationConfigParams] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> FormDetectionRun:
+        """
+        Detect fields in a PDF form and wait for the generated edit schema before returning. This endpoint has a 5-minute timeout.
+
+        For production workloads, use `POST /form_detection_runs` and poll `GET /form_detection_runs/{id}` instead. The response is a completed `form_detection_run`; its `output.schema` can be passed directly to `POST /edit` or `POST /edit_runs`.
+
+        Parameters
+        ----------
+        file : DetectFormRequestFileParams
+            The PDF form to analyze. Files can be provided as a URL or an Extend file ID.
+
+        config : typing.Optional[EditSchemaGenerationConfigParams]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        FormDetectionRun
+            Successfully detected the form and generated an edit schema
+
+        Examples
+        --------
+        from extend_ai import Extend
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.detect_form(
+            file={"url": "https://example.com/form.pdf"},
+            config={
+                "instructions": "Detect the form fields and use human-readable field names.",
+                "advanced_options": {"radio_enums_enabled": True},
+            },
+        )
+        """
+        _response = self._raw_client.detect_form(file=file, config=config, request_options=request_options)
         return _response.data
 
     def extract(
@@ -403,7 +458,7 @@ class Extend:
 
         The Classify endpoint allows you to classify documents using an existing classifier or an inline configuration.
 
-        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/classification/configuring-a-classifier).
+        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/classification/configuration).
 
         Parameters
         ----------
@@ -477,7 +532,7 @@ class Extend:
 
         The Split endpoint allows you to split documents into multiple parts using an existing splitter or an inline configuration.
 
-        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/splitting/configuring-a-splitter).
+        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/splitting/configuration).
 
         Parameters
         ----------
@@ -576,6 +631,14 @@ class Extend:
 
             self._edit_schemas = EditSchemasClient(client_wrapper=self._client_wrapper)
         return self._edit_schemas
+
+    @property
+    def form_detection_runs(self):
+        if self._form_detection_runs is None:
+            from .form_detection_runs.client import FormDetectionRunsClient  # noqa: E402
+
+            self._form_detection_runs = FormDetectionRunsClient(client_wrapper=self._client_wrapper)
+        return self._form_detection_runs
 
     @property
     def extract_runs(self):
@@ -830,6 +893,7 @@ class AsyncExtend:
         self._edit_runs: typing.Optional[AsyncEditRunsClient] = None
         self._edit_templates: typing.Optional[AsyncEditTemplatesClient] = None
         self._edit_schemas: typing.Optional[AsyncEditSchemasClient] = None
+        self._form_detection_runs: typing.Optional[AsyncFormDetectionRunsClient] = None
         self._extract_runs: typing.Optional[AsyncExtractRunsClient] = None
         self._extractors: typing.Optional[AsyncExtractorsClient] = None
         self._extractor_versions: typing.Optional[AsyncExtractorVersionsClient] = None
@@ -872,6 +936,7 @@ class AsyncExtend:
         extend_workspace_id: typing.Optional[str] = None,
         config: typing.Optional[ParseConfigParams] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
+        data_retention: typing.Optional[DataRetentionParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ParseRun:
         """
@@ -899,6 +964,8 @@ class AsyncExtend:
         config : typing.Optional[ParseConfigParams]
 
         metadata : typing.Optional[RunMetadata]
+
+        data_retention : typing.Optional[DataRetentionParams]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -936,6 +1003,7 @@ class AsyncExtend:
             extend_workspace_id=extend_workspace_id,
             config=config,
             metadata=metadata,
+            data_retention=data_retention,
             request_options=request_options,
         )
         return _response.data
@@ -954,7 +1022,7 @@ class AsyncExtend:
 
         The Edit endpoint allows you to detect and fill form fields in PDF documents.
 
-        For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/editing/edit).
+        For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/editing/overview). See [Editing Error Handling](https://docs.extend.ai/2026-02-09/editing/error-handling) for HTTP errors and run failure reasons.
 
         Parameters
         ----------
@@ -995,6 +1063,59 @@ class AsyncExtend:
         asyncio.run(main())
         """
         _response = await self._raw_client.edit(file=file, config=config, request_options=request_options)
+        return _response.data
+
+    async def detect_form(
+        self,
+        *,
+        file: DetectFormRequestFileParams,
+        config: typing.Optional[EditSchemaGenerationConfigParams] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> FormDetectionRun:
+        """
+        Detect fields in a PDF form and wait for the generated edit schema before returning. This endpoint has a 5-minute timeout.
+
+        For production workloads, use `POST /form_detection_runs` and poll `GET /form_detection_runs/{id}` instead. The response is a completed `form_detection_run`; its `output.schema` can be passed directly to `POST /edit` or `POST /edit_runs`.
+
+        Parameters
+        ----------
+        file : DetectFormRequestFileParams
+            The PDF form to analyze. Files can be provided as a URL or an Extend file ID.
+
+        config : typing.Optional[EditSchemaGenerationConfigParams]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        FormDetectionRun
+            Successfully detected the form and generated an edit schema
+
+        Examples
+        --------
+        import asyncio
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.detect_form(
+                file={"url": "https://example.com/form.pdf"},
+                config={
+                    "instructions": "Detect the form fields and use human-readable field names.",
+                    "advanced_options": {"radio_enums_enabled": True},
+                },
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.detect_form(file=file, config=config, request_options=request_options)
         return _response.data
 
     async def extract(
@@ -1118,7 +1239,7 @@ class AsyncExtend:
 
         The Classify endpoint allows you to classify documents using an existing classifier or an inline configuration.
 
-        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/classification/configuring-a-classifier).
+        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/classification/configuration).
 
         Parameters
         ----------
@@ -1200,7 +1321,7 @@ class AsyncExtend:
 
         The Split endpoint allows you to split documents into multiple parts using an existing splitter or an inline configuration.
 
-        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/splitting/configuring-a-splitter).
+        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/splitting/configuration).
 
         Parameters
         ----------
@@ -1307,6 +1428,14 @@ class AsyncExtend:
 
             self._edit_schemas = AsyncEditSchemasClient(client_wrapper=self._client_wrapper)
         return self._edit_schemas
+
+    @property
+    def form_detection_runs(self):
+        if self._form_detection_runs is None:
+            from .form_detection_runs.client import AsyncFormDetectionRunsClient  # noqa: E402
+
+            self._form_detection_runs = AsyncFormDetectionRunsClient(client_wrapper=self._client_wrapper)
+        return self._form_detection_runs
 
     @property
     def extract_runs(self):

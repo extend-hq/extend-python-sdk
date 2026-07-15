@@ -35,6 +35,13 @@ class EditSchemaGenerationConfigAdvancedOptions(UncheckedBaseModel):
     If enabled, only native AcroForm fields from the PDF will be imported and used in the schema, skipping object detection. Defaults to `false`.
     """
 
+    conditional_generation_enabled: typing_extensions.Annotated[
+        typing.Optional[bool], FieldMetadata(alias="conditionalGenerationEnabled")
+    ] = pydantic.Field(alias="conditionalGenerationEnabled", default=None)
+    """
+    When enabled, reads requirements explicitly stated in the form and adds supported root-level JSON Schema conditional validation rules to the generated schema. These rules validate form data when the schema is used for an edit; they do not add interactive UI behavior. If generated edit values do not satisfy the rules, the Edit run fails with `SCHEMA_VALIDATION_ERROR`. Defaults to `false`.
+    """
+
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
     else:

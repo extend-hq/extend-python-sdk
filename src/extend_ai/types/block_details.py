@@ -9,7 +9,15 @@ from .formula_details import FormulaDetails
 from .key_value_details import KeyValueDetails
 from .table_cell_details import TableCellDetails
 from .table_details import TableDetails
+from .text_details import TextDetails
 
 BlockDetails = typing.Union[
-    TableDetails, TableCellDetails, FigureDetails, BarcodeDetails, FormulaDetails, KeyValueDetails, EmptyBlockDetails
+    TextDetails,
+    TableDetails,
+    TableCellDetails,
+    FigureDetails,
+    BarcodeDetails,
+    FormulaDetails,
+    KeyValueDetails,
+    EmptyBlockDetails,
 ]

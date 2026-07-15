@@ -46,7 +46,7 @@ class ParseConfigBlockOptionsTables(UncheckedBaseModel):
 
     agentic: typing.Optional[ParseConfigBlockOptionsTablesAgentic] = pydantic.Field(default=None)
     """
-    Options for agentic table processing using VLM-based review and correction.
+    Options for agentic table processing using VLM-based review and correction. Enabling this incurs additional credits on pages where agentic table correction is triggered.
     """
 
     if IS_PYDANTIC_V2:

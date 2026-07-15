@@ -3,17 +3,34 @@
 import typing
 
 import pydantic
+import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .extractor_ref import ExtractorRef
+from .workflow_inline_extract_config import WorkflowInlineExtractConfig
 
 
 class ExtractStepDefinitionConfig(UncheckedBaseModel):
     """
     Optional on create/update. Required before the workflow can be deployed. Omitted in responses when the step is not yet configured.
+
+    When present, must contain exactly one of `extractor` (saved processor reference) or `extractorConfig` (inline configuration) — not both.
     """
 
-    extractor: ExtractorRef
+    extractor: typing.Optional[ExtractorRef] = pydantic.Field(default=None)
+    """
+    Reference to a saved extractor. Provide either this or `extractorConfig`, not both.
+    """
+
+    extractor_config: typing_extensions.Annotated[
+        typing.Optional[WorkflowInlineExtractConfig], FieldMetadata(alias="extractorConfig")
+    ] = pydantic.Field(alias="extractorConfig", default=None)
+    """
+    Inline extractor configuration. Provide either this or `extractor`, not both. Unlike the run endpoints, `schema` is required — schema-less extraction is not supported in workflows.
+    
+    Inline configs are returned verbatim in responses (there is no saved processor, so no `version` is involved).
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -11,7 +11,7 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 
 class ParseConfigBlockOptionsTablesAgentic(UncheckedBaseModel):
     """
-    Options for agentic table processing using VLM-based review and correction.
+    Options for agentic table processing using VLM-based review and correction. Enabling this incurs additional credits on pages where agentic table correction is triggered.
     """
 
     enabled: typing.Optional[bool] = pydantic.Field(default=None)

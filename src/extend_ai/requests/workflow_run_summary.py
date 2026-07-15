@@ -8,6 +8,7 @@ from ..core.serialization import FieldMetadata
 from ..types.created_at import CreatedAt
 from ..types.updated_at import UpdatedAt
 from ..types.workflow_run_status import WorkflowRunStatus
+from .file_summary import FileSummaryParams
 from .run_usage_summary import RunUsageSummaryParams
 from .workflow_summary import WorkflowSummaryParams
 from .workflow_version_summary import WorkflowVersionSummaryParams
@@ -83,6 +84,11 @@ class WorkflowRunSummaryParams(typing_extensions.TypedDict):
     The note that was added when the workflow run was rejected.
     
     Example: `"Invalid invoice format"`
+    """
+
+    files: typing.Sequence[FileSummaryParams]
+    """
+    The input files that this workflow run was executed on. Provided directly on the list response so you don't need to fetch each run individually to inspect its input.
     """
 
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]

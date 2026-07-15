@@ -17,6 +17,7 @@ class RunUsageBreakdownEntryObject(enum.StrEnum):
     SPLIT_RUN = "split_run"
     PARSE_RUN = "parse_run"
     EDIT_RUN = "edit_run"
+    FORM_DETECTION_RUN = "form_detection_run"
     _UNKNOWN = "__RUNUSAGEBREAKDOWNENTRYOBJECT_UNKNOWN__"
     """
     This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
@@ -35,6 +36,7 @@ class RunUsageBreakdownEntryObject(enum.StrEnum):
         split_run: typing.Callable[[], T_Result],
         parse_run: typing.Callable[[], T_Result],
         edit_run: typing.Callable[[], T_Result],
+        form_detection_run: typing.Callable[[], T_Result],
         _unknown_member: typing.Callable[[str], T_Result],
     ) -> T_Result:
         if self is RunUsageBreakdownEntryObject.EXTRACT_RUN:
@@ -47,4 +49,6 @@ class RunUsageBreakdownEntryObject(enum.StrEnum):
             return parse_run()
         if self is RunUsageBreakdownEntryObject.EDIT_RUN:
             return edit_run()
+        if self is RunUsageBreakdownEntryObject.FORM_DETECTION_RUN:
+            return form_detection_run()
         return _unknown_member(self._value_)

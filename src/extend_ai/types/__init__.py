@@ -26,6 +26,7 @@ if typing.TYPE_CHECKING:
     from .block_polygon_item import BlockPolygonItem
     from .block_type import BlockType
     from .bounding_box import BoundingBox
+    from .cell_formatting import CellFormatting
     from .chunk import Chunk
     from .chunk_metadata import ChunkMetadata
     from .chunk_metadata_page_range import ChunkMetadataPageRange
@@ -80,6 +81,9 @@ if typing.TYPE_CHECKING:
         ConditionalStepDefinitionConfigConditionsItemType,
     )
     from .created_at import CreatedAt
+    from .data_retention import DataRetention
+    from .data_retention_mode import DataRetentionMode
+    from .detect_form_request_file import DetectFormRequestFile
     from .edit_bounding_box import EditBoundingBox
     from .edit_conditional_clause import EditConditionalClause
     from .edit_conditional_object_property import EditConditionalObjectProperty
@@ -221,6 +225,9 @@ if typing.TYPE_CHECKING:
     from .file_metadata import FileMetadata
     from .file_summary import FileSummary
     from .file_type import FileType
+    from .form_detection_run import FormDetectionRun
+    from .form_detection_run_metrics import FormDetectionRunMetrics
+    from .form_detection_run_status import FormDetectionRunStatus
     from .formula_details import FormulaDetails
     from .human_review_step_definition import HumanReviewStepDefinition
     from .insight import Insight
@@ -451,6 +458,7 @@ if typing.TYPE_CHECKING:
     from .step_run_base_status import StepRunBaseStatus
     from .table_cell_details import TableCellDetails
     from .table_details import TableDetails
+    from .text_details import TextDetails
     from .too_many_requests_error_body import TooManyRequestsErrorBody
     from .trigger_step_definition import TriggerStepDefinition
     from .updated_at import UpdatedAt
@@ -511,6 +519,7 @@ if typing.TYPE_CHECKING:
     from .workflow_created_webhook_event import WorkflowCreatedWebhookEvent
     from .workflow_deleted_webhook_event import WorkflowDeletedWebhookEvent
     from .workflow_deployed_webhook_event import WorkflowDeployedWebhookEvent
+    from .workflow_inline_extract_config import WorkflowInlineExtractConfig
     from .workflow_reference import WorkflowReference
     from .workflow_run import WorkflowRun
     from .workflow_run_cancelled_webhook_event import WorkflowRunCancelledWebhookEvent
@@ -563,6 +572,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "BlockPolygonItem": ".block_polygon_item",
     "BlockType": ".block_type",
     "BoundingBox": ".bounding_box",
+    "CellFormatting": ".cell_formatting",
     "Chunk": ".chunk",
     "ChunkMetadata": ".chunk_metadata",
     "ChunkMetadataPageRange": ".chunk_metadata_page_range",
@@ -613,6 +623,9 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ConditionalStepDefinitionConfigConditionsItemOperation": ".conditional_step_definition_config_conditions_item_operation",
     "ConditionalStepDefinitionConfigConditionsItemType": ".conditional_step_definition_config_conditions_item_type",
     "CreatedAt": ".created_at",
+    "DataRetention": ".data_retention",
+    "DataRetentionMode": ".data_retention_mode",
+    "DetectFormRequestFile": ".detect_form_request_file",
     "EditBoundingBox": ".edit_bounding_box",
     "EditConditionalClause": ".edit_conditional_clause",
     "EditConditionalObjectProperty": ".edit_conditional_object_property",
@@ -736,6 +749,9 @@ _dynamic_imports: typing.Dict[str, str] = {
     "FileMetadata": ".file_metadata",
     "FileSummary": ".file_summary",
     "FileType": ".file_type",
+    "FormDetectionRun": ".form_detection_run",
+    "FormDetectionRunMetrics": ".form_detection_run_metrics",
+    "FormDetectionRunStatus": ".form_detection_run_status",
     "FormulaDetails": ".formula_details",
     "HumanReviewStepDefinition": ".human_review_step_definition",
     "Insight": ".insight",
@@ -950,6 +966,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "StepRun_Split": ".step_run",
     "TableCellDetails": ".table_cell_details",
     "TableDetails": ".table_details",
+    "TextDetails": ".text_details",
     "TooManyRequestsErrorBody": ".too_many_requests_error_body",
     "TriggerStepDefinition": ".trigger_step_definition",
     "UpdatedAt": ".updated_at",
@@ -1008,6 +1025,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WorkflowCreatedWebhookEvent": ".workflow_created_webhook_event",
     "WorkflowDeletedWebhookEvent": ".workflow_deleted_webhook_event",
     "WorkflowDeployedWebhookEvent": ".workflow_deployed_webhook_event",
+    "WorkflowInlineExtractConfig": ".workflow_inline_extract_config",
     "WorkflowReference": ".workflow_reference",
     "WorkflowRun": ".workflow_run",
     "WorkflowRunCancelledWebhookEvent": ".workflow_run_cancelled_webhook_event",
@@ -1082,6 +1100,7 @@ __all__ = [
     "BlockPolygonItem",
     "BlockType",
     "BoundingBox",
+    "CellFormatting",
     "Chunk",
     "ChunkMetadata",
     "ChunkMetadataPageRange",
@@ -1132,6 +1151,9 @@ __all__ = [
     "ConditionalStepDefinitionConfigConditionsItemOperation",
     "ConditionalStepDefinitionConfigConditionsItemType",
     "CreatedAt",
+    "DataRetention",
+    "DataRetentionMode",
+    "DetectFormRequestFile",
     "EditBoundingBox",
     "EditConditionalClause",
     "EditConditionalObjectProperty",
@@ -1255,6 +1277,9 @@ __all__ = [
     "FileMetadata",
     "FileSummary",
     "FileType",
+    "FormDetectionRun",
+    "FormDetectionRunMetrics",
+    "FormDetectionRunStatus",
     "FormulaDetails",
     "HumanReviewStepDefinition",
     "Insight",
@@ -1469,6 +1494,7 @@ __all__ = [
     "StepRun_Split",
     "TableCellDetails",
     "TableDetails",
+    "TextDetails",
     "TooManyRequestsErrorBody",
     "TriggerStepDefinition",
     "UpdatedAt",
@@ -1527,6 +1553,7 @@ __all__ = [
     "WorkflowCreatedWebhookEvent",
     "WorkflowDeletedWebhookEvent",
     "WorkflowDeployedWebhookEvent",
+    "WorkflowInlineExtractConfig",
     "WorkflowReference",
     "WorkflowRun",
     "WorkflowRunCancelledWebhookEvent",
