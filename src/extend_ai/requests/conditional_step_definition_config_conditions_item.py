@@ -21,19 +21,19 @@ class ConditionalStepDefinitionConfigConditionsItemParams(typing_extensions.Type
     """
     The comparison operation for this branch.
     
-    See the [Conditional step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#conditional-step).
+    See the [Conditional step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#conditional).
     """
 
     left_operand: typing_extensions.NotRequired[typing_extensions.Annotated[str, FieldMetadata(alias="leftOperand")]]
     """
     The left operand expression. This is typically a workflow variable or dynamic expression.
     
-    See the [Conditional step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#conditional-step).
+    See the [Conditional step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#conditional).
     """
 
     right_operand: typing_extensions.NotRequired[typing_extensions.Annotated[str, FieldMetadata(alias="rightOperand")]]
     """
     The right operand value. This is typically a literal comparison value and is omitted for fallback branches like `ELSE`.
     
-    See the [Conditional step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#conditional-step).
+    See the [Conditional step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#conditional).
     """

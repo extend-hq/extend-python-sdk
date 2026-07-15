@@ -4,12 +4,12 @@ dynamic = ["version"]
 
 [tool.poetry]
 name = "extend_ai"
-version = "1.10.0"
+version = "1.16.0"
 description = ""
 readme = "README.md"
 authors = []
 keywords = []
-
+license = "MIT"
 classifiers = [
     "Intended Audience :: Developers",
     "Programming Language :: Python",
@@ -25,7 +25,8 @@ classifiers = [
     "Operating System :: POSIX :: Linux",
     "Operating System :: Microsoft :: Windows",
     "Topic :: Software Development :: Libraries :: Python Modules",
-    "Typing :: Typed"
+    "Typing :: Typed",
+    "License :: OSI Approved :: MIT License"
 ]
 packages = [
     { include = "extend_ai", from = "src"}

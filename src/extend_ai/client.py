@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import os
 import typing
 
 import httpx
+from .core.api_error import ApiError
 from .core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from .core.request_options import RequestOptions
 from .environment import ExtendEnvironment
@@ -12,11 +14,15 @@ from .raw_client import AsyncRawExtend, RawExtend
 from .requests.classify_config import ClassifyConfigParams
 from .requests.classify_request_classifier import ClassifyRequestClassifierParams
 from .requests.classify_request_file import ClassifyRequestFileParams
+from .requests.data_retention import DataRetentionParams
+from .requests.detect_form_request_file import DetectFormRequestFileParams
 from .requests.edit_config import EditConfigParams
 from .requests.edit_request_file import EditRequestFileParams
+from .requests.edit_schema_generation_config import EditSchemaGenerationConfigParams
 from .requests.extract_config_json import ExtractConfigJsonParams
 from .requests.extract_request_extractor import ExtractRequestExtractorParams
 from .requests.extract_request_file import ExtractRequestFileParams
+from .requests.multi_file_run_package import MultiFileRunPackageParams
 from .requests.parse_config import ParseConfigParams
 from .requests.parse_request_file import ParseRequestFileParams
 from .requests.split_config import SplitConfigParams
@@ -25,6 +31,7 @@ from .requests.split_request_splitter import SplitRequestSplitterParams
 from .types.classify_run import ClassifyRun
 from .types.edit_run import EditRun
 from .types.extract_run import ExtractRun
+from .types.form_detection_run import FormDetectionRun
 from .types.parse_request_response_type import ParseRequestResponseType
 from .types.parse_run import ParseRun
 from .types.run_metadata import RunMetadata
@@ -46,6 +53,7 @@ if typing.TYPE_CHECKING:
     from .extractor_versions.client import AsyncExtractorVersionsClient, ExtractorVersionsClient
     from .extractors.client import AsyncExtractorsClient, ExtractorsClient
     from .files.client import AsyncFilesClient, FilesClient
+    from .form_detection_runs.client import AsyncFormDetectionRunsClient, FormDetectionRunsClient
     from .parse_runs.client import AsyncParseRunsClient, ParseRunsClient
     from .processor.client import AsyncProcessorClient, ProcessorClient
     from .processor_run.client import AsyncProcessorRunClient, ProcessorRunClient
@@ -80,7 +88,7 @@ class Extend:
 
 
 
-    token : typing.Union[str, typing.Callable[[], str]]
+    token : typing.Optional[typing.Union[str, typing.Callable[[], str]]]
     headers : typing.Optional[typing.Dict[str, str]]
         Additional headers to send with every request.
 
@@ -108,7 +116,7 @@ class Extend:
         *,
         base_url: typing.Optional[str] = None,
         environment: ExtendEnvironment = ExtendEnvironment.PRODUCTION,
-        token: typing.Union[str, typing.Callable[[], str]],
+        token: typing.Optional[typing.Union[str, typing.Callable[[], str]]] = os.getenv("EXTEND_API_KEY"),
         headers: typing.Optional[typing.Dict[str, str]] = None,
         timeout: typing.Optional[float] = None,
         follow_redirects: typing.Optional[bool] = True,
@@ -118,6 +126,8 @@ class Extend:
         _defaulted_timeout = (
             timeout if timeout is not None else 300 if httpx_client is None else httpx_client.timeout.read
         )
+        if token is None:
+            raise ApiError(body="The client must be instantiated be either passing in token or setting EXTEND_API_KEY")
         self._client_wrapper = SyncClientWrapper(
             base_url=_get_base_url(base_url=base_url, environment=environment),
             token=token,
@@ -136,6 +146,7 @@ class Extend:
         self._edit_runs: typing.Optional[EditRunsClient] = None
         self._edit_templates: typing.Optional[EditTemplatesClient] = None
         self._edit_schemas: typing.Optional[EditSchemasClient] = None
+        self._form_detection_runs: typing.Optional[FormDetectionRunsClient] = None
         self._extract_runs: typing.Optional[ExtractRunsClient] = None
         self._extractors: typing.Optional[ExtractorsClient] = None
         self._extractor_versions: typing.Optional[ExtractorVersionsClient] = None
@@ -178,16 +189,17 @@ class Extend:
         extend_workspace_id: typing.Optional[str] = None,
         config: typing.Optional[ParseConfigParams] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
+        data_retention: typing.Optional[DataRetentionParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ParseRun:
         """
         Parse a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
 
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /parse_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/developers/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
+        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /parse_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/general/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
 
         The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
 
-        For more details, see the [Parse File guide](https://docs.extend.ai/2026-02-09/product/parsing/parse).
+        For more details, see the [Parse File guide](https://docs.extend.ai/2026-02-09/parsing/overview).
 
         Parameters
         ----------
@@ -200,11 +212,13 @@ class Extend:
             * `url` - Return a presigned URL to the parsed content in the response body
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         config : typing.Optional[ParseConfigParams]
 
         metadata : typing.Optional[RunMetadata]
+
+        data_retention : typing.Optional[DataRetentionParams]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -234,6 +248,7 @@ class Extend:
             extend_workspace_id=extend_workspace_id,
             config=config,
             metadata=metadata,
+            data_retention=data_retention,
             request_options=request_options,
         )
         return _response.data
@@ -248,11 +263,11 @@ class Extend:
         """
         Edit a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
 
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /edit_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/developers/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
+        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /edit_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/general/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
 
         The Edit endpoint allows you to detect and fill form fields in PDF documents.
 
-        For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/product/editing/edit).
+        For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/editing/overview). See [Editing Error Handling](https://docs.extend.ai/2026-02-09/editing/error-handling) for HTTP errors and run failure reasons.
 
         Parameters
         ----------
@@ -287,34 +302,89 @@ class Extend:
         _response = self._raw_client.edit(file=file, config=config, request_options=request_options)
         return _response.data
 
+    def detect_form(
+        self,
+        *,
+        file: DetectFormRequestFileParams,
+        config: typing.Optional[EditSchemaGenerationConfigParams] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> FormDetectionRun:
+        """
+        Detect fields in a PDF form and wait for the generated edit schema before returning. This endpoint has a 5-minute timeout.
+
+        For production workloads, use `POST /form_detection_runs` and poll `GET /form_detection_runs/{id}` instead. The response is a completed `form_detection_run`; its `output.schema` can be passed directly to `POST /edit` or `POST /edit_runs`.
+
+        Parameters
+        ----------
+        file : DetectFormRequestFileParams
+            The PDF form to analyze. Files can be provided as a URL or an Extend file ID.
+
+        config : typing.Optional[EditSchemaGenerationConfigParams]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        FormDetectionRun
+            Successfully detected the form and generated an edit schema
+
+        Examples
+        --------
+        from extend_ai import Extend
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.detect_form(
+            file={"url": "https://example.com/form.pdf"},
+            config={
+                "instructions": "Detect the form fields and use human-readable field names.",
+                "advanced_options": {"radio_enums_enabled": True},
+            },
+        )
+        """
+        _response = self._raw_client.detect_form(file=file, config=config, request_options=request_options)
+        return _response.data
+
     def extract(
         self,
         *,
-        file: ExtractRequestFileParams,
         extractor: typing.Optional[ExtractRequestExtractorParams] = OMIT,
         config: typing.Optional[ExtractConfigJsonParams] = OMIT,
+        file: typing.Optional[ExtractRequestFileParams] = OMIT,
+        package: typing.Optional[MultiFileRunPackageParams] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ExtractRun:
         """
         Extract structured data from a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
 
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /extract_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/developers/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
+        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /extract_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/general/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
 
-        The Extract endpoint allows you to extract structured data from files using an existing extractor or an inline configuration.
+        The Extract endpoint allows you to extract structured data from files using an existing extractor, an inline configuration, or no configuration at all. When neither is provided, Extend automatically infers a schema from the document before extraction — no extractor or schema is required.
 
-        For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/product/extraction/quick-start-5-minutes).
+        Pass `file` for a single document, or `package` to extract from multiple files in a single run. Exactly one of `file` or `package` must be provided.
+
+        For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/extraction/overview).
 
         Parameters
         ----------
-        file : ExtractRequestFileParams
-            The file to be extracted from. Files can be provided as a URL, Extend file ID, or raw text.
-
         extractor : typing.Optional[ExtractRequestExtractorParams]
-            Reference to an existing extractor. One of `extractor` or `config` must be provided.
+            Reference to an existing extractor. Mutually exclusive with `config` — provide one or the other, or omit both to have Extend infer a schema from the document.
 
         config : typing.Optional[ExtractConfigJsonParams]
-            Inline extract configuration. One of `extractor` or `config` must be provided.
+            Inline extract configuration. Mutually exclusive with `extractor` — provide one or the other, or omit both to have Extend infer a schema from the document.
+
+        file : typing.Optional[ExtractRequestFileParams]
+            The file to be extracted from. Mutually exclusive with `package` — provide one or the other.
+
+            Files can be provided as a URL, Extend file ID, or raw text.
+
+        package : typing.Optional[MultiFileRunPackageParams]
+            A collection of files to extract from together in a single run. Mutually exclusive with `file` — provide one or the other.
+
+            See [Multifile Extraction](https://docs.extend.ai/2026-02-09/extraction/multifile) for details.
 
         metadata : typing.Optional[RunMetadata]
 
@@ -347,8 +417,14 @@ class Extend:
                             "description": "The invoice number",
                         },
                         "total_amount": {
-                            "type": "number",
+                            "type": "object",
+                            "extend:type": "currency",
                             "description": "The total amount due",
+                            "properties": {
+                                "amount": {"type": ["number", "null"]},
+                                "iso_4217_currency_code": {"type": ["string", "null"]},
+                            },
+                            "required": ["amount", "iso_4217_currency_code"],
                         },
                     },
                 }
@@ -357,7 +433,12 @@ class Extend:
         )
         """
         _response = self._raw_client.extract(
-            file=file, extractor=extractor, config=config, metadata=metadata, request_options=request_options
+            extractor=extractor,
+            config=config,
+            file=file,
+            package=package,
+            metadata=metadata,
+            request_options=request_options,
         )
         return _response.data
 
@@ -373,11 +454,11 @@ class Extend:
         """
         Classify a document synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
 
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /classify_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/developers/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
+        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /classify_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/general/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
 
         The Classify endpoint allows you to classify documents using an existing classifier or an inline configuration.
 
-        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/product/classification/configuring-a-classifier).
+        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/classification/configuration).
 
         Parameters
         ----------
@@ -447,11 +528,11 @@ class Extend:
         """
         Split a document synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
 
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /split_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/developers/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
+        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /split_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/general/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
 
         The Split endpoint allows you to split documents into multiple parts using an existing splitter or an inline configuration.
 
-        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/product/splitting/configuring-a-splitter).
+        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/splitting/configuration).
 
         Parameters
         ----------
@@ -550,6 +631,14 @@ class Extend:
 
             self._edit_schemas = EditSchemasClient(client_wrapper=self._client_wrapper)
         return self._edit_schemas
+
+    @property
+    def form_detection_runs(self):
+        if self._form_detection_runs is None:
+            from .form_detection_runs.client import FormDetectionRunsClient  # noqa: E402
+
+            self._form_detection_runs = FormDetectionRunsClient(client_wrapper=self._client_wrapper)
+        return self._form_detection_runs
 
     @property
     def extract_runs(self):
@@ -746,7 +835,7 @@ class AsyncExtend:
 
 
 
-    token : typing.Union[str, typing.Callable[[], str]]
+    token : typing.Optional[typing.Union[str, typing.Callable[[], str]]]
     headers : typing.Optional[typing.Dict[str, str]]
         Additional headers to send with every request.
 
@@ -774,7 +863,7 @@ class AsyncExtend:
         *,
         base_url: typing.Optional[str] = None,
         environment: ExtendEnvironment = ExtendEnvironment.PRODUCTION,
-        token: typing.Union[str, typing.Callable[[], str]],
+        token: typing.Optional[typing.Union[str, typing.Callable[[], str]]] = os.getenv("EXTEND_API_KEY"),
         headers: typing.Optional[typing.Dict[str, str]] = None,
         timeout: typing.Optional[float] = None,
         follow_redirects: typing.Optional[bool] = True,
@@ -784,6 +873,8 @@ class AsyncExtend:
         _defaulted_timeout = (
             timeout if timeout is not None else 300 if httpx_client is None else httpx_client.timeout.read
         )
+        if token is None:
+            raise ApiError(body="The client must be instantiated be either passing in token or setting EXTEND_API_KEY")
         self._client_wrapper = AsyncClientWrapper(
             base_url=_get_base_url(base_url=base_url, environment=environment),
             token=token,
@@ -802,6 +893,7 @@ class AsyncExtend:
         self._edit_runs: typing.Optional[AsyncEditRunsClient] = None
         self._edit_templates: typing.Optional[AsyncEditTemplatesClient] = None
         self._edit_schemas: typing.Optional[AsyncEditSchemasClient] = None
+        self._form_detection_runs: typing.Optional[AsyncFormDetectionRunsClient] = None
         self._extract_runs: typing.Optional[AsyncExtractRunsClient] = None
         self._extractors: typing.Optional[AsyncExtractorsClient] = None
         self._extractor_versions: typing.Optional[AsyncExtractorVersionsClient] = None
@@ -844,16 +936,17 @@ class AsyncExtend:
         extend_workspace_id: typing.Optional[str] = None,
         config: typing.Optional[ParseConfigParams] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
+        data_retention: typing.Optional[DataRetentionParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ParseRun:
         """
         Parse a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
 
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /parse_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/developers/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
+        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /parse_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/general/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
 
         The Parse endpoint allows you to convert documents into structured, machine-readable formats with fine-grained control over the parsing process. This endpoint is ideal for extracting cleaned document content to be used as context for downstream processing, e.g. RAG pipelines, custom ingestion pipelines, embeddings classification, etc.
 
-        For more details, see the [Parse File guide](https://docs.extend.ai/2026-02-09/product/parsing/parse).
+        For more details, see the [Parse File guide](https://docs.extend.ai/2026-02-09/parsing/overview).
 
         Parameters
         ----------
@@ -866,11 +959,13 @@ class AsyncExtend:
             * `url` - Return a presigned URL to the parsed content in the response body
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         config : typing.Optional[ParseConfigParams]
 
         metadata : typing.Optional[RunMetadata]
+
+        data_retention : typing.Optional[DataRetentionParams]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -908,6 +1003,7 @@ class AsyncExtend:
             extend_workspace_id=extend_workspace_id,
             config=config,
             metadata=metadata,
+            data_retention=data_retention,
             request_options=request_options,
         )
         return _response.data
@@ -922,11 +1018,11 @@ class AsyncExtend:
         """
         Edit a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
 
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /edit_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/developers/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
+        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /edit_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/general/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
 
         The Edit endpoint allows you to detect and fill form fields in PDF documents.
 
-        For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/product/editing/edit).
+        For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/editing/overview). See [Editing Error Handling](https://docs.extend.ai/2026-02-09/editing/error-handling) for HTTP errors and run failure reasons.
 
         Parameters
         ----------
@@ -969,34 +1065,97 @@ class AsyncExtend:
         _response = await self._raw_client.edit(file=file, config=config, request_options=request_options)
         return _response.data
 
+    async def detect_form(
+        self,
+        *,
+        file: DetectFormRequestFileParams,
+        config: typing.Optional[EditSchemaGenerationConfigParams] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> FormDetectionRun:
+        """
+        Detect fields in a PDF form and wait for the generated edit schema before returning. This endpoint has a 5-minute timeout.
+
+        For production workloads, use `POST /form_detection_runs` and poll `GET /form_detection_runs/{id}` instead. The response is a completed `form_detection_run`; its `output.schema` can be passed directly to `POST /edit` or `POST /edit_runs`.
+
+        Parameters
+        ----------
+        file : DetectFormRequestFileParams
+            The PDF form to analyze. Files can be provided as a URL or an Extend file ID.
+
+        config : typing.Optional[EditSchemaGenerationConfigParams]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        FormDetectionRun
+            Successfully detected the form and generated an edit schema
+
+        Examples
+        --------
+        import asyncio
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.detect_form(
+                file={"url": "https://example.com/form.pdf"},
+                config={
+                    "instructions": "Detect the form fields and use human-readable field names.",
+                    "advanced_options": {"radio_enums_enabled": True},
+                },
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.detect_form(file=file, config=config, request_options=request_options)
+        return _response.data
+
     async def extract(
         self,
         *,
-        file: ExtractRequestFileParams,
         extractor: typing.Optional[ExtractRequestExtractorParams] = OMIT,
         config: typing.Optional[ExtractConfigJsonParams] = OMIT,
+        file: typing.Optional[ExtractRequestFileParams] = OMIT,
+        package: typing.Optional[MultiFileRunPackageParams] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ExtractRun:
         """
         Extract structured data from a file synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
 
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /extract_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/developers/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
+        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /extract_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/general/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
 
-        The Extract endpoint allows you to extract structured data from files using an existing extractor or an inline configuration.
+        The Extract endpoint allows you to extract structured data from files using an existing extractor, an inline configuration, or no configuration at all. When neither is provided, Extend automatically infers a schema from the document before extraction — no extractor or schema is required.
 
-        For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/product/extraction/quick-start-5-minutes).
+        Pass `file` for a single document, or `package` to extract from multiple files in a single run. Exactly one of `file` or `package` must be provided.
+
+        For more details, see the [Extract File guide](https://docs.extend.ai/2026-02-09/extraction/overview).
 
         Parameters
         ----------
-        file : ExtractRequestFileParams
-            The file to be extracted from. Files can be provided as a URL, Extend file ID, or raw text.
-
         extractor : typing.Optional[ExtractRequestExtractorParams]
-            Reference to an existing extractor. One of `extractor` or `config` must be provided.
+            Reference to an existing extractor. Mutually exclusive with `config` — provide one or the other, or omit both to have Extend infer a schema from the document.
 
         config : typing.Optional[ExtractConfigJsonParams]
-            Inline extract configuration. One of `extractor` or `config` must be provided.
+            Inline extract configuration. Mutually exclusive with `extractor` — provide one or the other, or omit both to have Extend infer a schema from the document.
+
+        file : typing.Optional[ExtractRequestFileParams]
+            The file to be extracted from. Mutually exclusive with `package` — provide one or the other.
+
+            Files can be provided as a URL, Extend file ID, or raw text.
+
+        package : typing.Optional[MultiFileRunPackageParams]
+            A collection of files to extract from together in a single run. Mutually exclusive with `file` — provide one or the other.
+
+            See [Multifile Extraction](https://docs.extend.ai/2026-02-09/extraction/multifile) for details.
 
         metadata : typing.Optional[RunMetadata]
 
@@ -1034,8 +1193,16 @@ class AsyncExtend:
                                 "description": "The invoice number",
                             },
                             "total_amount": {
-                                "type": "number",
+                                "type": "object",
+                                "extend:type": "currency",
                                 "description": "The total amount due",
+                                "properties": {
+                                    "amount": {"type": ["number", "null"]},
+                                    "iso_4217_currency_code": {
+                                        "type": ["string", "null"]
+                                    },
+                                },
+                                "required": ["amount", "iso_4217_currency_code"],
                             },
                         },
                     }
@@ -1047,7 +1214,12 @@ class AsyncExtend:
         asyncio.run(main())
         """
         _response = await self._raw_client.extract(
-            file=file, extractor=extractor, config=config, metadata=metadata, request_options=request_options
+            extractor=extractor,
+            config=config,
+            file=file,
+            package=package,
+            metadata=metadata,
+            request_options=request_options,
         )
         return _response.data
 
@@ -1063,11 +1235,11 @@ class AsyncExtend:
         """
         Classify a document synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
 
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /classify_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/developers/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
+        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /classify_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/general/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
 
         The Classify endpoint allows you to classify documents using an existing classifier or an inline configuration.
 
-        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/product/classification/configuring-a-classifier).
+        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/classification/configuration).
 
         Parameters
         ----------
@@ -1145,11 +1317,11 @@ class AsyncExtend:
         """
         Split a document synchronously, waiting for the result before returning. This endpoint has a **5-minute timeout** — if processing takes longer, the request will fail.
 
-        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /split_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/developers/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
+        **Note:** This endpoint is intended for onboarding and testing only. For production workloads, use `POST /split_runs` with [polling or webhooks](https://docs.extend.ai/2026-02-09/general/async-processing) instead, as it provides better reliability for large files and avoids timeout issues.
 
         The Split endpoint allows you to split documents into multiple parts using an existing splitter or an inline configuration.
 
-        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/product/splitting/configuring-a-splitter).
+        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/splitting/configuration).
 
         Parameters
         ----------
@@ -1256,6 +1428,14 @@ class AsyncExtend:
 
             self._edit_schemas = AsyncEditSchemasClient(client_wrapper=self._client_wrapper)
         return self._edit_schemas
+
+    @property
+    def form_detection_runs(self):
+        if self._form_detection_runs is None:
+            from .form_detection_runs.client import AsyncFormDetectionRunsClient  # noqa: E402
+
+            self._form_detection_runs = AsyncFormDetectionRunsClient(client_wrapper=self._client_wrapper)
+        return self._form_detection_runs
 
     @property
     def extract_runs(self):

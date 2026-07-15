@@ -37,3 +37,8 @@ class EditTextOptionsParams(typing_extensions.TypedDict):
     """
     Maximum number of characters allowed
     """
+
+    multi_line: typing_extensions.NotRequired[typing_extensions.Annotated[bool, FieldMetadata(alias="multiLine")]]
+    """
+    Whether text can wrap across multiple lines
+    """

@@ -28,7 +28,7 @@ class ParseConfigParams(typing_extensions.TypedDict):
     * Prefer `markdown` for most documents, multi-column reading order, and retrieval use cases
     * Prefer `spatial` for messy/scanned/handwritten or skewed documents, when you need near 1:1 layout fidelity, or for BOL-like logistics docs
     
-    See “Markdown vs Spatial” in the [Parse guide](https://docs.extend.ai/2026-02-09/product/parsing/configuration-options#target-format) for details.
+    See “Markdown vs Spatial” in the [Parse guide](https://docs.extend.ai/2026-02-09/parsing/configuration#target-format) for details.
     """
 
     chunking_strategy: typing_extensions.NotRequired[
@@ -42,7 +42,7 @@ class ParseConfigParams(typing_extensions.TypedDict):
     """
     The parsing engine to use. Supported values:
     * `parse_performance`: Full-featured parsing engine with highest accuracy (default)
-    * `parse_light`: Lightweight parsing engine optimized for speed. This does not have robust layout support and does not support markdown layout target.
+    * `parse_light`: Lightweight parsing engine optimized for high-volume, cost-sensitive ingestion. Uses the new layout model with full layout support and the markdown target at lower cost and latency, but performs worse than `parse_performance` on lower-quality scans, harder handwriting, larger tables, non-Latin-based languages, and dense checkbox regions.
     """
 
     engine_version: typing_extensions.NotRequired[

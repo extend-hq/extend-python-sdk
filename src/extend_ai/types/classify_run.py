@@ -36,6 +36,14 @@ class ClassifyRun(UncheckedBaseModel):
     Example: `"clr_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
+    status: ProcessorRunStatus
+    output: typing.Optional[ClassifyOutput] = pydantic.Field(default=None)
+    """
+    The final output, either reviewed or initial.
+    
+    **Availability:** Present when `status` is `"PROCESSED"`.
+    """
+
     classifier: typing.Optional[ClassifierSummary] = pydantic.Field(default=None)
     """
     The classifier that was used for this run.
@@ -50,14 +58,6 @@ class ClassifyRun(UncheckedBaseModel):
     The version of the classifier that was used for this run.
     
     **Availability:** Present when a classifier reference was provided. Not present when using inline `config`.
-    """
-
-    status: ProcessorRunStatus
-    output: typing.Optional[ClassifyOutput] = pydantic.Field(default=None)
-    """
-    The final output, either reviewed or initial.
-    
-    **Availability:** Present when `status` is `"PROCESSED"`.
     """
 
     initial_output: typing_extensions.Annotated[
@@ -131,9 +131,9 @@ class ClassifyRun(UncheckedBaseModel):
     The configuration used for this classify run.
     """
 
-    file: FileSummary = pydantic.Field()
+    file: typing.Optional[FileSummary] = pydantic.Field(default=None)
     """
-    The file that was processed.
+    The file that was processed. `null` when the file could not be accessed or processed (for example a run that failed during file ingestion, or a multi-file batch run).
     """
 
     parse_run_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parseRunId")] = pydantic.Field(

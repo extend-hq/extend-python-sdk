@@ -77,9 +77,9 @@ class ClassifyRunSummaryParams(typing_extensions.TypedDict):
     Indicates whether the run results have been edited during review.
     """
 
-    file: FileSummaryParams
+    file: typing.Optional[FileSummaryParams]
     """
-    The file that was processed.
+    The file that was processed. `null` when the file could not be accessed or processed (for example a run that failed during file ingestion, or a multi-file batch run).
     """
 
     parse_run_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parseRunId")]

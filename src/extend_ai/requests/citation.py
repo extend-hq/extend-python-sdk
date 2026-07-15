@@ -9,6 +9,11 @@ from .polygon import PolygonParams
 
 
 class CitationParams(typing_extensions.TypedDict):
+    file_id: typing_extensions.NotRequired[typing_extensions.Annotated[str, FieldMetadata(alias="fileId")]]
+    """
+    ID of the file the cited content was found in. On multifile runs, join this against the run's `files` array to determine which input file the citation refers to; on single-file runs it equals the run's `file.id`.
+    """
+
     page: typing_extensions.NotRequired[CitationPageParams]
     reference_text: typing_extensions.NotRequired[
         typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="referenceText")]

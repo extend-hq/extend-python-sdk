@@ -8,7 +8,7 @@ class ConditionalNextEntryParams(typing_extensions.TypedDict):
     """
     A next entry for `CONDITIONAL` steps. Routes based on which condition branch matched.
 
-    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for end-to-end examples.
+    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for end-to-end examples.
     """
 
     step: str

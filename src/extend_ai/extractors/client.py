@@ -11,6 +11,7 @@ from ..types.next_page_token import NextPageToken
 from ..types.sort_by import SortBy
 from ..types.sort_dir import SortDir
 from .raw_client import AsyncRawExtractorsClient, RawExtractorsClient
+from .requests.extractors_create_request_generate import ExtractorsCreateRequestGenerateParams
 from .types.extractors_list_response import ExtractorsListResponse
 
 # this is used as the default value for optional parameters
@@ -58,7 +59,7 @@ class ExtractorsClient:
         sort_dir : typing.Optional[SortDir]
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -95,10 +96,13 @@ class ExtractorsClient:
         name: str,
         clone_extractor_id: typing.Optional[str] = OMIT,
         config: typing.Optional[ExtractConfigJsonParams] = OMIT,
+        generate: typing.Optional[ExtractorsCreateRequestGenerateParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> Extractor:
         """
         Create a new extractor.
+
+        You can optionally provide a `generate` object to automatically generate an extraction schema from sample documents using AI. `generate` is mutually exclusive with `config` and `cloneExtractorId`.
 
         Parameters
         ----------
@@ -106,12 +110,17 @@ class ExtractorsClient:
             The name of the extractor.
 
         clone_extractor_id : typing.Optional[str]
-            The ID of an existing extractor to clone. If provided, the new extractor will be created with the same config as the extractor with this ID. Cannot be provided together with `config`.
+            The ID of an existing extractor to clone. If provided, the new extractor will be created with the same config as the extractor with this ID. Cannot be provided together with `config` or `generate`.
 
             Example: `"ex_BMdfq_yWM3sT-ZzvCnA3f"`
 
         config : typing.Optional[ExtractConfigJsonParams]
-            The configuration for the extractor. Cannot be provided together with `cloneExtractorId`.
+            The configuration for the extractor. Cannot be provided together with `cloneExtractorId` or `generate`.
+
+        generate : typing.Optional[ExtractorsCreateRequestGenerateParams]
+            If provided, an extraction schema is automatically generated from the supplied sample documents and applied to the extractor's draft. The response includes the extractor with the generated schema already in place.
+
+            Cannot be provided together with `config` or `cloneExtractorId`.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -135,16 +144,22 @@ class ExtractorsClient:
                     "type": "object",
                     "properties": {
                         "vendor_name": {
-                            "type": "string",
+                            "type": ["string", "null"],
                             "description": "The name of the vendor",
                         },
                         "invoice_number": {
-                            "type": "string",
+                            "type": ["string", "null"],
                             "description": "The invoice number",
                         },
                         "total_amount": {
-                            "type": "number",
+                            "type": "object",
+                            "extend:type": "currency",
                             "description": "The total amount due",
+                            "properties": {
+                                "amount": {"type": ["number", "null"]},
+                                "iso_4217_currency_code": {"type": ["string", "null"]},
+                            },
+                            "required": ["amount", "iso_4217_currency_code"],
                         },
                     },
                 }
@@ -152,7 +167,11 @@ class ExtractorsClient:
         )
         """
         _response = self._raw_client.create(
-            name=name, clone_extractor_id=clone_extractor_id, config=config, request_options=request_options
+            name=name,
+            clone_extractor_id=clone_extractor_id,
+            config=config,
+            generate=generate,
+            request_options=request_options,
         )
         return _response.data
 
@@ -174,7 +193,7 @@ class ExtractorsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -220,7 +239,7 @@ class ExtractorsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             The new name of the extractor.
@@ -295,7 +314,7 @@ class AsyncExtractorsClient:
         sort_dir : typing.Optional[SortDir]
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -340,10 +359,13 @@ class AsyncExtractorsClient:
         name: str,
         clone_extractor_id: typing.Optional[str] = OMIT,
         config: typing.Optional[ExtractConfigJsonParams] = OMIT,
+        generate: typing.Optional[ExtractorsCreateRequestGenerateParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> Extractor:
         """
         Create a new extractor.
+
+        You can optionally provide a `generate` object to automatically generate an extraction schema from sample documents using AI. `generate` is mutually exclusive with `config` and `cloneExtractorId`.
 
         Parameters
         ----------
@@ -351,12 +373,17 @@ class AsyncExtractorsClient:
             The name of the extractor.
 
         clone_extractor_id : typing.Optional[str]
-            The ID of an existing extractor to clone. If provided, the new extractor will be created with the same config as the extractor with this ID. Cannot be provided together with `config`.
+            The ID of an existing extractor to clone. If provided, the new extractor will be created with the same config as the extractor with this ID. Cannot be provided together with `config` or `generate`.
 
             Example: `"ex_BMdfq_yWM3sT-ZzvCnA3f"`
 
         config : typing.Optional[ExtractConfigJsonParams]
-            The configuration for the extractor. Cannot be provided together with `cloneExtractorId`.
+            The configuration for the extractor. Cannot be provided together with `cloneExtractorId` or `generate`.
+
+        generate : typing.Optional[ExtractorsCreateRequestGenerateParams]
+            If provided, an extraction schema is automatically generated from the supplied sample documents and applied to the extractor's draft. The response includes the extractor with the generated schema already in place.
+
+            Cannot be provided together with `config` or `cloneExtractorId`.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -385,16 +412,24 @@ class AsyncExtractorsClient:
                         "type": "object",
                         "properties": {
                             "vendor_name": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "description": "The name of the vendor",
                             },
                             "invoice_number": {
-                                "type": "string",
+                                "type": ["string", "null"],
                                 "description": "The invoice number",
                             },
                             "total_amount": {
-                                "type": "number",
+                                "type": "object",
+                                "extend:type": "currency",
                                 "description": "The total amount due",
+                                "properties": {
+                                    "amount": {"type": ["number", "null"]},
+                                    "iso_4217_currency_code": {
+                                        "type": ["string", "null"]
+                                    },
+                                },
+                                "required": ["amount", "iso_4217_currency_code"],
                             },
                         },
                     }
@@ -405,7 +440,11 @@ class AsyncExtractorsClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.create(
-            name=name, clone_extractor_id=clone_extractor_id, config=config, request_options=request_options
+            name=name,
+            clone_extractor_id=clone_extractor_id,
+            config=config,
+            generate=generate,
+            request_options=request_options,
         )
         return _response.data
 
@@ -427,7 +466,7 @@ class AsyncExtractorsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -481,7 +520,7 @@ class AsyncExtractorsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             The new name of the extractor.

@@ -6,6 +6,10 @@ from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
 from ..types.evaluation_set_run import EvaluationSetRun
 from .raw_client import AsyncRawEvaluationSetRunsClient, RawEvaluationSetRunsClient
+from .requests.evaluation_set_runs_create_request_entity import EvaluationSetRunsCreateRequestEntityParams
+
+# this is used as the default value for optional parameters
+OMIT = typing.cast(typing.Any, ...)
 
 
 class EvaluationSetRunsClient:
@@ -23,6 +27,63 @@ class EvaluationSetRunsClient:
         """
         return self._raw_client
 
+    def create(
+        self,
+        *,
+        evaluation_set_id: str,
+        extend_workspace_id: typing.Optional[str] = None,
+        entity: typing.Optional[EvaluationSetRunsCreateRequestEntityParams] = OMIT,
+        evaluation_set_item_ids: typing.Optional[typing.Sequence[str]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> EvaluationSetRun:
+        """
+        Create and start an async evaluation set run. The response returns the evaluation set run object with its initial status; use `GET /evaluation_set_runs/{id}` to poll for completion.
+
+        Evaluation set runs are currently supported for document processor evaluation sets.
+
+        Parameters
+        ----------
+        evaluation_set_id : str
+            The ID of the evaluation set to run.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+
+        entity : typing.Optional[EvaluationSetRunsCreateRequestEntityParams]
+            Optional processor and version to run against the evaluation set. If omitted, the evaluation set's processor is run at its draft version.
+
+        evaluation_set_item_ids : typing.Optional[typing.Sequence[str]]
+            Optional list of evaluation set item IDs to run. If omitted, all items in the evaluation set are run.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        EvaluationSetRun
+            Evaluation set run created successfully
+
+        Examples
+        --------
+        from extend_ai import Extend
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.evaluation_set_runs.create(
+            evaluation_set_id="ev_2LcgeY_mp2T5yPaEuq5Lw",
+            entity={"id": "ex_Xj8mK2pL9nR4vT7qY5wZ", "version": "1.0"},
+        )
+        """
+        _response = self._raw_client.create(
+            evaluation_set_id=evaluation_set_id,
+            extend_workspace_id=extend_workspace_id,
+            entity=entity,
+            evaluation_set_item_ids=evaluation_set_item_ids,
+            request_options=request_options,
+        )
+        return _response.data
+
     def retrieve(
         self,
         id: str,
@@ -38,10 +99,10 @@ class EvaluationSetRunsClient:
         id : str
             The ID of the evaluation set run.
 
-            Example: `"evr_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -59,7 +120,7 @@ class EvaluationSetRunsClient:
             token="YOUR_TOKEN",
         )
         client.evaluation_set_runs.retrieve(
-            id="evaluation_set_run_id_here",
+            id="bpr_Xj8mK2pL9nR4vT7qY5wZ",
         )
         """
         _response = self._raw_client.retrieve(
@@ -83,6 +144,71 @@ class AsyncEvaluationSetRunsClient:
         """
         return self._raw_client
 
+    async def create(
+        self,
+        *,
+        evaluation_set_id: str,
+        extend_workspace_id: typing.Optional[str] = None,
+        entity: typing.Optional[EvaluationSetRunsCreateRequestEntityParams] = OMIT,
+        evaluation_set_item_ids: typing.Optional[typing.Sequence[str]] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> EvaluationSetRun:
+        """
+        Create and start an async evaluation set run. The response returns the evaluation set run object with its initial status; use `GET /evaluation_set_runs/{id}` to poll for completion.
+
+        Evaluation set runs are currently supported for document processor evaluation sets.
+
+        Parameters
+        ----------
+        evaluation_set_id : str
+            The ID of the evaluation set to run.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+
+        entity : typing.Optional[EvaluationSetRunsCreateRequestEntityParams]
+            Optional processor and version to run against the evaluation set. If omitted, the evaluation set's processor is run at its draft version.
+
+        evaluation_set_item_ids : typing.Optional[typing.Sequence[str]]
+            Optional list of evaluation set item IDs to run. If omitted, all items in the evaluation set are run.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        EvaluationSetRun
+            Evaluation set run created successfully
+
+        Examples
+        --------
+        import asyncio
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.evaluation_set_runs.create(
+                evaluation_set_id="ev_2LcgeY_mp2T5yPaEuq5Lw",
+                entity={"id": "ex_Xj8mK2pL9nR4vT7qY5wZ", "version": "1.0"},
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.create(
+            evaluation_set_id=evaluation_set_id,
+            extend_workspace_id=extend_workspace_id,
+            entity=entity,
+            evaluation_set_item_ids=evaluation_set_item_ids,
+            request_options=request_options,
+        )
+        return _response.data
+
     async def retrieve(
         self,
         id: str,
@@ -98,10 +224,10 @@ class AsyncEvaluationSetRunsClient:
         id : str
             The ID of the evaluation set run.
 
-            Example: `"evr_Xj8mK2pL9nR4vT7qY5wZ"`
+            Example: `"bpr_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -124,7 +250,7 @@ class AsyncEvaluationSetRunsClient:
 
         async def main() -> None:
             await client.evaluation_set_runs.retrieve(
-                id="evaluation_set_run_id_here",
+                id="bpr_Xj8mK2pL9nR4vT7qY5wZ",
             )
 
 

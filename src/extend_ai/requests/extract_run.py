@@ -34,28 +34,12 @@ class ExtractRunParams(typing_extensions.TypedDict):
     Example: `"exr_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
-    extractor: typing.Optional[ExtractorSummaryParams]
-    """
-    The extractor that was used for this run.
-    
-    **Availability:** Present when an extractor reference was provided. Not present when using inline `config`.
-    """
-
-    extractor_version: typing_extensions.Annotated[
-        typing.Optional[ExtractorVersionSummaryParams], FieldMetadata(alias="extractorVersion")
-    ]
-    """
-    The version of the extractor that was used for this run.
-    
-    **Availability:** Present when an extractor reference was provided. Not present when using inline `config`.
-    """
-
     status: ProcessorRunStatus
     output: typing.Optional[ExtractOutputParams]
     """
     The final output, either reviewed or initial. This is a union of two possible shapes:
     
-    - **[JSON Schema output](https://docs.extend.ai/2026-02-09/product/extraction/output-types):** The current output format, returned for runs created with a JSON Schema config.
+    - **[JSON Schema output](https://docs.extend.ai/2026-02-09/extraction/response-format):** The current output format, returned for runs created with a JSON Schema config.
     - **[Legacy output](https://docs.extend.ai/2025-04-21/product/legacy/output-type-legacy):** A legacy output format from a previous API version. This shape is only returned for runs that were originally created with a legacy config.
     
     **Availability:** Present when `status` is `"PROCESSED"`.
@@ -95,6 +79,7 @@ class ExtractRunParams(typing_extensions.TypedDict):
     * `PRE_PROCESSING_FAILURE` - An error occurred during preprocessing (e.g., chunking)
     * `POST_PROCESSING_FAILURE` - An error occurred during postprocessing
     * `OUT_OF_CREDITS` - Insufficient credits to run the extraction
+    * `SCHEMA_GENERATION_FAILED` - Automatic schema inference failed (only applies when `schema` is omitted). The file could not be parsed or a schema could not be generated from it.
     
     **Note:** Additional failure reasons may be added in the future. Your integration should handle unknown values gracefully.
     """
@@ -134,13 +119,36 @@ class ExtractRunParams(typing_extensions.TypedDict):
     """
     The configuration used for this extract run. This is a union of two possible shapes:
     
-    - **[JSON Schema config](https://docs.extend.ai/2026-02-09/product/extraction/schema):** The current config format. All runs created through this API version use this shape.
+    - **[JSON Schema config](https://docs.extend.ai/2026-02-09/extraction/schema):** The current config format. All runs created through this API version use this shape.
     - **[Legacy config](https://docs.extend.ai/2025-04-21/product/legacy/legacy-schema):** A fields-array config from a previous API version. This shape is only returned when retrieving runs that were originally created with the legacy format. This API version does not support creating runs with legacy configs.
     """
 
-    file: FileSummaryParams
+    extractor: typing.Optional[ExtractorSummaryParams]
     """
-    The file that was processed.
+    The extractor that was used for this run.
+    
+    **Availability:** Present when an extractor reference was provided. Not present when using inline `config`.
+    """
+
+    extractor_version: typing_extensions.Annotated[
+        typing.Optional[ExtractorVersionSummaryParams], FieldMetadata(alias="extractorVersion")
+    ]
+    """
+    The version of the extractor that was used for this run.
+    
+    **Availability:** Present when an extractor reference was provided. Not present when using inline `config`.
+    """
+
+    file: typing.Optional[FileSummaryParams]
+    """
+    The file that was processed. `null` for multifile runs (use `files` instead), and `null` when the file could not be accessed or processed (for example, a run that failed during file ingestion).
+    """
+
+    files: typing.Optional[typing.Sequence[FileSummaryParams]]
+    """
+    The files that were processed, in the order they were submitted. Only populated for multifile runs (created with `package`).
+    
+    For single-file runs, this is `null` — use `file` instead.
     """
 
     parse_run_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parseRunId")]

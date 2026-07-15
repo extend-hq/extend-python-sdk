@@ -21,10 +21,12 @@ if typing.TYPE_CHECKING:
     from .block_details import BlockDetails
     from .block_metadata import BlockMetadata
     from .block_metadata_page import BlockMetadataPage
+    from .block_metadata_sheet import BlockMetadataSheet
     from .block_metadata_text_direction import BlockMetadataTextDirection
     from .block_polygon_item import BlockPolygonItem
     from .block_type import BlockType
     from .bounding_box import BoundingBox
+    from .cell_formatting import CellFormatting
     from .chunk import Chunk
     from .chunk_metadata import ChunkMetadata
     from .chunk_metadata_page_range import ChunkMetadataPageRange
@@ -79,6 +81,9 @@ if typing.TYPE_CHECKING:
         ConditionalStepDefinitionConfigConditionsItemType,
     )
     from .created_at import CreatedAt
+    from .data_retention import DataRetention
+    from .data_retention_mode import DataRetentionMode
+    from .detect_form_request_file import DetectFormRequestFile
     from .edit_bounding_box import EditBoundingBox
     from .edit_conditional_clause import EditConditionalClause
     from .edit_conditional_object_property import EditConditionalObjectProperty
@@ -154,6 +159,7 @@ if typing.TYPE_CHECKING:
     from .external_data_validation_step_run_step import ExternalDataValidationStepRunStep
     from .extract_advanced_options import ExtractAdvancedOptions
     from .extract_advanced_options_array_citation_strategy import ExtractAdvancedOptionsArrayCitationStrategy
+    from .extract_advanced_options_citation_mode import ExtractAdvancedOptionsCitationMode
     from .extract_advanced_options_excel_sheet_selection_strategy import (
         ExtractAdvancedOptionsExcelSheetSelectionStrategy,
     )
@@ -219,6 +225,9 @@ if typing.TYPE_CHECKING:
     from .file_metadata import FileMetadata
     from .file_summary import FileSummary
     from .file_type import FileType
+    from .form_detection_run import FormDetectionRun
+    from .form_detection_run_metrics import FormDetectionRunMetrics
+    from .form_detection_run_status import FormDetectionRunStatus
     from .formula_details import FormulaDetails
     from .human_review_step_definition import HumanReviewStepDefinition
     from .insight import Insight
@@ -321,6 +330,8 @@ if typing.TYPE_CHECKING:
     from .merge_extract_step_definition_config_merge_order import MergeExtractStepDefinitionConfigMergeOrder
     from .merge_extract_step_run import MergeExtractStepRun
     from .merge_extract_step_run_step import MergeExtractStepRunStep
+    from .multi_file_run_package import MultiFileRunPackage
+    from .multi_file_run_package_files_item import MultiFileRunPackageFilesItem
     from .next_page_token import NextPageToken
     from .page_ranges import PageRanges
     from .page_ranges_item import PageRangesItem
@@ -363,6 +374,9 @@ if typing.TYPE_CHECKING:
     from .parse_run_status import ParseRunStatus
     from .parse_run_status_enum import ParseRunStatusEnum
     from .parse_run_status_status import ParseRunStatusStatus
+    from .parse_run_summary import ParseRunSummary
+    from .parse_run_summary_metrics import ParseRunSummaryMetrics
+    from .parse_run_summary_status import ParseRunSummaryStatus
     from .parse_step_definition import ParseStepDefinition
     from .parse_step_definition_config import ParseStepDefinitionConfig
     from .parse_step_run import ParseStepRun
@@ -392,6 +406,7 @@ if typing.TYPE_CHECKING:
     from .run_source import RunSource
     from .run_source_id import RunSourceId
     from .run_usage import RunUsage
+    from .run_usage_breakdown_charge import RunUsageBreakdownCharge
     from .run_usage_breakdown_entry import RunUsageBreakdownEntry
     from .run_usage_breakdown_entry_object import RunUsageBreakdownEntryObject
     from .run_usage_summary import RunUsageSummary
@@ -428,11 +443,22 @@ if typing.TYPE_CHECKING:
     from .splitter_version import SplitterVersion
     from .splitter_version_published_webhook_event import SplitterVersionPublishedWebhookEvent
     from .splitter_version_summary import SplitterVersionSummary
-    from .step_run import StepRun
+    from .step_run import (
+        StepRun,
+        StepRun_Classify,
+        StepRun_ConditionalExtract,
+        StepRun_ExternalDataValidation,
+        StepRun_Extract,
+        StepRun_MergeExtract,
+        StepRun_Parse,
+        StepRun_RuleValidation,
+        StepRun_Split,
+    )
     from .step_run_base import StepRunBase
     from .step_run_base_status import StepRunBaseStatus
     from .table_cell_details import TableCellDetails
     from .table_details import TableDetails
+    from .text_details import TextDetails
     from .too_many_requests_error_body import TooManyRequestsErrorBody
     from .trigger_step_definition import TriggerStepDefinition
     from .updated_at import UpdatedAt
@@ -493,6 +519,7 @@ if typing.TYPE_CHECKING:
     from .workflow_created_webhook_event import WorkflowCreatedWebhookEvent
     from .workflow_deleted_webhook_event import WorkflowDeletedWebhookEvent
     from .workflow_deployed_webhook_event import WorkflowDeployedWebhookEvent
+    from .workflow_inline_extract_config import WorkflowInlineExtractConfig
     from .workflow_reference import WorkflowReference
     from .workflow_run import WorkflowRun
     from .workflow_run_cancelled_webhook_event import WorkflowRunCancelledWebhookEvent
@@ -540,10 +567,12 @@ _dynamic_imports: typing.Dict[str, str] = {
     "BlockDetails": ".block_details",
     "BlockMetadata": ".block_metadata",
     "BlockMetadataPage": ".block_metadata_page",
+    "BlockMetadataSheet": ".block_metadata_sheet",
     "BlockMetadataTextDirection": ".block_metadata_text_direction",
     "BlockPolygonItem": ".block_polygon_item",
     "BlockType": ".block_type",
     "BoundingBox": ".bounding_box",
+    "CellFormatting": ".cell_formatting",
     "Chunk": ".chunk",
     "ChunkMetadata": ".chunk_metadata",
     "ChunkMetadataPageRange": ".chunk_metadata_page_range",
@@ -594,6 +623,9 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ConditionalStepDefinitionConfigConditionsItemOperation": ".conditional_step_definition_config_conditions_item_operation",
     "ConditionalStepDefinitionConfigConditionsItemType": ".conditional_step_definition_config_conditions_item_type",
     "CreatedAt": ".created_at",
+    "DataRetention": ".data_retention",
+    "DataRetentionMode": ".data_retention_mode",
+    "DetectFormRequestFile": ".detect_form_request_file",
     "EditBoundingBox": ".edit_bounding_box",
     "EditConditionalClause": ".edit_conditional_clause",
     "EditConditionalObjectProperty": ".edit_conditional_object_property",
@@ -655,6 +687,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ExternalDataValidationStepRunStep": ".external_data_validation_step_run_step",
     "ExtractAdvancedOptions": ".extract_advanced_options",
     "ExtractAdvancedOptionsArrayCitationStrategy": ".extract_advanced_options_array_citation_strategy",
+    "ExtractAdvancedOptionsCitationMode": ".extract_advanced_options_citation_mode",
     "ExtractAdvancedOptionsExcelSheetSelectionStrategy": ".extract_advanced_options_excel_sheet_selection_strategy",
     "ExtractAdvancedOptionsReviewAgent": ".extract_advanced_options_review_agent",
     "ExtractBaseProcessor": ".extract_base_processor",
@@ -716,6 +749,9 @@ _dynamic_imports: typing.Dict[str, str] = {
     "FileMetadata": ".file_metadata",
     "FileSummary": ".file_summary",
     "FileType": ".file_type",
+    "FormDetectionRun": ".form_detection_run",
+    "FormDetectionRunMetrics": ".form_detection_run_metrics",
+    "FormDetectionRunStatus": ".form_detection_run_status",
     "FormulaDetails": ".formula_details",
     "HumanReviewStepDefinition": ".human_review_step_definition",
     "Insight": ".insight",
@@ -806,6 +842,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "MergeExtractStepDefinitionConfigMergeOrder": ".merge_extract_step_definition_config_merge_order",
     "MergeExtractStepRun": ".merge_extract_step_run",
     "MergeExtractStepRunStep": ".merge_extract_step_run_step",
+    "MultiFileRunPackage": ".multi_file_run_package",
+    "MultiFileRunPackageFilesItem": ".multi_file_run_package_files_item",
     "NextPageToken": ".next_page_token",
     "PageRanges": ".page_ranges",
     "PageRangesItem": ".page_ranges_item",
@@ -846,6 +884,9 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ParseRunStatus": ".parse_run_status",
     "ParseRunStatusEnum": ".parse_run_status_enum",
     "ParseRunStatusStatus": ".parse_run_status_status",
+    "ParseRunSummary": ".parse_run_summary",
+    "ParseRunSummaryMetrics": ".parse_run_summary_metrics",
+    "ParseRunSummaryStatus": ".parse_run_summary_status",
     "ParseStepDefinition": ".parse_step_definition",
     "ParseStepDefinitionConfig": ".parse_step_definition_config",
     "ParseStepRun": ".parse_step_run",
@@ -875,6 +916,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "RunSource": ".run_source",
     "RunSourceId": ".run_source_id",
     "RunUsage": ".run_usage",
+    "RunUsageBreakdownCharge": ".run_usage_breakdown_charge",
     "RunUsageBreakdownEntry": ".run_usage_breakdown_entry",
     "RunUsageBreakdownEntryObject": ".run_usage_breakdown_entry_object",
     "RunUsageSummary": ".run_usage_summary",
@@ -914,8 +956,17 @@ _dynamic_imports: typing.Dict[str, str] = {
     "StepRun": ".step_run",
     "StepRunBase": ".step_run_base",
     "StepRunBaseStatus": ".step_run_base_status",
+    "StepRun_Classify": ".step_run",
+    "StepRun_ConditionalExtract": ".step_run",
+    "StepRun_ExternalDataValidation": ".step_run",
+    "StepRun_Extract": ".step_run",
+    "StepRun_MergeExtract": ".step_run",
+    "StepRun_Parse": ".step_run",
+    "StepRun_RuleValidation": ".step_run",
+    "StepRun_Split": ".step_run",
     "TableCellDetails": ".table_cell_details",
     "TableDetails": ".table_details",
+    "TextDetails": ".text_details",
     "TooManyRequestsErrorBody": ".too_many_requests_error_body",
     "TriggerStepDefinition": ".trigger_step_definition",
     "UpdatedAt": ".updated_at",
@@ -974,6 +1025,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WorkflowCreatedWebhookEvent": ".workflow_created_webhook_event",
     "WorkflowDeletedWebhookEvent": ".workflow_deleted_webhook_event",
     "WorkflowDeployedWebhookEvent": ".workflow_deployed_webhook_event",
+    "WorkflowInlineExtractConfig": ".workflow_inline_extract_config",
     "WorkflowReference": ".workflow_reference",
     "WorkflowRun": ".workflow_run",
     "WorkflowRunCancelledWebhookEvent": ".workflow_run_cancelled_webhook_event",
@@ -1043,10 +1095,12 @@ __all__ = [
     "BlockDetails",
     "BlockMetadata",
     "BlockMetadataPage",
+    "BlockMetadataSheet",
     "BlockMetadataTextDirection",
     "BlockPolygonItem",
     "BlockType",
     "BoundingBox",
+    "CellFormatting",
     "Chunk",
     "ChunkMetadata",
     "ChunkMetadataPageRange",
@@ -1097,6 +1151,9 @@ __all__ = [
     "ConditionalStepDefinitionConfigConditionsItemOperation",
     "ConditionalStepDefinitionConfigConditionsItemType",
     "CreatedAt",
+    "DataRetention",
+    "DataRetentionMode",
+    "DetectFormRequestFile",
     "EditBoundingBox",
     "EditConditionalClause",
     "EditConditionalObjectProperty",
@@ -1158,6 +1215,7 @@ __all__ = [
     "ExternalDataValidationStepRunStep",
     "ExtractAdvancedOptions",
     "ExtractAdvancedOptionsArrayCitationStrategy",
+    "ExtractAdvancedOptionsCitationMode",
     "ExtractAdvancedOptionsExcelSheetSelectionStrategy",
     "ExtractAdvancedOptionsReviewAgent",
     "ExtractBaseProcessor",
@@ -1219,6 +1277,9 @@ __all__ = [
     "FileMetadata",
     "FileSummary",
     "FileType",
+    "FormDetectionRun",
+    "FormDetectionRunMetrics",
+    "FormDetectionRunStatus",
     "FormulaDetails",
     "HumanReviewStepDefinition",
     "Insight",
@@ -1309,6 +1370,8 @@ __all__ = [
     "MergeExtractStepDefinitionConfigMergeOrder",
     "MergeExtractStepRun",
     "MergeExtractStepRunStep",
+    "MultiFileRunPackage",
+    "MultiFileRunPackageFilesItem",
     "NextPageToken",
     "PageRanges",
     "PageRangesItem",
@@ -1349,6 +1412,9 @@ __all__ = [
     "ParseRunStatus",
     "ParseRunStatusEnum",
     "ParseRunStatusStatus",
+    "ParseRunSummary",
+    "ParseRunSummaryMetrics",
+    "ParseRunSummaryStatus",
     "ParseStepDefinition",
     "ParseStepDefinitionConfig",
     "ParseStepRun",
@@ -1378,6 +1444,7 @@ __all__ = [
     "RunSource",
     "RunSourceId",
     "RunUsage",
+    "RunUsageBreakdownCharge",
     "RunUsageBreakdownEntry",
     "RunUsageBreakdownEntryObject",
     "RunUsageSummary",
@@ -1417,8 +1484,17 @@ __all__ = [
     "StepRun",
     "StepRunBase",
     "StepRunBaseStatus",
+    "StepRun_Classify",
+    "StepRun_ConditionalExtract",
+    "StepRun_ExternalDataValidation",
+    "StepRun_Extract",
+    "StepRun_MergeExtract",
+    "StepRun_Parse",
+    "StepRun_RuleValidation",
+    "StepRun_Split",
     "TableCellDetails",
     "TableDetails",
+    "TextDetails",
     "TooManyRequestsErrorBody",
     "TriggerStepDefinition",
     "UpdatedAt",
@@ -1477,6 +1553,7 @@ __all__ = [
     "WorkflowCreatedWebhookEvent",
     "WorkflowDeletedWebhookEvent",
     "WorkflowDeployedWebhookEvent",
+    "WorkflowInlineExtractConfig",
     "WorkflowReference",
     "WorkflowRun",
     "WorkflowRunCancelledWebhookEvent",

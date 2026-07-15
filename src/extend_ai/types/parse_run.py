@@ -14,6 +14,7 @@ from .parse_config import ParseConfig
 from .parse_run_metrics import ParseRunMetrics
 from .parse_run_output import ParseRunOutput
 from .parse_run_status_enum import ParseRunStatusEnum
+from .run_metadata import RunMetadata
 from .run_usage import RunUsage
 
 
@@ -92,6 +93,13 @@ class ParseRun(UncheckedBaseModel):
     A human-readable description of the failure.
     
     **Availability:** Present when `status` is `"FAILED"`.
+    """
+
+    metadata: typing.Optional[RunMetadata] = pydantic.Field(default=None)
+    """
+    Any metadata that was provided when creating the parse run.
+    
+    **Availability:** Present when metadata was provided during creation.
     """
 
     output: typing.Optional[ParseRunOutput] = pydantic.Field(default=None)

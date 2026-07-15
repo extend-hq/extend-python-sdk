@@ -6,9 +6,17 @@ import typing
 from importlib import import_module
 
 if typing.TYPE_CHECKING:
-    from .types import ExtractorsListResponse
-    from .requests import ExtractorsListResponseParams
+    from .types import ExtractorsCreateRequestGenerate, ExtractorsCreateRequestGenerateFilesItem, ExtractorsListResponse
+    from .requests import (
+        ExtractorsCreateRequestGenerateFilesItemParams,
+        ExtractorsCreateRequestGenerateParams,
+        ExtractorsListResponseParams,
+    )
 _dynamic_imports: typing.Dict[str, str] = {
+    "ExtractorsCreateRequestGenerate": ".types",
+    "ExtractorsCreateRequestGenerateFilesItem": ".types",
+    "ExtractorsCreateRequestGenerateFilesItemParams": ".requests",
+    "ExtractorsCreateRequestGenerateParams": ".requests",
     "ExtractorsListResponse": ".types",
     "ExtractorsListResponseParams": ".requests",
 }
@@ -35,4 +43,11 @@ def __dir__():
     return sorted(lazy_attrs)
 
 
-__all__ = ["ExtractorsListResponse", "ExtractorsListResponseParams"]
+__all__ = [
+    "ExtractorsCreateRequestGenerate",
+    "ExtractorsCreateRequestGenerateFilesItem",
+    "ExtractorsCreateRequestGenerateFilesItemParams",
+    "ExtractorsCreateRequestGenerateParams",
+    "ExtractorsListResponse",
+    "ExtractorsListResponseParams",
+]

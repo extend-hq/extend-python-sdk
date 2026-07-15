@@ -10,7 +10,9 @@ class LegacyExtractionAdvancedOptionsReviewAgentParams(typing_extensions.TypedDi
     and may include additional `insights` of type `issue` or `review_summary` to help identify
     fields that may need manual review.
 
-    To learn more, view the [Review Agent Documentation](https://docs.extend.ai/2026-02-09/product/extraction/review-agent)
+    Enabling the review agent incurs additional credits.
+
+    To learn more, view the [Review Agent Documentation](https://docs.extend.ai/2026-02-09/extraction/review-agent)
     """
 
     enabled: typing_extensions.NotRequired[bool]

@@ -106,7 +106,7 @@ class WorkflowsClient:
 
             When omitted, the workflow is created with default steps (`TRIGGER` → `PARSE`). The default steps may change in the future.
 
-            See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for step definitions, branching patterns, and examples.
+            See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for step definitions, branching patterns, and examples.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -185,7 +185,7 @@ class WorkflowsClient:
         steps : typing.Optional[typing.Sequence[WorkflowStepDefinitionParams]]
             The new step definitions for the draft version. Replaces all existing draft steps.
 
-            See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for step definitions, branching patterns, and examples.
+            See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for step definitions, branching patterns, and examples.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -308,7 +308,7 @@ class AsyncWorkflowsClient:
 
             When omitted, the workflow is created with default steps (`TRIGGER` → `PARSE`). The default steps may change in the future.
 
-            See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for step definitions, branching patterns, and examples.
+            See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for step definitions, branching patterns, and examples.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -403,7 +403,7 @@ class AsyncWorkflowsClient:
         steps : typing.Optional[typing.Sequence[WorkflowStepDefinitionParams]]
             The new step definitions for the draft version. Replaces all existing draft steps.
 
-            See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api) for step definitions, branching patterns, and examples.
+            See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for step definitions, branching patterns, and examples.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.

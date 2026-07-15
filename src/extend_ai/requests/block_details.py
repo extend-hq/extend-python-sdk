@@ -9,8 +9,10 @@ from .formula_details import FormulaDetailsParams
 from .key_value_details import KeyValueDetailsParams
 from .table_cell_details import TableCellDetailsParams
 from .table_details import TableDetailsParams
+from .text_details import TextDetailsParams
 
 BlockDetailsParams = typing.Union[
+    TextDetailsParams,
     TableDetailsParams,
     TableCellDetailsParams,
     FigureDetailsParams,

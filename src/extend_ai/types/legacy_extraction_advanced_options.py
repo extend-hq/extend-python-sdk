@@ -80,7 +80,9 @@ class LegacyExtractionAdvancedOptions(UncheckedBaseModel):
     and may include additional `insights` of type `issue` or `review_summary` to help identify
     fields that may need manual review.
     
-    To learn more, view the [Review Agent Documentation](https://docs.extend.ai/2026-02-09/product/extraction/review-agent)
+    Enabling the review agent incurs additional credits.
+    
+    To learn more, view the [Review Agent Documentation](https://docs.extend.ai/2026-02-09/extraction/review-agent)
     """
 
     array_strategy: typing_extensions.Annotated[
@@ -112,7 +114,7 @@ class LegacyExtractionAdvancedOptions(UncheckedBaseModel):
         pydantic.Field(alias="fixedPageLimit", default=None)
     )
     """
-    DEPRECATED - See [Page Ranges](https://docs.extend.ai/2026-02-09/product/page-ranges).
+    DEPRECATED - See [Page Ranges](https://docs.extend.ai/2026-02-09/page-ranges).
     """
 
     page_ranges: typing_extensions.Annotated[typing.Optional[PageRanges], FieldMetadata(alias="pageRanges")] = (

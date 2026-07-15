@@ -9,7 +9,7 @@ T_Result = typing.TypeVar("T_Result")
 
 class SplitBaseProcessor(enum.StrEnum):
     """
-    The base processor to use. For splitters, this can be either `"splitting_performance"` or `"splitting_light"`. Defaults to `"splitting_performance"` if not provided. See [Splitting Changelog](https://docs.extend.ai/2026-02-09/changelog/splitting/splitting-performance) for more details.
+    The base processor to use. For splitters, this can be either `"splitting_performance"` or `"splitting_light"`. Defaults to `"splitting_performance"` if not provided. See [Splitting Changelog](https://docs.extend.ai/2026-02-09/model-versioning/splitting/splitting-performance) for more details.
     """
 
     SPLITTING_PERFORMANCE = "splitting_performance"

@@ -14,7 +14,7 @@ class ExtractConfigJsonParams(typing_extensions.TypedDict):
     ]
     base_version: typing_extensions.NotRequired[typing_extensions.Annotated[str, FieldMetadata(alias="baseVersion")]]
     """
-    The version of the `"extraction_performance"` or `"extraction_light"` processor to use. If not provided, the latest stable version for the selected `baseProcessor` will be used automatically. See [Extraction Changelog](https://docs.extend.ai/2026-02-09/changelog/extraction/extraction-performance) for more details.
+    The version of the `"extraction_performance"` or `"extraction_light"` processor to use. If not provided, the latest stable version for the selected `baseProcessor` will be used automatically. See [Extraction Changelog](https://docs.extend.ai/2026-02-09/model-versioning/extraction/extraction-performance) for more details.
     """
 
     extraction_rules: typing_extensions.NotRequired[
@@ -22,13 +22,15 @@ class ExtractConfigJsonParams(typing_extensions.TypedDict):
     ]
     """
     Custom rules to guide the extraction process in natural language.
+    
+    When `schema` is omitted, `extractionRules` also serves as schema generation instructions — for example, `"Invoice with vendor name, line items, and total due"`. Providing focused instructions produces a more targeted inferred schema.
     """
 
-    schema: JsonObject
+    schema: typing_extensions.NotRequired[JsonObject]
     """
-    JSON Schema definition of the data to extract.
+    JSON Schema definition of the data to extract. **Optional** — if omitted, Extend automatically infers a schema from the document before running extraction. No extractor is required.
     
-    See the [JSON Schema guide](https://docs.extend.ai/2026-02-09/product/extraction/schema) for details and examples of schema configuration.
+    See the [JSON Schema guide](https://docs.extend.ai/2026-02-09/extraction/schema) for details and examples of schema configuration.
     """
 
     advanced_options: typing_extensions.NotRequired[

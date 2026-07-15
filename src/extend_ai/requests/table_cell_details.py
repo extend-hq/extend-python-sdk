@@ -4,6 +4,7 @@ import typing
 
 import typing_extensions
 from ..core.serialization import FieldMetadata
+from .cell_formatting import CellFormattingParams
 
 
 class TableCellDetailsParams(typing_extensions.TypedDict):
@@ -18,3 +19,19 @@ class TableCellDetailsParams(typing_extensions.TypedDict):
 
     row_index: typing_extensions.Annotated[int, FieldMetadata(alias="rowIndex")]
     column_index: typing_extensions.Annotated[int, FieldMetadata(alias="columnIndex")]
+    cell_reference: typing_extensions.NotRequired[
+        typing_extensions.Annotated[str, FieldMetadata(alias="cellReference")]
+    ]
+    """
+    Source spreadsheet cell or range in A1 notation, such as `B2` or `A1:C1` for a merged cell. Only set for Excel table cells when `advancedOptions.excelIncludeCellMetadata` is enabled.
+    """
+
+    formula: typing_extensions.NotRequired[str]
+    """
+    Source spreadsheet formula text with a leading `=`, when the cell has a formula. Only set for Excel table cells when `advancedOptions.excelIncludeCellMetadata` is enabled.
+    """
+
+    formatting: typing_extensions.NotRequired[CellFormattingParams]
+    """
+    Structured spreadsheet cell formatting. Only set when `advancedOptions.excelIncludeCellFormatting` is enabled and formatting is present.
+    """

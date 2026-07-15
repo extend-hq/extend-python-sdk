@@ -68,7 +68,7 @@ class WorkflowRunsClient:
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
         batch_id : typing.Optional[str]
-            Filters workflow runs by the batch ID. This is useful for fetching all runs for a given batch created via the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
+            Filters workflow runs by the batch ID. This is useful for fetching all runs for a given batch created via the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
 
             Example: `"batch_7Ws31-F5"`
 
@@ -86,7 +86,7 @@ class WorkflowRunsClient:
         max_page_size : typing.Optional[MaxPageSize]
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -96,7 +96,7 @@ class WorkflowRunsClient:
         WorkflowRunsListResponse
             You will get a list of summaries for each workflow run. These are shortened versions of the full WorkflowRun object.
 
-            To get the full object, use the [Get WorkflowRun](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/get-workflow-run) endpoint.
+            To get the full object, use the [Get WorkflowRun](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/get-workflow-run) endpoint.
 
         Examples
         --------
@@ -144,7 +144,7 @@ class WorkflowRunsClient:
         workflow : WorkflowReferenceParams
 
         file : WorkflowRunsCreateRequestFileParams
-            The file to be processed. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/product/general/supported-file-types). Files can be provided as a URL, an Extend file ID, or raw text. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
+            The file to be processed. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/general/supported-file-types). Files can be provided as a URL, an Extend file ID, or raw text. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
 
         outputs : typing.Optional[typing.Sequence[WorkflowRunsCreateRequestOutputsItemParams]]
             Predetermined outputs to be used for the workflow run. Generally not recommended for most use cases, however, can be useful in cases of overriding a classification in a workflow, or a subset of extraction fields when data is known.
@@ -204,7 +204,7 @@ class WorkflowRunsClient:
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -250,7 +250,7 @@ class WorkflowRunsClient:
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             An optional name that can be assigned to a specific WorkflowRun
@@ -308,7 +308,7 @@ class WorkflowRunsClient:
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -354,7 +354,7 @@ class WorkflowRunsClient:
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -385,22 +385,23 @@ class WorkflowRunsClient:
         *,
         workflow: WorkflowReferenceParams,
         inputs: typing.Sequence[WorkflowRunsCreateBatchRequestInputsItemParams],
+        priority: typing.Optional[int] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowRunsCreateBatchResponse:
         """
         This endpoint allows you to efficiently initiate large batches of workflow runs in a single request (up to 1,000 in a single request, but you can queue up multiple batches in rapid succession). It accepts an array of inputs, each containing a file and metadata pair. The primary use case for this endpoint is for doing large bulk runs of >1000 files at a time that can process over the course of a few hours without needing to manage rate limits that would likely occur using the primary run endpoint.
 
-        Unlike the single [Run Workflow](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/create-workflow-run) endpoint which returns the details of the created workflow runs immediately, this batch endpoint returns a `batchId`.
+        Unlike the single [Run Workflow](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/create-workflow-run) endpoint which returns the details of the created workflow runs immediately, this batch endpoint returns a `batchId`.
 
-        Our recommended usage pattern is to integrate with [Webhooks](https://docs.extend.ai/2026-02-09/product/webhooks/configuration) for consuming results, using the `metadata` and `batchId` to match up results to the original inputs in your downstream systems. However, you can integrate in a polling mechanism by using a combination of the [List Workflow Runs](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/list-workflow-runs) endpoint to fetch all runs via a batch, and then [Get Workflow Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/get-workflow-run) to fetch the full outputs each run.
+        Our recommended usage pattern is to integrate with [Webhooks](https://docs.extend.ai/2026-02-09/webhooks/configuration) for consuming results, using the `metadata` and `batchId` to match up results to the original inputs in your downstream systems. However, you can integrate in a polling mechanism by using a combination of the [List Workflow Runs](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/list-workflow-runs) endpoint to fetch all runs via a batch, and then [Get Workflow Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/get-workflow-run) to fetch the full outputs each run.
 
-        **Priority:** All workflow runs created through this batch endpoint are automatically assigned a priority of 90.
+        **Priority:** By default, workflow runs created through this batch endpoint are assigned a priority of 90. You can override this by passing an optional `priority` value (1–100) in the request body — lower values run first.
 
         **Processing and Monitoring:**
         Upon successful submission, the endpoint returns a `batchId`. The individual workflow runs are then queued for processing.
 
-        - **Monitoring:** Track the progress and consume results of individual runs using [Webhooks](https://docs.extend.ai/2026-02-09/product/webhooks/configuration). Subscribe to events like `workflow_run.completed`, `workflow_run.failed`, etc. The webhook payload for these events will include the corresponding `batchId` and the `metadata` you provided for each input.
-        - **Fetching Results:** You can also use the [List Workflow Runs](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/list-workflow-runs) endpoint and filter using the `batchId` query param.
+        - **Monitoring:** Track the progress and consume results of individual runs using [Webhooks](https://docs.extend.ai/2026-02-09/webhooks/configuration). Subscribe to events like `workflow_run.completed`, `workflow_run.failed`, etc. The webhook payload for these events will include the corresponding `batchId` and the `metadata` you provided for each input.
+        - **Fetching Results:** You can also use the [List Workflow Runs](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/list-workflow-runs) endpoint and filter using the `batchId` query param.
 
         Parameters
         ----------
@@ -408,6 +409,9 @@ class WorkflowRunsClient:
 
         inputs : typing.Sequence[WorkflowRunsCreateBatchRequestInputsItemParams]
             An array of input objects to be processed by the workflow. Each object represents a single workflow run to be created. The array must contain at least 1 input and at most 1000 inputs.
+
+        priority : typing.Optional[int]
+            An optional value used to determine the relative order of runs when rate limiting is in effect. Lower values will be prioritized before higher values. Defaults to 90 if not specified.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -438,7 +442,9 @@ class WorkflowRunsClient:
             ],
         )
         """
-        _response = self._raw_client.create_batch(workflow=workflow, inputs=inputs, request_options=request_options)
+        _response = self._raw_client.create_batch(
+            workflow=workflow, inputs=inputs, priority=priority, request_options=request_options
+        )
         return _response.data
 
 
@@ -484,7 +490,7 @@ class AsyncWorkflowRunsClient:
             Example: `"workflow_BMdfq_yWM3sT-ZzvCnA3f"`
 
         batch_id : typing.Optional[str]
-            Filters workflow runs by the batch ID. This is useful for fetching all runs for a given batch created via the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
+            Filters workflow runs by the batch ID. This is useful for fetching all runs for a given batch created via the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
 
             Example: `"batch_7Ws31-F5"`
 
@@ -502,7 +508,7 @@ class AsyncWorkflowRunsClient:
         max_page_size : typing.Optional[MaxPageSize]
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -512,7 +518,7 @@ class AsyncWorkflowRunsClient:
         WorkflowRunsListResponse
             You will get a list of summaries for each workflow run. These are shortened versions of the full WorkflowRun object.
 
-            To get the full object, use the [Get WorkflowRun](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/get-workflow-run) endpoint.
+            To get the full object, use the [Get WorkflowRun](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/get-workflow-run) endpoint.
 
         Examples
         --------
@@ -568,7 +574,7 @@ class AsyncWorkflowRunsClient:
         workflow : WorkflowReferenceParams
 
         file : WorkflowRunsCreateRequestFileParams
-            The file to be processed. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/product/general/supported-file-types). Files can be provided as a URL, an Extend file ID, or raw text. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
+            The file to be processed. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/general/supported-file-types). Files can be provided as a URL, an Extend file ID, or raw text. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
 
         outputs : typing.Optional[typing.Sequence[WorkflowRunsCreateRequestOutputsItemParams]]
             Predetermined outputs to be used for the workflow run. Generally not recommended for most use cases, however, can be useful in cases of overriding a classification in a workflow, or a subset of extraction fields when data is known.
@@ -636,7 +642,7 @@ class AsyncWorkflowRunsClient:
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -690,7 +696,7 @@ class AsyncWorkflowRunsClient:
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         name : typing.Optional[str]
             An optional name that can be assigned to a specific WorkflowRun
@@ -756,7 +762,7 @@ class AsyncWorkflowRunsClient:
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -810,7 +816,7 @@ class AsyncWorkflowRunsClient:
             Example: `"workflow_run_xKm9pNv3qWsY_jL2tR5Dh"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -849,22 +855,23 @@ class AsyncWorkflowRunsClient:
         *,
         workflow: WorkflowReferenceParams,
         inputs: typing.Sequence[WorkflowRunsCreateBatchRequestInputsItemParams],
+        priority: typing.Optional[int] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowRunsCreateBatchResponse:
         """
         This endpoint allows you to efficiently initiate large batches of workflow runs in a single request (up to 1,000 in a single request, but you can queue up multiple batches in rapid succession). It accepts an array of inputs, each containing a file and metadata pair. The primary use case for this endpoint is for doing large bulk runs of >1000 files at a time that can process over the course of a few hours without needing to manage rate limits that would likely occur using the primary run endpoint.
 
-        Unlike the single [Run Workflow](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/create-workflow-run) endpoint which returns the details of the created workflow runs immediately, this batch endpoint returns a `batchId`.
+        Unlike the single [Run Workflow](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/create-workflow-run) endpoint which returns the details of the created workflow runs immediately, this batch endpoint returns a `batchId`.
 
-        Our recommended usage pattern is to integrate with [Webhooks](https://docs.extend.ai/2026-02-09/product/webhooks/configuration) for consuming results, using the `metadata` and `batchId` to match up results to the original inputs in your downstream systems. However, you can integrate in a polling mechanism by using a combination of the [List Workflow Runs](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/list-workflow-runs) endpoint to fetch all runs via a batch, and then [Get Workflow Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/get-workflow-run) to fetch the full outputs each run.
+        Our recommended usage pattern is to integrate with [Webhooks](https://docs.extend.ai/2026-02-09/webhooks/configuration) for consuming results, using the `metadata` and `batchId` to match up results to the original inputs in your downstream systems. However, you can integrate in a polling mechanism by using a combination of the [List Workflow Runs](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/list-workflow-runs) endpoint to fetch all runs via a batch, and then [Get Workflow Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/get-workflow-run) to fetch the full outputs each run.
 
-        **Priority:** All workflow runs created through this batch endpoint are automatically assigned a priority of 90.
+        **Priority:** By default, workflow runs created through this batch endpoint are assigned a priority of 90. You can override this by passing an optional `priority` value (1–100) in the request body — lower values run first.
 
         **Processing and Monitoring:**
         Upon successful submission, the endpoint returns a `batchId`. The individual workflow runs are then queued for processing.
 
-        - **Monitoring:** Track the progress and consume results of individual runs using [Webhooks](https://docs.extend.ai/2026-02-09/product/webhooks/configuration). Subscribe to events like `workflow_run.completed`, `workflow_run.failed`, etc. The webhook payload for these events will include the corresponding `batchId` and the `metadata` you provided for each input.
-        - **Fetching Results:** You can also use the [List Workflow Runs](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/workflow/list-workflow-runs) endpoint and filter using the `batchId` query param.
+        - **Monitoring:** Track the progress and consume results of individual runs using [Webhooks](https://docs.extend.ai/2026-02-09/webhooks/configuration). Subscribe to events like `workflow_run.completed`, `workflow_run.failed`, etc. The webhook payload for these events will include the corresponding `batchId` and the `metadata` you provided for each input.
+        - **Fetching Results:** You can also use the [List Workflow Runs](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/list-workflow-runs) endpoint and filter using the `batchId` query param.
 
         Parameters
         ----------
@@ -872,6 +879,9 @@ class AsyncWorkflowRunsClient:
 
         inputs : typing.Sequence[WorkflowRunsCreateBatchRequestInputsItemParams]
             An array of input objects to be processed by the workflow. Each object represents a single workflow run to be created. The array must contain at least 1 input and at most 1000 inputs.
+
+        priority : typing.Optional[int]
+            An optional value used to determine the relative order of runs when rate limiting is in effect. Lower values will be prioritized before higher values. Defaults to 90 if not specified.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -911,6 +921,6 @@ class AsyncWorkflowRunsClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.create_batch(
-            workflow=workflow, inputs=inputs, request_options=request_options
+            workflow=workflow, inputs=inputs, priority=priority, request_options=request_options
         )
         return _response.data

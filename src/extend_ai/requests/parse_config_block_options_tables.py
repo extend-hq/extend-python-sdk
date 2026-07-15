@@ -41,5 +41,5 @@ class ParseConfigBlockOptionsTablesParams(typing_extensions.TypedDict):
 
     agentic: typing_extensions.NotRequired[ParseConfigBlockOptionsTablesAgenticParams]
     """
-    Options for agentic table processing using VLM-based review and correction.
+    Options for agentic table processing using VLM-based review and correction. Enabling this incurs additional credits on pages where agentic table correction is triggered.
     """

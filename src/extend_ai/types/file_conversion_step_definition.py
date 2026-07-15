@@ -13,7 +13,7 @@ class FileConversionStepDefinition(UncheckedBaseModel):
     """
     Converts files to a different format.
 
-    See the [File Conversion step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#file-conversion-step).
+    See the [File Conversion step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#file-conversion).
     """
 
     name: str

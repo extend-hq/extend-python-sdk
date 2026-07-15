@@ -3,23 +3,40 @@
 import typing
 
 import pydantic
+import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .classifier_ref import ClassifierRef
+from .classify_config import ClassifyConfig
 
 
 class ClassifyStepDefinitionConfig(UncheckedBaseModel):
     """
     Optional on create/update. Required before the workflow can be deployed. Omitted in responses when the step is not yet configured.
 
-    Reference to the classifier used by this step. The `next[].classificationId` values must match classification `id` values (not `type` strings) from the referenced classifier's configuration. For example, if the classifier defines `{ "id": "cls_invoice", "type": "invoice" }`, use `"cls_invoice"` as the `classificationId`.
+    When present, must contain exactly one of `classifier` (saved processor reference) or `classifierConfig` (inline configuration) — not both.
 
-    The classifier `version` is required and must be a pinned version (semver like `"0.1"` or `"draft"`). `"latest"` is not allowed.
+    The `next[].classificationId` values must match classification `id` values (not `type` strings) from the classifier's configuration — the referenced version's config for a saved reference, or the inline `classifications` array for an inline config. For example, if the classifier defines `{ "id": "cls_invoice", "type": "invoice" }`, use `"cls_invoice"` as the `classificationId`.
 
-    See the [Classify step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#classify-step).
+    See the [Classify step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#classify).
     """
 
-    classifier: ClassifierRef
+    classifier: typing.Optional[ClassifierRef] = pydantic.Field(default=None)
+    """
+    Reference to a saved classifier. Provide either this or `classifierConfig`, not both.
+    
+    The `version` is required and must be a pinned version (semver like `"0.1"` or `"draft"`). `"latest"` is not allowed.
+    """
+
+    classifier_config: typing_extensions.Annotated[
+        typing.Optional[ClassifyConfig], FieldMetadata(alias="classifierConfig")
+    ] = pydantic.Field(alias="classifierConfig", default=None)
+    """
+    Inline classifier configuration. Provide either this or `classifier`, not both. Same shape as the `config` accepted by [Create Classify Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/classify/create-classify-run).
+    
+    Inline configs are returned verbatim in responses (there is no saved processor, so no `version` is involved).
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

@@ -5,6 +5,7 @@ import typing
 import typing_extensions
 from ..core.serialization import FieldMetadata
 from ..types.extract_advanced_options_array_citation_strategy import ExtractAdvancedOptionsArrayCitationStrategy
+from ..types.extract_advanced_options_citation_mode import ExtractAdvancedOptionsCitationMode
 from ..types.extract_advanced_options_excel_sheet_selection_strategy import (
     ExtractAdvancedOptionsExcelSheetSelectionStrategy,
 )
@@ -37,11 +38,14 @@ class ExtractAdvancedOptionsParams(typing_extensions.TypedDict):
     Whether to enable citations in the output.
     """
 
-    current_date_enabled: typing_extensions.NotRequired[
-        typing_extensions.Annotated[bool, FieldMetadata(alias="currentDateEnabled")]
+    citation_mode: typing_extensions.NotRequired[
+        typing_extensions.Annotated[ExtractAdvancedOptionsCitationMode, FieldMetadata(alias="citationMode")]
     ]
     """
-    Whether to include the current date as context for the model during extraction. Defaults to `false`.
+    Controls the granularity of citations returned alongside extracted values. Requires `citationsEnabled=true` and a base processor version that supports bounding box citations.
+    - `line`: Use OCR lines for citations. This can return one or more relevant OCR lines for each citation. This is the default mode.
+    - `word`: Narrow each matched citation down to the relevant OCR word span when possible. Note: this might still return line citations in cases where the citation model is unable to reliably narrow down to a word-level citation. Typically, this only makes sense when you are doing array extraction and want precise word citations from a given cell in a table to match an array property, e.g. `line_items.total`.
+    - `block`: Use parser blocks (e.g. full paragraphs, key-val regions, tables, lists, etc.) and return block-level polygons for each citation. Will have highest recall in terms of overlap with the extracted value source, but least granularity.
     """
 
     array_citation_strategy: typing_extensions.NotRequired[
@@ -50,7 +54,9 @@ class ExtractAdvancedOptionsParams(typing_extensions.TypedDict):
         ]
     ]
     """
-    Granularity for array citations. This requires citationsEnabled=true and a base processor version that supports property-level array citations (extraction_performance ≥ 4.4.0).
+    Granularity for array citations. Requires turning on citations: `citationsEnabled=true`.
+    - `item`: Creates item-level citations for array fields. This will return a single bbox citation for each "item" in the array e.g. line_items[0], line_items[1], etc.
+    - `property`: Creates property-level citations (cell-level citations) for array fields. This will return a citation for each property/cell for every item/row in the array, e.g. line_items[0].description, line_items[1].price, etc.
     """
 
     array_strategy: typing_extensions.NotRequired[
@@ -91,5 +97,14 @@ class ExtractAdvancedOptionsParams(typing_extensions.TypedDict):
     and may include additional `insights` of type `issue` or `review_summary` to help identify
     fields that may need manual review.
     
-    To learn more, view the [Review Agent Documentation](https://docs.extend.ai/2026-02-09/product/extraction/review-agent)
+    Enabling the review agent incurs additional credits.
+    
+    To learn more, view the [Review Agent Documentation](https://docs.extend.ai/2026-02-09/extraction/review-agent)
+    """
+
+    current_date_enabled: typing_extensions.NotRequired[
+        typing_extensions.Annotated[bool, FieldMetadata(alias="currentDateEnabled")]
+    ]
+    """
+    Whether to include the current date as context for the model during extraction. Defaults to `false`.
     """

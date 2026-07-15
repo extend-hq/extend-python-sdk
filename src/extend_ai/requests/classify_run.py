@@ -33,6 +33,14 @@ class ClassifyRunParams(typing_extensions.TypedDict):
     Example: `"clr_Xj8mK2pL9nR4vT7qY5wZ"`
     """
 
+    status: ProcessorRunStatus
+    output: typing.Optional[ClassifyOutputParams]
+    """
+    The final output, either reviewed or initial.
+    
+    **Availability:** Present when `status` is `"PROCESSED"`.
+    """
+
     classifier: typing.Optional[ClassifierSummaryParams]
     """
     The classifier that was used for this run.
@@ -47,14 +55,6 @@ class ClassifyRunParams(typing_extensions.TypedDict):
     The version of the classifier that was used for this run.
     
     **Availability:** Present when a classifier reference was provided. Not present when using inline `config`.
-    """
-
-    status: ProcessorRunStatus
-    output: typing.Optional[ClassifyOutputParams]
-    """
-    The final output, either reviewed or initial.
-    
-    **Availability:** Present when `status` is `"PROCESSED"`.
     """
 
     initial_output: typing_extensions.Annotated[
@@ -124,9 +124,9 @@ class ClassifyRunParams(typing_extensions.TypedDict):
     The configuration used for this classify run.
     """
 
-    file: FileSummaryParams
+    file: typing.Optional[FileSummaryParams]
     """
-    The file that was processed.
+    The file that was processed. `null` when the file could not be accessed or processed (for example a run that failed during file ingestion, or a multi-file batch run).
     """
 
     parse_run_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parseRunId")]

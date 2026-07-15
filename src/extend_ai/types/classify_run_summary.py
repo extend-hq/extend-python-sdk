@@ -84,9 +84,9 @@ class ClassifyRunSummary(UncheckedBaseModel):
     Indicates whether the run results have been edited during review.
     """
 
-    file: FileSummary = pydantic.Field()
+    file: typing.Optional[FileSummary] = pydantic.Field(default=None)
     """
-    The file that was processed.
+    The file that was processed. `null` when the file could not be accessed or processed (for example a run that failed during file ingestion, or a multi-file batch run).
     """
 
     parse_run_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="parseRunId")] = pydantic.Field(

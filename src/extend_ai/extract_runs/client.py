@@ -5,6 +5,7 @@ import typing
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
 from ..requests.extract_config_json import ExtractConfigJsonParams
+from ..requests.multi_file_run_package import MultiFileRunPackageParams
 from ..types.batch_run import BatchRun
 from ..types.extract_run import ExtractRun
 from ..types.max_page_size import MaxPageSize
@@ -98,7 +99,7 @@ class ExtractRunsClient:
         max_page_size : typing.Optional[MaxPageSize]
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -108,7 +109,7 @@ class ExtractRunsClient:
         ExtractRunsListResponse
             You will get a list of summaries for each extract run. These are shortened versions of the full extract run object.
 
-            To get the full object, use the [Get Extract Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/get-extract-run) endpoint.
+            To get the full object, use the [Get Extract Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/extract/get-extract-run) endpoint.
 
         Examples
         --------
@@ -140,9 +141,10 @@ class ExtractRunsClient:
     def create(
         self,
         *,
-        file: ExtractRunsCreateRequestFileParams,
         extractor: typing.Optional[ExtractRunsCreateRequestExtractorParams] = OMIT,
         config: typing.Optional[ExtractConfigJsonParams] = OMIT,
+        file: typing.Optional[ExtractRunsCreateRequestFileParams] = OMIT,
+        package: typing.Optional[MultiFileRunPackageParams] = OMIT,
         priority: typing.Optional[RunPriority] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -154,14 +156,21 @@ class ExtractRunsClient:
 
         Parameters
         ----------
-        file : ExtractRunsCreateRequestFileParams
-            The file to be extracted from. Files can be provided as a URL, Extend file ID, or raw text.
-
         extractor : typing.Optional[ExtractRunsCreateRequestExtractorParams]
-            Reference to an existing extractor. One of `extractor` or `config` must be provided.
+            Reference to an existing extractor. Mutually exclusive with `config` — provide one or the other, or omit both to have Extend infer a schema from the document.
 
         config : typing.Optional[ExtractConfigJsonParams]
-            Inline extract configuration. One of `extractor` or `config` must be provided.
+            Inline extract configuration. Mutually exclusive with `extractor` — provide one or the other, or omit both to have Extend infer a schema from the document.
+
+        file : typing.Optional[ExtractRunsCreateRequestFileParams]
+            The file to be extracted from. Mutually exclusive with `package` — provide one or the other.
+
+            Files can be provided as a URL, Extend file ID, or raw text.
+
+        package : typing.Optional[MultiFileRunPackageParams]
+            A collection of files to extract from together in a single run. Mutually exclusive with `file` — provide one or the other.
+
+            See [Multifile Extraction](https://docs.extend.ai/2026-02-09/extraction/multifile) for details.
 
         priority : typing.Optional[RunPriority]
 
@@ -188,9 +197,10 @@ class ExtractRunsClient:
         )
         """
         _response = self._raw_client.create(
-            file=file,
             extractor=extractor,
             config=config,
+            file=file,
+            package=package,
             priority=priority,
             metadata=metadata,
             request_options=request_options,
@@ -207,7 +217,7 @@ class ExtractRunsClient:
         """
         Retrieve details about a specific extract run, including its status, outputs, and any edits made during review.
 
-        A common use case for this endpoint is to poll for the status and final output of an extract run when using the [Create Extract Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/create-extract-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
+        A common use case for this endpoint is to poll for the status and final output of an extract run when using the [Create Extract Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/extract/create-extract-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
 
         Parameters
         ----------
@@ -217,7 +227,7 @@ class ExtractRunsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -261,7 +271,7 @@ class ExtractRunsClient:
             The ID of the extract run.
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -307,7 +317,7 @@ class ExtractRunsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -344,7 +354,7 @@ class ExtractRunsClient:
         """
         Submit up to **1,000 files** for extraction in a single request. Each file is processed as an independent extract run using the same extractor and configuration.
 
-        Unlike the single [Extract File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/create-extract-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+        Unlike the single [Extract File (Async)](https://docs.extend.ai/2026-02-09/api-reference/endpoints/extract/create-extract-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
 
         **Monitoring results:**
         - **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /extract_runs?batchId={id}`.
@@ -474,7 +484,7 @@ class AsyncExtractRunsClient:
         max_page_size : typing.Optional[MaxPageSize]
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -484,7 +494,7 @@ class AsyncExtractRunsClient:
         ExtractRunsListResponse
             You will get a list of summaries for each extract run. These are shortened versions of the full extract run object.
 
-            To get the full object, use the [Get Extract Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/get-extract-run) endpoint.
+            To get the full object, use the [Get Extract Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/extract/get-extract-run) endpoint.
 
         Examples
         --------
@@ -524,9 +534,10 @@ class AsyncExtractRunsClient:
     async def create(
         self,
         *,
-        file: ExtractRunsCreateRequestFileParams,
         extractor: typing.Optional[ExtractRunsCreateRequestExtractorParams] = OMIT,
         config: typing.Optional[ExtractConfigJsonParams] = OMIT,
+        file: typing.Optional[ExtractRunsCreateRequestFileParams] = OMIT,
+        package: typing.Optional[MultiFileRunPackageParams] = OMIT,
         priority: typing.Optional[RunPriority] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
@@ -538,14 +549,21 @@ class AsyncExtractRunsClient:
 
         Parameters
         ----------
-        file : ExtractRunsCreateRequestFileParams
-            The file to be extracted from. Files can be provided as a URL, Extend file ID, or raw text.
-
         extractor : typing.Optional[ExtractRunsCreateRequestExtractorParams]
-            Reference to an existing extractor. One of `extractor` or `config` must be provided.
+            Reference to an existing extractor. Mutually exclusive with `config` — provide one or the other, or omit both to have Extend infer a schema from the document.
 
         config : typing.Optional[ExtractConfigJsonParams]
-            Inline extract configuration. One of `extractor` or `config` must be provided.
+            Inline extract configuration. Mutually exclusive with `extractor` — provide one or the other, or omit both to have Extend infer a schema from the document.
+
+        file : typing.Optional[ExtractRunsCreateRequestFileParams]
+            The file to be extracted from. Mutually exclusive with `package` — provide one or the other.
+
+            Files can be provided as a URL, Extend file ID, or raw text.
+
+        package : typing.Optional[MultiFileRunPackageParams]
+            A collection of files to extract from together in a single run. Mutually exclusive with `file` — provide one or the other.
+
+            See [Multifile Extraction](https://docs.extend.ai/2026-02-09/extraction/multifile) for details.
 
         priority : typing.Optional[RunPriority]
 
@@ -580,9 +598,10 @@ class AsyncExtractRunsClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.create(
-            file=file,
             extractor=extractor,
             config=config,
+            file=file,
+            package=package,
             priority=priority,
             metadata=metadata,
             request_options=request_options,
@@ -599,7 +618,7 @@ class AsyncExtractRunsClient:
         """
         Retrieve details about a specific extract run, including its status, outputs, and any edits made during review.
 
-        A common use case for this endpoint is to poll for the status and final output of an extract run when using the [Create Extract Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/create-extract-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
+        A common use case for this endpoint is to poll for the status and final output of an extract run when using the [Create Extract Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/extract/create-extract-run) endpoint. For instance, if you do not want to not configure webhooks to receive the output via completion/failure events.
 
         Parameters
         ----------
@@ -609,7 +628,7 @@ class AsyncExtractRunsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -661,7 +680,7 @@ class AsyncExtractRunsClient:
             The ID of the extract run.
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -715,7 +734,7 @@ class AsyncExtractRunsClient:
             Example: `"ex_Xj8mK2pL9nR4vT7qY5wZ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -760,7 +779,7 @@ class AsyncExtractRunsClient:
         """
         Submit up to **1,000 files** for extraction in a single request. Each file is processed as an independent extract run using the same extractor and configuration.
 
-        Unlike the single [Extract File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/extract/create-extract-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+        Unlike the single [Extract File (Async)](https://docs.extend.ai/2026-02-09/api-reference/endpoints/extract/create-extract-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
 
         **Monitoring results:**
         - **Webhooks (recommended):** Subscribe to `batch_processor_run.processed` and `batch_processor_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /extract_runs?batchId={id}`.

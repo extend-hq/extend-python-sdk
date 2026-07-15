@@ -24,7 +24,7 @@ class ParseConfigBlockOptionsText(UncheckedBaseModel):
 
     agentic: typing.Optional[ParseConfigBlockOptionsTextAgentic] = pydantic.Field(default=None)
     """
-    Options for agentic text processing using VLM-based review and correction.
+    Options for agentic text processing using VLM-based review and correction. Enabling this incurs additional credits on pages where agentic text correction is triggered.
     """
 
     if IS_PYDANTIC_V2:

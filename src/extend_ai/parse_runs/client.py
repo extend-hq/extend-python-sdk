@@ -4,6 +4,7 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
+from ..requests.data_retention import DataRetentionParams
 from ..requests.parse_config import ParseConfigParams
 from ..types.batch_run import BatchRun
 from ..types.max_page_size import MaxPageSize
@@ -86,7 +87,7 @@ class ParseRunsClient:
         max_page_size : typing.Optional[MaxPageSize]
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -126,6 +127,7 @@ class ParseRunsClient:
         file: ParseRunsCreateRequestFileParams,
         config: typing.Optional[ParseConfigParams] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
+        data_retention: typing.Optional[DataRetentionParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ParseRun:
         """
@@ -143,6 +145,8 @@ class ParseRunsClient:
         config : typing.Optional[ParseConfigParams]
 
         metadata : typing.Optional[RunMetadata]
+
+        data_retention : typing.Optional[DataRetentionParams]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -167,7 +171,7 @@ class ParseRunsClient:
         )
         """
         _response = self._raw_client.create(
-            file=file, config=config, metadata=metadata, request_options=request_options
+            file=file, config=config, metadata=metadata, data_retention=data_retention, request_options=request_options
         )
         return _response.data
 
@@ -182,7 +186,7 @@ class ParseRunsClient:
         """
         Retrieve the status and results of a parse run.
 
-        Use this endpoint to get results for a parse run that has already completed, or to check on the status of a parse run initiated by the [Create Parse Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/parse/create-parse-run) endpoint.
+        Use this endpoint to get results for a parse run that has already completed, or to check on the status of a parse run initiated by the [Create Parse Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/parse/create-parse-run) endpoint.
 
         Parameters
         ----------
@@ -197,7 +201,7 @@ class ParseRunsClient:
             * `url` - Returns a presigned URL in the `outputUrl` field to download the output as a JSON file. The URL expires after 15 minutes. Useful for large outputs.
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -243,7 +247,7 @@ class ParseRunsClient:
             Example: `"pr_xK9mLPqRtN3vS8wF5hB2cQ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -269,6 +273,52 @@ class ParseRunsClient:
         )
         return _response.data
 
+    def cancel(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ParseRun:
+        """
+        Cancel an in-progress parse run.
+
+        Note: Only parse runs with a status of `"PROCESSING"` can be cancelled. Parse runs that have already completed, failed, or been cancelled cannot be cancelled again.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the parse run to cancel.
+
+            Example: `"pr_xK9mLPqRtN3vS8wF5hB2cQ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ParseRun
+            Parse run cancelled successfully
+
+        Examples
+        --------
+        from extend_ai import Extend
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.parse_runs.cancel(
+            id="parse_run_id_here",
+        )
+        """
+        _response = self._raw_client.cancel(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
+        return _response.data
+
     def create_batch(
         self,
         *,
@@ -280,7 +330,7 @@ class ParseRunsClient:
         """
         Submit up to **1,000 files** for parsing in a single request. Each file is processed as an independent parse run using the same configuration.
 
-        Unlike the single [Parse File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/parse/create-parse-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+        Unlike the single [Parse File (Async)](https://docs.extend.ai/2026-02-09/api-reference/endpoints/parse/create-parse-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
 
         **Monitoring results:**
         - **Webhooks (recommended):** Subscribe to `batch_parse_run.processed` and `batch_parse_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /parse_runs?batchId={id}`.
@@ -399,7 +449,7 @@ class AsyncParseRunsClient:
         max_page_size : typing.Optional[MaxPageSize]
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -447,6 +497,7 @@ class AsyncParseRunsClient:
         file: ParseRunsCreateRequestFileParams,
         config: typing.Optional[ParseConfigParams] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
+        data_retention: typing.Optional[DataRetentionParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ParseRun:
         """
@@ -464,6 +515,8 @@ class AsyncParseRunsClient:
         config : typing.Optional[ParseConfigParams]
 
         metadata : typing.Optional[RunMetadata]
+
+        data_retention : typing.Optional[DataRetentionParams]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -496,7 +549,7 @@ class AsyncParseRunsClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.create(
-            file=file, config=config, metadata=metadata, request_options=request_options
+            file=file, config=config, metadata=metadata, data_retention=data_retention, request_options=request_options
         )
         return _response.data
 
@@ -511,7 +564,7 @@ class AsyncParseRunsClient:
         """
         Retrieve the status and results of a parse run.
 
-        Use this endpoint to get results for a parse run that has already completed, or to check on the status of a parse run initiated by the [Create Parse Run](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/parse/create-parse-run) endpoint.
+        Use this endpoint to get results for a parse run that has already completed, or to check on the status of a parse run initiated by the [Create Parse Run](https://docs.extend.ai/2026-02-09/api-reference/endpoints/parse/create-parse-run) endpoint.
 
         Parameters
         ----------
@@ -526,7 +579,7 @@ class AsyncParseRunsClient:
             * `url` - Returns a presigned URL in the `outputUrl` field to download the output as a JSON file. The URL expires after 15 minutes. Useful for large outputs.
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -580,7 +633,7 @@ class AsyncParseRunsClient:
             Example: `"pr_xK9mLPqRtN3vS8wF5hB2cQ"`
 
         extend_workspace_id : typing.Optional[str]
-            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/developers/authentication) for details on API key scopes.
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -614,6 +667,60 @@ class AsyncParseRunsClient:
         )
         return _response.data
 
+    async def cancel(
+        self,
+        id: str,
+        *,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ParseRun:
+        """
+        Cancel an in-progress parse run.
+
+        Note: Only parse runs with a status of `"PROCESSING"` can be cancelled. Parse runs that have already completed, failed, or been cancelled cannot be cancelled again.
+
+        Parameters
+        ----------
+        id : str
+            The ID of the parse run to cancel.
+
+            Example: `"pr_xK9mLPqRtN3vS8wF5hB2cQ"`
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        ParseRun
+            Parse run cancelled successfully
+
+        Examples
+        --------
+        import asyncio
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.parse_runs.cancel(
+                id="parse_run_id_here",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.cancel(
+            id, extend_workspace_id=extend_workspace_id, request_options=request_options
+        )
+        return _response.data
+
     async def create_batch(
         self,
         *,
@@ -625,7 +732,7 @@ class AsyncParseRunsClient:
         """
         Submit up to **1,000 files** for parsing in a single request. Each file is processed as an independent parse run using the same configuration.
 
-        Unlike the single [Parse File (Async)](https://docs.extend.ai/2026-02-09/developers/api-reference/endpoints/parse/create-parse-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
+        Unlike the single [Parse File (Async)](https://docs.extend.ai/2026-02-09/api-reference/endpoints/parse/create-parse-run) endpoint, this batch endpoint accepts an `inputs` array and immediately returns a `BatchRun` object containing a batch `id` and a `PENDING` status. The individual runs are then queued and processed asynchronously.
 
         **Monitoring results:**
         - **Webhooks (recommended):** Subscribe to `batch_parse_run.processed` and `batch_parse_run.failed` events. The webhook payload indicates the batch has finished — fetch individual run results using `GET /parse_runs?batchId={id}`.

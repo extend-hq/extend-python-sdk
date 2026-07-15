@@ -13,7 +13,7 @@ class MergeExtractStepDefinition(UncheckedBaseModel):
     """
     Merges extraction outputs from multiple upstream extract steps.
 
-    See the [Merge Extract step docs](https://docs.extend.ai/2026-02-09/product/workflows/configuring-workflows-via-api#merge-extract-step).
+    See the [Merge Extract step docs](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows#merge-extract).
     """
 
     name: str

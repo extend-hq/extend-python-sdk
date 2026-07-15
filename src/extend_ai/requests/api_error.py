@@ -8,7 +8,7 @@ class ApiErrorParams(typing_extensions.TypedDict):
     """
     Standard error response format for all Extend API errors.
 
-    See the [Error Codes documentation](https://docs.extend.ai/2026-02-09/developers/error-codes) for error handling recommendations.
+    See the [Error Codes documentation](https://docs.extend.ai/2026-02-09/api-reference/error-handling) for error handling recommendations.
     """
 
     code: str
@@ -32,4 +32,9 @@ class ApiErrorParams(typing_extensions.TypedDict):
     """
     Unique request identifier for support purposes. Always include this 
     when contacting Extend support about an error.
+    """
+
+    doc_url: typing_extensions.NotRequired[typing_extensions.Annotated[str, FieldMetadata(alias="docUrl")]]
+    """
+    Link to relevant documentation when one is available.
     """

@@ -13,7 +13,7 @@ class ApiError(UncheckedBaseModel):
     """
     Standard error response format for all Extend API errors.
 
-    See the [Error Codes documentation](https://docs.extend.ai/2026-02-09/developers/error-codes) for error handling recommendations.
+    See the [Error Codes documentation](https://docs.extend.ai/2026-02-09/api-reference/error-handling) for error handling recommendations.
     """
 
     code: str = pydantic.Field()
@@ -39,6 +39,13 @@ class ApiError(UncheckedBaseModel):
     """
     Unique request identifier for support purposes. Always include this 
     when contacting Extend support about an error.
+    """
+
+    doc_url: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="docUrl")] = pydantic.Field(
+        alias="docUrl", default=None
+    )
+    """
+    Link to relevant documentation when one is available.
     """
 
     if IS_PYDANTIC_V2:

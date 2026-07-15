@@ -11,7 +11,7 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 
 class ParseConfigBlockOptionsTextAgentic(UncheckedBaseModel):
     """
-    Options for agentic text processing using VLM-based review and correction.
+    Options for agentic text processing using VLM-based review and correction. Enabling this incurs additional credits on pages where agentic text correction is triggered.
     """
 
     enabled: typing.Optional[bool] = pydantic.Field(default=None)
