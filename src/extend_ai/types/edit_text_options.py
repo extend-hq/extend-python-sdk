@@ -45,6 +45,13 @@ class EditTextOptions(UncheckedBaseModel):
     Maximum number of characters allowed
     """
 
+    multi_line: typing_extensions.Annotated[typing.Optional[bool], FieldMetadata(alias="multiLine")] = pydantic.Field(
+        alias="multiLine", default=None
+    )
+    """
+    Whether text can wrap across multiple lines
+    """
+
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
     else:

@@ -6,5 +6,288 @@ generations:
     timestamp: 2026-05-22T21:57:38.156Z
     cli_version: unknown
     generator_versions: {}
-current_generation: 367dd0be746692443ff7eb01e60ea2fff4b7a375
-patches: []
+  - commit_sha: 5127f8898b00255cf4632d0d7caf1a18f12e2910
+    tree_hash: 0f82ce7a2875d82675ee22b9098ca4e5dc7450c5
+    timestamp: 2026-07-15T17:01:52.474Z
+    cli_version: unknown
+    generator_versions:
+      fernapi/fern-python-sdk: 4.53.0
+current_generation: 5127f8898b00255cf4632d0d7caf1a18f12e2910
+patches:
+  - id: patch-29b579f8
+    content_hash: sha256:19cd61f1a6dd83c32c2b84be87c4195e51f4c531a09b504a5a4ec17b1de9b4a9
+    original_commit: 29b579f8e16bcdb832ae7c749c839fa917c206f5
+    original_message: patch
+    original_author: James Page <james@extend.app>
+    base_generation: 314c38825d3a129f6b76088bed0c09cd0ee003db
+    files:
+      - pyproject.toml
+    patch_content: |+
+      From 29b579f8e16bcdb832ae7c749c839fa917c206f5 Mon Sep 17 00:00:00 2001
+      From: James Page <james@extend.app>
+      Date: Mon, 6 Jul 2026 18:56:48 -0400
+      Subject: [PATCH] patch
+
+      ---
+       pyproject.toml | 2 +-
+       1 file changed, 1 insertion(+), 1 deletion(-)
+
+      diff --git a/pyproject.toml b/pyproject.toml
+      index 1c652ec..31170b6 100644
+      --- a/pyproject.toml
+      +++ b/pyproject.toml
+      @@ -4,7 +4,7 @@ dynamic = ["version"]
+       
+       [tool.poetry]
+       name = "extend_ai"
+      -version = "1.15.0"
+      +version = "1.15.1"
+       description = ""
+       readme = "README.md"
+       authors = []
+      -- 
+      2.52.0
+
+    theirs_snapshot:
+      pyproject.toml: |
+        [project]
+        name = "extend_ai"
+        dynamic = ["version"]
+
+        [tool.poetry]
+        name = "extend_ai"
+        version = "1.15.1"
+        description = ""
+        readme = "README.md"
+        authors = []
+        keywords = []
+        license = "MIT"
+        classifiers = [
+            "Intended Audience :: Developers",
+            "Programming Language :: Python",
+            "Programming Language :: Python :: 3",
+            "Programming Language :: Python :: 3.8",
+            "Programming Language :: Python :: 3.9",
+            "Programming Language :: Python :: 3.10",
+            "Programming Language :: Python :: 3.11",
+            "Programming Language :: Python :: 3.12",
+            "Operating System :: OS Independent",
+            "Operating System :: POSIX",
+            "Operating System :: MacOS",
+            "Operating System :: POSIX :: Linux",
+            "Operating System :: Microsoft :: Windows",
+            "Topic :: Software Development :: Libraries :: Python Modules",
+            "Typing :: Typed",
+            "License :: OSI Approved :: MIT License"
+        ]
+        packages = [
+            { include = "extend_ai", from = "src"}
+        ]
+
+        [tool.poetry.urls]
+        Repository = 'https://github.com/extend-hq/extend-python-sdk'
+
+        [tool.poetry.dependencies]
+        python = "^3.8"
+        httpx = ">=0.21.2"
+        pydantic = ">= 1.9.2"
+        pydantic-core = ">=2.18.2"
+        typing_extensions = ">= 4.0.0"
+
+        [tool.poetry.group.dev.dependencies]
+        mypy = "==1.13.0"
+        pytest = "^7.4.0"
+        pytest-asyncio = "^0.23.5"
+        pytest-xdist = "^3.6.1"
+        python-dateutil = "^2.9.0"
+        types-python-dateutil = "^2.9.0.20240316"
+        ruff = "==0.11.5"
+
+        [tool.pytest.ini_options]
+        testpaths = [ "tests" ]
+        asyncio_mode = "auto"
+
+        [tool.mypy]
+        plugins = ["pydantic.mypy"]
+
+        [tool.ruff]
+        line-length = 120
+
+        [tool.ruff.lint]
+        select = [
+            "E",  # pycodestyle errors
+            "F",  # pyflakes
+            "I",  # isort
+        ]
+        ignore = [
+            "E402",  # Module level import not at top of file
+            "E501",  # Line too long
+            "E711",  # Comparison to `None` should be `cond is not None`
+            "E712",  # Avoid equality comparisons to `True`; use `if ...:` checks
+            "E721",  # Use `is` and `is not` for type comparisons, or `isinstance()` for insinstance checks
+            "E722",  # Do not use bare `except`
+            "E731",  # Do not assign a `lambda` expression, use a `def`
+            "F821",  # Undefined name
+            "F841"   # Local variable ... is assigned to but never used
+        ]
+
+        [tool.ruff.lint.isort]
+        section-order = ["future", "standard-library", "third-party", "first-party"]
+
+        [build-system]
+        requires = ["poetry-core"]
+        build-backend = "poetry.core.masonry.api"
+    status: unresolved
+  - id: patch-4df4e73b
+    content_hash: sha256:5ae6cf843c83300578dbbe88ac7e88028f95221b2174366370482ab9a604ad28
+    original_commit: 4df4e73b49b9e59112fafc32c047ddff9d18881f
+    original_message: bump
+    original_author: James Page <james@extend.app>
+    base_generation: 314c38825d3a129f6b76088bed0c09cd0ee003db
+    files:
+      - src/extend_ai/core/client_wrapper.py
+    patch_content: |+
+      From 4df4e73b49b9e59112fafc32c047ddff9d18881f Mon Sep 17 00:00:00 2001
+      From: James Page <james@extend.app>
+      Date: Mon, 6 Jul 2026 18:58:00 -0400
+      Subject: [PATCH] bump
+
+      ---
+       src/extend_ai/core/client_wrapper.py | 4 ++--
+       1 file changed, 2 insertions(+), 2 deletions(-)
+
+      diff --git a/src/extend_ai/core/client_wrapper.py b/src/extend_ai/core/client_wrapper.py
+      index df1f566..7931265 100644
+      --- a/src/extend_ai/core/client_wrapper.py
+      +++ b/src/extend_ai/core/client_wrapper.py
+      @@ -26,12 +26,12 @@ class BaseClientWrapper:
+               import platform
+       
+               headers: typing.Dict[str, str] = {
+      -            "User-Agent": "extend_ai/1.15.0",
+      +            "User-Agent": "extend_ai/1.15.1",
+                   "X-Fern-Language": "Python",
+                   "X-Fern-Runtime": f"python/{platform.python_version()}",
+                   "X-Fern-Platform": f"{platform.system().lower()}/{platform.release()}",
+                   "X-Fern-SDK-Name": "extend_ai",
+      -            "X-Fern-SDK-Version": "1.15.0",
+      +            "X-Fern-SDK-Version": "1.15.1",
+                   **(self.get_custom_headers() or {}),
+               }
+               headers["Authorization"] = f"Bearer {self._get_token()}"
+      -- 
+      2.52.0
+
+    theirs_snapshot:
+      src/extend_ai/core/client_wrapper.py: |
+        # This file was auto-generated by Fern from our API Definition.
+
+        import typing
+
+        import httpx
+        from .http_client import AsyncHttpClient, HttpClient
+
+
+        class BaseClientWrapper:
+            def __init__(
+                self,
+                *,
+                token: typing.Union[str, typing.Callable[[], str]],
+                headers: typing.Optional[typing.Dict[str, str]] = None,
+                base_url: str,
+                timeout: typing.Optional[float] = None,
+                extend_api_version: typing.Optional[str] = None,
+            ):
+                self._token = token
+                self._headers = headers
+                self._base_url = base_url
+                self._timeout = timeout
+                self._extend_api_version = extend_api_version
+
+            def get_headers(self) -> typing.Dict[str, str]:
+                import platform
+
+                headers: typing.Dict[str, str] = {
+                    "User-Agent": "extend_ai/1.15.1",
+                    "X-Fern-Language": "Python",
+                    "X-Fern-Runtime": f"python/{platform.python_version()}",
+                    "X-Fern-Platform": f"{platform.system().lower()}/{platform.release()}",
+                    "X-Fern-SDK-Name": "extend_ai",
+                    "X-Fern-SDK-Version": "1.15.1",
+                    **(self.get_custom_headers() or {}),
+                }
+                headers["Authorization"] = f"Bearer {self._get_token()}"
+                headers["x-extend-api-version"] = (
+                    self._extend_api_version if self._extend_api_version is not None else "2026-02-09"
+                )
+                return headers
+
+            def _get_token(self) -> str:
+                if isinstance(self._token, str):
+                    return self._token
+                else:
+                    return self._token()
+
+            def get_custom_headers(self) -> typing.Optional[typing.Dict[str, str]]:
+                return self._headers
+
+            def get_base_url(self) -> str:
+                return self._base_url
+
+            def get_timeout(self) -> typing.Optional[float]:
+                return self._timeout
+
+
+        class SyncClientWrapper(BaseClientWrapper):
+            def __init__(
+                self,
+                *,
+                token: typing.Union[str, typing.Callable[[], str]],
+                headers: typing.Optional[typing.Dict[str, str]] = None,
+                base_url: str,
+                timeout: typing.Optional[float] = None,
+                extend_api_version: typing.Optional[str] = None,
+                httpx_client: httpx.Client,
+            ):
+                super().__init__(
+                    token=token, headers=headers, base_url=base_url, timeout=timeout, extend_api_version=extend_api_version
+                )
+                self.httpx_client = HttpClient(
+                    httpx_client=httpx_client,
+                    base_headers=self.get_headers,
+                    base_timeout=self.get_timeout,
+                    base_url=self.get_base_url,
+                )
+
+
+        class AsyncClientWrapper(BaseClientWrapper):
+            def __init__(
+                self,
+                *,
+                token: typing.Union[str, typing.Callable[[], str]],
+                headers: typing.Optional[typing.Dict[str, str]] = None,
+                base_url: str,
+                timeout: typing.Optional[float] = None,
+                extend_api_version: typing.Optional[str] = None,
+                async_token: typing.Optional[typing.Callable[[], typing.Awaitable[str]]] = None,
+                httpx_client: httpx.AsyncClient,
+            ):
+                super().__init__(
+                    token=token, headers=headers, base_url=base_url, timeout=timeout, extend_api_version=extend_api_version
+                )
+                self._async_token = async_token
+                self.httpx_client = AsyncHttpClient(
+                    httpx_client=httpx_client,
+                    base_headers=self.get_headers,
+                    base_timeout=self.get_timeout,
+                    base_url=self.get_base_url,
+                    async_base_headers=self.async_get_headers,
+                )
+
+            async def async_get_headers(self) -> typing.Dict[str, str]:
+                headers = self.get_headers()
+                if self._async_token is not None:
+                    token = await self._async_token()
+                    headers["Authorization"] = f"Bearer {token}"
+                return headers
+    status: unresolved

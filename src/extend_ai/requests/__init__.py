@@ -21,6 +21,7 @@ if typing.TYPE_CHECKING:
     from .block_metadata_sheet import BlockMetadataSheetParams
     from .block_polygon_item import BlockPolygonItemParams
     from .bounding_box import BoundingBoxParams
+    from .cell_formatting import CellFormattingParams
     from .chunk import ChunkParams
     from .chunk_metadata import ChunkMetadataParams
     from .chunk_metadata_page_range import ChunkMetadataPageRangeParams
@@ -67,6 +68,8 @@ if typing.TYPE_CHECKING:
     from .conditional_step_definition import ConditionalStepDefinitionParams
     from .conditional_step_definition_config import ConditionalStepDefinitionConfigParams
     from .conditional_step_definition_config_conditions_item import ConditionalStepDefinitionConfigConditionsItemParams
+    from .data_retention import DataRetentionParams
+    from .detect_form_request_file import DetectFormRequestFileParams
     from .edit_bounding_box import EditBoundingBoxParams
     from .edit_conditional_clause import EditConditionalClauseParams
     from .edit_conditional_object_property import EditConditionalObjectPropertyParams
@@ -181,6 +184,8 @@ if typing.TYPE_CHECKING:
     from .file_from_url_settings import FileFromUrlSettingsParams
     from .file_metadata import FileMetadataParams
     from .file_summary import FileSummaryParams
+    from .form_detection_run import FormDetectionRunParams
+    from .form_detection_run_metrics import FormDetectionRunMetricsParams
     from .formula_details import FormulaDetailsParams
     from .human_review_step_definition import HumanReviewStepDefinitionParams
     from .insight import InsightParams
@@ -349,6 +354,7 @@ if typing.TYPE_CHECKING:
     from .step_run_base import StepRunBaseParams
     from .table_cell_details import TableCellDetailsParams
     from .table_details import TableDetailsParams
+    from .text_details import TextDetailsParams
     from .too_many_requests_error_body import TooManyRequestsErrorBodyParams
     from .trigger_step_definition import TriggerStepDefinitionParams
     from .webhook_advanced_options import WebhookAdvancedOptionsParams
@@ -402,6 +408,7 @@ if typing.TYPE_CHECKING:
     from .workflow_created_webhook_event import WorkflowCreatedWebhookEventParams
     from .workflow_deleted_webhook_event import WorkflowDeletedWebhookEventParams
     from .workflow_deployed_webhook_event import WorkflowDeployedWebhookEventParams
+    from .workflow_inline_extract_config import WorkflowInlineExtractConfigParams
     from .workflow_reference import WorkflowReferenceParams
     from .workflow_run import WorkflowRunParams
     from .workflow_run_cancelled_webhook_event import WorkflowRunCancelledWebhookEventParams
@@ -448,6 +455,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "BlockParams": ".block",
     "BlockPolygonItemParams": ".block_polygon_item",
     "BoundingBoxParams": ".bounding_box",
+    "CellFormattingParams": ".cell_formatting",
     "ChunkMetadataPageRangeParams": ".chunk_metadata_page_range",
     "ChunkMetadataParams": ".chunk_metadata",
     "ChunkParams": ".chunk",
@@ -492,6 +500,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ConditionalStepDefinitionConfigConditionsItemParams": ".conditional_step_definition_config_conditions_item",
     "ConditionalStepDefinitionConfigParams": ".conditional_step_definition_config",
     "ConditionalStepDefinitionParams": ".conditional_step_definition",
+    "DataRetentionParams": ".data_retention",
+    "DetectFormRequestFileParams": ".detect_form_request_file",
     "EditBoundingBoxParams": ".edit_bounding_box",
     "EditConditionalClauseParams": ".edit_conditional_clause",
     "EditConditionalObjectPropertyParams": ".edit_conditional_object_property",
@@ -596,6 +606,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "FileMetadataParams": ".file_metadata",
     "FileParams": ".file",
     "FileSummaryParams": ".file_summary",
+    "FormDetectionRunMetricsParams": ".form_detection_run_metrics",
+    "FormDetectionRunParams": ".form_detection_run",
     "FormulaDetailsParams": ".formula_details",
     "HumanReviewStepDefinitionParams": ".human_review_step_definition",
     "InsightParams": ".insight",
@@ -754,6 +766,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "StepRun_SplitParams": ".step_run",
     "TableCellDetailsParams": ".table_cell_details",
     "TableDetailsParams": ".table_details",
+    "TextDetailsParams": ".text_details",
     "TooManyRequestsErrorBodyParams": ".too_many_requests_error_body",
     "TriggerStepDefinitionParams": ".trigger_step_definition",
     "WebhookAdvancedOptionsParams": ".webhook_advanced_options",
@@ -804,6 +817,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WorkflowCreatedWebhookEventParams": ".workflow_created_webhook_event",
     "WorkflowDeletedWebhookEventParams": ".workflow_deleted_webhook_event",
     "WorkflowDeployedWebhookEventParams": ".workflow_deployed_webhook_event",
+    "WorkflowInlineExtractConfigParams": ".workflow_inline_extract_config",
     "WorkflowParams": ".workflow",
     "WorkflowReferenceParams": ".workflow_reference",
     "WorkflowRunCancelledWebhookEventParams": ".workflow_run_cancelled_webhook_event",
@@ -873,6 +887,7 @@ __all__ = [
     "BlockParams",
     "BlockPolygonItemParams",
     "BoundingBoxParams",
+    "CellFormattingParams",
     "ChunkMetadataPageRangeParams",
     "ChunkMetadataParams",
     "ChunkParams",
@@ -917,6 +932,8 @@ __all__ = [
     "ConditionalStepDefinitionConfigConditionsItemParams",
     "ConditionalStepDefinitionConfigParams",
     "ConditionalStepDefinitionParams",
+    "DataRetentionParams",
+    "DetectFormRequestFileParams",
     "EditBoundingBoxParams",
     "EditConditionalClauseParams",
     "EditConditionalObjectPropertyParams",
@@ -1021,6 +1038,8 @@ __all__ = [
     "FileMetadataParams",
     "FileParams",
     "FileSummaryParams",
+    "FormDetectionRunMetricsParams",
+    "FormDetectionRunParams",
     "FormulaDetailsParams",
     "HumanReviewStepDefinitionParams",
     "InsightParams",
@@ -1179,6 +1198,7 @@ __all__ = [
     "StepRun_SplitParams",
     "TableCellDetailsParams",
     "TableDetailsParams",
+    "TextDetailsParams",
     "TooManyRequestsErrorBodyParams",
     "TriggerStepDefinitionParams",
     "WebhookAdvancedOptionsParams",
@@ -1229,6 +1249,7 @@ __all__ = [
     "WorkflowCreatedWebhookEventParams",
     "WorkflowDeletedWebhookEventParams",
     "WorkflowDeployedWebhookEventParams",
+    "WorkflowInlineExtractConfigParams",
     "WorkflowParams",
     "WorkflowReferenceParams",
     "WorkflowRunCancelledWebhookEventParams",

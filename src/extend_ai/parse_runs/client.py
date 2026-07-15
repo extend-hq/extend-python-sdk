@@ -4,6 +4,7 @@ import typing
 
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
+from ..requests.data_retention import DataRetentionParams
 from ..requests.parse_config import ParseConfigParams
 from ..types.batch_run import BatchRun
 from ..types.max_page_size import MaxPageSize
@@ -126,6 +127,7 @@ class ParseRunsClient:
         file: ParseRunsCreateRequestFileParams,
         config: typing.Optional[ParseConfigParams] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
+        data_retention: typing.Optional[DataRetentionParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ParseRun:
         """
@@ -143,6 +145,8 @@ class ParseRunsClient:
         config : typing.Optional[ParseConfigParams]
 
         metadata : typing.Optional[RunMetadata]
+
+        data_retention : typing.Optional[DataRetentionParams]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -167,7 +171,7 @@ class ParseRunsClient:
         )
         """
         _response = self._raw_client.create(
-            file=file, config=config, metadata=metadata, request_options=request_options
+            file=file, config=config, metadata=metadata, data_retention=data_retention, request_options=request_options
         )
         return _response.data
 
@@ -493,6 +497,7 @@ class AsyncParseRunsClient:
         file: ParseRunsCreateRequestFileParams,
         config: typing.Optional[ParseConfigParams] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
+        data_retention: typing.Optional[DataRetentionParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> ParseRun:
         """
@@ -510,6 +515,8 @@ class AsyncParseRunsClient:
         config : typing.Optional[ParseConfigParams]
 
         metadata : typing.Optional[RunMetadata]
+
+        data_retention : typing.Optional[DataRetentionParams]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -542,7 +549,7 @@ class AsyncParseRunsClient:
         asyncio.run(main())
         """
         _response = await self._raw_client.create(
-            file=file, config=config, metadata=metadata, request_options=request_options
+            file=file, config=config, metadata=metadata, data_retention=data_retention, request_options=request_options
         )
         return _response.data
 

@@ -7,6 +7,7 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .cell_formatting import CellFormatting
 
 
 class TableCellDetails(UncheckedBaseModel):
@@ -23,6 +24,22 @@ class TableCellDetails(UncheckedBaseModel):
     column_index: typing_extensions.Annotated[int, FieldMetadata(alias="columnIndex")] = pydantic.Field(
         alias="columnIndex"
     )
+    cell_reference: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="cellReference")] = (
+        pydantic.Field(alias="cellReference", default=None)
+    )
+    """
+    Source spreadsheet cell or range in A1 notation, such as `B2` or `A1:C1` for a merged cell. Only set for Excel table cells when `advancedOptions.excelIncludeCellMetadata` is enabled.
+    """
+
+    formula: typing.Optional[str] = pydantic.Field(default=None)
+    """
+    Source spreadsheet formula text with a leading `=`, when the cell has a formula. Only set for Excel table cells when `advancedOptions.excelIncludeCellMetadata` is enabled.
+    """
+
+    formatting: typing.Optional[CellFormatting] = pydantic.Field(default=None)
+    """
+    Structured spreadsheet cell formatting. Only set when `advancedOptions.excelIncludeCellFormatting` is enabled and formatting is present.
+    """
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

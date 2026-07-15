@@ -6,7 +6,7 @@ from ..core.serialization import FieldMetadata
 
 class ParseConfigBlockOptionsTablesAgenticParams(typing_extensions.TypedDict):
     """
-    Options for agentic table processing using VLM-based review and correction.
+    Options for agentic table processing using VLM-based review and correction. Enabling this incurs additional credits on pages where agentic table correction is triggered.
     """
 
     enabled: typing_extensions.NotRequired[bool]

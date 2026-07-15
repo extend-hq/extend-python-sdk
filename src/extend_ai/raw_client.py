@@ -20,8 +20,11 @@ from .errors.unprocessable_entity_error import UnprocessableEntityError
 from .requests.classify_config import ClassifyConfigParams
 from .requests.classify_request_classifier import ClassifyRequestClassifierParams
 from .requests.classify_request_file import ClassifyRequestFileParams
+from .requests.data_retention import DataRetentionParams
+from .requests.detect_form_request_file import DetectFormRequestFileParams
 from .requests.edit_config import EditConfigParams
 from .requests.edit_request_file import EditRequestFileParams
+from .requests.edit_schema_generation_config import EditSchemaGenerationConfigParams
 from .requests.extract_config_json import ExtractConfigJsonParams
 from .requests.extract_request_extractor import ExtractRequestExtractorParams
 from .requests.extract_request_file import ExtractRequestFileParams
@@ -35,6 +38,7 @@ from .types.api_error import ApiError as types_api_error_ApiError
 from .types.classify_run import ClassifyRun
 from .types.edit_run import EditRun
 from .types.extract_run import ExtractRun
+from .types.form_detection_run import FormDetectionRun
 from .types.parse_request_response_type import ParseRequestResponseType
 from .types.parse_run import ParseRun
 from .types.run_metadata import RunMetadata
@@ -56,6 +60,7 @@ class RawExtend:
         extend_workspace_id: typing.Optional[str] = None,
         config: typing.Optional[ParseConfigParams] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
+        data_retention: typing.Optional[DataRetentionParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ParseRun]:
         """
@@ -84,6 +89,8 @@ class RawExtend:
 
         metadata : typing.Optional[RunMetadata]
 
+        data_retention : typing.Optional[DataRetentionParams]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -106,6 +113,9 @@ class RawExtend:
                     object_=config, annotation=ParseConfigParams, direction="write"
                 ),
                 "metadata": metadata,
+                "dataRetention": convert_and_respect_annotation_metadata(
+                    object_=data_retention, annotation=DataRetentionParams, direction="write"
+                ),
             },
             headers={
                 "content-type": "application/json",
@@ -235,7 +245,7 @@ class RawExtend:
 
         The Edit endpoint allows you to detect and fill form fields in PDF documents.
 
-        For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/editing/edit).
+        For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/editing/overview). See [Editing Error Handling](https://docs.extend.ai/2026-02-09/editing/error-handling) for HTTP errors and run failure reasons.
 
         Parameters
         ----------
@@ -275,6 +285,157 @@ class RawExtend:
                     EditRun,
                     construct_type(
                         type_=EditRun,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise core_api_error_ApiError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+            )
+        raise core_api_error_ApiError(
+            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
+        )
+
+    def detect_form(
+        self,
+        *,
+        file: DetectFormRequestFileParams,
+        config: typing.Optional[EditSchemaGenerationConfigParams] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[FormDetectionRun]:
+        """
+        Detect fields in a PDF form and wait for the generated edit schema before returning. This endpoint has a 5-minute timeout.
+
+        For production workloads, use `POST /form_detection_runs` and poll `GET /form_detection_runs/{id}` instead. The response is a completed `form_detection_run`; its `output.schema` can be passed directly to `POST /edit` or `POST /edit_runs`.
+
+        Parameters
+        ----------
+        file : DetectFormRequestFileParams
+            The PDF form to analyze. Files can be provided as a URL or an Extend file ID.
+
+        config : typing.Optional[EditSchemaGenerationConfigParams]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[FormDetectionRun]
+            Successfully detected the form and generated an edit schema
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "detect_form",
+            method="POST",
+            json={
+                "file": convert_and_respect_annotation_metadata(
+                    object_=file, annotation=DetectFormRequestFileParams, direction="write"
+                ),
+                "config": convert_and_respect_annotation_metadata(
+                    object_=config, annotation=EditSchemaGenerationConfigParams, direction="write"
+                ),
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    FormDetectionRun,
+                    construct_type(
+                        type_=FormDetectionRun,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -572,7 +733,7 @@ class RawExtend:
 
         The Classify endpoint allows you to classify documents using an existing classifier or an inline configuration.
 
-        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/classification/configuring-a-classifier).
+        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/classification/configuration).
 
         Parameters
         ----------
@@ -739,7 +900,7 @@ class RawExtend:
 
         The Split endpoint allows you to split documents into multiple parts using an existing splitter or an inline configuration.
 
-        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/splitting/configuring-a-splitter).
+        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/splitting/configuration).
 
         Parameters
         ----------
@@ -903,6 +1064,7 @@ class AsyncRawExtend:
         extend_workspace_id: typing.Optional[str] = None,
         config: typing.Optional[ParseConfigParams] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
+        data_retention: typing.Optional[DataRetentionParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ParseRun]:
         """
@@ -931,6 +1093,8 @@ class AsyncRawExtend:
 
         metadata : typing.Optional[RunMetadata]
 
+        data_retention : typing.Optional[DataRetentionParams]
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -953,6 +1117,9 @@ class AsyncRawExtend:
                     object_=config, annotation=ParseConfigParams, direction="write"
                 ),
                 "metadata": metadata,
+                "dataRetention": convert_and_respect_annotation_metadata(
+                    object_=data_retention, annotation=DataRetentionParams, direction="write"
+                ),
             },
             headers={
                 "content-type": "application/json",
@@ -1082,7 +1249,7 @@ class AsyncRawExtend:
 
         The Edit endpoint allows you to detect and fill form fields in PDF documents.
 
-        For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/editing/edit).
+        For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/editing/overview). See [Editing Error Handling](https://docs.extend.ai/2026-02-09/editing/error-handling) for HTTP errors and run failure reasons.
 
         Parameters
         ----------
@@ -1122,6 +1289,157 @@ class AsyncRawExtend:
                     EditRun,
                     construct_type(
                         type_=EditRun,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise core_api_error_ApiError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+            )
+        raise core_api_error_ApiError(
+            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
+        )
+
+    async def detect_form(
+        self,
+        *,
+        file: DetectFormRequestFileParams,
+        config: typing.Optional[EditSchemaGenerationConfigParams] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[FormDetectionRun]:
+        """
+        Detect fields in a PDF form and wait for the generated edit schema before returning. This endpoint has a 5-minute timeout.
+
+        For production workloads, use `POST /form_detection_runs` and poll `GET /form_detection_runs/{id}` instead. The response is a completed `form_detection_run`; its `output.schema` can be passed directly to `POST /edit` or `POST /edit_runs`.
+
+        Parameters
+        ----------
+        file : DetectFormRequestFileParams
+            The PDF form to analyze. Files can be provided as a URL or an Extend file ID.
+
+        config : typing.Optional[EditSchemaGenerationConfigParams]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[FormDetectionRun]
+            Successfully detected the form and generated an edit schema
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "detect_form",
+            method="POST",
+            json={
+                "file": convert_and_respect_annotation_metadata(
+                    object_=file, annotation=DetectFormRequestFileParams, direction="write"
+                ),
+                "config": convert_and_respect_annotation_metadata(
+                    object_=config, annotation=EditSchemaGenerationConfigParams, direction="write"
+                ),
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    FormDetectionRun,
+                    construct_type(
+                        type_=FormDetectionRun,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -1419,7 +1737,7 @@ class AsyncRawExtend:
 
         The Classify endpoint allows you to classify documents using an existing classifier or an inline configuration.
 
-        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/classification/configuring-a-classifier).
+        For more details, see the [Classify File guide](https://docs.extend.ai/2026-02-09/classification/configuration).
 
         Parameters
         ----------
@@ -1586,7 +1904,7 @@ class AsyncRawExtend:
 
         The Split endpoint allows you to split documents into multiple parts using an existing splitter or an inline configuration.
 
-        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/splitting/configuring-a-splitter).
+        For more details, see the [Split File guide](https://docs.extend.ai/2026-02-09/splitting/configuration).
 
         Parameters
         ----------

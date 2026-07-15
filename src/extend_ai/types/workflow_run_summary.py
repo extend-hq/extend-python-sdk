@@ -9,6 +9,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .created_at import CreatedAt
+from .file_summary import FileSummary
 from .run_usage_summary import RunUsageSummary
 from .updated_at import UpdatedAt
 from .workflow_run_status import WorkflowRunStatus
@@ -104,6 +105,11 @@ class WorkflowRunSummary(UncheckedBaseModel):
     The note that was added when the workflow run was rejected.
     
     Example: `"Invalid invoice format"`
+    """
+
+    files: typing.List[FileSummary] = pydantic.Field()
+    """
+    The input files that this workflow run was executed on. Provided directly on the list response so you don't need to fetch each run individually to inspect its input.
     """
 
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(

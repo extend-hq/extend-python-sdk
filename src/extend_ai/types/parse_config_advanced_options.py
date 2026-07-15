@@ -33,7 +33,7 @@ class ParseConfigAdvancedOptions(UncheckedBaseModel):
     Controls how Excel files are parsed.
     
     * `basic`: Fast, deterministic parsing.
-    * `advanced`: Enable layout block detection for complex spreadsheets.
+    * `advanced`: Enable layout block detection for complex spreadsheets. This mode incurs additional credits when enabled.
     
     For `.xls` files, `basic` mode is always used.
     """
@@ -57,6 +57,20 @@ class ParseConfigAdvancedOptions(UncheckedBaseModel):
     ] = pydantic.Field(alias="excelSkipCalculation", default=None)
     """
     Whether to skip formula recalculation when opening Excel workbooks. Significantly improves parsing speed for formula-heavy spreadsheets. Disable if cell values depend on volatile functions like NOW() or TODAY().
+    """
+
+    excel_include_cell_metadata: typing_extensions.Annotated[
+        typing.Optional[bool], FieldMetadata(alias="excelIncludeCellMetadata")
+    ] = pydantic.Field(alias="excelIncludeCellMetadata", default=None)
+    """
+    Whether to include spreadsheet cell provenance when parsing Excel files in advanced mode. When enabled, table cell block details include source cell references and formulas, text or heading block details can include source ranges, and HTML table output includes `data-cell` and `data-formula` attributes.
+    """
+
+    excel_include_cell_formatting: typing_extensions.Annotated[
+        typing.Optional[bool], FieldMetadata(alias="excelIncludeCellFormatting")
+    ] = pydantic.Field(alias="excelIncludeCellFormatting", default=None)
+    """
+    Whether to include spreadsheet cell formatting when parsing Excel files in advanced mode. When enabled, table cell block details include structured formatting such as bold, italic, font color, and background color, and HTML table output preserves inline cell styles.
     """
 
     vertical_grouping_threshold: typing_extensions.Annotated[

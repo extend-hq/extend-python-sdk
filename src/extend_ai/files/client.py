@@ -111,19 +111,19 @@ class FilesClient:
             Example: `"file_Xj8mK2pL9nR4vT7qY5wZ"`
 
         raw_text : typing.Optional[bool]
-            **Deprecated:** Use `POST /parse_runs` instead to parse file contents.
+            **Deprecated:** Use `POST /parse_runs` instead to parse file contents and get contents or `GET /parse_runs/{id}` to retrieve the results async if file is already parsed. Files parsed with versions >2.x will not support this parameter.
 
             If set to true, the raw text content of the file will be included in the response.
 
         markdown : typing.Optional[bool]
-            **Deprecated:** Use `POST /parse_runs` instead to parse file contents.
+            **Deprecated:** Use `POST /parse_runs` instead to parse file contents and get contents or `GET /parse_runs/{id}` to retrieve the results async if file is already parsed. Files parsed with versions >2.x will not support this parameter.
 
             If set to true, the markdown content of the file will be included in the response.
 
             Only available for files with a type of PDF, IMG, or DOCX files that were auto-converted to PDFs.
 
         html : typing.Optional[bool]
-            **Deprecated:** Use `POST /parse_runs` instead to parse file contents.
+            **Deprecated:** Use `POST /parse_runs` instead to parse file contents and get contents or `GET /parse_runs/{id}` to retrieve the results async if file is already parsed. Files parsed with versions >2.x will not support this parameter.
 
             If set to true, the html content of the file will be included in the response.
 
@@ -370,19 +370,19 @@ class AsyncFilesClient:
             Example: `"file_Xj8mK2pL9nR4vT7qY5wZ"`
 
         raw_text : typing.Optional[bool]
-            **Deprecated:** Use `POST /parse_runs` instead to parse file contents.
+            **Deprecated:** Use `POST /parse_runs` instead to parse file contents and get contents or `GET /parse_runs/{id}` to retrieve the results async if file is already parsed. Files parsed with versions >2.x will not support this parameter.
 
             If set to true, the raw text content of the file will be included in the response.
 
         markdown : typing.Optional[bool]
-            **Deprecated:** Use `POST /parse_runs` instead to parse file contents.
+            **Deprecated:** Use `POST /parse_runs` instead to parse file contents and get contents or `GET /parse_runs/{id}` to retrieve the results async if file is already parsed. Files parsed with versions >2.x will not support this parameter.
 
             If set to true, the markdown content of the file will be included in the response.
 
             Only available for files with a type of PDF, IMG, or DOCX files that were auto-converted to PDFs.
 
         html : typing.Optional[bool]
-            **Deprecated:** Use `POST /parse_runs` instead to parse file contents.
+            **Deprecated:** Use `POST /parse_runs` instead to parse file contents and get contents or `GET /parse_runs/{id}` to retrieve the results async if file is already parsed. Files parsed with versions >2.x will not support this parameter.
 
             If set to true, the html content of the file will be included in the response.
 

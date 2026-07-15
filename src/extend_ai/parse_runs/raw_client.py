@@ -18,6 +18,7 @@ from ..errors.payment_required_error import PaymentRequiredError
 from ..errors.too_many_requests_error import TooManyRequestsError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
+from ..requests.data_retention import DataRetentionParams
 from ..requests.parse_config import ParseConfigParams
 from ..types.api_error import ApiError as types_api_error_ApiError
 from ..types.batch_run import BatchRun
@@ -229,6 +230,7 @@ class RawParseRunsClient:
         file: ParseRunsCreateRequestFileParams,
         config: typing.Optional[ParseConfigParams] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
+        data_retention: typing.Optional[DataRetentionParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[ParseRun]:
         """
@@ -246,6 +248,8 @@ class RawParseRunsClient:
         config : typing.Optional[ParseConfigParams]
 
         metadata : typing.Optional[RunMetadata]
+
+        data_retention : typing.Optional[DataRetentionParams]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -266,6 +270,9 @@ class RawParseRunsClient:
                     object_=config, annotation=ParseConfigParams, direction="write"
                 ),
                 "metadata": metadata,
+                "dataRetention": convert_and_respect_annotation_metadata(
+                    object_=data_retention, annotation=DataRetentionParams, direction="write"
+                ),
             },
             headers={
                 "content-type": "application/json",
@@ -1181,6 +1188,7 @@ class AsyncRawParseRunsClient:
         file: ParseRunsCreateRequestFileParams,
         config: typing.Optional[ParseConfigParams] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
+        data_retention: typing.Optional[DataRetentionParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[ParseRun]:
         """
@@ -1198,6 +1206,8 @@ class AsyncRawParseRunsClient:
         config : typing.Optional[ParseConfigParams]
 
         metadata : typing.Optional[RunMetadata]
+
+        data_retention : typing.Optional[DataRetentionParams]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -1218,6 +1228,9 @@ class AsyncRawParseRunsClient:
                     object_=config, annotation=ParseConfigParams, direction="write"
                 ),
                 "metadata": metadata,
+                "dataRetention": convert_and_respect_annotation_metadata(
+                    object_=data_retention, annotation=DataRetentionParams, direction="write"
+                ),
             },
             headers={
                 "content-type": "application/json",

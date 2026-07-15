@@ -33,3 +33,8 @@ class ApiErrorParams(typing_extensions.TypedDict):
     Unique request identifier for support purposes. Always include this 
     when contacting Extend support about an error.
     """
+
+    doc_url: typing_extensions.NotRequired[typing_extensions.Annotated[str, FieldMetadata(alias="docUrl")]]
+    """
+    Link to relevant documentation when one is available.
+    """
