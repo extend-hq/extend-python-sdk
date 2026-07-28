@@ -5,6 +5,7 @@ import typing
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
 from ..requests.workflow_reference import WorkflowReferenceParams
+from ..requests.workflow_run_package import WorkflowRunPackageParams
 from ..types.max_page_size import MaxPageSize
 from ..types.next_page_token import NextPageToken
 from ..types.run_metadata import RunMetadata
@@ -127,7 +128,8 @@ class WorkflowRunsClient:
         self,
         *,
         workflow: WorkflowReferenceParams,
-        file: WorkflowRunsCreateRequestFileParams,
+        file: typing.Optional[WorkflowRunsCreateRequestFileParams] = OMIT,
+        package: typing.Optional[WorkflowRunPackageParams] = OMIT,
         outputs: typing.Optional[typing.Sequence[WorkflowRunsCreateRequestOutputsItemParams]] = OMIT,
         priority: typing.Optional[RunPriority] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
@@ -135,7 +137,9 @@ class WorkflowRunsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowRun:
         """
-        Run a workflow with a file. A workflow is a sequence of steps that process files and data in a specific order to achieve a desired outcome.
+        Run a workflow. A workflow is a sequence of steps that process files and data in a specific order to achieve a desired outcome.
+
+        Pass `file` for a single document, or `package` to process 2-50 files together as one package in a single run. Exactly one of `file` or `package` must be provided.
 
         The request returns immediately with a `PROCESSING` status. Use webhooks or poll the Get Workflow Run endpoint for results.
 
@@ -143,11 +147,14 @@ class WorkflowRunsClient:
         ----------
         workflow : WorkflowReferenceParams
 
-        file : WorkflowRunsCreateRequestFileParams
-            The file to be processed. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/general/supported-file-types). Files can be provided as a URL, an Extend file ID, or raw text. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
+        file : typing.Optional[WorkflowRunsCreateRequestFileParams]
+            The file to be processed. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/general/supported-file-types). Files can be provided as a URL, an Extend file ID, or raw text. Mutually exclusive with `package` — provide one or the other. If you wish to process many files as independent runs, consider using the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
+
+        package : typing.Optional[WorkflowRunPackageParams]
+            A set of 2–50 files to process together in a single workflow run. Mutually exclusive with `file` — provide one or the other.
 
         outputs : typing.Optional[typing.Sequence[WorkflowRunsCreateRequestOutputsItemParams]]
-            Predetermined outputs to be used for the workflow run. Generally not recommended for most use cases, however, can be useful in cases of overriding a classification in a workflow, or a subset of extraction fields when data is known.
+            Predetermined outputs to be used for the workflow run. Generally not recommended for most use cases, however, can be useful in cases of overriding a classification in a workflow, or a subset of extraction fields when data is known. Not supported on package runs — a package run produces a single merged result across all files and cannot accept pre-supplied per-processor outputs.
 
         priority : typing.Optional[RunPriority]
 
@@ -178,6 +185,7 @@ class WorkflowRunsClient:
         _response = self._raw_client.create(
             workflow=workflow,
             file=file,
+            package=package,
             outputs=outputs,
             priority=priority,
             metadata=metadata,
@@ -557,7 +565,8 @@ class AsyncWorkflowRunsClient:
         self,
         *,
         workflow: WorkflowReferenceParams,
-        file: WorkflowRunsCreateRequestFileParams,
+        file: typing.Optional[WorkflowRunsCreateRequestFileParams] = OMIT,
+        package: typing.Optional[WorkflowRunPackageParams] = OMIT,
         outputs: typing.Optional[typing.Sequence[WorkflowRunsCreateRequestOutputsItemParams]] = OMIT,
         priority: typing.Optional[RunPriority] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
@@ -565,7 +574,9 @@ class AsyncWorkflowRunsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> WorkflowRun:
         """
-        Run a workflow with a file. A workflow is a sequence of steps that process files and data in a specific order to achieve a desired outcome.
+        Run a workflow. A workflow is a sequence of steps that process files and data in a specific order to achieve a desired outcome.
+
+        Pass `file` for a single document, or `package` to process 2-50 files together as one package in a single run. Exactly one of `file` or `package` must be provided.
 
         The request returns immediately with a `PROCESSING` status. Use webhooks or poll the Get Workflow Run endpoint for results.
 
@@ -573,11 +584,14 @@ class AsyncWorkflowRunsClient:
         ----------
         workflow : WorkflowReferenceParams
 
-        file : WorkflowRunsCreateRequestFileParams
-            The file to be processed. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/general/supported-file-types). Files can be provided as a URL, an Extend file ID, or raw text. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
+        file : typing.Optional[WorkflowRunsCreateRequestFileParams]
+            The file to be processed. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/general/supported-file-types). Files can be provided as a URL, an Extend file ID, or raw text. Mutually exclusive with `package` — provide one or the other. If you wish to process many files as independent runs, consider using the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
+
+        package : typing.Optional[WorkflowRunPackageParams]
+            A set of 2–50 files to process together in a single workflow run. Mutually exclusive with `file` — provide one or the other.
 
         outputs : typing.Optional[typing.Sequence[WorkflowRunsCreateRequestOutputsItemParams]]
-            Predetermined outputs to be used for the workflow run. Generally not recommended for most use cases, however, can be useful in cases of overriding a classification in a workflow, or a subset of extraction fields when data is known.
+            Predetermined outputs to be used for the workflow run. Generally not recommended for most use cases, however, can be useful in cases of overriding a classification in a workflow, or a subset of extraction fields when data is known. Not supported on package runs — a package run produces a single merged result across all files and cannot accept pre-supplied per-processor outputs.
 
         priority : typing.Optional[RunPriority]
 
@@ -616,6 +630,7 @@ class AsyncWorkflowRunsClient:
         _response = await self._raw_client.create(
             workflow=workflow,
             file=file,
+            package=package,
             outputs=outputs,
             priority=priority,
             metadata=metadata,

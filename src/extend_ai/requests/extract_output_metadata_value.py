@@ -16,7 +16,9 @@ class ExtractOutputMetadataValueParams(typing_extensions.TypedDict):
     Confidence score from OCR processing, if applicable
     """
 
-    logprobs_confidence: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="logprobsConfidence")]
+    logprobs_confidence: typing_extensions.NotRequired[
+        typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="logprobsConfidence")]
+    ]
     """
     Confidence score based on model logprobs
     """

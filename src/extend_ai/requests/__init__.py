@@ -28,6 +28,7 @@ if typing.TYPE_CHECKING:
     from .citation import CitationParams
     from .citation_page import CitationPageParams
     from .classification import ClassificationParams
+    from .classification_metric import ClassificationMetricParams
     from .classification_next_entry import ClassificationNextEntryParams
     from .classifications import ClassificationsParams
     from .classifier import ClassifierParams
@@ -42,6 +43,7 @@ if typing.TYPE_CHECKING:
     from .classifier_version_summary import ClassifierVersionSummaryParams
     from .classify_advanced_options import ClassifyAdvancedOptionsParams
     from .classify_config import ClassifyConfigParams
+    from .classify_evaluation_set_run_metrics import ClassifyEvaluationSetRunMetricsParams
     from .classify_output import ClassifyOutputParams
     from .classify_override_config import ClassifyOverrideConfigParams
     from .classify_request_classifier import ClassifyRequestClassifierParams
@@ -118,7 +120,14 @@ if typing.TYPE_CHECKING:
         EvaluationSetRunEntityVersion_ExtractorVersionParams,
         EvaluationSetRunEntityVersion_SplitterVersionParams,
     )
-    from .evaluation_set_run_metrics import EvaluationSetRunMetricsParams
+    from .evaluation_set_run_field_metric import EvaluationSetRunFieldMetricParams
+    from .evaluation_set_run_metrics import (
+        EvaluationSetRunMetricsParams,
+        EvaluationSetRunMetrics_ClassifyParams,
+        EvaluationSetRunMetrics_ExtractParams,
+        EvaluationSetRunMetrics_SplitterParams,
+    )
+    from .evaluation_set_run_metrics_base import EvaluationSetRunMetricsBaseParams
     from .evaluation_set_run_options import EvaluationSetRunOptionsParams
     from .excel_sheet_range import ExcelSheetRangeParams
     from .external_data_validation_result import ExternalDataValidationResultParams
@@ -136,6 +145,7 @@ if typing.TYPE_CHECKING:
     from .extract_config import ExtractConfigParams
     from .extract_config_json import ExtractConfigJsonParams
     from .extract_config_legacy import ExtractConfigLegacyParams
+    from .extract_evaluation_set_run_metrics import ExtractEvaluationSetRunMetricsParams
     from .extract_output import ExtractOutputParams
     from .extract_output_edits import ExtractOutputEditsParams
     from .extract_output_json import ExtractOutputJsonParams
@@ -334,6 +344,7 @@ if typing.TYPE_CHECKING:
     from .splitter_created_webhook_event import SplitterCreatedWebhookEventParams
     from .splitter_deleted_webhook_event import SplitterDeletedWebhookEventParams
     from .splitter_draft_updated_webhook_event import SplitterDraftUpdatedWebhookEventParams
+    from .splitter_evaluation_set_run_metrics import SplitterEvaluationSetRunMetricsParams
     from .splitter_ref import SplitterRefParams
     from .splitter_summary import SplitterSummaryParams
     from .splitter_updated_webhook_event import SplitterUpdatedWebhookEventParams
@@ -415,6 +426,8 @@ if typing.TYPE_CHECKING:
     from .workflow_run_completed_webhook_event import WorkflowRunCompletedWebhookEventParams
     from .workflow_run_failed_webhook_event import WorkflowRunFailedWebhookEventParams
     from .workflow_run_needs_review_webhook_event import WorkflowRunNeedsReviewWebhookEventParams
+    from .workflow_run_package import WorkflowRunPackageParams
+    from .workflow_run_package_files_item import WorkflowRunPackageFilesItemParams
     from .workflow_run_rejected_webhook_event import WorkflowRunRejectedWebhookEventParams
     from .workflow_run_step_run_processed_webhook_event import WorkflowRunStepRunProcessedWebhookEventParams
     from .workflow_run_summary import WorkflowRunSummaryParams
@@ -461,6 +474,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ChunkParams": ".chunk",
     "CitationPageParams": ".citation_page",
     "CitationParams": ".citation",
+    "ClassificationMetricParams": ".classification_metric",
     "ClassificationNextEntryParams": ".classification_next_entry",
     "ClassificationParams": ".classification",
     "ClassificationsParams": ".classifications",
@@ -476,6 +490,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ClassifierVersionSummaryParams": ".classifier_version_summary",
     "ClassifyAdvancedOptionsParams": ".classify_advanced_options",
     "ClassifyConfigParams": ".classify_config",
+    "ClassifyEvaluationSetRunMetricsParams": ".classify_evaluation_set_run_metrics",
     "ClassifyOutputParams": ".classify_output",
     "ClassifyOverrideConfigParams": ".classify_override_config",
     "ClassifyRequestClassifierParams": ".classify_request_classifier",
@@ -543,7 +558,12 @@ _dynamic_imports: typing.Dict[str, str] = {
     "EvaluationSetRunEntity_ClassifierParams": ".evaluation_set_run_entity",
     "EvaluationSetRunEntity_ExtractorParams": ".evaluation_set_run_entity",
     "EvaluationSetRunEntity_SplitterParams": ".evaluation_set_run_entity",
+    "EvaluationSetRunFieldMetricParams": ".evaluation_set_run_field_metric",
+    "EvaluationSetRunMetricsBaseParams": ".evaluation_set_run_metrics_base",
     "EvaluationSetRunMetricsParams": ".evaluation_set_run_metrics",
+    "EvaluationSetRunMetrics_ClassifyParams": ".evaluation_set_run_metrics",
+    "EvaluationSetRunMetrics_ExtractParams": ".evaluation_set_run_metrics",
+    "EvaluationSetRunMetrics_SplitterParams": ".evaluation_set_run_metrics",
     "EvaluationSetRunOptionsParams": ".evaluation_set_run_options",
     "EvaluationSetRunParams": ".evaluation_set_run",
     "ExcelSheetRangeParams": ".excel_sheet_range",
@@ -560,6 +580,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ExtractConfigJsonParams": ".extract_config_json",
     "ExtractConfigLegacyParams": ".extract_config_legacy",
     "ExtractConfigParams": ".extract_config",
+    "ExtractEvaluationSetRunMetricsParams": ".extract_evaluation_set_run_metrics",
     "ExtractOutputEditsParams": ".extract_output_edits",
     "ExtractOutputJsonParams": ".extract_output_json",
     "ExtractOutputLegacyParams": ".extract_output_legacy",
@@ -747,6 +768,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "SplitterCreatedWebhookEventParams": ".splitter_created_webhook_event",
     "SplitterDeletedWebhookEventParams": ".splitter_deleted_webhook_event",
     "SplitterDraftUpdatedWebhookEventParams": ".splitter_draft_updated_webhook_event",
+    "SplitterEvaluationSetRunMetricsParams": ".splitter_evaluation_set_run_metrics",
     "SplitterParams": ".splitter",
     "SplitterRefParams": ".splitter_ref",
     "SplitterSummaryParams": ".splitter_summary",
@@ -824,6 +846,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WorkflowRunCompletedWebhookEventParams": ".workflow_run_completed_webhook_event",
     "WorkflowRunFailedWebhookEventParams": ".workflow_run_failed_webhook_event",
     "WorkflowRunNeedsReviewWebhookEventParams": ".workflow_run_needs_review_webhook_event",
+    "WorkflowRunPackageFilesItemParams": ".workflow_run_package_files_item",
+    "WorkflowRunPackageParams": ".workflow_run_package",
     "WorkflowRunParams": ".workflow_run",
     "WorkflowRunRejectedWebhookEventParams": ".workflow_run_rejected_webhook_event",
     "WorkflowRunStepRunProcessedWebhookEventParams": ".workflow_run_step_run_processed_webhook_event",
@@ -893,6 +917,7 @@ __all__ = [
     "ChunkParams",
     "CitationPageParams",
     "CitationParams",
+    "ClassificationMetricParams",
     "ClassificationNextEntryParams",
     "ClassificationParams",
     "ClassificationsParams",
@@ -908,6 +933,7 @@ __all__ = [
     "ClassifierVersionSummaryParams",
     "ClassifyAdvancedOptionsParams",
     "ClassifyConfigParams",
+    "ClassifyEvaluationSetRunMetricsParams",
     "ClassifyOutputParams",
     "ClassifyOverrideConfigParams",
     "ClassifyRequestClassifierParams",
@@ -975,7 +1001,12 @@ __all__ = [
     "EvaluationSetRunEntity_ClassifierParams",
     "EvaluationSetRunEntity_ExtractorParams",
     "EvaluationSetRunEntity_SplitterParams",
+    "EvaluationSetRunFieldMetricParams",
+    "EvaluationSetRunMetricsBaseParams",
     "EvaluationSetRunMetricsParams",
+    "EvaluationSetRunMetrics_ClassifyParams",
+    "EvaluationSetRunMetrics_ExtractParams",
+    "EvaluationSetRunMetrics_SplitterParams",
     "EvaluationSetRunOptionsParams",
     "EvaluationSetRunParams",
     "ExcelSheetRangeParams",
@@ -992,6 +1023,7 @@ __all__ = [
     "ExtractConfigJsonParams",
     "ExtractConfigLegacyParams",
     "ExtractConfigParams",
+    "ExtractEvaluationSetRunMetricsParams",
     "ExtractOutputEditsParams",
     "ExtractOutputJsonParams",
     "ExtractOutputLegacyParams",
@@ -1179,6 +1211,7 @@ __all__ = [
     "SplitterCreatedWebhookEventParams",
     "SplitterDeletedWebhookEventParams",
     "SplitterDraftUpdatedWebhookEventParams",
+    "SplitterEvaluationSetRunMetricsParams",
     "SplitterParams",
     "SplitterRefParams",
     "SplitterSummaryParams",
@@ -1256,6 +1289,8 @@ __all__ = [
     "WorkflowRunCompletedWebhookEventParams",
     "WorkflowRunFailedWebhookEventParams",
     "WorkflowRunNeedsReviewWebhookEventParams",
+    "WorkflowRunPackageFilesItemParams",
+    "WorkflowRunPackageParams",
     "WorkflowRunParams",
     "WorkflowRunRejectedWebhookEventParams",
     "WorkflowRunStepRunProcessedWebhookEventParams",

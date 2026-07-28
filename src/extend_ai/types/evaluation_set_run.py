@@ -50,7 +50,11 @@ class EvaluationSetRun(UncheckedBaseModel):
     The version of the extractor, classifier, or splitter that was run.
     """
 
-    metrics: EvaluationSetRunMetrics
+    metrics: EvaluationSetRunMetrics = pydantic.Field()
+    """
+    Metrics for the evaluation set run. The shape depends on the entity type.
+    """
+
     status: BatchRunStatus
     options: EvaluationSetRunOptions = pydantic.Field()
     """
