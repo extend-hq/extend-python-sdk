@@ -29,8 +29,9 @@ Example:
     )
 
     # output.value is a validated Invoice instance
-    print(result.output.value.invoice_number)
-    print(result.output.value.total.amount)
+    if result.output is not None:
+        print(result.output.value.invoice_number)
+        print(result.output.value.total.amount if result.output.value.total else None)
 """
 
 from .config_conversion import (
@@ -43,7 +44,7 @@ from .config_conversion import (
 )
 from .conversion import SchemaConversionError, pydantic_to_extend_schema
 from .custom_types import ExtendCurrency, ExtendDate, ExtendSignature
-from .typed_run import TypedExtractOutput, TypedExtractRun, parse_extract_run
+from .typed_run import ExtractOutputValidationError, TypedExtractOutput, TypedExtractRun, parse_extract_run
 
 __all__ = [
     # Custom field types
@@ -53,6 +54,8 @@ __all__ = [
     # Conversion
     "SchemaConversionError",
     "pydantic_to_extend_schema",
+    # Errors
+    "ExtractOutputValidationError",
     # Typed configs (for annotations / advanced usage)
     "TypedExtractConfigParams",
     "TypedExtractorParams",

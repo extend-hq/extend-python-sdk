@@ -11,6 +11,7 @@ import typing
 
 import pydantic
 from ...core.pydantic_utilities import IS_PYDANTIC_V2
+from ...types.created_at import CreatedAt
 from ...types.extract_config import ExtractConfig
 from ...types.extract_output import ExtractOutput
 from ...types.extract_output_edits import ExtractOutputEdits
@@ -22,10 +23,32 @@ from ...types.file_summary import FileSummary
 from ...types.processor_run_status import ProcessorRunStatus
 from ...types.run_metadata import RunMetadata
 from ...types.run_usage import RunUsage
+from ...types.updated_at import UpdatedAt
 
-__all__ = ["ModelT", "TypedExtractOutput", "TypedExtractRun", "parse_extract_run"]
+__all__ = [
+    "ExtractOutputValidationError",
+    "ModelT",
+    "TypedExtractOutput",
+    "TypedExtractRun",
+    "parse_extract_run",
+]
 
 ModelT = typing.TypeVar("ModelT", bound=pydantic.BaseModel)
+
+
+class ExtractOutputValidationError(Exception):
+    """
+    Raised when a completed extract run's output does not validate against the
+    pydantic model that was used as the extraction schema.
+
+    The run itself completed successfully — only the client-side validation
+    failed — so the full run is preserved on the ``run`` attribute (including
+    ``run.id``, ``run.dashboard_url``, and the raw ``run.output``).
+    """
+
+    def __init__(self, message: str, run: ExtractRun):
+        self.run = run
+        super().__init__(message)
 
 
 def _validate_model(model: typing.Type[ModelT], value: typing.Any) -> ModelT:
@@ -38,9 +61,9 @@ class TypedExtractOutput(typing.Generic[ModelT]):
     """Extract output whose value is a validated pydantic model instance."""
 
     value: ModelT
-    metadata: ExtractOutputMetadata
+    metadata: typing.Optional[ExtractOutputMetadata]
 
-    def __init__(self, *, value: ModelT, metadata: ExtractOutputMetadata) -> None:
+    def __init__(self, *, value: ModelT, metadata: typing.Optional[ExtractOutputMetadata]) -> None:
         self.value = value
         self.metadata = metadata
 
@@ -77,8 +100,8 @@ class TypedExtractRun(typing.Generic[ModelT]):
     parse_run_id: typing.Optional[str]
     dashboard_url: str
     usage: typing.Optional[RunUsage]
-    created_at: typing.Any
-    updated_at: typing.Any
+    created_at: CreatedAt
+    updated_at: UpdatedAt
     raw: ExtractRun
     """The original, untyped extract run response."""
 
@@ -87,9 +110,9 @@ class TypedExtractRun(typing.Generic[ModelT]):
         self.object = run.object
         self.id = run.id
         self.status = run.status
-        self.output = _parse_output(run.output, model)
-        self.initial_output = _parse_output(run.initial_output, model)
-        self.reviewed_output = _parse_output(run.reviewed_output, model)
+        self.output = _parse_output(run.output, model, run)
+        self.initial_output = _parse_output(run.initial_output, model, run)
+        self.reviewed_output = _parse_output(run.reviewed_output, model, run)
         self.failure_reason = run.failure_reason
         self.failure_message = run.failure_message
         self.metadata = run.metadata
@@ -112,19 +135,31 @@ class TypedExtractRun(typing.Generic[ModelT]):
 
 
 def _parse_output(
-    output: typing.Optional[ExtractOutput], model: typing.Type[ModelT]
+    output: typing.Optional[ExtractOutput], model: typing.Type[ModelT], run: ExtractRun
 ) -> typing.Optional[TypedExtractOutput[ModelT]]:
     if output is None:
         return None
     value = getattr(output, "value", None)
     if value is None:
-        raise ValueError(
-            "Extract run output has no 'value' field; typed schemas are only supported "
-            "for runs created with a JSON Schema config."
+        raise ExtractOutputValidationError(
+            f"Extract run {getattr(run, 'id', None)!r} has no 'value' on its output; typed schemas are "
+            "only supported for runs created with a JSON Schema config. "
+            "The full run is available on this error's `run` attribute.",
+            run=run,
         )
+    try:
+        validated = _validate_model(model, value)
+    except pydantic.ValidationError as exc:
+        raise ExtractOutputValidationError(
+            f"Output of extract run {getattr(run, 'id', None)!r} did not validate against "
+            f"{model.__name__}: {exc}\n"
+            "The run completed successfully; the full run (including its raw output) is "
+            "available on this error's `run` attribute.",
+            run=run,
+        ) from exc
     return TypedExtractOutput(
-        value=_validate_model(model, value),
-        metadata=typing.cast(ExtractOutputMetadata, getattr(output, "metadata", None)),
+        value=validated,
+        metadata=getattr(output, "metadata", None),
     )
 
 
@@ -140,8 +175,7 @@ def parse_extract_run(run: ExtractRun, model: typing.Type[ModelT]) -> TypedExtra
         A :class:`TypedExtractRun` whose output values are instances of ``model``.
 
     Raises:
-        pydantic.ValidationError: If an output value does not conform to the model.
-            Extraction can return ``null`` for any field, so model fields should
-            be declared ``Optional``.
+        ExtractOutputValidationError: If an output value does not conform to the
+            model. The completed run is preserved on the error's ``run`` attribute.
     """
     return TypedExtractRun(run, model)

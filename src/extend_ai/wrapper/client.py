@@ -280,7 +280,8 @@ class Extend(GeneratedExtend):
                 file={"url": "https://example.com/invoice.pdf"},
                 config={"schema": Invoice},
             )
-            print(result.output.value.invoice_number)  # typed!
+            if result.output is not None:
+                print(result.output.value.invoice_number)  # typed!
         """
         converted_extractor, converted_config, schema_model = _convert_extract_request(extractor, config)
         result = super().extract(

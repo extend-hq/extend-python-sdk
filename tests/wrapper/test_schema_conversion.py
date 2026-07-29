@@ -2,6 +2,7 @@
 
 import datetime as dt
 import enum
+import typing
 from typing import Dict, List, Optional, Union
 
 import pydantic
@@ -97,14 +98,32 @@ class TestPrimitiveTypes:
 
         assert pydantic_to_extend_schema(Schema)["properties"]["field"] == {"type": ["boolean", "null"]}
 
-    def test_non_optional_primitives_are_forced_nullable(self):
+    def test_non_optional_primitives_are_rejected(self):
         class Schema(pydantic.BaseModel):
             name: str
-            count: int
 
-        properties = pydantic_to_extend_schema(Schema)["properties"]
-        assert properties["name"] == {"type": ["string", "null"]}
-        assert properties["count"] == {"type": ["integer", "null"]}
+        with pytest.raises(SchemaConversionError, match=r"Optional\[str\].*name"):
+            pydantic_to_extend_schema(Schema)
+
+    @pytest.mark.parametrize(
+        "annotation,expected_hint",
+        [(str, "str"), (int, "int"), (float, "float"), (bool, "bool"), (dt.date, "datetime.date")],
+        ids=["str", "int", "float", "bool", "date"],
+    )
+    def test_each_non_optional_nullable_kind_is_rejected(self, annotation, expected_hint):
+        Schema = pydantic.create_model("Schema", field=(annotation, ...))
+
+        with pytest.raises(SchemaConversionError, match=f"Optional\\[{expected_hint}\\]"):
+            pydantic_to_extend_schema(Schema)
+
+    def test_non_optional_primitive_with_default_is_still_rejected(self):
+        # A default only covers a *missing* field; extraction returns explicit
+        # nulls, which the model would still reject.
+        class Schema(pydantic.BaseModel):
+            name: str = "unknown"
+
+        with pytest.raises(SchemaConversionError):
+            pydantic_to_extend_schema(Schema)
 
     def test_includes_descriptions(self):
         class Schema(pydantic.BaseModel):
@@ -170,6 +189,37 @@ class TestEnumTypes:
             value: Optional[Number] = None
 
         with pytest.raises(SchemaConversionError):
+            pydantic_to_extend_schema(Schema)
+
+    def test_typing_literal_is_recognized(self):
+        # typing.Literal and typing_extensions.Literal are distinct objects on
+        # some Python versions; both must be treated as enums.
+        class Schema(pydantic.BaseModel):
+            status: Optional[typing.Literal["active", "inactive"]] = None
+
+        assert pydantic_to_extend_schema(Schema)["properties"]["status"] == {"enum": ["active", "inactive", None]}
+
+    def test_literal_including_none_is_nullable_without_optional(self):
+        class Schema(pydantic.BaseModel):
+            status: Literal["active", "inactive", None] = None
+
+        assert pydantic_to_extend_schema(Schema)["properties"]["status"] == {"enum": ["active", "inactive", None]}
+
+    def test_rejects_non_optional_literal(self):
+        class Schema(pydantic.BaseModel):
+            status: Literal["active", "inactive"]
+
+        with pytest.raises(SchemaConversionError, match="Optional"):
+            pydantic_to_extend_schema(Schema)
+
+    def test_rejects_non_optional_string_enum(self):
+        class Status(str, enum.Enum):
+            ACTIVE = "active"
+
+        class Schema(pydantic.BaseModel):
+            status: Status
+
+        with pytest.raises(SchemaConversionError, match="Optional"):
             pydantic_to_extend_schema(Schema)
 
 
@@ -472,6 +522,74 @@ class TestUnsupportedTypes:
 
         with pytest.raises(SchemaConversionError):
             pydantic_to_extend_schema(Schema)
+
+    def test_rejects_optional_array_items(self):
+        class Schema(pydantic.BaseModel):
+            tags: List[Optional[str]] = []
+
+        with pytest.raises(SchemaConversionError, match="Array items must not be Optional"):
+            pydantic_to_extend_schema(Schema)
+
+
+class TestRecursiveModels:
+    def test_rejects_directly_recursive_model(self):
+        class Node(pydantic.BaseModel):
+            name: Optional[str] = None
+            children: List["Node"] = []
+
+        if hasattr(Node, "model_rebuild"):
+            Node.model_rebuild()
+        else:
+            Node.update_forward_refs(Node=Node)
+
+        with pytest.raises(SchemaConversionError, match="Recursive"):
+            pydantic_to_extend_schema(Node)
+
+    def test_rejects_mutually_recursive_models(self):
+        class A(pydantic.BaseModel):
+            b: Optional["B"] = None
+
+        class B(pydantic.BaseModel):
+            a: Optional[A] = None
+
+        if hasattr(A, "model_rebuild"):
+            A.model_rebuild()
+        else:
+            A.update_forward_refs(B=B)
+
+        with pytest.raises(SchemaConversionError, match="Recursive"):
+            pydantic_to_extend_schema(A)
+
+    def test_allows_same_model_in_sibling_fields(self):
+        class Address(pydantic.BaseModel):
+            street: Optional[str] = None
+
+        class Schema(pydantic.BaseModel):
+            billing_address: Optional[Address] = None
+            shipping_address: Optional[Address] = None
+
+        json_schema = pydantic_to_extend_schema(Schema)
+        assert json_schema["properties"]["billing_address"] == json_schema["properties"]["shipping_address"]
+
+
+class TestFieldAliases:
+    def test_rejects_aliased_fields(self):
+        class Schema(pydantic.BaseModel):
+            invoice_number: Optional[str] = pydantic.Field(None, alias="invoiceNumber")
+
+        with pytest.raises(SchemaConversionError, match="alias"):
+            pydantic_to_extend_schema(Schema)
+
+    def test_rejects_aliased_fields_in_nested_models(self):
+        class Inner(pydantic.BaseModel):
+            value: Optional[str] = pydantic.Field(None, alias="theValue")
+
+        class Schema(pydantic.BaseModel):
+            inner: Optional[Inner] = None
+
+        with pytest.raises(SchemaConversionError) as exc_info:
+            pydantic_to_extend_schema(Schema)
+        assert exc_info.value.path == ["inner", "value"]
 
 
 class TestComplexSchemas:

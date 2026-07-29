@@ -26,12 +26,14 @@ Example:
         file={"id": "file_xxx"},
         config={"schema": Invoice},
     )
-    print(result.output.value.invoice_number)  # typed!
+    if result.output is not None:
+        print(result.output.value.invoice_number)  # typed!
 """
 
 import typing
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
+from ...core.request_options import RequestOptions
 from ...extract_runs.client import AsyncExtractRunsClient as GeneratedAsyncExtractRunsClient
 from ...extract_runs.client import ExtractRunsClient as GeneratedExtractRunsClient
 from ...extract_runs.requests.extract_runs_create_request_extractor import ExtractRunsCreateRequestExtractorParams
@@ -57,6 +59,18 @@ from ..schema import (
 from ..schema.typed_run import ModelT
 
 __all__ = ["ExtractRunsClient", "AsyncExtractRunsClient", "PollingTimeoutError"]
+
+# this is used as the default value for optional parameters
+OMIT = typing.cast(typing.Any, ...)
+
+
+def _convert_create_args(extractor: typing.Any, config: typing.Any) -> typing.Tuple[typing.Any, typing.Any]:
+    """Convert a pydantic model schema in create() arguments, passing other values through."""
+    if get_schema_model(config) is not None:
+        config = convert_typed_config(config)
+    if get_extractor_schema_model(extractor) is not None:
+        extractor = convert_typed_extractor(extractor)
+    return extractor, config
 
 
 def _is_terminal_status(status: str) -> bool:
@@ -123,6 +137,39 @@ class ExtractRunsClient(GeneratedExtractRunsClient):
 
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         super().__init__(client_wrapper=client_wrapper)
+
+    def create(
+        self,
+        *,
+        extractor: typing.Optional[
+            typing.Union[ExtractRunsCreateRequestExtractorParams, TypedExtractorParams[ModelT]]
+        ] = OMIT,
+        config: typing.Optional[typing.Union[ExtractConfigJsonParams, TypedExtractConfigParams[ModelT]]] = OMIT,
+        file: typing.Optional[ExtractRunsCreateRequestFileParams] = OMIT,
+        package: typing.Optional[MultiFileRunPackageParams] = OMIT,
+        priority: typing.Optional[RunPriority] = OMIT,
+        metadata: typing.Optional[RunMetadata] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ExtractRun:
+        """
+        Create an extract run. See the generated client for full documentation.
+
+        `config["schema"]` (or `extractor["override_config"]["schema"]`) may be a
+        pydantic model class; it is converted to Extend's JSON Schema format before
+        the request is sent. Note that `create()` returns immediately without
+        output — for validated, typed output use `create_and_poll()` or
+        `client.extract()` instead.
+        """
+        converted_extractor, converted_config = _convert_create_args(extractor, config)
+        return super().create(
+            extractor=converted_extractor,
+            config=converted_config,
+            file=file,
+            package=package,
+            priority=priority,
+            metadata=metadata,
+            request_options=request_options,
+        )
 
     @typing.overload
     def create_and_poll(
@@ -239,6 +286,40 @@ class AsyncExtractRunsClient(GeneratedAsyncExtractRunsClient):
 
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         super().__init__(client_wrapper=client_wrapper)
+
+    async def create(
+        self,
+        *,
+        extractor: typing.Optional[
+            typing.Union[ExtractRunsCreateRequestExtractorParams, TypedExtractorParams[ModelT]]
+        ] = OMIT,
+        config: typing.Optional[typing.Union[ExtractConfigJsonParams, TypedExtractConfigParams[ModelT]]] = OMIT,
+        file: typing.Optional[ExtractRunsCreateRequestFileParams] = OMIT,
+        package: typing.Optional[MultiFileRunPackageParams] = OMIT,
+        priority: typing.Optional[RunPriority] = OMIT,
+        metadata: typing.Optional[RunMetadata] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ExtractRun:
+        """
+        Create an extract run (async version). See the generated client for full
+        documentation.
+
+        `config["schema"]` (or `extractor["override_config"]["schema"]`) may be a
+        pydantic model class; it is converted to Extend's JSON Schema format before
+        the request is sent. Note that `create()` returns immediately without
+        output — for validated, typed output use `create_and_poll()` or
+        `client.extract()` instead.
+        """
+        converted_extractor, converted_config = _convert_create_args(extractor, config)
+        return await super().create(
+            extractor=converted_extractor,
+            config=converted_config,
+            file=file,
+            package=package,
+            priority=priority,
+            metadata=metadata,
+            request_options=request_options,
+        )
 
     @typing.overload
     async def create_and_poll(
