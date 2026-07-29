@@ -87,13 +87,18 @@ result = client.extract(
 )
 
 # output.value is a validated Invoice instance
-print(result.output.value.invoice_number)                # str | None
-print(result.output.value.invoice_date)                  # datetime.date | None
-print(result.output.value.total.amount)                  # float | None
-print(result.output.value.total.iso_4217_currency_code)  # str | None
+if result.status == "PROCESSED" and result.output is not None:
+    invoice = result.output.value
+    print(invoice.invoice_number)  # str | None
+    print(invoice.invoice_date)    # datetime.date | None
+    if invoice.total is not None:
+        print(invoice.total.amount)                  # float | None
+        print(invoice.total.iso_4217_currency_code)  # str | None
 ```
 
-The model is converted to [Extend's JSON Schema format](https://docs.extend.ai/2026-02-09/extraction/schema) for the request, and the extraction output is validated back into model instances. Use `Field(description=...)` to guide the extraction, and declare fields as `Optional` -- extraction can return `null` for any field, and non-nullable fields will fail output validation.
+The model is converted to [Extend's JSON Schema format](https://docs.extend.ai/2026-02-09/extraction/schema) for the request, and the extraction output is validated back into model instances. Use `Field(description=...)` to guide the extraction.
+
+Primitive, enum, and date fields must be declared `Optional` -- extraction can return `null` for any field, so a non-Optional field raises `SchemaConversionError` before any request is sent. In the unlikely event that a completed run's output fails model validation, the SDK raises `ExtractOutputValidationError`, which preserves the completed run (including its raw output) on the error's `run` attribute.
 
 Pydantic model schemas are accepted everywhere an extraction schema can be provided:
 
@@ -122,7 +127,7 @@ The SDK provides field types for Extend-specific extraction behavior:
 | `ExtendCurrency` | `ExtendCurrency(amount, iso_4217_currency_code)` | Currency with amount and code |
 | `ExtendSignature` | `ExtendSignature(printed_name, signature_date, is_signed, title_or_role)` | Signature detection |
 
-Supported field types: `str`, `float`, `int`, `bool`, `datetime.date`, `Literal[...]` / string enums (converted to nullable enums), nested models, and lists of any of these. Unsupported constructs (unions, dicts, etc.) raise `SchemaConversionError`.
+Supported field types: `Optional[str]`, `Optional[float]`, `Optional[int]`, `Optional[bool]`, `Optional[datetime.date]`, `Optional[Literal[...]]` / string enums (converted to nullable enums), nested models, and lists of these (list items are non-Optional, e.g. `List[str]`). Unsupported constructs (non-Optional unions, dicts, recursive models, field aliases, etc.) raise `SchemaConversionError`.
 
 ## Polling helpers
 

@@ -10,6 +10,7 @@ import pytest
 from extend_ai.wrapper.schema import (
     ExtendCurrency,
     ExtendDate,
+    ExtractOutputValidationError,
     TypedExtractOutput,
     TypedExtractRun,
     parse_extract_run,
@@ -106,8 +107,21 @@ class TestParseExtractRun:
         run = create_mock_run(value=INVOICE_OUTPUT_VALUE)
         run.output = MagicMock(spec=[])  # legacy output shape: no `value` attribute
 
-        with pytest.raises(ValueError):
+        with pytest.raises(ExtractOutputValidationError) as exc_info:
             parse_extract_run(run, Invoice)
+        assert exc_info.value.run is run
+
+    def test_validation_failure_preserves_completed_run_on_error(self):
+        run = create_mock_run(value={"invoice_number": "INV-1", "line_items": "not-a-list"})
+
+        with pytest.raises(ExtractOutputValidationError) as exc_info:
+            parse_extract_run(run, Invoice)
+
+        error = exc_info.value
+        assert error.run is run
+        assert error.run.output.value["line_items"] == "not-a-list"
+        assert "Invoice" in str(error)
+        assert isinstance(error.__cause__, pydantic.ValidationError)
 
 
 # ============================================================================
@@ -208,6 +222,42 @@ class TestAsyncCreateAndPollTypedSchema:
         assert isinstance(sent_schema, dict)
         assert isinstance(result, TypedExtractRun)
         assert result.output.value.invoice_number == "INV-123"
+
+
+# ============================================================================
+# ExtractRunsClient.create (plain, non-polling) with typed schemas
+# ============================================================================
+
+
+class TestPlainCreateTypedSchema:
+    def setup_method(self):
+        from extend_ai.wrapper.resources.extract_runs import ExtractRunsClient
+
+        self.client = ExtractRunsClient(client_wrapper=MagicMock())
+        self.raw_client = MagicMock()
+        self.client._raw_client = self.raw_client
+
+    def test_create_converts_model_schema(self):
+        self.client.create(file={"id": "file_1"}, config={"schema": Invoice})
+
+        sent_config = self.raw_client.create.call_args.kwargs["config"]
+        assert isinstance(sent_config["schema"], dict)
+        assert sent_config["schema"]["type"] == "object"
+
+    def test_create_converts_extractor_override_config_schema(self):
+        self.client.create(
+            file={"id": "file_1"},
+            extractor={"id": "extractor_abc", "override_config": {"schema": Invoice}},
+        )
+
+        sent_extractor = self.raw_client.create.call_args.kwargs["extractor"]
+        assert isinstance(sent_extractor["override_config"]["schema"], dict)
+
+    def test_create_passes_through_json_schema(self):
+        json_config = {"schema": {"type": "object", "properties": {}}}
+        self.client.create(file={"id": "file_1"}, config=json_config)
+
+        assert self.raw_client.create.call_args.kwargs["config"] is json_config
 
 
 # ============================================================================

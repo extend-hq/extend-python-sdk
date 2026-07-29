@@ -17,6 +17,7 @@ generated superclass.)
 
 import inspect
 import typing
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
@@ -68,6 +69,55 @@ def test_create_and_poll_accepts_all_create_params(wrapper_client):
         f"{generated_client.__name__}.create() accepts: {sorted(missing)}. "
         "Add them to create_and_poll() and forward them to create()."
     )
+
+
+SYNC_RUN_CLIENTS = [cls for cls in RUN_CLIENTS if not cls.__name__.startswith("Async")]
+ASYNC_RUN_CLIENTS = [cls for cls in RUN_CLIENTS if cls.__name__.startswith("Async")]
+
+
+def _create_sentinel_kwargs(wrapper_client) -> typing.Dict[str, object]:
+    """One unique sentinel per generated create() parameter."""
+    generated_client = wrapper_client.__mro__[1]
+    return {name: object() for name in _param_names(generated_client.create) - {"request_options"}}
+
+
+def _bind_create_and_poll(wrapper_client, mock_cls):
+    client = MagicMock(spec=wrapper_client)
+    client.create = mock_cls()
+    client.retrieve = mock_cls()
+    client.retrieve.return_value = MagicMock(status="PROCESSED")
+    client.create_and_poll = wrapper_client.create_and_poll.__get__(client, wrapper_client)
+    return client
+
+
+def _assert_all_forwarded(client, sentinels: typing.Dict[str, object], wrapper_client) -> None:
+    create_kwargs = client.create.call_args.kwargs
+    not_forwarded = [name for name, sentinel in sentinels.items() if create_kwargs.get(name) is not sentinel]
+    assert not not_forwarded, (
+        f"{wrapper_client.__name__}.create_and_poll() accepted these parameters but did not "
+        f"forward them to create(): {sorted(not_forwarded)}"
+    )
+
+
+@pytest.mark.parametrize("wrapper_client", SYNC_RUN_CLIENTS, ids=lambda cls: cls.__name__)
+def test_create_and_poll_forwards_all_create_params(wrapper_client):
+    """Accepting a parameter is not enough — it must reach create()."""
+    client = _bind_create_and_poll(wrapper_client, MagicMock)
+    sentinels = _create_sentinel_kwargs(wrapper_client)
+
+    client.create_and_poll(**sentinels)
+
+    _assert_all_forwarded(client, sentinels, wrapper_client)
+
+
+@pytest.mark.parametrize("wrapper_client", ASYNC_RUN_CLIENTS, ids=lambda cls: cls.__name__)
+async def test_async_create_and_poll_forwards_all_create_params(wrapper_client):
+    client = _bind_create_and_poll(wrapper_client, AsyncMock)
+    sentinels = _create_sentinel_kwargs(wrapper_client)
+
+    await client.create_and_poll(**sentinels)
+
+    _assert_all_forwarded(client, sentinels, wrapper_client)
 
 
 def test_typed_extract_config_matches_generated_config_keys():
