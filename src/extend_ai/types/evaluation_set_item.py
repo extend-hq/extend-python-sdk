@@ -7,6 +7,7 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .created_by import CreatedBy
 from .file_summary import FileSummary
 from .provided_processor_output import ProvidedProcessorOutput
 
@@ -44,6 +45,10 @@ class EvaluationSetItem(UncheckedBaseModel):
     """
     The expected output that will be used to evaluate the performance of the extractor, classifier, or splitter associated with the evaluation set. This must conform to the output schema of the entity associated with the evaluation set.
     """
+
+    created_by: typing_extensions.Annotated[typing.Optional[CreatedBy], FieldMetadata(alias="createdBy")] = (
+        pydantic.Field(alias="createdBy", default=None)
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

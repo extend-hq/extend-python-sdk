@@ -9,6 +9,7 @@ from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .classify_config import ClassifyConfig
 from .created_at import CreatedAt
+from .created_by import CreatedBy
 
 
 class ClassifierVersion(UncheckedBaseModel):
@@ -54,6 +55,9 @@ class ClassifierVersion(UncheckedBaseModel):
 
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
         alias="createdAt"
+    )
+    created_by: typing_extensions.Annotated[typing.Optional[CreatedBy], FieldMetadata(alias="createdBy")] = (
+        pydantic.Field(alias="createdBy", default=None)
     )
 
     if IS_PYDANTIC_V2:

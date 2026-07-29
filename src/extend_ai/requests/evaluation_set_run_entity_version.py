@@ -7,6 +7,7 @@ import typing
 import typing_extensions
 from ..core.serialization import FieldMetadata
 from ..types.created_at import CreatedAt
+from .created_by import CreatedByParams
 
 
 class EvaluationSetRunEntityVersion_ExtractorVersionParams(typing_extensions.TypedDict):
@@ -16,6 +17,7 @@ class EvaluationSetRunEntityVersion_ExtractorVersionParams(typing_extensions.Typ
     version: str
     extractor_id: typing_extensions.Annotated[str, FieldMetadata(alias="extractorId")]
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
+    created_by: typing_extensions.Annotated[typing.Optional[CreatedByParams], FieldMetadata(alias="createdBy")]
 
 
 class EvaluationSetRunEntityVersion_ClassifierVersionParams(typing_extensions.TypedDict):
@@ -25,6 +27,7 @@ class EvaluationSetRunEntityVersion_ClassifierVersionParams(typing_extensions.Ty
     version: str
     classifier_id: typing_extensions.Annotated[str, FieldMetadata(alias="classifierId")]
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
+    created_by: typing_extensions.Annotated[typing.Optional[CreatedByParams], FieldMetadata(alias="createdBy")]
 
 
 class EvaluationSetRunEntityVersion_SplitterVersionParams(typing_extensions.TypedDict):
@@ -34,6 +37,7 @@ class EvaluationSetRunEntityVersion_SplitterVersionParams(typing_extensions.Type
     version: str
     splitter_id: typing_extensions.Annotated[str, FieldMetadata(alias="splitterId")]
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
+    created_by: typing_extensions.Annotated[typing.Optional[CreatedByParams], FieldMetadata(alias="createdBy")]
 
 
 EvaluationSetRunEntityVersionParams = typing.Union[

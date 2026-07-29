@@ -8,6 +8,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .created_at import CreatedAt
+from .created_by import CreatedBy
 from .updated_at import UpdatedAt
 from .workflow_version import WorkflowVersion
 
@@ -40,6 +41,9 @@ class Workflow(UncheckedBaseModel):
     )
     draft_version: typing_extensions.Annotated[WorkflowVersion, FieldMetadata(alias="draftVersion")] = pydantic.Field(
         alias="draftVersion"
+    )
+    created_by: typing_extensions.Annotated[typing.Optional[CreatedBy], FieldMetadata(alias="createdBy")] = (
+        pydantic.Field(alias="createdBy", default=None)
     )
 
     if IS_PYDANTIC_V2:

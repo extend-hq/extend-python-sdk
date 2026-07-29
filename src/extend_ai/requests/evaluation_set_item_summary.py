@@ -3,6 +3,8 @@
 import typing
 
 import typing_extensions
+from ..core.serialization import FieldMetadata
+from .created_by import CreatedByParams
 from .file_summary import FileSummaryParams
 
 
@@ -23,3 +25,5 @@ class EvaluationSetItemSummaryParams(typing_extensions.TypedDict):
     """
     A summary of the file associated with the evaluation set item.
     """
+
+    created_by: typing_extensions.Annotated[typing.Optional[CreatedByParams], FieldMetadata(alias="createdBy")]

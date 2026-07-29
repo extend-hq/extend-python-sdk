@@ -10,6 +10,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
 from .created_at import CreatedAt
+from .created_by import CreatedBy
 
 
 class EvaluationSetRunEntityVersion_ExtractorVersion(UncheckedBaseModel):
@@ -26,6 +27,9 @@ class EvaluationSetRunEntityVersion_ExtractorVersion(UncheckedBaseModel):
     )
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
         alias="createdAt"
+    )
+    created_by: typing_extensions.Annotated[typing.Optional[CreatedBy], FieldMetadata(alias="createdBy")] = (
+        pydantic.Field(alias="createdBy", default=None)
     )
 
     if IS_PYDANTIC_V2:
@@ -53,6 +57,9 @@ class EvaluationSetRunEntityVersion_ClassifierVersion(UncheckedBaseModel):
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
         alias="createdAt"
     )
+    created_by: typing_extensions.Annotated[typing.Optional[CreatedBy], FieldMetadata(alias="createdBy")] = (
+        pydantic.Field(alias="createdBy", default=None)
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -78,6 +85,9 @@ class EvaluationSetRunEntityVersion_SplitterVersion(UncheckedBaseModel):
     )
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(
         alias="createdAt"
+    )
+    created_by: typing_extensions.Annotated[typing.Optional[CreatedBy], FieldMetadata(alias="createdBy")] = (
+        pydantic.Field(alias="createdBy", default=None)
     )
 
     if IS_PYDANTIC_V2:

@@ -19,6 +19,7 @@ from ..errors.too_many_requests_error import TooManyRequestsError
 from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
 from ..requests.workflow_reference import WorkflowReferenceParams
+from ..requests.workflow_run_package import WorkflowRunPackageParams
 from ..types.api_error import ApiError as types_api_error_ApiError
 from ..types.max_page_size import MaxPageSize
 from ..types.next_page_token import NextPageToken
@@ -230,7 +231,8 @@ class RawWorkflowRunsClient:
         self,
         *,
         workflow: WorkflowReferenceParams,
-        file: WorkflowRunsCreateRequestFileParams,
+        file: typing.Optional[WorkflowRunsCreateRequestFileParams] = OMIT,
+        package: typing.Optional[WorkflowRunPackageParams] = OMIT,
         outputs: typing.Optional[typing.Sequence[WorkflowRunsCreateRequestOutputsItemParams]] = OMIT,
         priority: typing.Optional[RunPriority] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
@@ -238,7 +240,9 @@ class RawWorkflowRunsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[WorkflowRun]:
         """
-        Run a workflow with a file. A workflow is a sequence of steps that process files and data in a specific order to achieve a desired outcome.
+        Run a workflow. A workflow is a sequence of steps that process files and data in a specific order to achieve a desired outcome.
+
+        Pass `file` for a single document, or `package` to process 2-50 files together as one package in a single run. Exactly one of `file` or `package` must be provided.
 
         The request returns immediately with a `PROCESSING` status. Use webhooks or poll the Get Workflow Run endpoint for results.
 
@@ -246,11 +250,14 @@ class RawWorkflowRunsClient:
         ----------
         workflow : WorkflowReferenceParams
 
-        file : WorkflowRunsCreateRequestFileParams
-            The file to be processed. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/general/supported-file-types). Files can be provided as a URL, an Extend file ID, or raw text. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
+        file : typing.Optional[WorkflowRunsCreateRequestFileParams]
+            The file to be processed. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/general/supported-file-types). Files can be provided as a URL, an Extend file ID, or raw text. Mutually exclusive with `package` — provide one or the other. If you wish to process many files as independent runs, consider using the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
+
+        package : typing.Optional[WorkflowRunPackageParams]
+            A set of 2–50 files to process together in a single workflow run. Mutually exclusive with `file` — provide one or the other.
 
         outputs : typing.Optional[typing.Sequence[WorkflowRunsCreateRequestOutputsItemParams]]
-            Predetermined outputs to be used for the workflow run. Generally not recommended for most use cases, however, can be useful in cases of overriding a classification in a workflow, or a subset of extraction fields when data is known.
+            Predetermined outputs to be used for the workflow run. Generally not recommended for most use cases, however, can be useful in cases of overriding a classification in a workflow, or a subset of extraction fields when data is known. Not supported on package runs — a package run produces a single merged result across all files and cannot accept pre-supplied per-processor outputs.
 
         priority : typing.Optional[RunPriority]
 
@@ -275,6 +282,9 @@ class RawWorkflowRunsClient:
                 ),
                 "file": convert_and_respect_annotation_metadata(
                     object_=file, annotation=WorkflowRunsCreateRequestFileParams, direction="write"
+                ),
+                "package": convert_and_respect_annotation_metadata(
+                    object_=package, annotation=WorkflowRunPackageParams, direction="write"
                 ),
                 "outputs": convert_and_respect_annotation_metadata(
                     object_=outputs,
@@ -1351,7 +1361,8 @@ class AsyncRawWorkflowRunsClient:
         self,
         *,
         workflow: WorkflowReferenceParams,
-        file: WorkflowRunsCreateRequestFileParams,
+        file: typing.Optional[WorkflowRunsCreateRequestFileParams] = OMIT,
+        package: typing.Optional[WorkflowRunPackageParams] = OMIT,
         outputs: typing.Optional[typing.Sequence[WorkflowRunsCreateRequestOutputsItemParams]] = OMIT,
         priority: typing.Optional[RunPriority] = OMIT,
         metadata: typing.Optional[RunMetadata] = OMIT,
@@ -1359,7 +1370,9 @@ class AsyncRawWorkflowRunsClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[WorkflowRun]:
         """
-        Run a workflow with a file. A workflow is a sequence of steps that process files and data in a specific order to achieve a desired outcome.
+        Run a workflow. A workflow is a sequence of steps that process files and data in a specific order to achieve a desired outcome.
+
+        Pass `file` for a single document, or `package` to process 2-50 files together as one package in a single run. Exactly one of `file` or `package` must be provided.
 
         The request returns immediately with a `PROCESSING` status. Use webhooks or poll the Get Workflow Run endpoint for results.
 
@@ -1367,11 +1380,14 @@ class AsyncRawWorkflowRunsClient:
         ----------
         workflow : WorkflowReferenceParams
 
-        file : WorkflowRunsCreateRequestFileParams
-            The file to be processed. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/general/supported-file-types). Files can be provided as a URL, an Extend file ID, or raw text. If you wish to process more at a time, consider using the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
+        file : typing.Optional[WorkflowRunsCreateRequestFileParams]
+            The file to be processed. Supported file types can be found [here](https://docs.extend.ai/2026-02-09/general/supported-file-types). Files can be provided as a URL, an Extend file ID, or raw text. Mutually exclusive with `package` — provide one or the other. If you wish to process many files as independent runs, consider using the [Batch Run Workflow](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workflow/batch-create-workflow-runs) endpoint.
+
+        package : typing.Optional[WorkflowRunPackageParams]
+            A set of 2–50 files to process together in a single workflow run. Mutually exclusive with `file` — provide one or the other.
 
         outputs : typing.Optional[typing.Sequence[WorkflowRunsCreateRequestOutputsItemParams]]
-            Predetermined outputs to be used for the workflow run. Generally not recommended for most use cases, however, can be useful in cases of overriding a classification in a workflow, or a subset of extraction fields when data is known.
+            Predetermined outputs to be used for the workflow run. Generally not recommended for most use cases, however, can be useful in cases of overriding a classification in a workflow, or a subset of extraction fields when data is known. Not supported on package runs — a package run produces a single merged result across all files and cannot accept pre-supplied per-processor outputs.
 
         priority : typing.Optional[RunPriority]
 
@@ -1396,6 +1412,9 @@ class AsyncRawWorkflowRunsClient:
                 ),
                 "file": convert_and_respect_annotation_metadata(
                     object_=file, annotation=WorkflowRunsCreateRequestFileParams, direction="write"
+                ),
+                "package": convert_and_respect_annotation_metadata(
+                    object_=package, annotation=WorkflowRunPackageParams, direction="write"
                 ),
                 "outputs": convert_and_respect_annotation_metadata(
                     object_=outputs,

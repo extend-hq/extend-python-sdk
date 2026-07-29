@@ -9,7 +9,6 @@ from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .block_metadata_page import BlockMetadataPage
 from .block_metadata_sheet import BlockMetadataSheet
-from .block_metadata_text_direction import BlockMetadataTextDirection
 
 
 class BlockMetadata(UncheckedBaseModel):
@@ -25,13 +24,6 @@ class BlockMetadata(UncheckedBaseModel):
     sheet: typing.Optional[BlockMetadataSheet] = pydantic.Field(default=None)
     """
     Spreadsheet sheet metadata. Present for blocks parsed from spreadsheet files, such as Excel workbooks.
-    """
-
-    text_direction: typing_extensions.Annotated[
-        typing.Optional[BlockMetadataTextDirection], FieldMetadata(alias="textDirection")
-    ] = pydantic.Field(alias="textDirection", default=None)
-    """
-    Text direction for this block's content ("ltr" for left-to-right, "rtl" for right-to-left).
     """
 
     min_ocr_confidence: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="minOcrConfidence")] = (
