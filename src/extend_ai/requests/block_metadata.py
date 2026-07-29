@@ -4,7 +4,6 @@ import typing
 
 import typing_extensions
 from ..core.serialization import FieldMetadata
-from ..types.block_metadata_text_direction import BlockMetadataTextDirection
 from .block_metadata_page import BlockMetadataPageParams
 from .block_metadata_sheet import BlockMetadataSheetParams
 
@@ -22,13 +21,6 @@ class BlockMetadataParams(typing_extensions.TypedDict):
     sheet: typing_extensions.NotRequired[BlockMetadataSheetParams]
     """
     Spreadsheet sheet metadata. Present for blocks parsed from spreadsheet files, such as Excel workbooks.
-    """
-
-    text_direction: typing_extensions.NotRequired[
-        typing_extensions.Annotated[BlockMetadataTextDirection, FieldMetadata(alias="textDirection")]
-    ]
-    """
-    Text direction for this block's content ("ltr" for left-to-right, "rtl" for right-to-left).
     """
 
     min_ocr_confidence: typing_extensions.NotRequired[

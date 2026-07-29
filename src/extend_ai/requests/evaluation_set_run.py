@@ -46,6 +46,10 @@ class EvaluationSetRunParams(typing_extensions.TypedDict):
     """
 
     metrics: EvaluationSetRunMetricsParams
+    """
+    Metrics for the evaluation set run. The shape depends on the entity type.
+    """
+
     status: BatchRunStatus
     options: EvaluationSetRunOptionsParams
     """

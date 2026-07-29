@@ -5,6 +5,7 @@ import typing
 import typing_extensions
 from ..core.serialization import FieldMetadata
 from ..types.created_at import CreatedAt
+from .created_by import CreatedByParams
 from .split_config import SplitConfigParams
 
 
@@ -48,3 +49,4 @@ class SplitterVersionParams(typing_extensions.TypedDict):
     """
 
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
+    created_by: typing_extensions.Annotated[typing.Optional[CreatedByParams], FieldMetadata(alias="createdBy")]

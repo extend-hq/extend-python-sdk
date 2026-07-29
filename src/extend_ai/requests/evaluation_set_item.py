@@ -4,6 +4,7 @@ import typing
 
 import typing_extensions
 from ..core.serialization import FieldMetadata
+from .created_by import CreatedByParams
 from .file_summary import FileSummaryParams
 from .provided_processor_output import ProvidedProcessorOutputParams
 
@@ -37,3 +38,5 @@ class EvaluationSetItemParams(typing_extensions.TypedDict):
     """
     The expected output that will be used to evaluate the performance of the extractor, classifier, or splitter associated with the evaluation set. This must conform to the output schema of the entity associated with the evaluation set.
     """
+
+    created_by: typing_extensions.Annotated[typing.Optional[CreatedByParams], FieldMetadata(alias="createdBy")]

@@ -6,6 +6,7 @@ import typing_extensions
 from ..core.serialization import FieldMetadata
 from ..types.created_at import CreatedAt
 from ..types.updated_at import UpdatedAt
+from .created_by import CreatedByParams
 from .workflow_version import WorkflowVersionParams
 
 
@@ -32,3 +33,4 @@ class WorkflowParams(typing_extensions.TypedDict):
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
     updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")]
     draft_version: typing_extensions.Annotated[WorkflowVersionParams, FieldMetadata(alias="draftVersion")]
+    created_by: typing_extensions.Annotated[typing.Optional[CreatedByParams], FieldMetadata(alias="createdBy")]

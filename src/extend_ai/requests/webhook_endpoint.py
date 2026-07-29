@@ -8,6 +8,7 @@ from ..core.serialization import FieldMetadata
 from ..types.api_version_enum import ApiVersionEnum
 from ..types.webhook_endpoint_event_type import WebhookEndpointEventType
 from ..types.webhook_endpoint_status import WebhookEndpointStatus
+from .created_by import CreatedByParams
 from .webhook_advanced_options import WebhookAdvancedOptionsParams
 
 
@@ -48,3 +49,5 @@ class WebhookEndpointParams(typing_extensions.TypedDict):
     """
     The date and time the webhook endpoint was created.
     """
+
+    created_by: typing_extensions.Annotated[typing.Optional[CreatedByParams], FieldMetadata(alias="createdBy")]
