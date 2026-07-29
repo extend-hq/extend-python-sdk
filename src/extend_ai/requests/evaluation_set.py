@@ -6,6 +6,7 @@ import typing_extensions
 from ..core.serialization import FieldMetadata
 from ..types.created_at import CreatedAt
 from ..types.updated_at import UpdatedAt
+from .created_by import CreatedByParams
 from .evaluation_set_entity import EvaluationSetEntityParams
 
 
@@ -43,3 +44,4 @@ class EvaluationSetParams(typing_extensions.TypedDict):
 
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]
     updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")]
+    created_by: typing_extensions.Annotated[typing.Optional[CreatedByParams], FieldMetadata(alias="createdBy")]

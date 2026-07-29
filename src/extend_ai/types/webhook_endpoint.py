@@ -9,6 +9,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .api_version_enum import ApiVersionEnum
+from .created_by import CreatedBy
 from .webhook_advanced_options import WebhookAdvancedOptions
 from .webhook_endpoint_event_type import WebhookEndpointEventType
 from .webhook_endpoint_status import WebhookEndpointStatus
@@ -55,6 +56,10 @@ class WebhookEndpoint(UncheckedBaseModel):
     """
     The date and time the webhook endpoint was created.
     """
+
+    created_by: typing_extensions.Annotated[typing.Optional[CreatedBy], FieldMetadata(alias="createdBy")] = (
+        pydantic.Field(alias="createdBy", default=None)
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

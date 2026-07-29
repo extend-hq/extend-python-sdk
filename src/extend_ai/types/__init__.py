@@ -22,7 +22,6 @@ if typing.TYPE_CHECKING:
     from .block_metadata import BlockMetadata
     from .block_metadata_page import BlockMetadataPage
     from .block_metadata_sheet import BlockMetadataSheet
-    from .block_metadata_text_direction import BlockMetadataTextDirection
     from .block_polygon_item import BlockPolygonItem
     from .block_type import BlockType
     from .bounding_box import BoundingBox
@@ -34,6 +33,7 @@ if typing.TYPE_CHECKING:
     from .citation import Citation
     from .citation_page import CitationPage
     from .classification import Classification
+    from .classification_metric import ClassificationMetric
     from .classification_next_entry import ClassificationNextEntry
     from .classifications import Classifications
     from .classifier import Classifier
@@ -50,6 +50,7 @@ if typing.TYPE_CHECKING:
     from .classify_advanced_options_context import ClassifyAdvancedOptionsContext
     from .classify_base_processor import ClassifyBaseProcessor
     from .classify_config import ClassifyConfig
+    from .classify_evaluation_set_run_metrics import ClassifyEvaluationSetRunMetrics
     from .classify_output import ClassifyOutput
     from .classify_override_config import ClassifyOverrideConfig
     from .classify_request_classifier import ClassifyRequestClassifier
@@ -81,6 +82,9 @@ if typing.TYPE_CHECKING:
         ConditionalStepDefinitionConfigConditionsItemType,
     )
     from .created_at import CreatedAt
+    from .created_by import CreatedBy, CreatedBy_ApiKey, CreatedBy_User
+    from .created_by_api_key import CreatedByApiKey
+    from .created_by_user import CreatedByUser
     from .data_retention import DataRetention
     from .data_retention_mode import DataRetentionMode
     from .detect_form_request_file import DetectFormRequestFile
@@ -136,7 +140,14 @@ if typing.TYPE_CHECKING:
         EvaluationSetRunEntityVersion_ExtractorVersion,
         EvaluationSetRunEntityVersion_SplitterVersion,
     )
-    from .evaluation_set_run_metrics import EvaluationSetRunMetrics
+    from .evaluation_set_run_field_metric import EvaluationSetRunFieldMetric
+    from .evaluation_set_run_metrics import (
+        EvaluationSetRunMetrics,
+        EvaluationSetRunMetrics_Classify,
+        EvaluationSetRunMetrics_Extract,
+        EvaluationSetRunMetrics_Splitter,
+    )
+    from .evaluation_set_run_metrics_base import EvaluationSetRunMetricsBase
     from .evaluation_set_run_options import EvaluationSetRunOptions
     from .excel_sheet_range import ExcelSheetRange
     from .external_data_validation_result import ExternalDataValidationResult
@@ -172,6 +183,7 @@ if typing.TYPE_CHECKING:
     from .extract_config_json import ExtractConfigJson
     from .extract_config_legacy import ExtractConfigLegacy
     from .extract_config_legacy_base_processor import ExtractConfigLegacyBaseProcessor
+    from .extract_evaluation_set_run_metrics import ExtractEvaluationSetRunMetrics
     from .extract_output import ExtractOutput
     from .extract_output_edits import ExtractOutputEdits
     from .extract_output_json import ExtractOutputJson
@@ -437,6 +449,7 @@ if typing.TYPE_CHECKING:
     from .splitter_created_webhook_event import SplitterCreatedWebhookEvent
     from .splitter_deleted_webhook_event import SplitterDeletedWebhookEvent
     from .splitter_draft_updated_webhook_event import SplitterDraftUpdatedWebhookEvent
+    from .splitter_evaluation_set_run_metrics import SplitterEvaluationSetRunMetrics
     from .splitter_ref import SplitterRef
     from .splitter_summary import SplitterSummary
     from .splitter_updated_webhook_event import SplitterUpdatedWebhookEvent
@@ -526,6 +539,8 @@ if typing.TYPE_CHECKING:
     from .workflow_run_completed_webhook_event import WorkflowRunCompletedWebhookEvent
     from .workflow_run_failed_webhook_event import WorkflowRunFailedWebhookEvent
     from .workflow_run_needs_review_webhook_event import WorkflowRunNeedsReviewWebhookEvent
+    from .workflow_run_package import WorkflowRunPackage
+    from .workflow_run_package_files_item import WorkflowRunPackageFilesItem
     from .workflow_run_rejected_webhook_event import WorkflowRunRejectedWebhookEvent
     from .workflow_run_status import WorkflowRunStatus
     from .workflow_run_step_run_processed_webhook_event import WorkflowRunStepRunProcessedWebhookEvent
@@ -568,7 +583,6 @@ _dynamic_imports: typing.Dict[str, str] = {
     "BlockMetadata": ".block_metadata",
     "BlockMetadataPage": ".block_metadata_page",
     "BlockMetadataSheet": ".block_metadata_sheet",
-    "BlockMetadataTextDirection": ".block_metadata_text_direction",
     "BlockPolygonItem": ".block_polygon_item",
     "BlockType": ".block_type",
     "BoundingBox": ".bounding_box",
@@ -580,6 +594,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "Citation": ".citation",
     "CitationPage": ".citation_page",
     "Classification": ".classification",
+    "ClassificationMetric": ".classification_metric",
     "ClassificationNextEntry": ".classification_next_entry",
     "Classifications": ".classifications",
     "Classifier": ".classifier",
@@ -596,6 +611,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ClassifyAdvancedOptionsContext": ".classify_advanced_options_context",
     "ClassifyBaseProcessor": ".classify_base_processor",
     "ClassifyConfig": ".classify_config",
+    "ClassifyEvaluationSetRunMetrics": ".classify_evaluation_set_run_metrics",
     "ClassifyOutput": ".classify_output",
     "ClassifyOverrideConfig": ".classify_override_config",
     "ClassifyRequestClassifier": ".classify_request_classifier",
@@ -623,6 +639,11 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ConditionalStepDefinitionConfigConditionsItemOperation": ".conditional_step_definition_config_conditions_item_operation",
     "ConditionalStepDefinitionConfigConditionsItemType": ".conditional_step_definition_config_conditions_item_type",
     "CreatedAt": ".created_at",
+    "CreatedBy": ".created_by",
+    "CreatedByApiKey": ".created_by_api_key",
+    "CreatedByUser": ".created_by_user",
+    "CreatedBy_ApiKey": ".created_by",
+    "CreatedBy_User": ".created_by",
     "DataRetention": ".data_retention",
     "DataRetentionMode": ".data_retention_mode",
     "DetectFormRequestFile": ".detect_form_request_file",
@@ -672,7 +693,12 @@ _dynamic_imports: typing.Dict[str, str] = {
     "EvaluationSetRunEntity_Classifier": ".evaluation_set_run_entity",
     "EvaluationSetRunEntity_Extractor": ".evaluation_set_run_entity",
     "EvaluationSetRunEntity_Splitter": ".evaluation_set_run_entity",
+    "EvaluationSetRunFieldMetric": ".evaluation_set_run_field_metric",
     "EvaluationSetRunMetrics": ".evaluation_set_run_metrics",
+    "EvaluationSetRunMetricsBase": ".evaluation_set_run_metrics_base",
+    "EvaluationSetRunMetrics_Classify": ".evaluation_set_run_metrics",
+    "EvaluationSetRunMetrics_Extract": ".evaluation_set_run_metrics",
+    "EvaluationSetRunMetrics_Splitter": ".evaluation_set_run_metrics",
     "EvaluationSetRunOptions": ".evaluation_set_run_options",
     "ExcelSheetRange": ".excel_sheet_range",
     "ExternalDataValidationResult": ".external_data_validation_result",
@@ -698,6 +724,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ExtractConfigJson": ".extract_config_json",
     "ExtractConfigLegacy": ".extract_config_legacy",
     "ExtractConfigLegacyBaseProcessor": ".extract_config_legacy_base_processor",
+    "ExtractEvaluationSetRunMetrics": ".extract_evaluation_set_run_metrics",
     "ExtractOutput": ".extract_output",
     "ExtractOutputEdits": ".extract_output_edits",
     "ExtractOutputJson": ".extract_output_json",
@@ -947,6 +974,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "SplitterCreatedWebhookEvent": ".splitter_created_webhook_event",
     "SplitterDeletedWebhookEvent": ".splitter_deleted_webhook_event",
     "SplitterDraftUpdatedWebhookEvent": ".splitter_draft_updated_webhook_event",
+    "SplitterEvaluationSetRunMetrics": ".splitter_evaluation_set_run_metrics",
     "SplitterRef": ".splitter_ref",
     "SplitterSummary": ".splitter_summary",
     "SplitterUpdatedWebhookEvent": ".splitter_updated_webhook_event",
@@ -1032,6 +1060,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WorkflowRunCompletedWebhookEvent": ".workflow_run_completed_webhook_event",
     "WorkflowRunFailedWebhookEvent": ".workflow_run_failed_webhook_event",
     "WorkflowRunNeedsReviewWebhookEvent": ".workflow_run_needs_review_webhook_event",
+    "WorkflowRunPackage": ".workflow_run_package",
+    "WorkflowRunPackageFilesItem": ".workflow_run_package_files_item",
     "WorkflowRunRejectedWebhookEvent": ".workflow_run_rejected_webhook_event",
     "WorkflowRunStatus": ".workflow_run_status",
     "WorkflowRunStepRunProcessedWebhookEvent": ".workflow_run_step_run_processed_webhook_event",
@@ -1096,7 +1126,6 @@ __all__ = [
     "BlockMetadata",
     "BlockMetadataPage",
     "BlockMetadataSheet",
-    "BlockMetadataTextDirection",
     "BlockPolygonItem",
     "BlockType",
     "BoundingBox",
@@ -1108,6 +1137,7 @@ __all__ = [
     "Citation",
     "CitationPage",
     "Classification",
+    "ClassificationMetric",
     "ClassificationNextEntry",
     "Classifications",
     "Classifier",
@@ -1124,6 +1154,7 @@ __all__ = [
     "ClassifyAdvancedOptionsContext",
     "ClassifyBaseProcessor",
     "ClassifyConfig",
+    "ClassifyEvaluationSetRunMetrics",
     "ClassifyOutput",
     "ClassifyOverrideConfig",
     "ClassifyRequestClassifier",
@@ -1151,6 +1182,11 @@ __all__ = [
     "ConditionalStepDefinitionConfigConditionsItemOperation",
     "ConditionalStepDefinitionConfigConditionsItemType",
     "CreatedAt",
+    "CreatedBy",
+    "CreatedByApiKey",
+    "CreatedByUser",
+    "CreatedBy_ApiKey",
+    "CreatedBy_User",
     "DataRetention",
     "DataRetentionMode",
     "DetectFormRequestFile",
@@ -1200,7 +1236,12 @@ __all__ = [
     "EvaluationSetRunEntity_Classifier",
     "EvaluationSetRunEntity_Extractor",
     "EvaluationSetRunEntity_Splitter",
+    "EvaluationSetRunFieldMetric",
     "EvaluationSetRunMetrics",
+    "EvaluationSetRunMetricsBase",
+    "EvaluationSetRunMetrics_Classify",
+    "EvaluationSetRunMetrics_Extract",
+    "EvaluationSetRunMetrics_Splitter",
     "EvaluationSetRunOptions",
     "ExcelSheetRange",
     "ExternalDataValidationResult",
@@ -1226,6 +1267,7 @@ __all__ = [
     "ExtractConfigJson",
     "ExtractConfigLegacy",
     "ExtractConfigLegacyBaseProcessor",
+    "ExtractEvaluationSetRunMetrics",
     "ExtractOutput",
     "ExtractOutputEdits",
     "ExtractOutputJson",
@@ -1475,6 +1517,7 @@ __all__ = [
     "SplitterCreatedWebhookEvent",
     "SplitterDeletedWebhookEvent",
     "SplitterDraftUpdatedWebhookEvent",
+    "SplitterEvaluationSetRunMetrics",
     "SplitterRef",
     "SplitterSummary",
     "SplitterUpdatedWebhookEvent",
@@ -1560,6 +1603,8 @@ __all__ = [
     "WorkflowRunCompletedWebhookEvent",
     "WorkflowRunFailedWebhookEvent",
     "WorkflowRunNeedsReviewWebhookEvent",
+    "WorkflowRunPackage",
+    "WorkflowRunPackageFilesItem",
     "WorkflowRunRejectedWebhookEvent",
     "WorkflowRunStatus",
     "WorkflowRunStepRunProcessedWebhookEvent",

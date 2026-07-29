@@ -30,12 +30,33 @@ from .errors import (
     WebhookSignatureVerificationError,
 )
 from .polling import PollingOptions, calculate_backoff_delay, poll_until_done, poll_until_done_async
+from .schema import (
+    ExtendCurrency,
+    ExtendDate,
+    ExtendSignature,
+    ExtractOutputValidationError,
+    SchemaConversionError,
+    TypedExtractOutput,
+    TypedExtractRun,
+    parse_extract_run,
+    pydantic_to_extend_schema,
+)
 from .webhooks import RawWebhookEvent, SignedDataUrlPayload, WebhookEventWithSignedUrl, Webhooks
 
 __all__ = [
     # Client
     "Extend",
     "AsyncExtend",
+    # Typed extraction schemas
+    "ExtendCurrency",
+    "ExtendDate",
+    "ExtendSignature",
+    "ExtractOutputValidationError",
+    "SchemaConversionError",
+    "TypedExtractOutput",
+    "TypedExtractRun",
+    "parse_extract_run",
+    "pydantic_to_extend_schema",
     # Webhooks
     "Webhooks",
     "RawWebhookEvent",

@@ -8,6 +8,7 @@ from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .created_at import CreatedAt
+from .created_by import CreatedBy
 from .evaluation_set_entity import EvaluationSetEntity
 from .updated_at import UpdatedAt
 
@@ -49,6 +50,9 @@ class EvaluationSet(UncheckedBaseModel):
     )
     updated_at: typing_extensions.Annotated[UpdatedAt, FieldMetadata(alias="updatedAt")] = pydantic.Field(
         alias="updatedAt"
+    )
+    created_by: typing_extensions.Annotated[typing.Optional[CreatedBy], FieldMetadata(alias="createdBy")] = (
+        pydantic.Field(alias="createdBy", default=None)
     )
 
     if IS_PYDANTIC_V2:

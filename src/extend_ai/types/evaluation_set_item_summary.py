@@ -3,8 +3,11 @@
 import typing
 
 import pydantic
+import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
+from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .created_by import CreatedBy
 from .file_summary import FileSummary
 
 
@@ -25,6 +28,10 @@ class EvaluationSetItemSummary(UncheckedBaseModel):
     """
     A summary of the file associated with the evaluation set item.
     """
+
+    created_by: typing_extensions.Annotated[typing.Optional[CreatedBy], FieldMetadata(alias="createdBy")] = (
+        pydantic.Field(alias="createdBy", default=None)
+    )
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2

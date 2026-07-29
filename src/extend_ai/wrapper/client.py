@@ -32,43 +32,88 @@ import os
 import typing
 
 import httpx
-
+from ..batch_processor_run.client import AsyncBatchProcessorRunClient, BatchProcessorRunClient
+from ..classifier_versions.client import AsyncClassifierVersionsClient, ClassifierVersionsClient
+from ..classifiers.client import AsyncClassifiersClient, ClassifiersClient
 from ..client import AsyncExtend as GeneratedAsyncExtend
 from ..client import Extend as GeneratedExtend
-from ..environment import ExtendEnvironment
 
 # Import all client types for proper type annotations
-from ..files.client import FilesClient, AsyncFilesClient
-from ..extractors.client import ExtractorsClient, AsyncExtractorsClient
-from ..extractor_versions.client import ExtractorVersionsClient, AsyncExtractorVersionsClient
-from ..classifiers.client import ClassifiersClient, AsyncClassifiersClient
-from ..classifier_versions.client import ClassifierVersionsClient, AsyncClassifierVersionsClient
-from ..splitters.client import SplittersClient, AsyncSplittersClient
-from ..splitter_versions.client import SplitterVersionsClient, AsyncSplitterVersionsClient
-from ..workflows.client import WorkflowsClient, AsyncWorkflowsClient
-from ..evaluation_sets.client import EvaluationSetsClient, AsyncEvaluationSetsClient
-from ..evaluation_set_items.client import EvaluationSetItemsClient, AsyncEvaluationSetItemsClient
-from ..evaluation_set_runs.client import EvaluationSetRunsClient, AsyncEvaluationSetRunsClient
-from ..processor.client import ProcessorClient, AsyncProcessorClient
-from ..processor_run.client import ProcessorRunClient, AsyncProcessorRunClient
-from ..processor_version.client import ProcessorVersionClient, AsyncProcessorVersionClient
-from ..batch_processor_run.client import BatchProcessorRunClient, AsyncBatchProcessorRunClient
-
+from ..core.request_options import RequestOptions
+from ..environment import ExtendEnvironment
+from ..evaluation_set_items.client import AsyncEvaluationSetItemsClient, EvaluationSetItemsClient
+from ..evaluation_set_runs.client import AsyncEvaluationSetRunsClient, EvaluationSetRunsClient
+from ..evaluation_sets.client import AsyncEvaluationSetsClient, EvaluationSetsClient
+from ..files.client import AsyncFilesClient, FilesClient
+from ..processor.client import AsyncProcessorClient, ProcessorClient
+from ..processor_run.client import AsyncProcessorRunClient, ProcessorRunClient
+from ..processor_version.client import AsyncProcessorVersionClient, ProcessorVersionClient
+from ..requests.extract_config_json import ExtractConfigJsonParams
+from ..requests.extract_request_extractor import ExtractRequestExtractorParams
+from ..requests.extract_request_file import ExtractRequestFileParams
+from ..requests.multi_file_run_package import MultiFileRunPackageParams
+from ..splitter_versions.client import AsyncSplitterVersionsClient, SplitterVersionsClient
+from ..splitters.client import AsyncSplittersClient, SplittersClient
+from ..types.extract_run import ExtractRun
+from ..types.run_metadata import RunMetadata
+from ..workflows.client import AsyncWorkflowsClient, WorkflowsClient
 from .resources import (
     AsyncClassifyRunsClient,
     AsyncEditRunsClient,
+    AsyncExtractorsClient,
+    AsyncExtractorVersionsClient,
     AsyncExtractRunsClient,
     AsyncParseRunsClient,
     AsyncSplitRunsClient,
     AsyncWorkflowRunsClient,
     ClassifyRunsClient,
     EditRunsClient,
+    ExtractorsClient,
+    ExtractorVersionsClient,
     ExtractRunsClient,
     ParseRunsClient,
     SplitRunsClient,
     WorkflowRunsClient,
 )
+from .schema import (
+    TypedExtractConfigParams,
+    TypedExtractorParams,
+    TypedExtractRun,
+    convert_typed_config,
+    convert_typed_extractor,
+    get_extractor_schema_model,
+    get_schema_model,
+    parse_extract_run,
+)
+from .schema.typed_run import ModelT
 from .webhooks import Webhooks
+
+# this is used as the default value for optional parameters
+OMIT = typing.cast(typing.Any, ...)
+
+
+def _convert_extract_request(
+    extractor: typing.Any, config: typing.Any
+) -> typing.Tuple[typing.Any, typing.Any, typing.Optional[type]]:
+    """
+    Convert a pydantic model schema in an extract request's `config` or
+    `extractor["override_config"]` to Extend JSON Schema. Returns the
+    (possibly converted) extractor and config, and the schema model if one
+    was supplied.
+    """
+    schema_model: typing.Optional[type] = None
+
+    model = get_schema_model(config)
+    if model is not None:
+        schema_model = model
+        config = convert_typed_config(config)
+
+    model = get_extractor_schema_model(extractor)
+    if model is not None:
+        schema_model = model
+        extractor = convert_typed_extractor(extractor)
+
+    return extractor, config, schema_model
 
 
 class Extend(GeneratedExtend):
@@ -161,11 +206,95 @@ class Extend(GeneratedExtend):
         self._workflow_runs_client: typing.Optional[WorkflowRunsClient] = None
         self._edit_runs_client: typing.Optional[EditRunsClient] = None
         self._parse_runs_client: typing.Optional[ParseRunsClient] = None
+        self._extractors_client: typing.Optional[ExtractorsClient] = None
+        self._extractor_versions_client: typing.Optional[ExtractorVersionsClient] = None
 
     @property
     def webhooks(self) -> Webhooks:
         """Webhook utilities for signature verification and event parsing."""
         return self._webhooks
+
+    @typing.overload
+    def extract(
+        self,
+        *,
+        config: TypedExtractConfigParams[ModelT],
+        file: typing.Optional[ExtractRequestFileParams] = OMIT,
+        package: typing.Optional[MultiFileRunPackageParams] = OMIT,
+        metadata: typing.Optional[RunMetadata] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> TypedExtractRun[ModelT]: ...
+
+    @typing.overload
+    def extract(
+        self,
+        *,
+        extractor: TypedExtractorParams[ModelT],
+        file: typing.Optional[ExtractRequestFileParams] = OMIT,
+        package: typing.Optional[MultiFileRunPackageParams] = OMIT,
+        metadata: typing.Optional[RunMetadata] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> TypedExtractRun[ModelT]: ...
+
+    @typing.overload
+    def extract(
+        self,
+        *,
+        extractor: typing.Optional[ExtractRequestExtractorParams] = OMIT,
+        config: typing.Optional[ExtractConfigJsonParams] = OMIT,
+        file: typing.Optional[ExtractRequestFileParams] = OMIT,
+        package: typing.Optional[MultiFileRunPackageParams] = OMIT,
+        metadata: typing.Optional[RunMetadata] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ExtractRun: ...
+
+    def extract(
+        self,
+        *,
+        extractor: typing.Optional[
+            typing.Union[ExtractRequestExtractorParams, TypedExtractorParams[ModelT]]
+        ] = OMIT,
+        config: typing.Optional[typing.Union[ExtractConfigJsonParams, TypedExtractConfigParams[ModelT]]] = OMIT,
+        file: typing.Optional[ExtractRequestFileParams] = OMIT,
+        package: typing.Optional[MultiFileRunPackageParams] = OMIT,
+        metadata: typing.Optional[RunMetadata] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Union[ExtractRun, TypedExtractRun[ModelT]]:
+        """
+        Extract structured data from a file synchronously, waiting for the result.
+
+        In addition to the generated `extract()` behavior, `config["schema"]`
+        (or `extractor["override_config"]["schema"]`) may be a pydantic model
+        class. The model is converted to Extend's JSON Schema format for the
+        request, and the extraction output is validated into instances of the
+        model, returned as a TypedExtractRun.
+
+        Example:
+            from typing import Optional
+            from pydantic import BaseModel
+
+            class Invoice(BaseModel):
+                invoice_number: Optional[str] = None
+
+            result = client.extract(
+                file={"url": "https://example.com/invoice.pdf"},
+                config={"schema": Invoice},
+            )
+            if result.output is not None:
+                print(result.output.value.invoice_number)  # typed!
+        """
+        converted_extractor, converted_config, schema_model = _convert_extract_request(extractor, config)
+        result = super().extract(
+            extractor=converted_extractor,
+            config=converted_config,
+            file=file,
+            package=package,
+            metadata=metadata,
+            request_options=request_options,
+        )
+        if schema_model is not None:
+            return parse_extract_run(result, typing.cast(typing.Type[ModelT], schema_model))
+        return result
 
     # Run resources with create_and_poll support
     @property
@@ -218,13 +347,17 @@ class Extend(GeneratedExtend):
 
     @property
     def extractors(self) -> ExtractorsClient:
-        """Extractors client."""
-        return super().extractors  # type: ignore[return-value]
+        """Extractors client with typed (pydantic) schema support."""
+        if self._extractors_client is None:
+            self._extractors_client = ExtractorsClient(client_wrapper=self._client_wrapper)
+        return self._extractors_client
 
     @property
     def extractor_versions(self) -> ExtractorVersionsClient:
-        """Extractor versions client."""
-        return super().extractor_versions  # type: ignore[return-value]
+        """Extractor versions client with typed (pydantic) schema support."""
+        if self._extractor_versions_client is None:
+            self._extractor_versions_client = ExtractorVersionsClient(client_wrapper=self._client_wrapper)
+        return self._extractor_versions_client
 
     @property
     def classifiers(self) -> ClassifiersClient:
@@ -349,11 +482,79 @@ class AsyncExtend(GeneratedAsyncExtend):
         self._workflow_runs_client: typing.Optional[AsyncWorkflowRunsClient] = None
         self._edit_runs_client: typing.Optional[AsyncEditRunsClient] = None
         self._parse_runs_client: typing.Optional[AsyncParseRunsClient] = None
+        self._extractors_client: typing.Optional[AsyncExtractorsClient] = None
+        self._extractor_versions_client: typing.Optional[AsyncExtractorVersionsClient] = None
 
     @property
     def webhooks(self) -> Webhooks:
         """Webhook utilities for signature verification and event parsing."""
         return self._webhooks
+
+    @typing.overload
+    async def extract(
+        self,
+        *,
+        config: TypedExtractConfigParams[ModelT],
+        file: typing.Optional[ExtractRequestFileParams] = OMIT,
+        package: typing.Optional[MultiFileRunPackageParams] = OMIT,
+        metadata: typing.Optional[RunMetadata] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> TypedExtractRun[ModelT]: ...
+
+    @typing.overload
+    async def extract(
+        self,
+        *,
+        extractor: TypedExtractorParams[ModelT],
+        file: typing.Optional[ExtractRequestFileParams] = OMIT,
+        package: typing.Optional[MultiFileRunPackageParams] = OMIT,
+        metadata: typing.Optional[RunMetadata] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> TypedExtractRun[ModelT]: ...
+
+    @typing.overload
+    async def extract(
+        self,
+        *,
+        extractor: typing.Optional[ExtractRequestExtractorParams] = OMIT,
+        config: typing.Optional[ExtractConfigJsonParams] = OMIT,
+        file: typing.Optional[ExtractRequestFileParams] = OMIT,
+        package: typing.Optional[MultiFileRunPackageParams] = OMIT,
+        metadata: typing.Optional[RunMetadata] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> ExtractRun: ...
+
+    async def extract(
+        self,
+        *,
+        extractor: typing.Optional[
+            typing.Union[ExtractRequestExtractorParams, TypedExtractorParams[ModelT]]
+        ] = OMIT,
+        config: typing.Optional[typing.Union[ExtractConfigJsonParams, TypedExtractConfigParams[ModelT]]] = OMIT,
+        file: typing.Optional[ExtractRequestFileParams] = OMIT,
+        package: typing.Optional[MultiFileRunPackageParams] = OMIT,
+        metadata: typing.Optional[RunMetadata] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> typing.Union[ExtractRun, TypedExtractRun[ModelT]]:
+        """
+        Extract structured data from a file synchronously, waiting for the result (async version).
+
+        `config["schema"]` (or `extractor["override_config"]["schema"]`) may be
+        a pydantic model class, in which case the extraction output is validated
+        into instances of the model and returned as a TypedExtractRun.
+        """
+        converted_extractor, converted_config, schema_model = _convert_extract_request(extractor, config)
+        result = await super().extract(
+            extractor=converted_extractor,
+            config=converted_config,
+            file=file,
+            package=package,
+            metadata=metadata,
+            request_options=request_options,
+        )
+        if schema_model is not None:
+            return parse_extract_run(result, typing.cast(typing.Type[ModelT], schema_model))
+        return result
 
     # Run resources with create_and_poll support
     @property
@@ -406,13 +607,17 @@ class AsyncExtend(GeneratedAsyncExtend):
 
     @property
     def extractors(self) -> AsyncExtractorsClient:
-        """Extractors client."""
-        return super().extractors  # type: ignore[return-value]
+        """Extractors client with typed (pydantic) schema support."""
+        if self._extractors_client is None:
+            self._extractors_client = AsyncExtractorsClient(client_wrapper=self._client_wrapper)
+        return self._extractors_client
 
     @property
     def extractor_versions(self) -> AsyncExtractorVersionsClient:
-        """Extractor versions client."""
-        return super().extractor_versions  # type: ignore[return-value]
+        """Extractor versions client with typed (pydantic) schema support."""
+        if self._extractor_versions_client is None:
+            self._extractor_versions_client = AsyncExtractorVersionsClient(client_wrapper=self._client_wrapper)
+        return self._extractor_versions_client
 
     @property
     def classifiers(self) -> AsyncClassifiersClient:

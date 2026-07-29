@@ -58,6 +58,77 @@ edit_run = client.edit(
 
 > **Note:** The synchronous methods above have a 5-minute timeout and are best suited for onboarding and testing. For production workloads, use [polling helpers](#polling-helpers) or [webhooks](#webhook-verification) instead.
 
+## Typed extraction with Pydantic
+
+The SDK supports [pydantic](https://docs.pydantic.dev/) models for fully typed extraction -- define your schema once and get end-to-end type safety from request to response:
+
+```python
+from typing import List, Optional
+
+from pydantic import BaseModel, Field
+
+from extend_ai import Extend, ExtendCurrency, ExtendDate
+
+class LineItem(BaseModel):
+    description: Optional[str] = None
+    amount: Optional[ExtendCurrency] = None
+
+class Invoice(BaseModel):
+    invoice_number: Optional[str] = Field(None, description="The invoice number")
+    invoice_date: ExtendDate = Field(None, description="The invoice date")
+    line_items: List[LineItem] = Field(default_factory=list, description="Line items on the invoice")
+    total: Optional[ExtendCurrency] = Field(None, description="Total amount due")
+
+client = Extend(token="YOUR_API_KEY")
+
+result = client.extract(
+    file={"url": "https://example.com/invoice.pdf"},
+    config={"schema": Invoice},
+)
+
+# output.value is a validated Invoice instance
+if result.status == "PROCESSED" and result.output is not None:
+    invoice = result.output.value
+    print(invoice.invoice_number)  # str | None
+    print(invoice.invoice_date)    # datetime.date | None
+    if invoice.total is not None:
+        print(invoice.total.amount)                  # float | None
+        print(invoice.total.iso_4217_currency_code)  # str | None
+```
+
+The model is converted to [Extend's JSON Schema format](https://docs.extend.ai/2026-02-09/extraction/schema) for the request, and the extraction output is validated back into model instances. Use `Field(description=...)` to guide the extraction.
+
+Primitive, enum, and date fields must be declared `Optional` -- extraction can return `null` for any field, so a non-Optional field raises `SchemaConversionError` before any request is sent. In the unlikely event that a completed run's output fails model validation, the SDK raises `ExtractOutputValidationError`, which preserves the completed run (including its raw output) on the error's `run` attribute.
+
+Pydantic model schemas are accepted everywhere an extraction schema can be provided:
+
+```python
+# Polling (see below), including extractor config overrides
+result = client.extract_runs.create_and_poll(
+    file={"url": "https://example.com/invoice.pdf"},
+    config={"schema": Invoice},
+)
+
+# Creating and updating extractors
+extractor = client.extractors.create(name="Invoice Extractor", config={"schema": Invoice})
+client.extractors.update(extractor.id, config={"schema": Invoice})
+
+# Publishing extractor versions
+client.extractor_versions.create(extractor.id, release_type="major", config={"schema": Invoice})
+```
+
+### Custom field types
+
+The SDK provides field types for Extend-specific extraction behavior:
+
+| Type | Output type | Description |
+|---|---|---|
+| `ExtendDate` | `datetime.date \| None` | ISO date (plain `datetime.date` annotations work too) |
+| `ExtendCurrency` | `ExtendCurrency(amount, iso_4217_currency_code)` | Currency with amount and code |
+| `ExtendSignature` | `ExtendSignature(printed_name, signature_date, is_signed, title_or_role)` | Signature detection |
+
+Supported field types: `Optional[str]`, `Optional[float]`, `Optional[int]`, `Optional[bool]`, `Optional[datetime.date]`, `Optional[Literal[...]]` / string enums (converted to nullable enums), nested models, and lists of these (list items are non-Optional, e.g. `List[str]`). Unsupported constructs (non-Optional unions, dicts, recursive models, field aliases, etc.) raise `SchemaConversionError`.
+
 ## Polling helpers
 
 Every run resource exposes a `create_and_poll()` method that creates the run and automatically polls until it reaches a terminal state (`PROCESSED`, `FAILED`, or `CANCELLED`):

@@ -20,6 +20,7 @@ from typing import Any, Dict, Optional, Sequence
 
 from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...requests.workflow_reference import WorkflowReferenceParams
+from ...requests.workflow_run_package import WorkflowRunPackageParams
 from ...types.run_metadata import RunMetadata
 from ...types.run_priority import RunPriority
 from ...types.run_secrets import RunSecrets
@@ -63,7 +64,8 @@ class WorkflowRunsClient(GeneratedWorkflowRunsClient):
         self,
         *,
         workflow: WorkflowReferenceParams,
-        file: WorkflowRunsCreateRequestFileParams,
+        file: Optional[WorkflowRunsCreateRequestFileParams] = None,
+        package: Optional[WorkflowRunPackageParams] = None,
         outputs: Optional[Sequence[WorkflowRunsCreateRequestOutputsItemParams]] = None,
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
@@ -80,7 +82,10 @@ class WorkflowRunsClient(GeneratedWorkflowRunsClient):
 
         Args:
             workflow: Reference to the workflow to run.
-            file: The file to process.
+            file: The file to process. Mutually exclusive with `package` —
+                provide one or the other.
+            package: A package of files to process together. Mutually exclusive
+                with `file` — provide one or the other.
             outputs: Optional list of output configurations.
             priority: Priority of the run.
             metadata: Additional metadata for the run.
@@ -108,7 +113,11 @@ class WorkflowRunsClient(GeneratedWorkflowRunsClient):
                     print("Failed:", result.failure_message)
         """
         # Build kwargs, only including non-None values to avoid passing null
-        kwargs: Dict[str, Any] = {"workflow": workflow, "file": file}
+        kwargs: Dict[str, Any] = {"workflow": workflow}
+        if file is not None:
+            kwargs["file"] = file
+        if package is not None:
+            kwargs["package"] = package
         if outputs is not None:
             kwargs["outputs"] = outputs
         if priority is not None:
@@ -142,7 +151,8 @@ class AsyncWorkflowRunsClient(GeneratedAsyncWorkflowRunsClient):
         self,
         *,
         workflow: WorkflowReferenceParams,
-        file: WorkflowRunsCreateRequestFileParams,
+        file: Optional[WorkflowRunsCreateRequestFileParams] = None,
+        package: Optional[WorkflowRunPackageParams] = None,
         outputs: Optional[Sequence[WorkflowRunsCreateRequestOutputsItemParams]] = None,
         priority: Optional[RunPriority] = None,
         metadata: Optional[RunMetadata] = None,
@@ -151,9 +161,15 @@ class AsyncWorkflowRunsClient(GeneratedAsyncWorkflowRunsClient):
     ) -> WorkflowRun:
         """
         Creates a workflow run and polls until it reaches a terminal state (async version).
+
+        `file` and `package` are mutually exclusive — provide one or the other.
         """
         # Build kwargs, only including non-None values to avoid passing null
-        kwargs: Dict[str, Any] = {"workflow": workflow, "file": file}
+        kwargs: Dict[str, Any] = {"workflow": workflow}
+        if file is not None:
+            kwargs["file"] = file
+        if package is not None:
+            kwargs["package"] = package
         if outputs is not None:
             kwargs["outputs"] = outputs
         if priority is not None:

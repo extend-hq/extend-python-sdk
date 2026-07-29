@@ -12,7 +12,13 @@ generations:
     cli_version: unknown
     generator_versions:
       fernapi/fern-python-sdk: 4.53.0
-current_generation: 5127f8898b00255cf4632d0d7caf1a18f12e2910
+  - commit_sha: ba094f1571e793f1e79af26fd47c40a070550444
+    tree_hash: 2ffd229afc07a3b2ab89bc2df4ab6f5e0d908cb2
+    timestamp: 2026-07-29T21:02:26.153Z
+    cli_version: unknown
+    generator_versions:
+      fernapi/fern-python-sdk: 4.53.0
+current_generation: ba094f1571e793f1e79af26fd47c40a070550444
 patches:
   - id: patch-29b579f8
     content_hash: sha256:19cd61f1a6dd83c32c2b84be87c4195e51f4c531a09b504a5a4ec17b1de9b4a9
@@ -137,7 +143,7 @@ patches:
         [build-system]
         requires = ["poetry-core"]
         build-backend = "poetry.core.masonry.api"
-    status: unresolved
+    status: resolving
   - id: patch-4df4e73b
     content_hash: sha256:5ae6cf843c83300578dbbe88ac7e88028f95221b2174366370482ab9a604ad28
     original_commit: 4df4e73b49b9e59112fafc32c047ddff9d18881f
@@ -290,4 +296,4 @@ patches:
                     token = await self._async_token()
                     headers["Authorization"] = f"Bearer {token}"
                 return headers
-    status: unresolved
+    status: resolving

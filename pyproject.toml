@@ -4,7 +4,7 @@ dynamic = ["version"]
 
 [tool.poetry]
 name = "extend_ai"
-version = "1.16.0"
+version = "1.17.0"
 description = ""
 readme = "README.md"
 authors = []
@@ -40,7 +40,8 @@ python = "^3.8"
 httpx = ">=0.21.2"
 pydantic = ">= 1.9.2"
 pydantic-core = ">=2.18.2"
-typing_extensions = ">= 4.0.0"
+# Generic TypedDicts (used by the typed extraction wrappers) require >= 4.3.0
+typing_extensions = ">= 4.3.0"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "==1.13.0"
