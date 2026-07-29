@@ -21,12 +21,13 @@ from ...core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ...parse_runs.client import AsyncParseRunsClient as GeneratedAsyncParseRunsClient
 from ...parse_runs.client import ParseRunsClient as GeneratedParseRunsClient
 from ...parse_runs.requests.parse_runs_create_request_file import ParseRunsCreateRequestFileParams
+from ...requests.data_retention import DataRetentionParams
 from ...requests.parse_config import ParseConfigParams
 from ...types.parse_run import ParseRun
-from ..polling import PollingOptions, poll_until_done, poll_until_done_async
+from ...types.run_metadata import RunMetadata
 
 # Re-export for convenience
-from ..polling import PollingTimeoutError
+from ..polling import PollingOptions, PollingTimeoutError, poll_until_done, poll_until_done_async
 
 __all__ = ["ParseRunsClient", "AsyncParseRunsClient", "PollingTimeoutError"]
 
@@ -58,6 +59,8 @@ class ParseRunsClient(GeneratedParseRunsClient):
         *,
         file: ParseRunsCreateRequestFileParams,
         config: Optional[ParseConfigParams] = None,
+        metadata: Optional[RunMetadata] = None,
+        data_retention: Optional[DataRetentionParams] = None,
         polling_options: Optional[PollingOptions] = None,
     ) -> ParseRun:
         """
@@ -68,6 +71,8 @@ class ParseRunsClient(GeneratedParseRunsClient):
         Args:
             file: The file to parse (FileFromId or FileFromUrl).
             config: Parse configuration options.
+            metadata: Additional metadata for the run.
+            data_retention: Data retention policy override for the run.
             polling_options: Options for polling behavior.
 
         Returns:
@@ -88,6 +93,10 @@ class ParseRunsClient(GeneratedParseRunsClient):
         kwargs: Dict[str, Any] = {"file": file}
         if config is not None:
             kwargs["config"] = config
+        if metadata is not None:
+            kwargs["metadata"] = metadata
+        if data_retention is not None:
+            kwargs["data_retention"] = data_retention
 
         # Create the parse run
         create_response = self.create(**kwargs)
@@ -114,6 +123,8 @@ class AsyncParseRunsClient(GeneratedAsyncParseRunsClient):
         *,
         file: ParseRunsCreateRequestFileParams,
         config: Optional[ParseConfigParams] = None,
+        metadata: Optional[RunMetadata] = None,
+        data_retention: Optional[DataRetentionParams] = None,
         polling_options: Optional[PollingOptions] = None,
     ) -> ParseRun:
         """
@@ -123,6 +134,10 @@ class AsyncParseRunsClient(GeneratedAsyncParseRunsClient):
         kwargs: Dict[str, Any] = {"file": file}
         if config is not None:
             kwargs["config"] = config
+        if metadata is not None:
+            kwargs["metadata"] = metadata
+        if data_retention is not None:
+            kwargs["data_retention"] = data_retention
 
         # Create the parse run
         create_response = await self.create(**kwargs)
