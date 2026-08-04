@@ -1,6 +1,6 @@
 # Extend Python Library
 
-Official Python SDK for [Extend](https://www.extend.ai) (extend.ai) — the document processing API. Parse, extract, classify, split, and edit PDFs and 30+ file types via PyPI (`extend-ai`).
+Official Python SDK for [Extend](https://www.extend.ai) (extend.ai) — the document processing API. Parse, extract, classify, split, and edit PDFs and 35+ file types via PyPI (`extend-ai`).
 
 [![PyPI version](https://img.shields.io/pypi/v/extend-ai.svg)](https://pypi.python.org/pypi/extend-ai)
 [![Python versions](https://img.shields.io/pypi/pyversions/extend-ai.svg)](https://pypi.python.org/pypi/extend-ai)
