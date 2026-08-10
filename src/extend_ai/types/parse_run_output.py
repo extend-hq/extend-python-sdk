@@ -8,6 +8,7 @@ import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.unchecked_base_model import UncheckedBaseModel
 from .chunk import Chunk
+from .parse_run_output_metadata import ParseRunOutputMetadata
 from .parse_run_output_ocr import ParseRunOutputOcr
 
 
@@ -26,6 +27,11 @@ class ParseRunOutput(UncheckedBaseModel):
     ocr: typing.Optional[ParseRunOutputOcr] = pydantic.Field(default=None)
     """
     Raw OCR data from the parsing process. Only included when `returnOcr` is configured in the parse config's advanced options.
+    """
+
+    metadata: typing.Optional[ParseRunOutputMetadata] = pydantic.Field(default=None)
+    """
+    Rotation, dimension, and file-type metadata about the parse output. `null` for parse runs that completed before this field was introduced.
     """
 
     if IS_PYDANTIC_V2:

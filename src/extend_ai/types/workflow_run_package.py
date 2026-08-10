@@ -17,7 +17,7 @@ class WorkflowRunPackage(UncheckedBaseModel):
 
     files: typing.List[WorkflowRunPackageFilesItem] = pydantic.Field()
     """
-    The files to process, in submission order. Each entry can be a URL or an existing Extend file ID. Raw text and base64 inputs are not supported for package runs.
+    The files to process. Each entry can be a URL or an existing Extend file ID. Raw text and base64 inputs are not supported for package runs.
     
     Duplicate file IDs and duplicate URLs are rejected — each file may appear only once. A URL and a file ID are never treated as duplicates of each other, even if they resolve to the same document.
     """

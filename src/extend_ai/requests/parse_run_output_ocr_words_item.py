@@ -25,3 +25,8 @@ class ParseRunOutputOcrWordsItemParams(typing_extensions.TypedDict):
     """
     The page number where the word was detected.
     """
+
+    block_id: typing_extensions.NotRequired[typing_extensions.Annotated[str, FieldMetadata(alias="blockId")]]
+    """
+    The `id` of the block (see the `Block` schema) this word was assigned to, based on bounding-box overlap. Omitted when the word doesn't fall within any block's bounding box.
+    """

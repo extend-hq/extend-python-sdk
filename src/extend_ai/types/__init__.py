@@ -379,6 +379,8 @@ if typing.TYPE_CHECKING:
     from .parse_run_failed_webhook_event import ParseRunFailedWebhookEvent
     from .parse_run_metrics import ParseRunMetrics
     from .parse_run_output import ParseRunOutput
+    from .parse_run_output_metadata import ParseRunOutputMetadata
+    from .parse_run_output_metadata_pages_item import ParseRunOutputMetadataPagesItem
     from .parse_run_output_ocr import ParseRunOutputOcr
     from .parse_run_output_ocr_words_item import ParseRunOutputOcrWordsItem
     from .parse_run_processed_webhook_event import ParseRunProcessedWebhookEvent
@@ -904,6 +906,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ParseRunFailedWebhookEvent": ".parse_run_failed_webhook_event",
     "ParseRunMetrics": ".parse_run_metrics",
     "ParseRunOutput": ".parse_run_output",
+    "ParseRunOutputMetadata": ".parse_run_output_metadata",
+    "ParseRunOutputMetadataPagesItem": ".parse_run_output_metadata_pages_item",
     "ParseRunOutputOcr": ".parse_run_output_ocr",
     "ParseRunOutputOcrWordsItem": ".parse_run_output_ocr_words_item",
     "ParseRunProcessedWebhookEvent": ".parse_run_processed_webhook_event",
@@ -1447,6 +1451,8 @@ __all__ = [
     "ParseRunFailedWebhookEvent",
     "ParseRunMetrics",
     "ParseRunOutput",
+    "ParseRunOutputMetadata",
+    "ParseRunOutputMetadataPagesItem",
     "ParseRunOutputOcr",
     "ParseRunOutputOcrWordsItem",
     "ParseRunProcessedWebhookEvent",
