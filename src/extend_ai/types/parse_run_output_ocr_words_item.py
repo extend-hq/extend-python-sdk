@@ -35,6 +35,13 @@ class ParseRunOutputOcrWordsItem(UncheckedBaseModel):
     The page number where the word was detected.
     """
 
+    block_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="blockId")] = pydantic.Field(
+        alias="blockId", default=None
+    )
+    """
+    The `id` of the block (see the `Block` schema) this word was assigned to, based on bounding-box overlap. Omitted when the word doesn't fall within any block's bounding box.
+    """
+
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
     else:

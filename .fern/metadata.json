@@ -12,6 +12,6 @@
       "enum_type": "forward_compatible_python_enums"
     }
   },
-  "originGitCommit": "a5c1143a7b724689db7c5e4cee897834882c9d69",
-  "sdkVersion": "1.17.0"
+  "originGitCommit": "204f01f5a6e9ad6585d71b0ad6315aef1be1f537",
+  "sdkVersion": "1.18.0"
 }

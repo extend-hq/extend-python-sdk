@@ -4,6 +4,7 @@ import typing
 
 import typing_extensions
 from .chunk import ChunkParams
+from .parse_run_output_metadata import ParseRunOutputMetadataParams
 from .parse_run_output_ocr import ParseRunOutputOcrParams
 
 
@@ -22,4 +23,9 @@ class ParseRunOutputParams(typing_extensions.TypedDict):
     ocr: typing_extensions.NotRequired[ParseRunOutputOcrParams]
     """
     Raw OCR data from the parsing process. Only included when `returnOcr` is configured in the parse config's advanced options.
+    """
+
+    metadata: typing_extensions.NotRequired[typing.Optional[ParseRunOutputMetadataParams]]
+    """
+    Rotation, dimension, and file-type metadata about the parse output. `null` for parse runs that completed before this field was introduced.
     """
