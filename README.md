@@ -100,6 +100,8 @@ if result.status == "PROCESSED" and result.output is not None:
 
 The model is converted to [Extend's JSON Schema format](https://docs.extend.ai/2026-02-09/extraction/schema) for the request, and the extraction output is validated back into model instances. Use `Field(description=...)` to guide the extraction.
 
+Metadata set via `Field(json_schema_extra=...)` is carried into the JSON Schema: `{"extend:name": "..."}` names a field, and enum fields accept `{"extend:descriptions": ["..."]}` with one description per enum value.
+
 Primitive, enum, and date fields must be declared `Optional` -- extraction can return `null` for any field, so a non-Optional field raises `SchemaConversionError` before any request is sent. In the unlikely event that a completed run's output fails model validation, the SDK raises `ExtractOutputValidationError`, which preserves the completed run (including its raw output) on the error's `run` attribute.
 
 Pydantic model schemas are accepted everywhere an extraction schema can be provided:

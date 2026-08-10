@@ -135,6 +135,125 @@ class TestPrimitiveTypes:
         assert properties["age"] == {"type": ["number", "null"], "description": "Customer age in years"}
 
 
+class TestExtendKeywords:
+    def test_includes_extend_name_from_json_schema_extra(self):
+        class Schema(pydantic.BaseModel):
+            name: Optional[str] = pydantic.Field(None, json_schema_extra={"extend:name": "CustomerName"})
+            age: Optional[float] = pydantic.Field(None, json_schema_extra={"extend:name": "CustomerAge"})
+
+        properties = pydantic_to_extend_schema(Schema)["properties"]
+        assert properties["name"] == {"type": ["string", "null"], "extend:name": "CustomerName"}
+        assert properties["age"] == {"type": ["number", "null"], "extend:name": "CustomerAge"}
+
+    def test_keeps_description_and_extend_name_when_both_are_set(self):
+        class Schema(pydantic.BaseModel):
+            name: Optional[str] = pydantic.Field(
+                None, description="The customer name", json_schema_extra={"extend:name": "CustomerName"}
+            )
+
+        assert pydantic_to_extend_schema(Schema)["properties"]["name"] == {
+            "type": ["string", "null"],
+            "description": "The customer name",
+            "extend:name": "CustomerName",
+        }
+
+    def test_ignores_unrelated_json_schema_extra_keys(self):
+        class Schema(pydantic.BaseModel):
+            name: Optional[str] = pydantic.Field(None, json_schema_extra={"title": "Not an extend key", "id": "x"})
+
+        assert pydantic_to_extend_schema(Schema)["properties"]["name"] == {"type": ["string", "null"]}
+
+    def test_ignores_wrong_typed_extend_keywords(self):
+        class Schema(pydantic.BaseModel):
+            name: Optional[str] = pydantic.Field(None, json_schema_extra={"extend:name": 42})
+            status: Optional[Literal["a", "b"]] = pydantic.Field(
+                None, json_schema_extra={"extend:descriptions": [1, 2]}
+            )
+
+        properties = pydantic_to_extend_schema(Schema)["properties"]
+        assert properties["name"] == {"type": ["string", "null"]}
+        assert properties["status"] == {"enum": ["a", "b", None]}
+
+    def test_includes_extend_descriptions_and_name_on_enums(self):
+        class Schema(pydantic.BaseModel):
+            status: Optional[Literal["active", "inactive"]] = pydantic.Field(
+                None,
+                json_schema_extra={
+                    "extend:descriptions": ["Account is active", "Account is inactive"],
+                    "extend:name": "AccountStatus",
+                },
+            )
+
+        assert pydantic_to_extend_schema(Schema)["properties"]["status"] == {
+            "enum": ["active", "inactive", None],
+            "extend:descriptions": ["Account is active", "Account is inactive"],
+            "extend:name": "AccountStatus",
+        }
+
+    def test_includes_extend_keywords_on_string_enums(self):
+        class Status(str, enum.Enum):
+            ACTIVE = "active"
+            INACTIVE = "inactive"
+
+        class Schema(pydantic.BaseModel):
+            status: Optional[Status] = pydantic.Field(
+                None, json_schema_extra={"extend:descriptions": ["Account is active", "Account is inactive"]}
+            )
+
+        assert pydantic_to_extend_schema(Schema)["properties"]["status"] == {
+            "enum": ["active", "inactive", None],
+            "extend:descriptions": ["Account is active", "Account is inactive"],
+        }
+
+    def test_ignores_extend_descriptions_on_non_enum_fields(self):
+        class Schema(pydantic.BaseModel):
+            name: Optional[str] = pydantic.Field(None, json_schema_extra={"extend:descriptions": ["Not an enum"]})
+
+        assert pydantic_to_extend_schema(Schema)["properties"]["name"] == {"type": ["string", "null"]}
+
+    def test_includes_extend_name_on_arrays(self):
+        class Schema(pydantic.BaseModel):
+            items: List[str] = pydantic.Field(default_factory=list, json_schema_extra={"extend:name": "Items"})
+
+        assert pydantic_to_extend_schema(Schema)["properties"]["items"] == {
+            "type": "array",
+            "items": {"type": "string"},
+            "extend:name": "Items",
+        }
+
+    def test_includes_extend_name_on_nested_objects(self):
+        class Address(pydantic.BaseModel):
+            street: Optional[str] = None
+
+        class Schema(pydantic.BaseModel):
+            address: Optional[Address] = pydantic.Field(None, json_schema_extra={"extend:name": "Address"})
+
+        assert pydantic_to_extend_schema(Schema)["properties"]["address"] == {
+            "type": "object",
+            "properties": {"street": {"type": ["string", "null"]}},
+            "required": ["street"],
+            "additionalProperties": False,
+            "extend:name": "Address",
+        }
+
+    def test_includes_extend_name_on_extend_date(self):
+        class Schema(pydantic.BaseModel):
+            invoice_date: ExtendDate = pydantic.Field(None, json_schema_extra={"extend:name": "InvoiceDate"})
+
+        assert pydantic_to_extend_schema(Schema)["properties"]["invoice_date"] == {
+            "type": ["string", "null"],
+            "extend:type": "date",
+            "extend:name": "InvoiceDate",
+        }
+
+    def test_includes_extend_name_on_extend_currency(self):
+        class Schema(pydantic.BaseModel):
+            total: Optional[ExtendCurrency] = pydantic.Field(None, json_schema_extra={"extend:name": "Total"})
+
+        expected = dict(CURRENCY_SCHEMA, **{"extend:name": "Total"})
+        assert pydantic_to_extend_schema(Schema)["properties"]["total"] == expected
+
+
 class TestEnumTypes:
     def test_converts_literal_with_null_added(self):
         class Schema(pydantic.BaseModel):

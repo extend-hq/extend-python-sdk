@@ -43,10 +43,12 @@ class SchemaConversionError(Exception):
 
 def _iter_model_fields(
     model: typing.Type[pydantic.BaseModel],
-) -> typing.Iterator[typing.Tuple[str, typing.Any, typing.Optional[str], typing.Any]]:
+) -> typing.Iterator[
+    typing.Tuple[str, typing.Any, typing.Optional[str], typing.Any, typing.Optional[typing.Dict[str, typing.Any]]]
+]:
     """
-    Yield (field_name, annotation, description, alias) for each field of a
-    pydantic model, working under both pydantic v1 and v2.
+    Yield (field_name, annotation, description, alias, json_schema_extra) for
+    each field of a pydantic model, working under both pydantic v1 and v2.
     """
     # Raw class annotations (via get_type_hints) preserve Optional wrappers,
     # which pydantic v1's `outer_type_` strips.
@@ -58,7 +60,8 @@ def _iter_model_fields(
     if IS_PYDANTIC_V2:
         for name, field in model.model_fields.items():  # type: ignore[attr-defined]
             alias = field.alias or getattr(field, "validation_alias", None)
-            yield name, hints.get(name, field.annotation), field.description, alias
+            extra = field.json_schema_extra if isinstance(field.json_schema_extra, dict) else None
+            yield name, hints.get(name, field.annotation), field.description, alias, extra
     else:
         for name, field in model.__fields__.items():  # type: ignore[attr-defined]
             info = field.field_info  # type: ignore[attr-defined]
@@ -67,7 +70,12 @@ def _iter_model_fields(
                 annotation = field.outer_type_  # type: ignore[attr-defined]
                 if field.allow_none:  # type: ignore[attr-defined]
                     annotation = typing.Optional[annotation]
-            yield name, annotation, getattr(info, "description", None), getattr(info, "alias", None)
+            # v1 collects unknown Field(...) kwargs into `extra`, so
+            # `json_schema_extra={...}` arrives as an entry in that dict.
+            raw_extra = getattr(info, "extra", None) or {}
+            json_extra = raw_extra.get("json_schema_extra")
+            extra = json_extra if isinstance(json_extra, dict) else raw_extra
+            yield name, annotation, getattr(info, "description", None), getattr(info, "alias", None), extra
 
 
 def _is_union_origin(origin: typing.Any) -> bool:
@@ -123,9 +131,26 @@ def _require_nullable(annotation: typing.Any, kind: str, path: typing.List[str])
         )
 
 
-def _with_description(schema: typing.Dict[str, typing.Any], description: typing.Optional[str]) -> typing.Dict[str, typing.Any]:
+def _apply_field_metadata(
+    schema: typing.Dict[str, typing.Any],
+    description: typing.Optional[str],
+    extra: typing.Optional[typing.Dict[str, typing.Any]],
+) -> typing.Dict[str, typing.Any]:
+    """
+    Attach the field's description and any extend:* keywords from
+    ``Field(json_schema_extra=...)``. Unrelated keys and wrong-typed values
+    are ignored, matching the TypeScript SDK's handling of zod ``.meta()``.
+    """
     if description:
         schema["description"] = description
+    if extra:
+        name = extra.get("extend:name")
+        if isinstance(name, str):
+            schema["extend:name"] = name
+        if "enum" in schema:
+            descriptions = extra.get("extend:descriptions")
+            if isinstance(descriptions, list) and all(isinstance(item, str) for item in descriptions):
+                schema["extend:descriptions"] = descriptions
     return schema
 
 
@@ -194,6 +219,11 @@ def pydantic_to_extend_schema(model: typing.Type[pydantic.BaseModel]) -> typing.
     declared ``Optional`` — extraction can return ``null`` for any field, and
     the emitted schema marks them nullable per Extend's schema requirements.
 
+    ``Field(json_schema_extra=...)`` carries Extend-specific keywords into the
+    schema: ``{"extend:name": "..."}`` names a field, and enum fields accept
+    ``{"extend:descriptions": ["..."]}`` with one description per enum value.
+    Other ``json_schema_extra`` keys are ignored.
+
     Args:
         model: A ``pydantic.BaseModel`` subclass describing the data to extract.
 
@@ -226,7 +256,7 @@ def _convert_object(
     properties: typing.Dict[str, typing.Any] = {}
     required: typing.List[str] = []
 
-    for name, annotation, description, alias in _iter_model_fields(model):
+    for name, annotation, description, alias, extra in _iter_model_fields(model):
         if alias:
             raise SchemaConversionError(
                 f"Field aliases are not supported for extraction schemas "
@@ -234,7 +264,7 @@ def _convert_object(
                 f"so aliased fields would silently validate to None. Remove the alias.",
                 path + [name],
             )
-        properties[name] = _convert_annotation(annotation, description, path + [name], seen)
+        properties[name] = _convert_annotation(annotation, description, extra, path + [name], seen)
         required.append(name)
 
     return {
@@ -248,6 +278,7 @@ def _convert_object(
 def _convert_annotation(
     annotation: typing.Any,
     description: typing.Optional[str],
+    extra: typing.Optional[typing.Dict[str, typing.Any]],
     path: typing.List[str],
     seen: typing.FrozenSet[type],
 ) -> typing.Dict[str, typing.Any]:
@@ -257,40 +288,42 @@ def _convert_annotation(
         args = typing_extensions.get_args(inner)
         if not args:
             raise SchemaConversionError("Arrays must declare an item type (use List[...])", path)
-        return _with_description({"type": "array", "items": _convert_array_item(args[0], path, seen)}, description)
+        return _apply_field_metadata(
+            {"type": "array", "items": _convert_array_item(args[0], path, seen)}, description, extra
+        )
 
     if _is_enum_annotation(inner):
         kind = inner.__name__ if isinstance(inner, type) else "Literal[...]"
         _require_nullable(annotation, kind, path)
-        return _with_description({"enum": _enum_values(inner, path)}, description)
+        return _apply_field_metadata({"enum": _enum_values(inner, path)}, description, extra)
 
     if isinstance(inner, type):
         if issubclass(inner, pydantic.BaseModel):
             extend_type = get_extend_type(inner)
             if extend_type == "currency":
-                return _with_description(_currency_schema(), description)
+                return _apply_field_metadata(_currency_schema(), description, extra)
             if extend_type == "signature":
-                return _with_description(_signature_schema(), description)
-            return _with_description(_convert_object(inner, path, seen), description)
+                return _apply_field_metadata(_signature_schema(), description, extra)
+            return _apply_field_metadata(_convert_object(inner, path, seen), description, extra)
         if issubclass(inner, bool):
             _require_nullable(annotation, "bool", path)
-            return _with_description({"type": ["boolean", "null"]}, description)
+            return _apply_field_metadata({"type": ["boolean", "null"]}, description, extra)
         if issubclass(inner, int):
             _require_nullable(annotation, "int", path)
-            return _with_description({"type": ["integer", "null"]}, description)
+            return _apply_field_metadata({"type": ["integer", "null"]}, description, extra)
         if issubclass(inner, float):
             _require_nullable(annotation, "float", path)
-            return _with_description({"type": ["number", "null"]}, description)
+            return _apply_field_metadata({"type": ["number", "null"]}, description, extra)
         if issubclass(inner, dt.datetime):
             raise SchemaConversionError(
                 "datetime.datetime is not supported; use datetime.date (or ExtendDate) for date fields", path
             )
         if issubclass(inner, dt.date):
             _require_nullable(annotation, "datetime.date", path)
-            return _with_description(_date_schema(), description)
+            return _apply_field_metadata(_date_schema(), description, extra)
         if issubclass(inner, str):
             _require_nullable(annotation, "str", path)
-            return _with_description({"type": ["string", "null"]}, description)
+            return _apply_field_metadata({"type": ["string", "null"]}, description, extra)
 
     raise SchemaConversionError(f"Unsupported type: {inner!r}", path)
 
