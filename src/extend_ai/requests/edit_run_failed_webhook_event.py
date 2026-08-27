@@ -6,6 +6,10 @@ from .edit_run import EditRunParams
 
 
 class EditRunFailedWebhookEventParams(typing_extensions.TypedDict):
+    """
+    Triggered when an API-created EditRun fails before it finishes filling the document's form fields. A failure in an internal FormDetectionRun is reported through this parent EditRun event; the internal run does not emit a Form Detection webhook.
+    """
+
     event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
     """
     Unique identifier for the event

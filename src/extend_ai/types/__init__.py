@@ -238,7 +238,9 @@ if typing.TYPE_CHECKING:
     from .file_summary import FileSummary
     from .file_type import FileType
     from .form_detection_run import FormDetectionRun
+    from .form_detection_run_failed_webhook_event import FormDetectionRunFailedWebhookEvent
     from .form_detection_run_metrics import FormDetectionRunMetrics
+    from .form_detection_run_processed_webhook_event import FormDetectionRunProcessedWebhookEvent
     from .form_detection_run_status import FormDetectionRunStatus
     from .formula_details import FormulaDetails
     from .human_review_step_definition import HumanReviewStepDefinition
@@ -505,6 +507,8 @@ if typing.TYPE_CHECKING:
         WebhookEvent_ExtractorDraftUpdated,
         WebhookEvent_ExtractorUpdated,
         WebhookEvent_ExtractorVersionPublished,
+        WebhookEvent_FormDetectionRunFailed,
+        WebhookEvent_FormDetectionRunProcessed,
         WebhookEvent_ParseRunFailed,
         WebhookEvent_ParseRunProcessed,
         WebhookEvent_SplitRunFailed,
@@ -779,7 +783,9 @@ _dynamic_imports: typing.Dict[str, str] = {
     "FileSummary": ".file_summary",
     "FileType": ".file_type",
     "FormDetectionRun": ".form_detection_run",
+    "FormDetectionRunFailedWebhookEvent": ".form_detection_run_failed_webhook_event",
     "FormDetectionRunMetrics": ".form_detection_run_metrics",
+    "FormDetectionRunProcessedWebhookEvent": ".form_detection_run_processed_webhook_event",
     "FormDetectionRunStatus": ".form_detection_run_status",
     "FormulaDetails": ".formula_details",
     "HumanReviewStepDefinition": ".human_review_step_definition",
@@ -1029,6 +1035,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WebhookEvent_ExtractorDraftUpdated": ".webhook_event",
     "WebhookEvent_ExtractorUpdated": ".webhook_event",
     "WebhookEvent_ExtractorVersionPublished": ".webhook_event",
+    "WebhookEvent_FormDetectionRunFailed": ".webhook_event",
+    "WebhookEvent_FormDetectionRunProcessed": ".webhook_event",
     "WebhookEvent_ParseRunFailed": ".webhook_event",
     "WebhookEvent_ParseRunProcessed": ".webhook_event",
     "WebhookEvent_SplitRunFailed": ".webhook_event",
@@ -1324,7 +1332,9 @@ __all__ = [
     "FileSummary",
     "FileType",
     "FormDetectionRun",
+    "FormDetectionRunFailedWebhookEvent",
     "FormDetectionRunMetrics",
+    "FormDetectionRunProcessedWebhookEvent",
     "FormDetectionRunStatus",
     "FormulaDetails",
     "HumanReviewStepDefinition",
@@ -1574,6 +1584,8 @@ __all__ = [
     "WebhookEvent_ExtractorDraftUpdated",
     "WebhookEvent_ExtractorUpdated",
     "WebhookEvent_ExtractorVersionPublished",
+    "WebhookEvent_FormDetectionRunFailed",
+    "WebhookEvent_FormDetectionRunProcessed",
     "WebhookEvent_ParseRunFailed",
     "WebhookEvent_ParseRunProcessed",
     "WebhookEvent_SplitRunFailed",

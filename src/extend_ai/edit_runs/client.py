@@ -68,6 +68,7 @@ class EditRunsClient:
         client.edit_runs.create(
             file={"url": "https://example.com/form.pdf"},
             config={
+                "engine_version": "0.0.1",
                 "instructions": "Fill out the form with the provided data",
                 "advanced_options": {"flatten_pdf": True},
             },
@@ -228,6 +229,7 @@ class AsyncEditRunsClient:
             await client.edit_runs.create(
                 file={"url": "https://example.com/form.pdf"},
                 config={
+                    "engine_version": "0.0.1",
                     "instructions": "Fill out the form with the provided data",
                     "advanced_options": {"flatten_pdf": True},
                 },

@@ -13,6 +13,10 @@ from .edit_run import EditRun
 
 
 class EditRunFailedWebhookEvent(UncheckedBaseModel):
+    """
+    Triggered when an API-created EditRun fails before it finishes filling the document's form fields. A failure in an internal FormDetectionRun is reported through this parent EditRun event; the internal run does not emit a Form Detection webhook.
+    """
+
     event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
     """
     Unique identifier for the event
