@@ -198,7 +198,9 @@ if typing.TYPE_CHECKING:
     from .file_metadata import FileMetadataParams
     from .file_summary import FileSummaryParams
     from .form_detection_run import FormDetectionRunParams
+    from .form_detection_run_failed_webhook_event import FormDetectionRunFailedWebhookEventParams
     from .form_detection_run_metrics import FormDetectionRunMetricsParams
+    from .form_detection_run_processed_webhook_event import FormDetectionRunProcessedWebhookEventParams
     from .formula_details import FormulaDetailsParams
     from .human_review_step_definition import HumanReviewStepDefinitionParams
     from .insight import InsightParams
@@ -398,6 +400,8 @@ if typing.TYPE_CHECKING:
         WebhookEvent_ExtractorDraftUpdatedParams,
         WebhookEvent_ExtractorUpdatedParams,
         WebhookEvent_ExtractorVersionPublishedParams,
+        WebhookEvent_FormDetectionRunFailedParams,
+        WebhookEvent_FormDetectionRunProcessedParams,
         WebhookEvent_ParseRunFailedParams,
         WebhookEvent_ParseRunProcessedParams,
         WebhookEvent_SplitRunFailedParams,
@@ -637,8 +641,10 @@ _dynamic_imports: typing.Dict[str, str] = {
     "FileMetadataParams": ".file_metadata",
     "FileParams": ".file",
     "FileSummaryParams": ".file_summary",
+    "FormDetectionRunFailedWebhookEventParams": ".form_detection_run_failed_webhook_event",
     "FormDetectionRunMetricsParams": ".form_detection_run_metrics",
     "FormDetectionRunParams": ".form_detection_run",
+    "FormDetectionRunProcessedWebhookEventParams": ".form_detection_run_processed_webhook_event",
     "FormulaDetailsParams": ".formula_details",
     "HumanReviewStepDefinitionParams": ".human_review_step_definition",
     "InsightParams": ".insight",
@@ -827,6 +833,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WebhookEvent_ExtractorDraftUpdatedParams": ".webhook_event",
     "WebhookEvent_ExtractorUpdatedParams": ".webhook_event",
     "WebhookEvent_ExtractorVersionPublishedParams": ".webhook_event",
+    "WebhookEvent_FormDetectionRunFailedParams": ".webhook_event",
+    "WebhookEvent_FormDetectionRunProcessedParams": ".webhook_event",
     "WebhookEvent_ParseRunFailedParams": ".webhook_event",
     "WebhookEvent_ParseRunProcessedParams": ".webhook_event",
     "WebhookEvent_SplitRunFailedParams": ".webhook_event",
@@ -1087,8 +1095,10 @@ __all__ = [
     "FileMetadataParams",
     "FileParams",
     "FileSummaryParams",
+    "FormDetectionRunFailedWebhookEventParams",
     "FormDetectionRunMetricsParams",
     "FormDetectionRunParams",
+    "FormDetectionRunProcessedWebhookEventParams",
     "FormulaDetailsParams",
     "HumanReviewStepDefinitionParams",
     "InsightParams",
@@ -1277,6 +1287,8 @@ __all__ = [
     "WebhookEvent_ExtractorDraftUpdatedParams",
     "WebhookEvent_ExtractorUpdatedParams",
     "WebhookEvent_ExtractorVersionPublishedParams",
+    "WebhookEvent_FormDetectionRunFailedParams",
+    "WebhookEvent_FormDetectionRunProcessedParams",
     "WebhookEvent_ParseRunFailedParams",
     "WebhookEvent_ParseRunProcessedParams",
     "WebhookEvent_SplitRunFailedParams",

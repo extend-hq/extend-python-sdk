@@ -16,6 +16,8 @@ class WebhookEndpointEventType(enum.StrEnum):
     PARSE_RUN_FAILED = "parse_run.failed"
     EDIT_RUN_PROCESSED = "edit_run.processed"
     EDIT_RUN_FAILED = "edit_run.failed"
+    FORM_DETECTION_RUN_PROCESSED = "form_detection_run.processed"
+    FORM_DETECTION_RUN_FAILED = "form_detection_run.failed"
     EXTRACT_RUN_PROCESSED = "extract_run.processed"
     EXTRACT_RUN_FAILED = "extract_run.failed"
     CLASSIFY_RUN_PROCESSED = "classify_run.processed"
@@ -61,6 +63,8 @@ class WebhookEndpointEventType(enum.StrEnum):
         parse_run_failed: typing.Callable[[], T_Result],
         edit_run_processed: typing.Callable[[], T_Result],
         edit_run_failed: typing.Callable[[], T_Result],
+        form_detection_run_processed: typing.Callable[[], T_Result],
+        form_detection_run_failed: typing.Callable[[], T_Result],
         extract_run_processed: typing.Callable[[], T_Result],
         extract_run_failed: typing.Callable[[], T_Result],
         classify_run_processed: typing.Callable[[], T_Result],
@@ -99,6 +103,10 @@ class WebhookEndpointEventType(enum.StrEnum):
             return edit_run_processed()
         if self is WebhookEndpointEventType.EDIT_RUN_FAILED:
             return edit_run_failed()
+        if self is WebhookEndpointEventType.FORM_DETECTION_RUN_PROCESSED:
+            return form_detection_run_processed()
+        if self is WebhookEndpointEventType.FORM_DETECTION_RUN_FAILED:
+            return form_detection_run_failed()
         if self is WebhookEndpointEventType.EXTRACT_RUN_PROCESSED:
             return extract_run_processed()
         if self is WebhookEndpointEventType.EXTRACT_RUN_FAILED:

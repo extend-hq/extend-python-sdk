@@ -18,6 +18,13 @@ class EditConfig(UncheckedBaseModel):
     Configuration options for the editing process.
     """
 
+    engine_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="engineVersion")] = (
+        pydantic.Field(alias="engineVersion", default=None)
+    )
+    """
+    The Edit engine version to use. Use an exact version for reproducible results, or `latest` to use the latest stable version. Defaults to `0.0.1` when omitted. Responses contain the resolved exact version.
+    """
+
     schema_: typing_extensions.Annotated[typing.Optional[EditRootJson], FieldMetadata(alias="schema")] = pydantic.Field(
         alias="schema", default=None
     )
