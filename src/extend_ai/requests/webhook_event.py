@@ -14,6 +14,7 @@ from .edit_run import EditRunParams
 from .extract_run import ExtractRunParams
 from .extractor import ExtractorParams
 from .extractor_version import ExtractorVersionParams
+from .form_detection_run import FormDetectionRunParams
 from .parse_run_status import ParseRunStatusParams
 from .split_run import SplitRunParams
 from .splitter import SplitterParams
@@ -153,6 +154,22 @@ class WebhookEvent_EditRunFailedParams(typing_extensions.TypedDict):
     payload: EditRunParams
 
 
+class WebhookEvent_FormDetectionRunProcessedParams(typing_extensions.TypedDict):
+    event_type: typing_extensions.Annotated[
+        typing.Literal["form_detection_run.processed"], FieldMetadata(alias="eventType")
+    ]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    payload: FormDetectionRunParams
+
+
+class WebhookEvent_FormDetectionRunFailedParams(typing_extensions.TypedDict):
+    event_type: typing_extensions.Annotated[
+        typing.Literal["form_detection_run.failed"], FieldMetadata(alias="eventType")
+    ]
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
+    payload: FormDetectionRunParams
+
+
 class WebhookEvent_WorkflowCreatedParams(typing_extensions.TypedDict):
     event_type: typing_extensions.Annotated[typing.Literal["workflow.created"], FieldMetadata(alias="eventType")]
     event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")]
@@ -290,6 +307,8 @@ WebhookEventParams = typing.Union[
     WebhookEvent_ParseRunFailedParams,
     WebhookEvent_EditRunProcessedParams,
     WebhookEvent_EditRunFailedParams,
+    WebhookEvent_FormDetectionRunProcessedParams,
+    WebhookEvent_FormDetectionRunFailedParams,
     WebhookEvent_WorkflowCreatedParams,
     WebhookEvent_WorkflowDeployedParams,
     WebhookEvent_WorkflowDeletedParams,

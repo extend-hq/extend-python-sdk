@@ -17,6 +17,7 @@ from .edit_run import EditRun
 from .extract_run import ExtractRun
 from .extractor import Extractor
 from .extractor_version import ExtractorVersion
+from .form_detection_run import FormDetectionRun
 from .parse_run_status import ParseRunStatus
 from .split_run import SplitRun
 from .splitter import Splitter
@@ -786,6 +787,82 @@ class WebhookEvent_EditRunFailed(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
+class WebhookEvent_FormDetectionRunProcessed(UncheckedBaseModel):
+    """
+    Union of all webhook event types. Use `eventType` as the discriminator
+    to determine the specific event type and narrow the `payload` type.
+
+    Example usage in TypeScript:
+    ```typescript
+    function handleWebhook(event: Extend.WebhookEvent) {
+      switch (event.eventType) {
+        case "workflow_run.completed":
+          // event.payload is typed as WorkflowRun
+          console.log(event.payload.status);
+          break;
+        case "extract_run.processed":
+          // event.payload is typed as ExtractRun
+          console.log(event.payload.output);
+          break;
+      }
+    }
+    ```
+    """
+
+    event_type: typing_extensions.Annotated[
+        typing.Literal["form_detection_run.processed"], FieldMetadata(alias="eventType")
+    ] = pydantic.Field(alias="eventType", default="form_detection_run.processed")
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
+    payload: FormDetectionRun
+
+    if IS_PYDANTIC_V2:
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+    else:
+
+        class Config:
+            frozen = True
+            smart_union = True
+            extra = pydantic.Extra.allow
+
+
+class WebhookEvent_FormDetectionRunFailed(UncheckedBaseModel):
+    """
+    Union of all webhook event types. Use `eventType` as the discriminator
+    to determine the specific event type and narrow the `payload` type.
+
+    Example usage in TypeScript:
+    ```typescript
+    function handleWebhook(event: Extend.WebhookEvent) {
+      switch (event.eventType) {
+        case "workflow_run.completed":
+          // event.payload is typed as WorkflowRun
+          console.log(event.payload.status);
+          break;
+        case "extract_run.processed":
+          // event.payload is typed as ExtractRun
+          console.log(event.payload.output);
+          break;
+      }
+    }
+    ```
+    """
+
+    event_type: typing_extensions.Annotated[
+        typing.Literal["form_detection_run.failed"], FieldMetadata(alias="eventType")
+    ] = pydantic.Field(alias="eventType", default="form_detection_run.failed")
+    event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
+    payload: FormDetectionRun
+
+    if IS_PYDANTIC_V2:
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+    else:
+
+        class Config:
+            frozen = True
+            smart_union = True
+            extra = pydantic.Extra.allow
+
+
 class WebhookEvent_WorkflowCreated(UncheckedBaseModel):
     """
     Union of all webhook event types. Use `eventType` as the discriminator
@@ -1492,6 +1569,8 @@ WebhookEvent = typing_extensions.Annotated[
         WebhookEvent_ParseRunFailed,
         WebhookEvent_EditRunProcessed,
         WebhookEvent_EditRunFailed,
+        WebhookEvent_FormDetectionRunProcessed,
+        WebhookEvent_FormDetectionRunFailed,
         WebhookEvent_WorkflowCreated,
         WebhookEvent_WorkflowDeployed,
         WebhookEvent_WorkflowDeleted,
@@ -1523,6 +1602,8 @@ update_forward_refs(WebhookEvent_ExtractRunProcessed)
 update_forward_refs(WebhookEvent_ExtractRunFailed)
 update_forward_refs(WebhookEvent_EditRunProcessed)
 update_forward_refs(WebhookEvent_EditRunFailed)
+update_forward_refs(WebhookEvent_FormDetectionRunProcessed)
+update_forward_refs(WebhookEvent_FormDetectionRunFailed)
 update_forward_refs(WebhookEvent_ExtractorCreated)
 update_forward_refs(WebhookEvent_ExtractorUpdated)
 update_forward_refs(WebhookEvent_ExtractorDeleted)

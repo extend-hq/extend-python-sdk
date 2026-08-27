@@ -9,12 +9,12 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .edit_run import EditRun
+from .form_detection_run import FormDetectionRun
 
 
-class EditRunProcessedWebhookEvent(UncheckedBaseModel):
+class FormDetectionRunFailedWebhookEvent(UncheckedBaseModel):
     """
-    Triggered after an API-created EditRun finishes filling the document's form fields. If no schema was provided, the EditRun first creates an internal FormDetectionRun; that internal run does not emit Form Detection webhooks.
+    Triggered when a FormDetectionRun created directly through the Form Detection API fails. Internal FormDetectionRuns created by EditRuns do not emit this webhook.
     """
 
     event_id: typing_extensions.Annotated[str, FieldMetadata(alias="eventId")] = pydantic.Field(alias="eventId")
@@ -22,7 +22,7 @@ class EditRunProcessedWebhookEvent(UncheckedBaseModel):
     Unique identifier for the event
     """
 
-    payload: EditRun
+    payload: FormDetectionRun
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -34,4 +34,4 @@ class EditRunProcessedWebhookEvent(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-update_forward_refs(EditRunProcessedWebhookEvent)
+update_forward_refs(FormDetectionRunFailedWebhookEvent)

@@ -294,6 +294,7 @@ class Extend:
         client.edit(
             file={"url": "https://example.com/form.pdf"},
             config={
+                "engine_version": "0.0.1",
                 "instructions": "Fill out the form with the provided data",
                 "advanced_options": {"flatten_pdf": True},
             },
@@ -312,7 +313,7 @@ class Extend:
         """
         Detect fields in a PDF form and wait for the generated edit schema before returning. This endpoint has a 5-minute timeout.
 
-        For production workloads, use `POST /form_detection_runs` and poll `GET /form_detection_runs/{id}` instead. The response is a completed `form_detection_run`; its `output.schema` can be passed directly to `POST /edit` or `POST /edit_runs`.
+        For production workloads, use `POST /form_detection_runs` and receive the result by webhook or poll `GET /form_detection_runs/{id}` instead. The response is a completed `form_detection_run`; its `output.schema` can be passed directly to `POST /edit` or `POST /edit_runs`.
 
         Parameters
         ----------
@@ -339,6 +340,7 @@ class Extend:
         client.detect_form(
             file={"url": "https://example.com/form.pdf"},
             config={
+                "engine_version": "0.0.1",
                 "instructions": "Detect the form fields and use human-readable field names.",
                 "advanced_options": {"radio_enums_enabled": True},
             },
@@ -1054,6 +1056,7 @@ class AsyncExtend:
             await client.edit(
                 file={"url": "https://example.com/form.pdf"},
                 config={
+                    "engine_version": "0.0.1",
                     "instructions": "Fill out the form with the provided data",
                     "advanced_options": {"flatten_pdf": True},
                 },
@@ -1075,7 +1078,7 @@ class AsyncExtend:
         """
         Detect fields in a PDF form and wait for the generated edit schema before returning. This endpoint has a 5-minute timeout.
 
-        For production workloads, use `POST /form_detection_runs` and poll `GET /form_detection_runs/{id}` instead. The response is a completed `form_detection_run`; its `output.schema` can be passed directly to `POST /edit` or `POST /edit_runs`.
+        For production workloads, use `POST /form_detection_runs` and receive the result by webhook or poll `GET /form_detection_runs/{id}` instead. The response is a completed `form_detection_run`; its `output.schema` can be passed directly to `POST /edit` or `POST /edit_runs`.
 
         Parameters
         ----------
@@ -1107,6 +1110,7 @@ class AsyncExtend:
             await client.detect_form(
                 file={"url": "https://example.com/form.pdf"},
                 config={
+                    "engine_version": "0.0.1",
                     "instructions": "Detect the form fields and use human-readable field names.",
                     "advanced_options": {"radio_enums_enabled": True},
                 },
