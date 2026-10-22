@@ -36,7 +36,7 @@ class ParseConfigBlockOptionsTablesParams(typing_extensions.TypedDict):
         typing_extensions.Annotated[bool, FieldMetadata(alias="cellBlocksEnabled")]
     ]
     """
-    Whether to include individual table cell blocks in the output. When enabled, each cell in a table will be represented as a separate block with its own bounding box and content and will be `children` of the table block.
+    Whether to include individual table cell blocks in the output. When enabled, each cell in a table will be represented as a separate block with its own bounding box and content and will be `children` of the table block. Only supported on `parse_performance` engineVersion `1.0.1`.
     """
 
     agentic: typing_extensions.NotRequired[ParseConfigBlockOptionsTablesAgenticParams]

@@ -15,7 +15,7 @@ from .legacy_json_output_metadata_value_citations_item_polygon_item import (
 class LegacyJsonOutputMetadataValueCitationsItem(UncheckedBaseModel):
     page: typing.Optional[float] = pydantic.Field(default=None)
     """
-    Page number where the citation was found
+    Page number where the citation was found. For Excel, the 1-based worksheet index; for CSV, always 1.
     """
 
     reference_text: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="referenceText")] = (
@@ -30,6 +30,13 @@ class LegacyJsonOutputMetadataValueCitationsItem(UncheckedBaseModel):
     )
     """
     Array of points defining the polygon around the referenced text
+    """
+
+    cell_range: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="cellRange")] = pydantic.Field(
+        alias="cellRange", default=None
+    )
+    """
+    The cited cell or range in A1 notation for Excel and CSV files. Returned instead of a polygon when a cell reference is available.
     """
 
     page_width: typing_extensions.Annotated[typing.Optional[float], FieldMetadata(alias="pageWidth")] = pydantic.Field(

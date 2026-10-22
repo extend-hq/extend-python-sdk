@@ -77,8 +77,8 @@ if typing.TYPE_CHECKING:
     from .detect_form_request_file import DetectFormRequestFileParams
     from .edit_bounding_box import EditBoundingBoxParams
     from .edit_conditional_clause import EditConditionalClauseParams
-    from .edit_conditional_object_property import EditConditionalObjectPropertyParams
     from .edit_conditional_property import EditConditionalPropertyParams
+    from .edit_conditional_property_enum_item import EditConditionalPropertyEnumItemParams
     from .edit_config import EditConfigParams
     from .edit_config_advanced_options import EditConfigAdvancedOptionsParams
     from .edit_json import EditJsonParams
@@ -92,12 +92,17 @@ if typing.TYPE_CHECKING:
     from .edit_run_output import EditRunOutputParams
     from .edit_run_output_edited_file import EditRunOutputEditedFileParams
     from .edit_run_processed_webhook_event import EditRunProcessedWebhookEventParams
+    from .edit_run_summary import EditRunSummaryParams
+    from .edit_run_summary_metrics import EditRunSummaryMetricsParams
     from .edit_schema_generation_config import EditSchemaGenerationConfigParams
     from .edit_schema_generation_config_advanced_options import EditSchemaGenerationConfigAdvancedOptionsParams
     from .edit_schema_generation_mapping_match import EditSchemaGenerationMappingMatchParams
     from .edit_schema_generation_mapping_result import EditSchemaGenerationMappingResultParams
     from .edit_schema_generation_response import EditSchemaGenerationResponseParams
+    from .edit_source_acro_form import EditSourceAcroFormParams
+    from .edit_source_acro_form_option import EditSourceAcroFormOptionParams
     from .edit_template import EditTemplateParams
+    from .edit_template_summary import EditTemplateSummaryParams
     from .edit_text_options import EditTextOptionsParams
     from .enum import EnumParams
     from .enum_option import EnumOptionParams
@@ -301,6 +306,7 @@ if typing.TYPE_CHECKING:
     from .parse_run_output_metadata import ParseRunOutputMetadataParams
     from .parse_run_output_metadata_pages_item import ParseRunOutputMetadataPagesItemParams
     from .parse_run_output_ocr import ParseRunOutputOcrParams
+    from .parse_run_output_ocr_lines_item import ParseRunOutputOcrLinesItemParams
     from .parse_run_output_ocr_words_item import ParseRunOutputOcrWordsItemParams
     from .parse_run_processed_webhook_event import ParseRunProcessedWebhookEventParams
     from .parse_run_status import ParseRunStatusParams
@@ -316,6 +322,15 @@ if typing.TYPE_CHECKING:
     from .provided_processor_output import ProvidedProcessorOutputParams
     from .provided_split_output import ProvidedSplitOutputParams
     from .provided_split_output_splits_item import ProvidedSplitOutputSplitsItemParams
+    from .router_branch_result import RouterBranchResultParams
+    from .router_next_entry import RouterNextEntryParams
+    from .router_result import RouterResultParams
+    from .router_result_matched_branch import RouterResultMatchedBranchParams
+    from .router_step_definition import RouterStepDefinitionParams
+    from .router_step_definition_config import RouterStepDefinitionConfigParams
+    from .router_step_definition_config_branches_item import RouterStepDefinitionConfigBranchesItemParams
+    from .router_step_run import RouterStepRunParams
+    from .router_step_run_step import RouterStepRunStepParams
     from .rule_validation_next_entry import RuleValidationNextEntryParams
     from .rule_validation_result import RuleValidationResultParams
     from .rule_validation_result_rules_item import RuleValidationResultRulesItemParams
@@ -366,8 +381,10 @@ if typing.TYPE_CHECKING:
         StepRun_ExtractParams,
         StepRun_MergeExtractParams,
         StepRun_ParseParams,
+        StepRun_RouterParams,
         StepRun_RuleValidationParams,
         StepRun_SplitParams,
+        StepRun_ValidationParams,
     )
     from .step_run_base import StepRunBaseParams
     from .table_cell_details import TableCellDetailsParams
@@ -375,6 +392,62 @@ if typing.TYPE_CHECKING:
     from .text_details import TextDetailsParams
     from .too_many_requests_error_body import TooManyRequestsErrorBodyParams
     from .trigger_step_definition import TriggerStepDefinitionParams
+    from .validation_block_input import (
+        ValidationBlockInputParams,
+        ValidationBlockInput_CodeParams,
+        ValidationBlockInput_SemanticParams,
+    )
+    from .validation_block_result import ValidationBlockResultParams
+    from .validation_code_block_input import ValidationCodeBlockInputParams
+    from .validation_code_block_input_code import ValidationCodeBlockInputCodeParams
+    from .validation_next_entry import ValidationNextEntryParams
+    from .validation_result import ValidationResultParams
+    from .validation_semantic_block_input import ValidationSemanticBlockInputParams
+    from .validation_semantic_block_input_semantic import ValidationSemanticBlockInputSemanticParams
+    from .validation_step_definition import ValidationStepDefinitionParams
+    from .validation_step_definition_config import ValidationStepDefinitionConfigParams
+    from .validation_step_run import ValidationStepRunParams
+    from .validation_step_run_step import ValidationStepRunStepParams
+    from .verify_advanced_options import VerifyAdvancedOptionsParams
+    from .verify_config import VerifyConfigParams
+    from .verify_evidence import (
+        VerifyEvidenceParams,
+        VerifyEvidence_HistoryParams,
+        VerifyEvidence_InventoryParams,
+        VerifyEvidence_ModelPredictionParams,
+        VerifyEvidence_StructuralPatternParams,
+        VerifyEvidence_ValidationParams,
+        VerifyEvidence_ValueComparisonParams,
+    )
+    from .verify_evidence_bounding_box import VerifyEvidenceBoundingBoxParams
+    from .verify_evidence_byte_range import VerifyEvidenceByteRangeParams
+    from .verify_evidence_location import VerifyEvidenceLocationParams
+    from .verify_evidence_page import VerifyEvidencePageParams
+    from .verify_history_evidence import VerifyHistoryEvidenceParams
+    from .verify_history_evidence_data import VerifyHistoryEvidenceDataParams
+    from .verify_history_evidence_data_events_item import VerifyHistoryEvidenceDataEventsItemParams
+    from .verify_inventory_evidence import VerifyInventoryEvidenceParams
+    from .verify_inventory_evidence_data import VerifyInventoryEvidenceDataParams
+    from .verify_inventory_evidence_data_items_item import VerifyInventoryEvidenceDataItemsItemParams
+    from .verify_model_prediction_evidence import VerifyModelPredictionEvidenceParams
+    from .verify_named_value import VerifyNamedValueParams
+    from .verify_output import VerifyOutputParams
+    from .verify_request_file import VerifyRequestFileParams
+    from .verify_risk_assessment import VerifyRiskAssessmentParams
+    from .verify_run import VerifyRunParams
+    from .verify_run_metrics import VerifyRunMetricsParams
+    from .verify_run_summary import VerifyRunSummaryParams
+    from .verify_signal import VerifySignalParams
+    from .verify_structural_pattern_evidence import VerifyStructuralPatternEvidenceParams
+    from .verify_structural_pattern_evidence_data import VerifyStructuralPatternEvidenceDataParams
+    from .verify_structural_pattern_evidence_data_components_item import (
+        VerifyStructuralPatternEvidenceDataComponentsItemParams,
+    )
+    from .verify_validation_evidence import VerifyValidationEvidenceParams
+    from .verify_validation_evidence_data import VerifyValidationEvidenceDataParams
+    from .verify_validation_evidence_data_findings_item import VerifyValidationEvidenceDataFindingsItemParams
+    from .verify_value_comparison_evidence import VerifyValueComparisonEvidenceParams
+    from .verify_value_comparison_evidence_data import VerifyValueComparisonEvidenceDataParams
     from .webhook_advanced_options import WebhookAdvancedOptionsParams
     from .webhook_endpoint import WebhookEndpointParams
     from .webhook_endpoint_create import WebhookEndpointCreateParams
@@ -453,9 +526,11 @@ if typing.TYPE_CHECKING:
         WorkflowStepDefinition_HumanReviewParams,
         WorkflowStepDefinition_MergeExtractParams,
         WorkflowStepDefinition_ParseParams,
+        WorkflowStepDefinition_RouterParams,
         WorkflowStepDefinition_RuleValidationParams,
         WorkflowStepDefinition_SplitParams,
         WorkflowStepDefinition_TriggerParams,
+        WorkflowStepDefinition_ValidationParams,
         WorkflowStepDefinition_WebhookResponseParams,
     )
     from .workflow_summary import WorkflowSummaryParams
@@ -533,7 +608,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "DetectFormRequestFileParams": ".detect_form_request_file",
     "EditBoundingBoxParams": ".edit_bounding_box",
     "EditConditionalClauseParams": ".edit_conditional_clause",
-    "EditConditionalObjectPropertyParams": ".edit_conditional_object_property",
+    "EditConditionalPropertyEnumItemParams": ".edit_conditional_property_enum_item",
     "EditConditionalPropertyParams": ".edit_conditional_property",
     "EditConfigAdvancedOptionsParams": ".edit_config_advanced_options",
     "EditConfigParams": ".edit_config",
@@ -548,12 +623,17 @@ _dynamic_imports: typing.Dict[str, str] = {
     "EditRunOutputParams": ".edit_run_output",
     "EditRunParams": ".edit_run",
     "EditRunProcessedWebhookEventParams": ".edit_run_processed_webhook_event",
+    "EditRunSummaryMetricsParams": ".edit_run_summary_metrics",
+    "EditRunSummaryParams": ".edit_run_summary",
     "EditSchemaGenerationConfigAdvancedOptionsParams": ".edit_schema_generation_config_advanced_options",
     "EditSchemaGenerationConfigParams": ".edit_schema_generation_config",
     "EditSchemaGenerationMappingMatchParams": ".edit_schema_generation_mapping_match",
     "EditSchemaGenerationMappingResultParams": ".edit_schema_generation_mapping_result",
     "EditSchemaGenerationResponseParams": ".edit_schema_generation_response",
+    "EditSourceAcroFormOptionParams": ".edit_source_acro_form_option",
+    "EditSourceAcroFormParams": ".edit_source_acro_form",
     "EditTemplateParams": ".edit_template",
+    "EditTemplateSummaryParams": ".edit_template_summary",
     "EditTextOptionsParams": ".edit_text_options",
     "EnumOptionParams": ".enum_option",
     "EnumParams": ".enum",
@@ -734,6 +814,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ParseRunMetricsParams": ".parse_run_metrics",
     "ParseRunOutputMetadataPagesItemParams": ".parse_run_output_metadata_pages_item",
     "ParseRunOutputMetadataParams": ".parse_run_output_metadata",
+    "ParseRunOutputOcrLinesItemParams": ".parse_run_output_ocr_lines_item",
     "ParseRunOutputOcrParams": ".parse_run_output_ocr",
     "ParseRunOutputOcrWordsItemParams": ".parse_run_output_ocr_words_item",
     "ParseRunOutputParams": ".parse_run_output",
@@ -752,6 +833,15 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ProvidedProcessorOutputParams": ".provided_processor_output",
     "ProvidedSplitOutputParams": ".provided_split_output",
     "ProvidedSplitOutputSplitsItemParams": ".provided_split_output_splits_item",
+    "RouterBranchResultParams": ".router_branch_result",
+    "RouterNextEntryParams": ".router_next_entry",
+    "RouterResultMatchedBranchParams": ".router_result_matched_branch",
+    "RouterResultParams": ".router_result",
+    "RouterStepDefinitionConfigBranchesItemParams": ".router_step_definition_config_branches_item",
+    "RouterStepDefinitionConfigParams": ".router_step_definition_config",
+    "RouterStepDefinitionParams": ".router_step_definition",
+    "RouterStepRunParams": ".router_step_run",
+    "RouterStepRunStepParams": ".router_step_run_step",
     "RuleValidationNextEntryParams": ".rule_validation_next_entry",
     "RuleValidationResultParams": ".rule_validation_result",
     "RuleValidationResultRulesItemParams": ".rule_validation_result_rules_item",
@@ -802,13 +892,65 @@ _dynamic_imports: typing.Dict[str, str] = {
     "StepRun_ExtractParams": ".step_run",
     "StepRun_MergeExtractParams": ".step_run",
     "StepRun_ParseParams": ".step_run",
+    "StepRun_RouterParams": ".step_run",
     "StepRun_RuleValidationParams": ".step_run",
     "StepRun_SplitParams": ".step_run",
+    "StepRun_ValidationParams": ".step_run",
     "TableCellDetailsParams": ".table_cell_details",
     "TableDetailsParams": ".table_details",
     "TextDetailsParams": ".text_details",
     "TooManyRequestsErrorBodyParams": ".too_many_requests_error_body",
     "TriggerStepDefinitionParams": ".trigger_step_definition",
+    "ValidationBlockInputParams": ".validation_block_input",
+    "ValidationBlockInput_CodeParams": ".validation_block_input",
+    "ValidationBlockInput_SemanticParams": ".validation_block_input",
+    "ValidationBlockResultParams": ".validation_block_result",
+    "ValidationCodeBlockInputCodeParams": ".validation_code_block_input_code",
+    "ValidationCodeBlockInputParams": ".validation_code_block_input",
+    "ValidationNextEntryParams": ".validation_next_entry",
+    "ValidationResultParams": ".validation_result",
+    "ValidationSemanticBlockInputParams": ".validation_semantic_block_input",
+    "ValidationSemanticBlockInputSemanticParams": ".validation_semantic_block_input_semantic",
+    "ValidationStepDefinitionConfigParams": ".validation_step_definition_config",
+    "ValidationStepDefinitionParams": ".validation_step_definition",
+    "ValidationStepRunParams": ".validation_step_run",
+    "ValidationStepRunStepParams": ".validation_step_run_step",
+    "VerifyAdvancedOptionsParams": ".verify_advanced_options",
+    "VerifyConfigParams": ".verify_config",
+    "VerifyEvidenceBoundingBoxParams": ".verify_evidence_bounding_box",
+    "VerifyEvidenceByteRangeParams": ".verify_evidence_byte_range",
+    "VerifyEvidenceLocationParams": ".verify_evidence_location",
+    "VerifyEvidencePageParams": ".verify_evidence_page",
+    "VerifyEvidenceParams": ".verify_evidence",
+    "VerifyEvidence_HistoryParams": ".verify_evidence",
+    "VerifyEvidence_InventoryParams": ".verify_evidence",
+    "VerifyEvidence_ModelPredictionParams": ".verify_evidence",
+    "VerifyEvidence_StructuralPatternParams": ".verify_evidence",
+    "VerifyEvidence_ValidationParams": ".verify_evidence",
+    "VerifyEvidence_ValueComparisonParams": ".verify_evidence",
+    "VerifyHistoryEvidenceDataEventsItemParams": ".verify_history_evidence_data_events_item",
+    "VerifyHistoryEvidenceDataParams": ".verify_history_evidence_data",
+    "VerifyHistoryEvidenceParams": ".verify_history_evidence",
+    "VerifyInventoryEvidenceDataItemsItemParams": ".verify_inventory_evidence_data_items_item",
+    "VerifyInventoryEvidenceDataParams": ".verify_inventory_evidence_data",
+    "VerifyInventoryEvidenceParams": ".verify_inventory_evidence",
+    "VerifyModelPredictionEvidenceParams": ".verify_model_prediction_evidence",
+    "VerifyNamedValueParams": ".verify_named_value",
+    "VerifyOutputParams": ".verify_output",
+    "VerifyRequestFileParams": ".verify_request_file",
+    "VerifyRiskAssessmentParams": ".verify_risk_assessment",
+    "VerifyRunMetricsParams": ".verify_run_metrics",
+    "VerifyRunParams": ".verify_run",
+    "VerifyRunSummaryParams": ".verify_run_summary",
+    "VerifySignalParams": ".verify_signal",
+    "VerifyStructuralPatternEvidenceDataComponentsItemParams": ".verify_structural_pattern_evidence_data_components_item",
+    "VerifyStructuralPatternEvidenceDataParams": ".verify_structural_pattern_evidence_data",
+    "VerifyStructuralPatternEvidenceParams": ".verify_structural_pattern_evidence",
+    "VerifyValidationEvidenceDataFindingsItemParams": ".verify_validation_evidence_data_findings_item",
+    "VerifyValidationEvidenceDataParams": ".verify_validation_evidence_data",
+    "VerifyValidationEvidenceParams": ".verify_validation_evidence",
+    "VerifyValueComparisonEvidenceDataParams": ".verify_value_comparison_evidence_data",
+    "VerifyValueComparisonEvidenceParams": ".verify_value_comparison_evidence",
     "WebhookAdvancedOptionsParams": ".webhook_advanced_options",
     "WebhookEndpointCreateParams": ".webhook_endpoint_create",
     "WebhookEndpointParams": ".webhook_endpoint",
@@ -884,9 +1026,11 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WorkflowStepDefinition_HumanReviewParams": ".workflow_step_definition",
     "WorkflowStepDefinition_MergeExtractParams": ".workflow_step_definition",
     "WorkflowStepDefinition_ParseParams": ".workflow_step_definition",
+    "WorkflowStepDefinition_RouterParams": ".workflow_step_definition",
     "WorkflowStepDefinition_RuleValidationParams": ".workflow_step_definition",
     "WorkflowStepDefinition_SplitParams": ".workflow_step_definition",
     "WorkflowStepDefinition_TriggerParams": ".workflow_step_definition",
+    "WorkflowStepDefinition_ValidationParams": ".workflow_step_definition",
     "WorkflowStepDefinition_WebhookResponseParams": ".workflow_step_definition",
     "WorkflowSummaryParams": ".workflow_summary",
     "WorkflowVersionParams": ".workflow_version",
@@ -987,7 +1131,7 @@ __all__ = [
     "DetectFormRequestFileParams",
     "EditBoundingBoxParams",
     "EditConditionalClauseParams",
-    "EditConditionalObjectPropertyParams",
+    "EditConditionalPropertyEnumItemParams",
     "EditConditionalPropertyParams",
     "EditConfigAdvancedOptionsParams",
     "EditConfigParams",
@@ -1002,12 +1146,17 @@ __all__ = [
     "EditRunOutputParams",
     "EditRunParams",
     "EditRunProcessedWebhookEventParams",
+    "EditRunSummaryMetricsParams",
+    "EditRunSummaryParams",
     "EditSchemaGenerationConfigAdvancedOptionsParams",
     "EditSchemaGenerationConfigParams",
     "EditSchemaGenerationMappingMatchParams",
     "EditSchemaGenerationMappingResultParams",
     "EditSchemaGenerationResponseParams",
+    "EditSourceAcroFormOptionParams",
+    "EditSourceAcroFormParams",
     "EditTemplateParams",
+    "EditTemplateSummaryParams",
     "EditTextOptionsParams",
     "EnumOptionParams",
     "EnumParams",
@@ -1188,6 +1337,7 @@ __all__ = [
     "ParseRunMetricsParams",
     "ParseRunOutputMetadataPagesItemParams",
     "ParseRunOutputMetadataParams",
+    "ParseRunOutputOcrLinesItemParams",
     "ParseRunOutputOcrParams",
     "ParseRunOutputOcrWordsItemParams",
     "ParseRunOutputParams",
@@ -1206,6 +1356,15 @@ __all__ = [
     "ProvidedProcessorOutputParams",
     "ProvidedSplitOutputParams",
     "ProvidedSplitOutputSplitsItemParams",
+    "RouterBranchResultParams",
+    "RouterNextEntryParams",
+    "RouterResultMatchedBranchParams",
+    "RouterResultParams",
+    "RouterStepDefinitionConfigBranchesItemParams",
+    "RouterStepDefinitionConfigParams",
+    "RouterStepDefinitionParams",
+    "RouterStepRunParams",
+    "RouterStepRunStepParams",
     "RuleValidationNextEntryParams",
     "RuleValidationResultParams",
     "RuleValidationResultRulesItemParams",
@@ -1256,13 +1415,65 @@ __all__ = [
     "StepRun_ExtractParams",
     "StepRun_MergeExtractParams",
     "StepRun_ParseParams",
+    "StepRun_RouterParams",
     "StepRun_RuleValidationParams",
     "StepRun_SplitParams",
+    "StepRun_ValidationParams",
     "TableCellDetailsParams",
     "TableDetailsParams",
     "TextDetailsParams",
     "TooManyRequestsErrorBodyParams",
     "TriggerStepDefinitionParams",
+    "ValidationBlockInputParams",
+    "ValidationBlockInput_CodeParams",
+    "ValidationBlockInput_SemanticParams",
+    "ValidationBlockResultParams",
+    "ValidationCodeBlockInputCodeParams",
+    "ValidationCodeBlockInputParams",
+    "ValidationNextEntryParams",
+    "ValidationResultParams",
+    "ValidationSemanticBlockInputParams",
+    "ValidationSemanticBlockInputSemanticParams",
+    "ValidationStepDefinitionConfigParams",
+    "ValidationStepDefinitionParams",
+    "ValidationStepRunParams",
+    "ValidationStepRunStepParams",
+    "VerifyAdvancedOptionsParams",
+    "VerifyConfigParams",
+    "VerifyEvidenceBoundingBoxParams",
+    "VerifyEvidenceByteRangeParams",
+    "VerifyEvidenceLocationParams",
+    "VerifyEvidencePageParams",
+    "VerifyEvidenceParams",
+    "VerifyEvidence_HistoryParams",
+    "VerifyEvidence_InventoryParams",
+    "VerifyEvidence_ModelPredictionParams",
+    "VerifyEvidence_StructuralPatternParams",
+    "VerifyEvidence_ValidationParams",
+    "VerifyEvidence_ValueComparisonParams",
+    "VerifyHistoryEvidenceDataEventsItemParams",
+    "VerifyHistoryEvidenceDataParams",
+    "VerifyHistoryEvidenceParams",
+    "VerifyInventoryEvidenceDataItemsItemParams",
+    "VerifyInventoryEvidenceDataParams",
+    "VerifyInventoryEvidenceParams",
+    "VerifyModelPredictionEvidenceParams",
+    "VerifyNamedValueParams",
+    "VerifyOutputParams",
+    "VerifyRequestFileParams",
+    "VerifyRiskAssessmentParams",
+    "VerifyRunMetricsParams",
+    "VerifyRunParams",
+    "VerifyRunSummaryParams",
+    "VerifySignalParams",
+    "VerifyStructuralPatternEvidenceDataComponentsItemParams",
+    "VerifyStructuralPatternEvidenceDataParams",
+    "VerifyStructuralPatternEvidenceParams",
+    "VerifyValidationEvidenceDataFindingsItemParams",
+    "VerifyValidationEvidenceDataParams",
+    "VerifyValidationEvidenceParams",
+    "VerifyValueComparisonEvidenceDataParams",
+    "VerifyValueComparisonEvidenceParams",
     "WebhookAdvancedOptionsParams",
     "WebhookEndpointCreateParams",
     "WebhookEndpointParams",
@@ -1338,9 +1549,11 @@ __all__ = [
     "WorkflowStepDefinition_HumanReviewParams",
     "WorkflowStepDefinition_MergeExtractParams",
     "WorkflowStepDefinition_ParseParams",
+    "WorkflowStepDefinition_RouterParams",
     "WorkflowStepDefinition_RuleValidationParams",
     "WorkflowStepDefinition_SplitParams",
     "WorkflowStepDefinition_TriggerParams",
+    "WorkflowStepDefinition_ValidationParams",
     "WorkflowStepDefinition_WebhookResponseParams",
     "WorkflowSummaryParams",
     "WorkflowVersionParams",

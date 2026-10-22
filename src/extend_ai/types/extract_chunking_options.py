@@ -12,6 +12,10 @@ from .extract_chunking_options_chunking_strategy import ExtractChunkingOptionsCh
 
 
 class ExtractChunkingOptions(UncheckedBaseModel):
+    """
+    Options controlling how documents are chunked before extraction.
+    """
+
     chunking_strategy: typing_extensions.Annotated[
         typing.Optional[ExtractChunkingOptionsChunkingStrategy], FieldMetadata(alias="chunkingStrategy")
     ] = pydantic.Field(alias="chunkingStrategy", default=None)

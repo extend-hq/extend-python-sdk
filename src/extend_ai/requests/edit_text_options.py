@@ -16,11 +16,21 @@ class EditTextOptionsParams(typing_extensions.TypedDict):
     Font size in points
     """
 
+    color: typing_extensions.NotRequired[typing.Sequence[int]]
+    """
+    RGB color values from 0 to 255 for text color.
+    """
+
+    opacity: typing_extensions.NotRequired[float]
+    """
+    Text opacity from 0 to 1. Defaults to 1.
+    """
+
     font_color: typing_extensions.NotRequired[
-        typing_extensions.Annotated[typing.Sequence[float], FieldMetadata(alias="fontColor")]
+        typing_extensions.Annotated[typing.Sequence[int], FieldMetadata(alias="fontColor")]
     ]
     """
-    RGB color values (0-255) for text color
+    Deprecated alias for `color`. RGB color values from 0 to 255.
     """
 
     font: typing_extensions.NotRequired[str]

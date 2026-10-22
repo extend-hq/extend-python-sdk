@@ -48,6 +48,13 @@ class ApiError(UncheckedBaseModel):
     Link to relevant documentation when one is available.
     """
 
+    run_id: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="runId")] = pydantic.Field(
+        alias="runId", default=None
+    )
+    """
+    The ID of the run the error refers to, when the run outlives the request. Currently returned only when a synchronous `POST /verify` request times out: the verify run keeps processing, so fetch it with `GET /verify_runs/{id}` instead of resubmitting the file.
+    """
+
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
     else:

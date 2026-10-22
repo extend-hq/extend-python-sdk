@@ -7,6 +7,10 @@ from ..types.extract_chunking_options_chunking_strategy import ExtractChunkingOp
 
 
 class ExtractChunkingOptionsParams(typing_extensions.TypedDict):
+    """
+    Options controlling how documents are chunked before extraction.
+    """
+
     chunking_strategy: typing_extensions.NotRequired[
         typing_extensions.Annotated[ExtractChunkingOptionsChunkingStrategy, FieldMetadata(alias="chunkingStrategy")]
     ]

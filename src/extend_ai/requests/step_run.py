@@ -20,10 +20,14 @@ from .merge_extract_result import MergeExtractResultParams
 from .merge_extract_step_run_step import MergeExtractStepRunStepParams
 from .parse_result import ParseResultParams
 from .parse_step_run_step import ParseStepRunStepParams
+from .router_result import RouterResultParams
+from .router_step_run_step import RouterStepRunStepParams
 from .rule_validation_result import RuleValidationResultParams
 from .rule_validation_step_run_step import RuleValidationStepRunStepParams
 from .split_result import SplitResultParams
 from .split_step_run_step import SplitStepRunStepParams
+from .validation_result import ValidationResultParams
+from .validation_step_run_step import ValidationStepRunStepParams
 
 
 class StepRun_ParseParams(typing_extensions.TypedDict):
@@ -114,6 +118,28 @@ class StepRun_ExternalDataValidationParams(typing_extensions.TypedDict):
     files: typing.Sequence[FileSummaryParams]
 
 
+class StepRun_ValidationParams(typing_extensions.TypedDict):
+    step_type: typing_extensions.Annotated[typing.Literal["VALIDATION"], FieldMetadata(alias="stepType")]
+    step: ValidationStepRunStepParams
+    result: typing.Optional[ValidationResultParams]
+    object: typing.Literal["workflow_step_run"]
+    id: str
+    workflow_run_id: typing_extensions.Annotated[str, FieldMetadata(alias="workflowRunId")]
+    status: StepRunBaseStatus
+    files: typing.Sequence[FileSummaryParams]
+
+
+class StepRun_RouterParams(typing_extensions.TypedDict):
+    step_type: typing_extensions.Annotated[typing.Literal["ROUTER"], FieldMetadata(alias="stepType")]
+    step: RouterStepRunStepParams
+    result: typing.Optional[RouterResultParams]
+    object: typing.Literal["workflow_step_run"]
+    id: str
+    workflow_run_id: typing_extensions.Annotated[str, FieldMetadata(alias="workflowRunId")]
+    status: StepRunBaseStatus
+    files: typing.Sequence[FileSummaryParams]
+
+
 StepRunParams = typing.Union[
     StepRun_ParseParams,
     StepRun_ExtractParams,
@@ -123,4 +149,6 @@ StepRunParams = typing.Union[
     StepRun_ConditionalExtractParams,
     StepRun_RuleValidationParams,
     StepRun_ExternalDataValidationParams,
+    StepRun_ValidationParams,
+    StepRun_RouterParams,
 ]

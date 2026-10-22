@@ -25,14 +25,14 @@ class EditConfigAdvancedOptions(UncheckedBaseModel):
         alias="flattenPdf", default=None
     )
     """
-    Whether to flatten PDF forms after editing (makes form fields non-editable). Defaults to `true`.
+    Whether to flatten PDF forms after editing (makes form fields non-editable). Defaults to `true` for Edit `1.0.0` and `0.0.1`, and `false` for `1.0.0-beta`.
     """
 
     radio_enums_enabled: typing_extensions.Annotated[
         typing.Optional[bool], FieldMetadata(alias="radioEnumsEnabled")
     ] = pydantic.Field(alias="radioEnumsEnabled", default=None)
     """
-    Whether to model radio fields as enums. This ensures only one radio widget is filled. Defaults to false.
+    Whether to represent radio groups as enums so only one option can be selected. Defaults to `true` for Edit `1.0.0` and `1.0.0-beta`, and `false` for `0.0.1`.
     """
 
     native_fields_only: typing_extensions.Annotated[typing.Optional[bool], FieldMetadata(alias="nativeFieldsOnly")] = (

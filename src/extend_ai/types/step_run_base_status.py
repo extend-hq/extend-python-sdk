@@ -15,6 +15,7 @@ class StepRunBaseStatus(enum.StrEnum):
     * `"PROCESSING"` - The step run is currently executing
     * `"PROCESSED"` - The step run completed successfully
     * `"FAILED"` - The step run encountered an error
+    * `"INVALIDATED"` - The step run was invalidated
     * `"CANCELLED"` - The step run was cancelled
     """
 
@@ -23,6 +24,7 @@ class StepRunBaseStatus(enum.StrEnum):
     PROCESSING = "PROCESSING"
     PROCESSED = "PROCESSED"
     FAILED = "FAILED"
+    INVALIDATED = "INVALIDATED"
     CANCELLED = "CANCELLED"
     _UNKNOWN = "__STEPRUNBASESTATUS_UNKNOWN__"
     """
@@ -42,6 +44,7 @@ class StepRunBaseStatus(enum.StrEnum):
         processing: typing.Callable[[], T_Result],
         processed: typing.Callable[[], T_Result],
         failed: typing.Callable[[], T_Result],
+        invalidated: typing.Callable[[], T_Result],
         cancelled: typing.Callable[[], T_Result],
         _unknown_member: typing.Callable[[str], T_Result],
     ) -> T_Result:
@@ -55,6 +58,8 @@ class StepRunBaseStatus(enum.StrEnum):
             return processed()
         if self is StepRunBaseStatus.FAILED:
             return failed()
+        if self is StepRunBaseStatus.INVALIDATED:
+            return invalidated()
         if self is StepRunBaseStatus.CANCELLED:
             return cancelled()
         return _unknown_member(self._value_)

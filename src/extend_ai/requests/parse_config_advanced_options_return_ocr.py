@@ -5,10 +5,15 @@ import typing_extensions
 
 class ParseConfigAdvancedOptionsReturnOcrParams(typing_extensions.TypedDict):
     """
-    Options for returning raw OCR data in the response.
+    Options for returning raw OCR data in the response. Words and lines are independent opt-ins and both default to false.
     """
 
     words: typing_extensions.NotRequired[bool]
     """
     Whether to include word-level OCR data in the response, including word bounding boxes and confidence scores. This meaningfully impacts the response size, consider using the signed url return format.
+    """
+
+    lines: typing_extensions.NotRequired[bool]
+    """
+    Whether to include line-level OCR data at `output.ocr.lines`, including bounding boxes and confidence scores when available. Does not enable word-level OCR output.
     """

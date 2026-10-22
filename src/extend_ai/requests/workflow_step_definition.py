@@ -15,10 +15,14 @@ from .extract_step_definition_config import ExtractStepDefinitionConfigParams
 from .file_conversion_step_definition_config import FileConversionStepDefinitionConfigParams
 from .merge_extract_step_definition_config import MergeExtractStepDefinitionConfigParams
 from .parse_step_definition_config import ParseStepDefinitionConfigParams
+from .router_next_entry import RouterNextEntryParams
+from .router_step_definition_config import RouterStepDefinitionConfigParams
 from .rule_validation_next_entry import RuleValidationNextEntryParams
 from .rule_validation_step_definition_config import RuleValidationStepDefinitionConfigParams
 from .simple_next_entry import SimpleNextEntryParams
 from .split_step_definition_config import SplitStepDefinitionConfigParams
+from .validation_next_entry import ValidationNextEntryParams
+from .validation_step_definition_config import ValidationStepDefinitionConfigParams
 
 
 class WorkflowStepDefinition_TriggerParams(typing_extensions.TypedDict):
@@ -95,6 +99,20 @@ class WorkflowStepDefinition_RuleValidationParams(typing_extensions.TypedDict):
     next: typing_extensions.NotRequired[typing.Sequence[RuleValidationNextEntryParams]]
 
 
+class WorkflowStepDefinition_ValidationParams(typing_extensions.TypedDict):
+    type: typing.Literal["VALIDATION"]
+    name: str
+    config: typing_extensions.NotRequired[ValidationStepDefinitionConfigParams]
+    next: typing_extensions.NotRequired[typing.Sequence[ValidationNextEntryParams]]
+
+
+class WorkflowStepDefinition_RouterParams(typing_extensions.TypedDict):
+    type: typing.Literal["ROUTER"]
+    name: str
+    config: typing_extensions.NotRequired[RouterStepDefinitionConfigParams]
+    next: typing_extensions.NotRequired[typing.Sequence[RouterNextEntryParams]]
+
+
 class WorkflowStepDefinition_HumanReviewParams(typing_extensions.TypedDict):
     type: typing.Literal["HUMAN_REVIEW"]
     name: str
@@ -126,6 +144,8 @@ WorkflowStepDefinitionParams = typing.Union[
     WorkflowStepDefinition_ExternalDataValidationParams,
     WorkflowStepDefinition_WebhookResponseParams,
     WorkflowStepDefinition_RuleValidationParams,
+    WorkflowStepDefinition_ValidationParams,
+    WorkflowStepDefinition_RouterParams,
     WorkflowStepDefinition_HumanReviewParams,
     WorkflowStepDefinition_CollectParams,
     WorkflowStepDefinition_FileConversionParams,

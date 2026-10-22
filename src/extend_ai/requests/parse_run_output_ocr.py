@@ -3,15 +3,21 @@
 import typing
 
 import typing_extensions
+from .parse_run_output_ocr_lines_item import ParseRunOutputOcrLinesItemParams
 from .parse_run_output_ocr_words_item import ParseRunOutputOcrWordsItemParams
 
 
 class ParseRunOutputOcrParams(typing_extensions.TypedDict):
     """
-    Raw OCR data from the parsing process. Only included when `returnOcr` is configured in the parse config's advanced options.
+    Raw OCR data from the parsing process. Words and lines are independently enabled with `returnOcr.words` and `returnOcr.lines`; either array may be omitted.
     """
 
     words: typing_extensions.NotRequired[typing.Sequence[ParseRunOutputOcrWordsItemParams]]
     """
     An array of individual words detected by OCR.
+    """
+
+    lines: typing_extensions.NotRequired[typing.Sequence[ParseRunOutputOcrLinesItemParams]]
+    """
+    Text lines detected by OCR. Only included when `config.advancedOptions.returnOcr.lines` is true and line data is available; enabling words does not enable lines.
     """

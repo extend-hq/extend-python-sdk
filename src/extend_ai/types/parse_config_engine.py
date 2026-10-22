@@ -12,10 +12,12 @@ class ParseConfigEngine(enum.StrEnum):
     The parsing engine to use. Supported values:
     * `parse_performance`: Full-featured parsing engine with highest accuracy (default)
     * `parse_light`: Lightweight parsing engine optimized for high-volume, cost-sensitive ingestion. Uses the new layout model with full layout support and the markdown target at lower cost and latency, but performs worse than `parse_performance` on lower-quality scans, harder handwriting, larger tables, non-Latin-based languages, and dense checkbox regions.
+    * `parse_auto`: Adaptive parsing that classifies difficulty and routes work per page — simple pages are parsed with the parse_light model pipeline while complex pages get performance-level model treatment. Billed per page by complexity.
     """
 
     PARSE_PERFORMANCE = "parse_performance"
     PARSE_LIGHT = "parse_light"
+    PARSE_AUTO = "parse_auto"
     _UNKNOWN = "__PARSECONFIGENGINE_UNKNOWN__"
     """
     This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
@@ -31,10 +33,13 @@ class ParseConfigEngine(enum.StrEnum):
         self,
         parse_performance: typing.Callable[[], T_Result],
         parse_light: typing.Callable[[], T_Result],
+        parse_auto: typing.Callable[[], T_Result],
         _unknown_member: typing.Callable[[str], T_Result],
     ) -> T_Result:
         if self is ParseConfigEngine.PARSE_PERFORMANCE:
             return parse_performance()
         if self is ParseConfigEngine.PARSE_LIGHT:
             return parse_light()
+        if self is ParseConfigEngine.PARSE_AUTO:
+            return parse_auto()
         return _unknown_member(self._value_)

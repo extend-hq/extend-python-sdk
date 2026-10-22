@@ -34,9 +34,16 @@ class EvaluationSetItem(UncheckedBaseModel):
     Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
     """
 
-    file: FileSummary = pydantic.Field()
+    file: typing.Optional[FileSummary] = pydantic.Field(default=None)
     """
-    A summary of the file associated with the evaluation set item.
+    A summary of the file associated with the evaluation set item. `null` for multifile items (use `files` instead).
+    """
+
+    files: typing.Optional[typing.List[FileSummary]] = pydantic.Field(default=None)
+    """
+    The files associated with a multifile evaluation set item, in the order they were submitted. Only populated for items created with `fileIds`.
+    
+    For single-file items, this is `null` — use `file` instead.
     """
 
     expected_output: typing_extensions.Annotated[ProvidedProcessorOutput, FieldMetadata(alias="expectedOutput")] = (

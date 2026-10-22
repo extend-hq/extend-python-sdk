@@ -5,17 +5,23 @@ import typing
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .parse_run_output_ocr_lines_item import ParseRunOutputOcrLinesItem
 from .parse_run_output_ocr_words_item import ParseRunOutputOcrWordsItem
 
 
 class ParseRunOutputOcr(UncheckedBaseModel):
     """
-    Raw OCR data from the parsing process. Only included when `returnOcr` is configured in the parse config's advanced options.
+    Raw OCR data from the parsing process. Words and lines are independently enabled with `returnOcr.words` and `returnOcr.lines`; either array may be omitted.
     """
 
     words: typing.Optional[typing.List[ParseRunOutputOcrWordsItem]] = pydantic.Field(default=None)
     """
     An array of individual words detected by OCR.
+    """
+
+    lines: typing.Optional[typing.List[ParseRunOutputOcrLinesItem]] = pydantic.Field(default=None)
+    """
+    Text lines detected by OCR. Only included when `config.advancedOptions.returnOcr.lines` is true and line data is available; enabling words does not enable lines.
     """
 
     if IS_PYDANTIC_V2:

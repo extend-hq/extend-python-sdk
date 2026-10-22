@@ -9,11 +9,14 @@ T_Result = typing.TypeVar("T_Result")
 
 class ExtractBaseProcessor(enum.StrEnum):
     """
-    The base processor to use. For extractors, this can be either `"extraction_performance"` or `"extraction_light"`. Defaults to `"extraction_performance"` if not provided. See [Extraction Changelog](https://docs.extend.ai/2026-02-09/model-versioning/extraction/extraction-performance) for more details.
+    The base processor to use. For extractors, this can be `"extraction_performance"`, `"extraction_light"`, or `"extraction_operator"`. Defaults to `"extraction_performance"` if not provided. See [Extraction Changelog](https://docs.extend.ai/2026-02-09/model-versioning/extraction/extraction-performance) for more details.
+
+    `"extraction_operator"` selects [Operator](https://docs.extend.ai/2026-02-09/extraction/operator).
     """
 
     EXTRACTION_PERFORMANCE = "extraction_performance"
     EXTRACTION_LIGHT = "extraction_light"
+    EXTRACTION_OPERATOR = "extraction_operator"
     _UNKNOWN = "__EXTRACTBASEPROCESSOR_UNKNOWN__"
     """
     This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
@@ -29,10 +32,13 @@ class ExtractBaseProcessor(enum.StrEnum):
         self,
         extraction_performance: typing.Callable[[], T_Result],
         extraction_light: typing.Callable[[], T_Result],
+        extraction_operator: typing.Callable[[], T_Result],
         _unknown_member: typing.Callable[[str], T_Result],
     ) -> T_Result:
         if self is ExtractBaseProcessor.EXTRACTION_PERFORMANCE:
             return extraction_performance()
         if self is ExtractBaseProcessor.EXTRACTION_LIGHT:
             return extraction_light()
+        if self is ExtractBaseProcessor.EXTRACTION_OPERATOR:
+            return extraction_operator()
         return _unknown_member(self._value_)

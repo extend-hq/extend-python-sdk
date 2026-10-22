@@ -41,7 +41,7 @@ class ParseConfigBlockOptionsTables(UncheckedBaseModel):
         typing.Optional[bool], FieldMetadata(alias="cellBlocksEnabled")
     ] = pydantic.Field(alias="cellBlocksEnabled", default=None)
     """
-    Whether to include individual table cell blocks in the output. When enabled, each cell in a table will be represented as a separate block with its own bounding box and content and will be `children` of the table block.
+    Whether to include individual table cell blocks in the output. When enabled, each cell in a table will be represented as a separate block with its own bounding box and content and will be `children` of the table block. Only supported on `parse_performance` engineVersion `1.0.1`.
     """
 
     agentic: typing.Optional[ParseConfigBlockOptionsTablesAgentic] = pydantic.Field(default=None)

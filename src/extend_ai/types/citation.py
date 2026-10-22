@@ -32,6 +32,13 @@ class Citation(UncheckedBaseModel):
     Array of points defining the polygon around the referenced text
     """
 
+    cell_range: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="cellRange")] = pydantic.Field(
+        alias="cellRange", default=None
+    )
+    """
+    The cited cell or range in A1 notation for Excel and CSV files. Returned instead of a polygon when a cell reference is available.
+    """
+
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
     else:
