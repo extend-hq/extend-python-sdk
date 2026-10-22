@@ -57,7 +57,8 @@ class EditRunsClient(GeneratedEditRunsClient):
     def create_and_poll(
         self,
         *,
-        file: EditRunsCreateRequestFileParams,
+        file: Optional[EditRunsCreateRequestFileParams] = None,
+        template_id: Optional[str] = None,
         config: Optional[EditConfigParams] = None,
         polling_options: Optional[PollingOptions] = None,
     ) -> EditRun:
@@ -67,7 +68,8 @@ class EditRunsClient(GeneratedEditRunsClient):
         Terminal states: PROCESSED, FAILED
 
         Args:
-            file: The file to edit (must be a fillable PDF form).
+            file: The file to edit (must be a fillable PDF form). Mutually exclusive with template_id.
+            template_id: The ID of a saved edit template to run against. Mutually exclusive with file.
             config: Edit configuration specifying the edits to make.
             polling_options: Options for polling behavior.
 
@@ -87,7 +89,11 @@ class EditRunsClient(GeneratedEditRunsClient):
                 print(result.output)
         """
         # Build kwargs, only including non-None values to avoid passing null
-        kwargs: Dict[str, Any] = {"file": file}
+        kwargs: Dict[str, Any] = {}
+        if file is not None:
+            kwargs["file"] = file
+        if template_id is not None:
+            kwargs["template_id"] = template_id
         if config is not None:
             kwargs["config"] = config
 
@@ -114,7 +120,8 @@ class AsyncEditRunsClient(GeneratedAsyncEditRunsClient):
     async def create_and_poll(
         self,
         *,
-        file: EditRunsCreateRequestFileParams,
+        file: Optional[EditRunsCreateRequestFileParams] = None,
+        template_id: Optional[str] = None,
         config: Optional[EditConfigParams] = None,
         polling_options: Optional[PollingOptions] = None,
     ) -> EditRun:
@@ -122,7 +129,11 @@ class AsyncEditRunsClient(GeneratedAsyncEditRunsClient):
         Creates an edit run and polls until it reaches a terminal state (async version).
         """
         # Build kwargs, only including non-None values to avoid passing null
-        kwargs: Dict[str, Any] = {"file": file}
+        kwargs: Dict[str, Any] = {}
+        if file is not None:
+            kwargs["file"] = file
+        if template_id is not None:
+            kwargs["template_id"] = template_id
         if config is not None:
             kwargs["config"] = config
 
