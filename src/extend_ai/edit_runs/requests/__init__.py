@@ -8,9 +8,11 @@ from importlib import import_module
 if typing.TYPE_CHECKING:
     from .edit_runs_create_request_file import EditRunsCreateRequestFileParams
     from .edit_runs_delete_response import EditRunsDeleteResponseParams
+    from .edit_runs_list_response import EditRunsListResponseParams
 _dynamic_imports: typing.Dict[str, str] = {
     "EditRunsCreateRequestFileParams": ".edit_runs_create_request_file",
     "EditRunsDeleteResponseParams": ".edit_runs_delete_response",
+    "EditRunsListResponseParams": ".edit_runs_list_response",
 }
 
 
@@ -35,4 +37,4 @@ def __dir__():
     return sorted(lazy_attrs)
 
 
-__all__ = ["EditRunsCreateRequestFileParams", "EditRunsDeleteResponseParams"]
+__all__ = ["EditRunsCreateRequestFileParams", "EditRunsDeleteResponseParams", "EditRunsListResponseParams"]

@@ -29,9 +29,16 @@ class EvaluationSetItemParams(typing_extensions.TypedDict):
     Example: `"ev_2LcgeY_mp2T5yPaEuq5Lw"`
     """
 
-    file: FileSummaryParams
+    file: typing.Optional[FileSummaryParams]
     """
-    A summary of the file associated with the evaluation set item.
+    A summary of the file associated with the evaluation set item. `null` for multifile items (use `files` instead).
+    """
+
+    files: typing.Optional[typing.Sequence[FileSummaryParams]]
+    """
+    The files associated with a multifile evaluation set item, in the order they were submitted. Only populated for items created with `fileIds`.
+    
+    For single-file items, this is `null` — use `file` instead.
     """
 
     expected_output: typing_extensions.Annotated[ProvidedProcessorOutputParams, FieldMetadata(alias="expectedOutput")]

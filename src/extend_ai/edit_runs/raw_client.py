@@ -21,8 +21,15 @@ from ..errors.unprocessable_entity_error import UnprocessableEntityError
 from ..requests.edit_config import EditConfigParams
 from ..types.api_error import ApiError as types_api_error_ApiError
 from ..types.edit_run import EditRun
+from ..types.edit_run_source import EditRunSource
+from ..types.max_page_size import MaxPageSize
+from ..types.next_page_token import NextPageToken
+from ..types.sort_by import SortBy
+from ..types.sort_dir import SortDir
 from .requests.edit_runs_create_request_file import EditRunsCreateRequestFileParams
 from .types.edit_runs_delete_response import EditRunsDeleteResponse
+from .types.edit_runs_list_request_status import EditRunsListRequestStatus
+from .types.edit_runs_list_response import EditRunsListResponse
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -32,10 +39,185 @@ class RawEditRunsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
+    def list(
+        self,
+        *,
+        status: typing.Optional[EditRunsListRequestStatus] = None,
+        source: typing.Optional[EditRunSource] = None,
+        file_name_contains: typing.Optional[str] = None,
+        sort_by: typing.Optional[SortBy] = None,
+        sort_dir: typing.Optional[SortDir] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[EditRunsListResponse]:
+        """
+        List edit runs, with optional filters for status, source, and file name.
+
+        Returns a paginated list of edit runs. Use `GET /edit_runs/{id}` to retrieve the full result, including `config` and `output`, for a specific run.
+
+        Parameters
+        ----------
+        status : typing.Optional[EditRunsListRequestStatus]
+            Filter edit runs by status.
+
+        source : typing.Optional[EditRunSource]
+            Filters edit runs by the source that created them. If not provided, runs from all sources are returned.
+
+        file_name_contains : typing.Optional[str]
+            Filters runs by the name of the file. Only returns runs where the file name contains this string.
+
+            Example: `"invoice"`
+
+        sort_by : typing.Optional[SortBy]
+
+        sort_dir : typing.Optional[SortDir]
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[EditRunsListResponse]
+            Successfully retrieved edit runs
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "edit_runs",
+            method="GET",
+            params={
+                "status": status,
+                "source": source,
+                "fileNameContains": file_name_contains,
+                "sortBy": sort_by,
+                "sortDir": sort_dir,
+                "nextPageToken": next_page_token,
+                "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    EditRunsListResponse,
+                    construct_type(
+                        type_=EditRunsListResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise core_api_error_ApiError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+            )
+        raise core_api_error_ApiError(
+            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
+        )
+
     def create(
         self,
         *,
-        file: EditRunsCreateRequestFileParams,
+        file: typing.Optional[EditRunsCreateRequestFileParams] = OMIT,
+        template_id: typing.Optional[str] = OMIT,
         config: typing.Optional[EditConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[EditRun]:
@@ -48,8 +230,17 @@ class RawEditRunsClient:
 
         Parameters
         ----------
-        file : EditRunsCreateRequestFileParams
-            The file to be edited. Files can be provided as a URL or an Extend file ID.
+        file : typing.Optional[EditRunsCreateRequestFileParams]
+            The file to be edited. Mutually exclusive with `templateId` — provide one or the other.
+
+            Files can be provided as a URL or an Extend file ID.
+
+        template_id : typing.Optional[str]
+            The ID of a saved [edit template](https://docs.extend.ai/2026-02-09/api-reference/endpoints/edit/get-edit-template) to run against. Mutually exclusive with `file` — provide one or the other.
+
+            The template's saved file is used as the input file, and its saved `config` (schema, instructions, engine version, and advanced options) is used to fill in any values not set on the request's own `config`. Values set on the request's `config` always take precedence over the template's.
+
+            Example: `"edt_xK9mLPqRtN3vS8wF5hB2cQ"`
 
         config : typing.Optional[EditConfigParams]
 
@@ -68,6 +259,7 @@ class RawEditRunsClient:
                 "file": convert_and_respect_annotation_metadata(
                     object_=file, annotation=EditRunsCreateRequestFileParams, direction="write"
                 ),
+                "templateId": template_id,
                 "config": convert_and_respect_annotation_metadata(
                     object_=config, annotation=EditConfigParams, direction="write"
                 ),
@@ -480,10 +672,185 @@ class AsyncRawEditRunsClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
+    async def list(
+        self,
+        *,
+        status: typing.Optional[EditRunsListRequestStatus] = None,
+        source: typing.Optional[EditRunSource] = None,
+        file_name_contains: typing.Optional[str] = None,
+        sort_by: typing.Optional[SortBy] = None,
+        sort_dir: typing.Optional[SortDir] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[EditRunsListResponse]:
+        """
+        List edit runs, with optional filters for status, source, and file name.
+
+        Returns a paginated list of edit runs. Use `GET /edit_runs/{id}` to retrieve the full result, including `config` and `output`, for a specific run.
+
+        Parameters
+        ----------
+        status : typing.Optional[EditRunsListRequestStatus]
+            Filter edit runs by status.
+
+        source : typing.Optional[EditRunSource]
+            Filters edit runs by the source that created them. If not provided, runs from all sources are returned.
+
+        file_name_contains : typing.Optional[str]
+            Filters runs by the name of the file. Only returns runs where the file name contains this string.
+
+            Example: `"invoice"`
+
+        sort_by : typing.Optional[SortBy]
+
+        sort_dir : typing.Optional[SortDir]
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[EditRunsListResponse]
+            Successfully retrieved edit runs
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "edit_runs",
+            method="GET",
+            params={
+                "status": status,
+                "source": source,
+                "fileNameContains": file_name_contains,
+                "sortBy": sort_by,
+                "sortDir": sort_dir,
+                "nextPageToken": next_page_token,
+                "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    EditRunsListResponse,
+                    construct_type(
+                        type_=EditRunsListResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise core_api_error_ApiError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+            )
+        raise core_api_error_ApiError(
+            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
+        )
+
     async def create(
         self,
         *,
-        file: EditRunsCreateRequestFileParams,
+        file: typing.Optional[EditRunsCreateRequestFileParams] = OMIT,
+        template_id: typing.Optional[str] = OMIT,
         config: typing.Optional[EditConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[EditRun]:
@@ -496,8 +863,17 @@ class AsyncRawEditRunsClient:
 
         Parameters
         ----------
-        file : EditRunsCreateRequestFileParams
-            The file to be edited. Files can be provided as a URL or an Extend file ID.
+        file : typing.Optional[EditRunsCreateRequestFileParams]
+            The file to be edited. Mutually exclusive with `templateId` — provide one or the other.
+
+            Files can be provided as a URL or an Extend file ID.
+
+        template_id : typing.Optional[str]
+            The ID of a saved [edit template](https://docs.extend.ai/2026-02-09/api-reference/endpoints/edit/get-edit-template) to run against. Mutually exclusive with `file` — provide one or the other.
+
+            The template's saved file is used as the input file, and its saved `config` (schema, instructions, engine version, and advanced options) is used to fill in any values not set on the request's own `config`. Values set on the request's `config` always take precedence over the template's.
+
+            Example: `"edt_xK9mLPqRtN3vS8wF5hB2cQ"`
 
         config : typing.Optional[EditConfigParams]
 
@@ -516,6 +892,7 @@ class AsyncRawEditRunsClient:
                 "file": convert_and_respect_annotation_metadata(
                     object_=file, annotation=EditRunsCreateRequestFileParams, direction="write"
                 ),
+                "templateId": template_id,
                 "config": convert_and_respect_annotation_metadata(
                     object_=config, annotation=EditConfigParams, direction="write"
                 ),

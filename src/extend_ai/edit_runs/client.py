@@ -6,9 +6,16 @@ from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
 from ..requests.edit_config import EditConfigParams
 from ..types.edit_run import EditRun
+from ..types.edit_run_source import EditRunSource
+from ..types.max_page_size import MaxPageSize
+from ..types.next_page_token import NextPageToken
+from ..types.sort_by import SortBy
+from ..types.sort_dir import SortDir
 from .raw_client import AsyncRawEditRunsClient, RawEditRunsClient
 from .requests.edit_runs_create_request_file import EditRunsCreateRequestFileParams
 from .types.edit_runs_delete_response import EditRunsDeleteResponse
+from .types.edit_runs_list_request_status import EditRunsListRequestStatus
+from .types.edit_runs_list_response import EditRunsListResponse
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -29,10 +36,85 @@ class EditRunsClient:
         """
         return self._raw_client
 
+    def list(
+        self,
+        *,
+        status: typing.Optional[EditRunsListRequestStatus] = None,
+        source: typing.Optional[EditRunSource] = None,
+        file_name_contains: typing.Optional[str] = None,
+        sort_by: typing.Optional[SortBy] = None,
+        sort_dir: typing.Optional[SortDir] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> EditRunsListResponse:
+        """
+        List edit runs, with optional filters for status, source, and file name.
+
+        Returns a paginated list of edit runs. Use `GET /edit_runs/{id}` to retrieve the full result, including `config` and `output`, for a specific run.
+
+        Parameters
+        ----------
+        status : typing.Optional[EditRunsListRequestStatus]
+            Filter edit runs by status.
+
+        source : typing.Optional[EditRunSource]
+            Filters edit runs by the source that created them. If not provided, runs from all sources are returned.
+
+        file_name_contains : typing.Optional[str]
+            Filters runs by the name of the file. Only returns runs where the file name contains this string.
+
+            Example: `"invoice"`
+
+        sort_by : typing.Optional[SortBy]
+
+        sort_dir : typing.Optional[SortDir]
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        EditRunsListResponse
+            Successfully retrieved edit runs
+
+        Examples
+        --------
+        from extend_ai import Extend
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.edit_runs.list(
+            next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+        )
+        """
+        _response = self._raw_client.list(
+            status=status,
+            source=source,
+            file_name_contains=file_name_contains,
+            sort_by=sort_by,
+            sort_dir=sort_dir,
+            next_page_token=next_page_token,
+            max_page_size=max_page_size,
+            extend_workspace_id=extend_workspace_id,
+            request_options=request_options,
+        )
+        return _response.data
+
     def create(
         self,
         *,
-        file: EditRunsCreateRequestFileParams,
+        file: typing.Optional[EditRunsCreateRequestFileParams] = OMIT,
+        template_id: typing.Optional[str] = OMIT,
         config: typing.Optional[EditConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> EditRun:
@@ -45,8 +127,17 @@ class EditRunsClient:
 
         Parameters
         ----------
-        file : EditRunsCreateRequestFileParams
-            The file to be edited. Files can be provided as a URL or an Extend file ID.
+        file : typing.Optional[EditRunsCreateRequestFileParams]
+            The file to be edited. Mutually exclusive with `templateId` — provide one or the other.
+
+            Files can be provided as a URL or an Extend file ID.
+
+        template_id : typing.Optional[str]
+            The ID of a saved [edit template](https://docs.extend.ai/2026-02-09/api-reference/endpoints/edit/get-edit-template) to run against. Mutually exclusive with `file` — provide one or the other.
+
+            The template's saved file is used as the input file, and its saved `config` (schema, instructions, engine version, and advanced options) is used to fill in any values not set on the request's own `config`. Values set on the request's `config` always take precedence over the template's.
+
+            Example: `"edt_xK9mLPqRtN3vS8wF5hB2cQ"`
 
         config : typing.Optional[EditConfigParams]
 
@@ -68,13 +159,15 @@ class EditRunsClient:
         client.edit_runs.create(
             file={"url": "https://example.com/form.pdf"},
             config={
-                "engine_version": "0.0.1",
+                "engine_version": "1.0.0",
                 "instructions": "Fill out the form with the provided data",
                 "advanced_options": {"flatten_pdf": True},
             },
         )
         """
-        _response = self._raw_client.create(file=file, config=config, request_options=request_options)
+        _response = self._raw_client.create(
+            file=file, template_id=template_id, config=config, request_options=request_options
+        )
         return _response.data
 
     def retrieve(
@@ -185,10 +278,93 @@ class AsyncEditRunsClient:
         """
         return self._raw_client
 
+    async def list(
+        self,
+        *,
+        status: typing.Optional[EditRunsListRequestStatus] = None,
+        source: typing.Optional[EditRunSource] = None,
+        file_name_contains: typing.Optional[str] = None,
+        sort_by: typing.Optional[SortBy] = None,
+        sort_dir: typing.Optional[SortDir] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> EditRunsListResponse:
+        """
+        List edit runs, with optional filters for status, source, and file name.
+
+        Returns a paginated list of edit runs. Use `GET /edit_runs/{id}` to retrieve the full result, including `config` and `output`, for a specific run.
+
+        Parameters
+        ----------
+        status : typing.Optional[EditRunsListRequestStatus]
+            Filter edit runs by status.
+
+        source : typing.Optional[EditRunSource]
+            Filters edit runs by the source that created them. If not provided, runs from all sources are returned.
+
+        file_name_contains : typing.Optional[str]
+            Filters runs by the name of the file. Only returns runs where the file name contains this string.
+
+            Example: `"invoice"`
+
+        sort_by : typing.Optional[SortBy]
+
+        sort_dir : typing.Optional[SortDir]
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        EditRunsListResponse
+            Successfully retrieved edit runs
+
+        Examples
+        --------
+        import asyncio
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.edit_runs.list(
+                next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.list(
+            status=status,
+            source=source,
+            file_name_contains=file_name_contains,
+            sort_by=sort_by,
+            sort_dir=sort_dir,
+            next_page_token=next_page_token,
+            max_page_size=max_page_size,
+            extend_workspace_id=extend_workspace_id,
+            request_options=request_options,
+        )
+        return _response.data
+
     async def create(
         self,
         *,
-        file: EditRunsCreateRequestFileParams,
+        file: typing.Optional[EditRunsCreateRequestFileParams] = OMIT,
+        template_id: typing.Optional[str] = OMIT,
         config: typing.Optional[EditConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> EditRun:
@@ -201,8 +377,17 @@ class AsyncEditRunsClient:
 
         Parameters
         ----------
-        file : EditRunsCreateRequestFileParams
-            The file to be edited. Files can be provided as a URL or an Extend file ID.
+        file : typing.Optional[EditRunsCreateRequestFileParams]
+            The file to be edited. Mutually exclusive with `templateId` — provide one or the other.
+
+            Files can be provided as a URL or an Extend file ID.
+
+        template_id : typing.Optional[str]
+            The ID of a saved [edit template](https://docs.extend.ai/2026-02-09/api-reference/endpoints/edit/get-edit-template) to run against. Mutually exclusive with `file` — provide one or the other.
+
+            The template's saved file is used as the input file, and its saved `config` (schema, instructions, engine version, and advanced options) is used to fill in any values not set on the request's own `config`. Values set on the request's `config` always take precedence over the template's.
+
+            Example: `"edt_xK9mLPqRtN3vS8wF5hB2cQ"`
 
         config : typing.Optional[EditConfigParams]
 
@@ -229,7 +414,7 @@ class AsyncEditRunsClient:
             await client.edit_runs.create(
                 file={"url": "https://example.com/form.pdf"},
                 config={
-                    "engine_version": "0.0.1",
+                    "engine_version": "1.0.0",
                     "instructions": "Fill out the form with the provided data",
                     "advanced_options": {"flatten_pdf": True},
                 },
@@ -238,7 +423,9 @@ class AsyncEditRunsClient:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.create(file=file, config=config, request_options=request_options)
+        _response = await self._raw_client.create(
+            file=file, template_id=template_id, config=config, request_options=request_options
+        )
         return _response.data
 
     async def retrieve(

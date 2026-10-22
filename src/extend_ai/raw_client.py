@@ -34,6 +34,8 @@ from .requests.parse_request_file import ParseRequestFileParams
 from .requests.split_config import SplitConfigParams
 from .requests.split_request_file import SplitRequestFileParams
 from .requests.split_request_splitter import SplitRequestSplitterParams
+from .requests.verify_config import VerifyConfigParams
+from .requests.verify_request_file import VerifyRequestFileParams
 from .types.api_error import ApiError as types_api_error_ApiError
 from .types.classify_run import ClassifyRun
 from .types.edit_run import EditRun
@@ -43,6 +45,7 @@ from .types.parse_request_response_type import ParseRequestResponseType
 from .types.parse_run import ParseRun
 from .types.run_metadata import RunMetadata
 from .types.split_run import SplitRun
+from .types.verify_run import VerifyRun
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -234,7 +237,8 @@ class RawExtend:
     def edit(
         self,
         *,
-        file: EditRequestFileParams,
+        file: typing.Optional[EditRequestFileParams] = OMIT,
+        template_id: typing.Optional[str] = OMIT,
         config: typing.Optional[EditConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[EditRun]:
@@ -245,12 +249,23 @@ class RawExtend:
 
         The Edit endpoint allows you to detect and fill form fields in PDF documents.
 
+        Pass `file` to edit a document directly, or `templateId` to run against a saved [edit template](https://docs.extend.ai/2026-02-09/api-reference/endpoints/edit/get-edit-template). Exactly one of `file` or `templateId` must be provided.
+
         For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/editing/overview). See [Editing Error Handling](https://docs.extend.ai/2026-02-09/editing/error-handling) for HTTP errors and run failure reasons.
 
         Parameters
         ----------
-        file : EditRequestFileParams
-            The file to be edited. Files can be provided as a URL or an Extend file ID.
+        file : typing.Optional[EditRequestFileParams]
+            The file to be edited. Mutually exclusive with `templateId` — provide one or the other.
+
+            Files can be provided as a URL or an Extend file ID.
+
+        template_id : typing.Optional[str]
+            The ID of a saved [edit template](https://docs.extend.ai/2026-02-09/api-reference/endpoints/edit/get-edit-template) to run against. Mutually exclusive with `file` — provide one or the other.
+
+            The template's saved file is used as the input file, and its saved `config` (schema, instructions, engine version, and advanced options) is used to fill in any values not set on the request's own `config`. Values set on the request's `config` always take precedence over the template's.
+
+            Example: `"edt_xK9mLPqRtN3vS8wF5hB2cQ"`
 
         config : typing.Optional[EditConfigParams]
 
@@ -269,6 +284,7 @@ class RawExtend:
                 "file": convert_and_respect_annotation_metadata(
                     object_=file, annotation=EditRequestFileParams, direction="write"
                 ),
+                "templateId": template_id,
                 "config": convert_and_respect_annotation_metadata(
                     object_=config, annotation=EditConfigParams, direction="write"
                 ),
@@ -436,6 +452,166 @@ class RawExtend:
                     FormDetectionRun,
                     construct_type(
                         type_=FormDetectionRun,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise core_api_error_ApiError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+            )
+        raise core_api_error_ApiError(
+            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
+        )
+
+    def verify(
+        self,
+        *,
+        file: VerifyRequestFileParams,
+        extend_workspace_id: typing.Optional[str] = None,
+        config: typing.Optional[VerifyConfigParams] = OMIT,
+        metadata: typing.Optional[RunMetadata] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[VerifyRun]:
+        """
+        Check a single document for evidence of tampering, forgery, or AI generation and wait for the result. This endpoint times out after 5 minutes on both engines. A timed-out request usually fails with `504 Gateway Timeout`; the run keeps processing in the background. Use `POST /verify_runs` for `verify_agentic` and for any document that may take longer.
+
+        For production workloads, use `POST /verify_runs` and poll `GET /verify_runs/{id}` instead. The response is a completed `verify_run`; read `output.riskLevel`, `output.summary`, and `output.signals`. An empty `signals` array means no Public Signals were detected; it is not a claim that the document is authentic.
+
+        Parameters
+        ----------
+        file : VerifyRequestFileParams
+            The file to verify, as a public URL or an Extend file ID. Verify runs against the exact submitted bytes, so `text` and `base64` inputs are not accepted. Supported inputs are PDF, JPEG, PNG, and WebP files; other types fail with `FILE_TYPE_NOT_SUPPORTED`.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+
+        config : typing.Optional[VerifyConfigParams]
+
+        metadata : typing.Optional[RunMetadata]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[VerifyRun]
+            Successfully verified the file
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "verify",
+            method="POST",
+            json={
+                "file": convert_and_respect_annotation_metadata(
+                    object_=file, annotation=VerifyRequestFileParams, direction="write"
+                ),
+                "config": convert_and_respect_annotation_metadata(
+                    object_=config, annotation=VerifyConfigParams, direction="write"
+                ),
+                "metadata": metadata,
+            },
+            headers={
+                "content-type": "application/json",
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    VerifyRun,
+                    construct_type(
+                        type_=VerifyRun,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -1238,7 +1414,8 @@ class AsyncRawExtend:
     async def edit(
         self,
         *,
-        file: EditRequestFileParams,
+        file: typing.Optional[EditRequestFileParams] = OMIT,
+        template_id: typing.Optional[str] = OMIT,
         config: typing.Optional[EditConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[EditRun]:
@@ -1249,12 +1426,23 @@ class AsyncRawExtend:
 
         The Edit endpoint allows you to detect and fill form fields in PDF documents.
 
+        Pass `file` to edit a document directly, or `templateId` to run against a saved [edit template](https://docs.extend.ai/2026-02-09/api-reference/endpoints/edit/get-edit-template). Exactly one of `file` or `templateId` must be provided.
+
         For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/editing/overview). See [Editing Error Handling](https://docs.extend.ai/2026-02-09/editing/error-handling) for HTTP errors and run failure reasons.
 
         Parameters
         ----------
-        file : EditRequestFileParams
-            The file to be edited. Files can be provided as a URL or an Extend file ID.
+        file : typing.Optional[EditRequestFileParams]
+            The file to be edited. Mutually exclusive with `templateId` — provide one or the other.
+
+            Files can be provided as a URL or an Extend file ID.
+
+        template_id : typing.Optional[str]
+            The ID of a saved [edit template](https://docs.extend.ai/2026-02-09/api-reference/endpoints/edit/get-edit-template) to run against. Mutually exclusive with `file` — provide one or the other.
+
+            The template's saved file is used as the input file, and its saved `config` (schema, instructions, engine version, and advanced options) is used to fill in any values not set on the request's own `config`. Values set on the request's `config` always take precedence over the template's.
+
+            Example: `"edt_xK9mLPqRtN3vS8wF5hB2cQ"`
 
         config : typing.Optional[EditConfigParams]
 
@@ -1273,6 +1461,7 @@ class AsyncRawExtend:
                 "file": convert_and_respect_annotation_metadata(
                     object_=file, annotation=EditRequestFileParams, direction="write"
                 ),
+                "templateId": template_id,
                 "config": convert_and_respect_annotation_metadata(
                     object_=config, annotation=EditConfigParams, direction="write"
                 ),
@@ -1440,6 +1629,166 @@ class AsyncRawExtend:
                     FormDetectionRun,
                     construct_type(
                         type_=FormDetectionRun,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise core_api_error_ApiError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+            )
+        raise core_api_error_ApiError(
+            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
+        )
+
+    async def verify(
+        self,
+        *,
+        file: VerifyRequestFileParams,
+        extend_workspace_id: typing.Optional[str] = None,
+        config: typing.Optional[VerifyConfigParams] = OMIT,
+        metadata: typing.Optional[RunMetadata] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[VerifyRun]:
+        """
+        Check a single document for evidence of tampering, forgery, or AI generation and wait for the result. This endpoint times out after 5 minutes on both engines. A timed-out request usually fails with `504 Gateway Timeout`; the run keeps processing in the background. Use `POST /verify_runs` for `verify_agentic` and for any document that may take longer.
+
+        For production workloads, use `POST /verify_runs` and poll `GET /verify_runs/{id}` instead. The response is a completed `verify_run`; read `output.riskLevel`, `output.summary`, and `output.signals`. An empty `signals` array means no Public Signals were detected; it is not a claim that the document is authentic.
+
+        Parameters
+        ----------
+        file : VerifyRequestFileParams
+            The file to verify, as a public URL or an Extend file ID. Verify runs against the exact submitted bytes, so `text` and `base64` inputs are not accepted. Supported inputs are PDF, JPEG, PNG, and WebP files; other types fail with `FILE_TYPE_NOT_SUPPORTED`.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+
+        config : typing.Optional[VerifyConfigParams]
+
+        metadata : typing.Optional[RunMetadata]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[VerifyRun]
+            Successfully verified the file
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "verify",
+            method="POST",
+            json={
+                "file": convert_and_respect_annotation_metadata(
+                    object_=file, annotation=VerifyRequestFileParams, direction="write"
+                ),
+                "config": convert_and_respect_annotation_metadata(
+                    object_=config, annotation=VerifyConfigParams, direction="write"
+                ),
+                "metadata": metadata,
+            },
+            headers={
+                "content-type": "application/json",
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    VerifyRun,
+                    construct_type(
+                        type_=VerifyRun,  # type: ignore
                         object_=_response.json(),
                     ),
                 )

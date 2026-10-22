@@ -6,7 +6,7 @@ import typing_extensions
 class CitationPageParams(typing_extensions.TypedDict):
     number: float
     """
-    Page number where the citation was found. Starts at 1.
+    Page number where the citation was found. Starts at 1. For Excel, the 1-based worksheet index; for CSV, always 1.
     """
 
     width: typing_extensions.NotRequired[float]

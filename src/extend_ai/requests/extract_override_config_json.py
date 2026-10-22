@@ -19,7 +19,7 @@ class ExtractOverrideConfigJsonParams(typing_extensions.TypedDict):
     ]
     base_version: typing_extensions.NotRequired[typing_extensions.Annotated[str, FieldMetadata(alias="baseVersion")]]
     """
-    The version of the `"extraction_performance"` or `"extraction_light"` processor to use. If not provided, the latest stable version for the selected `baseProcessor` will be used automatically. See [Extraction Changelog](https://docs.extend.ai/2026-02-09/model-versioning/extraction/extraction-performance) for more details.
+    The version of the `"extraction_performance"`, `"extraction_light"`, or `"extraction_operator"` processor to use. If not provided, the latest stable version will be used. See [Extraction Changelog](https://docs.extend.ai/2026-02-09/model-versioning/extraction/extraction-performance) for more details.
     """
 
     extraction_rules: typing_extensions.NotRequired[

@@ -9,6 +9,7 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .edit_conditional_property_enum_item import EditConditionalPropertyEnumItem
 
 
 class EditConditionalProperty(UncheckedBaseModel):
@@ -29,12 +30,12 @@ class EditConditionalProperty(UncheckedBaseModel):
     Description of the field constraint.
     """
 
-    enum: typing.Optional[typing.List[str]] = pydantic.Field(default=None)
+    enum: typing.Optional[typing.List[typing.Optional[EditConditionalPropertyEnumItem]]] = pydantic.Field(default=None)
     """
     Allowed values for enum-based conditional constraints.
     """
 
-    items: typing.Optional["EditConditionalObjectProperty"] = pydantic.Field(default=None)
+    items: typing.Optional["EditConditionalProperty"] = pydantic.Field(default=None)
     """
     Nested array item schema for conditional array constraints.
     """
@@ -147,6 +148,4 @@ class EditConditionalProperty(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-from .edit_conditional_object_property import EditConditionalObjectProperty  # noqa: E402, I001
-
-update_forward_refs(EditConditionalProperty, EditConditionalObjectProperty=EditConditionalObjectProperty)
+update_forward_refs(EditConditionalProperty)

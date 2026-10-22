@@ -48,6 +48,7 @@ class ParseConfig(UncheckedBaseModel):
     The parsing engine to use. Supported values:
     * `parse_performance`: Full-featured parsing engine with highest accuracy (default)
     * `parse_light`: Lightweight parsing engine optimized for high-volume, cost-sensitive ingestion. Uses the new layout model with full layout support and the markdown target at lower cost and latency, but performs worse than `parse_performance` on lower-quality scans, harder handwriting, larger tables, non-Latin-based languages, and dense checkbox regions.
+    * `parse_auto`: Adaptive parsing that classifies difficulty and routes work per page — simple pages are parsed with the parse_light model pipeline while complex pages get performance-level model treatment. Billed per page by complexity.
     """
 
     engine_version: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="engineVersion")] = (

@@ -5,7 +5,12 @@ import typing
 from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from ..core.request_options import RequestOptions
 from ..types.edit_template import EditTemplate
+from ..types.max_page_size import MaxPageSize
+from ..types.next_page_token import NextPageToken
+from ..types.sort_by import SortBy
+from ..types.sort_dir import SortDir
 from .raw_client import AsyncRawEditTemplatesClient, RawEditTemplatesClient
+from .types.edit_templates_list_response import EditTemplatesListResponse
 
 
 class EditTemplatesClient:
@@ -23,6 +28,70 @@ class EditTemplatesClient:
         """
         return self._raw_client
 
+    def list(
+        self,
+        *,
+        name_contains: typing.Optional[str] = None,
+        sort_by: typing.Optional[SortBy] = None,
+        sort_dir: typing.Optional[SortDir] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> EditTemplatesListResponse:
+        """
+        List the edit templates saved in a workspace, with an optional filter on the template name.
+
+        Returns a paginated list of edit template summaries. Use `GET /edit_templates/{id}` to retrieve a specific template in full, including its `config` and `schemaConfig`.
+
+        Parameters
+        ----------
+        name_contains : typing.Optional[str]
+            Filters edit templates to only include those that contain the given string in the name. The match is case-insensitive.
+
+            Example: `"W-9"`
+
+        sort_by : typing.Optional[SortBy]
+
+        sort_dir : typing.Optional[SortDir]
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        EditTemplatesListResponse
+            Successfully retrieved edit templates
+
+        Examples
+        --------
+        from extend_ai import Extend
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.edit_templates.list(
+            next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+        )
+        """
+        _response = self._raw_client.list(
+            name_contains=name_contains,
+            sort_by=sort_by,
+            sort_dir=sort_dir,
+            next_page_token=next_page_token,
+            max_page_size=max_page_size,
+            extend_workspace_id=extend_workspace_id,
+            request_options=request_options,
+        )
+        return _response.data
+
     def retrieve(
         self,
         id: str,
@@ -33,7 +102,7 @@ class EditTemplatesClient:
         """
         Retrieve a saved edit template by ID.
 
-        Use this endpoint to inspect the source file, default edit configuration, and optional schema generation configuration saved on an edit template. You can reuse the returned `config` with `POST /edit` or `POST /edit_runs`, and reuse `schemaConfig` with `POST /detect_form` or `POST /form_detection_runs`.
+        Use this endpoint to inspect the source file, default edit configuration, and optional schema generation configuration saved on an edit template. To run an edit directly from a template, pass its ID as the top-level `templateId` field (in place of `file`) to `POST /edit` or `POST /edit_runs` — the template's file and `config` are used automatically, and any `config` values also set on the request take precedence over the template's. Reuse `schemaConfig` with `POST /detect_form` or `POST /form_detection_runs`.
 
         Parameters
         ----------
@@ -85,6 +154,78 @@ class AsyncEditTemplatesClient:
         """
         return self._raw_client
 
+    async def list(
+        self,
+        *,
+        name_contains: typing.Optional[str] = None,
+        sort_by: typing.Optional[SortBy] = None,
+        sort_dir: typing.Optional[SortDir] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> EditTemplatesListResponse:
+        """
+        List the edit templates saved in a workspace, with an optional filter on the template name.
+
+        Returns a paginated list of edit template summaries. Use `GET /edit_templates/{id}` to retrieve a specific template in full, including its `config` and `schemaConfig`.
+
+        Parameters
+        ----------
+        name_contains : typing.Optional[str]
+            Filters edit templates to only include those that contain the given string in the name. The match is case-insensitive.
+
+            Example: `"W-9"`
+
+        sort_by : typing.Optional[SortBy]
+
+        sort_dir : typing.Optional[SortDir]
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        EditTemplatesListResponse
+            Successfully retrieved edit templates
+
+        Examples
+        --------
+        import asyncio
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.edit_templates.list(
+                next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.list(
+            name_contains=name_contains,
+            sort_by=sort_by,
+            sort_dir=sort_dir,
+            next_page_token=next_page_token,
+            max_page_size=max_page_size,
+            extend_workspace_id=extend_workspace_id,
+            request_options=request_options,
+        )
+        return _response.data
+
     async def retrieve(
         self,
         id: str,
@@ -95,7 +236,7 @@ class AsyncEditTemplatesClient:
         """
         Retrieve a saved edit template by ID.
 
-        Use this endpoint to inspect the source file, default edit configuration, and optional schema generation configuration saved on an edit template. You can reuse the returned `config` with `POST /edit` or `POST /edit_runs`, and reuse `schemaConfig` with `POST /detect_form` or `POST /form_detection_runs`.
+        Use this endpoint to inspect the source file, default edit configuration, and optional schema generation configuration saved on an edit template. To run an edit directly from a template, pass its ID as the top-level `templateId` field (in place of `file`) to `POST /edit` or `POST /edit_runs` — the template's file and `config` are used automatically, and any `config` values also set on the request take precedence over the template's. Reuse `schemaConfig` with `POST /detect_form` or `POST /form_detection_runs`.
 
         Parameters
         ----------

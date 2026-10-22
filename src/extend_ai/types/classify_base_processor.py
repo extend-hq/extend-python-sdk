@@ -9,9 +9,10 @@ T_Result = typing.TypeVar("T_Result")
 
 class ClassifyBaseProcessor(enum.StrEnum):
     """
-    The base processor to use. For classifiers, this can be either `"classification_performance"` or `"classification_light"`. Defaults to `"classification_performance"` if not provided. See [Classification Changelog](https://docs.extend.ai/2026-02-09/model-versioning/classification/classification-performance) for more details.
+    The base processor to use. Default is classification_standard, which skips parsing when possible.
     """
 
+    CLASSIFICATION_STANDARD = "classification_standard"
     CLASSIFICATION_PERFORMANCE = "classification_performance"
     CLASSIFICATION_LIGHT = "classification_light"
     _UNKNOWN = "__CLASSIFYBASEPROCESSOR_UNKNOWN__"
@@ -27,10 +28,13 @@ class ClassifyBaseProcessor(enum.StrEnum):
 
     def visit(
         self,
+        classification_standard: typing.Callable[[], T_Result],
         classification_performance: typing.Callable[[], T_Result],
         classification_light: typing.Callable[[], T_Result],
         _unknown_member: typing.Callable[[str], T_Result],
     ) -> T_Result:
+        if self is ClassifyBaseProcessor.CLASSIFICATION_STANDARD:
+            return classification_standard()
         if self is ClassifyBaseProcessor.CLASSIFICATION_PERFORMANCE:
             return classification_performance()
         if self is ClassifyBaseProcessor.CLASSIFICATION_LIGHT:

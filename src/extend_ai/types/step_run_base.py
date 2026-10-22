@@ -45,6 +45,7 @@ class StepRunBase(UncheckedBaseModel):
     * `"PROCESSING"` - The step run is currently executing
     * `"PROCESSED"` - The step run completed successfully
     * `"FAILED"` - The step run encountered an error
+    * `"INVALIDATED"` - The step run was invalidated
     * `"CANCELLED"` - The step run was cancelled
     """
 

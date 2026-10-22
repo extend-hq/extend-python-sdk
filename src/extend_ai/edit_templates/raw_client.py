@@ -19,11 +19,180 @@ from ..errors.unauthorized_error import UnauthorizedError
 from ..errors.unprocessable_entity_error import UnprocessableEntityError
 from ..types.api_error import ApiError as types_api_error_ApiError
 from ..types.edit_template import EditTemplate
+from ..types.max_page_size import MaxPageSize
+from ..types.next_page_token import NextPageToken
+from ..types.sort_by import SortBy
+from ..types.sort_dir import SortDir
+from .types.edit_templates_list_response import EditTemplatesListResponse
 
 
 class RawEditTemplatesClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
+
+    def list(
+        self,
+        *,
+        name_contains: typing.Optional[str] = None,
+        sort_by: typing.Optional[SortBy] = None,
+        sort_dir: typing.Optional[SortDir] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[EditTemplatesListResponse]:
+        """
+        List the edit templates saved in a workspace, with an optional filter on the template name.
+
+        Returns a paginated list of edit template summaries. Use `GET /edit_templates/{id}` to retrieve a specific template in full, including its `config` and `schemaConfig`.
+
+        Parameters
+        ----------
+        name_contains : typing.Optional[str]
+            Filters edit templates to only include those that contain the given string in the name. The match is case-insensitive.
+
+            Example: `"W-9"`
+
+        sort_by : typing.Optional[SortBy]
+
+        sort_dir : typing.Optional[SortDir]
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[EditTemplatesListResponse]
+            Successfully retrieved edit templates
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "edit_templates",
+            method="GET",
+            params={
+                "nameContains": name_contains,
+                "sortBy": sort_by,
+                "sortDir": sort_dir,
+                "nextPageToken": next_page_token,
+                "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    EditTemplatesListResponse,
+                    construct_type(
+                        type_=EditTemplatesListResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise core_api_error_ApiError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+            )
+        raise core_api_error_ApiError(
+            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
+        )
 
     def retrieve(
         self,
@@ -35,7 +204,7 @@ class RawEditTemplatesClient:
         """
         Retrieve a saved edit template by ID.
 
-        Use this endpoint to inspect the source file, default edit configuration, and optional schema generation configuration saved on an edit template. You can reuse the returned `config` with `POST /edit` or `POST /edit_runs`, and reuse `schemaConfig` with `POST /detect_form` or `POST /form_detection_runs`.
+        Use this endpoint to inspect the source file, default edit configuration, and optional schema generation configuration saved on an edit template. To run an edit directly from a template, pass its ID as the top-level `templateId` field (in place of `file`) to `POST /edit` or `POST /edit_runs` — the template's file and `config` are used automatically, and any `config` values also set on the request take precedence over the template's. Reuse `schemaConfig` with `POST /detect_form` or `POST /form_detection_runs`.
 
         Parameters
         ----------
@@ -175,6 +344,170 @@ class AsyncRawEditTemplatesClient:
     def __init__(self, *, client_wrapper: AsyncClientWrapper):
         self._client_wrapper = client_wrapper
 
+    async def list(
+        self,
+        *,
+        name_contains: typing.Optional[str] = None,
+        sort_by: typing.Optional[SortBy] = None,
+        sort_dir: typing.Optional[SortDir] = None,
+        next_page_token: typing.Optional[NextPageToken] = None,
+        max_page_size: typing.Optional[MaxPageSize] = None,
+        extend_workspace_id: typing.Optional[str] = None,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[EditTemplatesListResponse]:
+        """
+        List the edit templates saved in a workspace, with an optional filter on the template name.
+
+        Returns a paginated list of edit template summaries. Use `GET /edit_templates/{id}` to retrieve a specific template in full, including its `config` and `schemaConfig`.
+
+        Parameters
+        ----------
+        name_contains : typing.Optional[str]
+            Filters edit templates to only include those that contain the given string in the name. The match is case-insensitive.
+
+            Example: `"W-9"`
+
+        sort_by : typing.Optional[SortBy]
+
+        sort_dir : typing.Optional[SortDir]
+
+        next_page_token : typing.Optional[NextPageToken]
+
+        max_page_size : typing.Optional[MaxPageSize]
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[EditTemplatesListResponse]
+            Successfully retrieved edit templates
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "edit_templates",
+            method="GET",
+            params={
+                "nameContains": name_contains,
+                "sortBy": sort_by,
+                "sortDir": sort_dir,
+                "nextPageToken": next_page_token,
+                "maxPageSize": max_page_size,
+            },
+            headers={
+                "x-extend-workspace-id": str(extend_workspace_id) if extend_workspace_id is not None else None,
+            },
+            request_options=request_options,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    EditTemplatesListResponse,
+                    construct_type(
+                        type_=EditTemplatesListResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 402:
+                raise PaymentRequiredError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        types_api_error_ApiError,
+                        construct_type(
+                            type_=types_api_error_ApiError,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise core_api_error_ApiError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.text
+            )
+        raise core_api_error_ApiError(
+            status_code=_response.status_code, headers=dict(_response.headers), body=_response_json
+        )
+
     async def retrieve(
         self,
         id: str,
@@ -185,7 +518,7 @@ class AsyncRawEditTemplatesClient:
         """
         Retrieve a saved edit template by ID.
 
-        Use this endpoint to inspect the source file, default edit configuration, and optional schema generation configuration saved on an edit template. You can reuse the returned `config` with `POST /edit` or `POST /edit_runs`, and reuse `schemaConfig` with `POST /detect_form` or `POST /form_detection_runs`.
+        Use this endpoint to inspect the source file, default edit configuration, and optional schema generation configuration saved on an edit template. To run an edit directly from a template, pass its ID as the top-level `templateId` field (in place of `file`) to `POST /edit` or `POST /edit_runs` — the template's file and `config` are used automatically, and any `config` values also set on the request take precedence over the template's. Reuse `schemaConfig` with `POST /detect_form` or `POST /form_detection_runs`.
 
         Parameters
         ----------

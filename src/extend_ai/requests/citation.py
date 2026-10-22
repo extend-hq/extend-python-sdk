@@ -26,3 +26,8 @@ class CitationParams(typing_extensions.TypedDict):
     """
     Array of points defining the polygon around the referenced text
     """
+
+    cell_range: typing_extensions.NotRequired[typing_extensions.Annotated[str, FieldMetadata(alias="cellRange")]]
+    """
+    The cited cell or range in A1 notation for Excel and CSV files. Returned instead of a polygon when a cell reference is available.
+    """
