@@ -84,7 +84,7 @@ class ParseConfigAdvancedOptions(UncheckedBaseModel):
         typing.Optional[ParseConfigAdvancedOptionsReturnOcr], FieldMetadata(alias="returnOcr")
     ] = pydantic.Field(alias="returnOcr", default=None)
     """
-    Options for returning raw OCR data in the response.
+    Options for returning raw OCR data in the response. Words and lines are independent opt-ins and both default to false.
     """
 
     always_convert_to_pdf: typing_extensions.Annotated[

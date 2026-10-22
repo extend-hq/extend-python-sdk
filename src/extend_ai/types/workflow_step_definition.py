@@ -18,10 +18,14 @@ from .extract_step_definition_config import ExtractStepDefinitionConfig
 from .file_conversion_step_definition_config import FileConversionStepDefinitionConfig
 from .merge_extract_step_definition_config import MergeExtractStepDefinitionConfig
 from .parse_step_definition_config import ParseStepDefinitionConfig
+from .router_next_entry import RouterNextEntry
+from .router_step_definition_config import RouterStepDefinitionConfig
 from .rule_validation_next_entry import RuleValidationNextEntry
 from .rule_validation_step_definition_config import RuleValidationStepDefinitionConfig
 from .simple_next_entry import SimpleNextEntry
 from .split_step_definition_config import SplitStepDefinitionConfig
+from .validation_next_entry import ValidationNextEntry
+from .validation_step_definition_config import ValidationStepDefinitionConfig
 
 
 class WorkflowStepDefinition_Trigger(UncheckedBaseModel):
@@ -263,6 +267,50 @@ class WorkflowStepDefinition_RuleValidation(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
+class WorkflowStepDefinition_Validation(UncheckedBaseModel):
+    """
+    A workflow step definition used when creating, updating, deploying, and retrieving workflow versions.
+
+    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for routing patterns and examples.
+    """
+
+    type: typing.Literal["VALIDATION"] = "VALIDATION"
+    name: str
+    config: typing.Optional[ValidationStepDefinitionConfig] = None
+    next: typing.Optional[typing.List[ValidationNextEntry]] = None
+
+    if IS_PYDANTIC_V2:
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+    else:
+
+        class Config:
+            frozen = True
+            smart_union = True
+            extra = pydantic.Extra.allow
+
+
+class WorkflowStepDefinition_Router(UncheckedBaseModel):
+    """
+    A workflow step definition used when creating, updating, deploying, and retrieving workflow versions.
+
+    See the [Configuring Workflows via API guide](https://docs.extend.ai/2026-02-09/workflows/configuring-workflows) for routing patterns and examples.
+    """
+
+    type: typing.Literal["ROUTER"] = "ROUTER"
+    name: str
+    config: typing.Optional[RouterStepDefinitionConfig] = None
+    next: typing.Optional[typing.List[RouterNextEntry]] = None
+
+    if IS_PYDANTIC_V2:
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+    else:
+
+        class Config:
+            frozen = True
+            smart_union = True
+            extra = pydantic.Extra.allow
+
+
 class WorkflowStepDefinition_HumanReview(UncheckedBaseModel):
     """
     A workflow step definition used when creating, updating, deploying, and retrieving workflow versions.
@@ -340,6 +388,8 @@ WorkflowStepDefinition = typing_extensions.Annotated[
         WorkflowStepDefinition_ExternalDataValidation,
         WorkflowStepDefinition_WebhookResponse,
         WorkflowStepDefinition_RuleValidation,
+        WorkflowStepDefinition_Validation,
+        WorkflowStepDefinition_Router,
         WorkflowStepDefinition_HumanReview,
         WorkflowStepDefinition_Collect,
         WorkflowStepDefinition_FileConversion,

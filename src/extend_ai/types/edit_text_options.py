@@ -21,11 +21,21 @@ class EditTextOptions(UncheckedBaseModel):
     Font size in points
     """
 
-    font_color: typing_extensions.Annotated[typing.Optional[typing.List[float]], FieldMetadata(alias="fontColor")] = (
+    color: typing.Optional[typing.List[int]] = pydantic.Field(default=None)
+    """
+    RGB color values from 0 to 255 for text color.
+    """
+
+    opacity: typing.Optional[float] = pydantic.Field(default=None)
+    """
+    Text opacity from 0 to 1. Defaults to 1.
+    """
+
+    font_color: typing_extensions.Annotated[typing.Optional[typing.List[int]], FieldMetadata(alias="fontColor")] = (
         pydantic.Field(alias="fontColor", default=None)
     )
     """
-    RGB color values (0-255) for text color
+    Deprecated alias for `color`. RGB color values from 0 to 255.
     """
 
     font: typing.Optional[str] = pydantic.Field(default=None)

@@ -22,7 +22,7 @@ class ParseRunOutputParams(typing_extensions.TypedDict):
 
     ocr: typing_extensions.NotRequired[ParseRunOutputOcrParams]
     """
-    Raw OCR data from the parsing process. Only included when `returnOcr` is configured in the parse config's advanced options.
+    Raw OCR data from the parsing process. Words and lines are independently enabled with `returnOcr.words` and `returnOcr.lines`; either array may be omitted.
     """
 
     metadata: typing_extensions.NotRequired[typing.Optional[ParseRunOutputMetadataParams]]

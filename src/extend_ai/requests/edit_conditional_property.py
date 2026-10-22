@@ -6,9 +6,7 @@ import typing
 
 import typing_extensions
 from ..core.serialization import FieldMetadata
-
-if typing.TYPE_CHECKING:
-    from .edit_conditional_object_property import EditConditionalObjectPropertyParams
+from .edit_conditional_property_enum_item import EditConditionalPropertyEnumItemParams
 
 
 class EditConditionalPropertyParams(typing_extensions.TypedDict):
@@ -29,12 +27,12 @@ class EditConditionalPropertyParams(typing_extensions.TypedDict):
     Description of the field constraint.
     """
 
-    enum: typing_extensions.NotRequired[typing.Sequence[str]]
+    enum: typing_extensions.NotRequired[typing.Sequence[typing.Optional[EditConditionalPropertyEnumItemParams]]]
     """
     Allowed values for enum-based conditional constraints.
     """
 
-    items: typing_extensions.NotRequired["EditConditionalObjectPropertyParams"]
+    items: typing_extensions.NotRequired["EditConditionalPropertyParams"]
     """
     Nested array item schema for conditional array constraints.
     """

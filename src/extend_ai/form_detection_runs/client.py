@@ -65,7 +65,7 @@ class FormDetectionRunsClient:
         client.form_detection_runs.create(
             file={"url": "https://example.com/form.pdf"},
             config={
-                "engine_version": "0.0.1",
+                "engine_version": "1.0.0",
                 "instructions": "Detect the form fields and use human-readable field names.",
                 "advanced_options": {"radio_enums_enabled": True},
             },
@@ -178,7 +178,7 @@ class AsyncFormDetectionRunsClient:
             await client.form_detection_runs.create(
                 file={"url": "https://example.com/form.pdf"},
                 config={
-                    "engine_version": "0.0.1",
+                    "engine_version": "1.0.0",
                     "instructions": "Detect the form fields and use human-readable field names.",
                     "advanced_options": {"radio_enums_enabled": True},
                 },

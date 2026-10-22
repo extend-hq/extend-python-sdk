@@ -22,11 +22,15 @@ from .merge_extract_result import MergeExtractResult
 from .merge_extract_step_run_step import MergeExtractStepRunStep
 from .parse_result import ParseResult
 from .parse_step_run_step import ParseStepRunStep
+from .router_result import RouterResult
+from .router_step_run_step import RouterStepRunStep
 from .rule_validation_result import RuleValidationResult
 from .rule_validation_step_run_step import RuleValidationStepRunStep
 from .split_result import SplitResult
 from .split_step_run_step import SplitStepRunStep
 from .step_run_base_status import StepRunBaseStatus
+from .validation_result import ValidationResult
+from .validation_step_run_step import ValidationStepRunStep
 
 
 class StepRun_Parse(UncheckedBaseModel):
@@ -253,6 +257,62 @@ class StepRun_ExternalDataValidation(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
+class StepRun_Validation(UncheckedBaseModel):
+    """
+    A workflow step run. The shape of the `result` field depends on the `stepType`.
+    """
+
+    step_type: typing_extensions.Annotated[typing.Literal["VALIDATION"], FieldMetadata(alias="stepType")] = (
+        pydantic.Field(alias="stepType", default="VALIDATION")
+    )
+    step: ValidationStepRunStep
+    result: typing.Optional[ValidationResult] = None
+    object: typing.Literal["workflow_step_run"] = "workflow_step_run"
+    id: str
+    workflow_run_id: typing_extensions.Annotated[str, FieldMetadata(alias="workflowRunId")] = pydantic.Field(
+        alias="workflowRunId"
+    )
+    status: StepRunBaseStatus
+    files: typing.List[FileSummary]
+
+    if IS_PYDANTIC_V2:
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+    else:
+
+        class Config:
+            frozen = True
+            smart_union = True
+            extra = pydantic.Extra.allow
+
+
+class StepRun_Router(UncheckedBaseModel):
+    """
+    A workflow step run. The shape of the `result` field depends on the `stepType`.
+    """
+
+    step_type: typing_extensions.Annotated[typing.Literal["ROUTER"], FieldMetadata(alias="stepType")] = pydantic.Field(
+        alias="stepType", default="ROUTER"
+    )
+    step: RouterStepRunStep
+    result: typing.Optional[RouterResult] = None
+    object: typing.Literal["workflow_step_run"] = "workflow_step_run"
+    id: str
+    workflow_run_id: typing_extensions.Annotated[str, FieldMetadata(alias="workflowRunId")] = pydantic.Field(
+        alias="workflowRunId"
+    )
+    status: StepRunBaseStatus
+    files: typing.List[FileSummary]
+
+    if IS_PYDANTIC_V2:
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+    else:
+
+        class Config:
+            frozen = True
+            smart_union = True
+            extra = pydantic.Extra.allow
+
+
 StepRun = typing_extensions.Annotated[
     typing.Union[
         StepRun_Parse,
@@ -263,6 +323,8 @@ StepRun = typing_extensions.Annotated[
         StepRun_ConditionalExtract,
         StepRun_RuleValidation,
         StepRun_ExternalDataValidation,
+        StepRun_Validation,
+        StepRun_Router,
     ],
     UnionMetadata(discriminant="step_type"),
 ]

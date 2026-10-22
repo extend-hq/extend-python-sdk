@@ -10,7 +10,7 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 class CitationPage(UncheckedBaseModel):
     number: float = pydantic.Field()
     """
-    Page number where the citation was found. Starts at 1.
+    Page number where the citation was found. Starts at 1. For Excel, the 1-based worksheet index; for CSV, always 1.
     """
 
     width: typing.Optional[float] = pydantic.Field(default=None)

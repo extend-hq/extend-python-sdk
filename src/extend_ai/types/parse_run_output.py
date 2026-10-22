@@ -26,7 +26,7 @@ class ParseRunOutput(UncheckedBaseModel):
 
     ocr: typing.Optional[ParseRunOutputOcr] = pydantic.Field(default=None)
     """
-    Raw OCR data from the parsing process. Only included when `returnOcr` is configured in the parse config's advanced options.
+    Raw OCR data from the parsing process. Words and lines are independently enabled with `returnOcr.words` and `returnOcr.lines`; either array may be omitted.
     """
 
     metadata: typing.Optional[ParseRunOutputMetadata] = pydantic.Field(default=None)

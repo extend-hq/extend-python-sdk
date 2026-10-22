@@ -9,6 +9,7 @@ from ..core.serialization import FieldMetadata
 from ..types.edit_json_extend_edit_field_type import EditJsonExtendEditFieldType
 from .edit_bounding_box import EditBoundingBoxParams
 from .edit_json_extend_edit_image import EditJsonExtendEditImageParams
+from .edit_source_acro_form import EditSourceAcroFormParams
 from .edit_text_options import EditTextOptionsParams
 
 if typing.TYPE_CHECKING:
@@ -83,6 +84,9 @@ class EditJsonParams(typing_extensions.TypedDict):
     Width of the column as a percentage (for table fields)
     """
 
+    extend_edit_source_acroform: typing_extensions.NotRequired[
+        typing_extensions.Annotated[EditSourceAcroFormParams, FieldMetadata(alias="extend_edit:source_acroform")]
+    ]
     extend_edit_value: typing_extensions.NotRequired[
         typing_extensions.Annotated[typing.Any, FieldMetadata(alias="extend_edit:value")]
     ]
@@ -117,6 +121,13 @@ class EditJsonParams(typing_extensions.TypedDict):
     enum: typing_extensions.NotRequired[typing.Sequence[str]]
     """
     Allowed values for enum/dropdown/radio fields
+    """
+
+    extend_descriptions: typing_extensions.NotRequired[
+        typing_extensions.Annotated[typing.Sequence[str], FieldMetadata(alias="extend:descriptions")]
+    ]
+    """
+    Human-readable labels for the values in `enum`, in the same order. Include this property when using a schema returned by Detect Form.
     """
 
     max_items: typing_extensions.NotRequired[typing_extensions.Annotated[int, FieldMetadata(alias="maxItems")]]

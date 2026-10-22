@@ -28,6 +28,8 @@ from .requests.parse_request_file import ParseRequestFileParams
 from .requests.split_config import SplitConfigParams
 from .requests.split_request_file import SplitRequestFileParams
 from .requests.split_request_splitter import SplitRequestSplitterParams
+from .requests.verify_config import VerifyConfigParams
+from .requests.verify_request_file import VerifyRequestFileParams
 from .types.classify_run import ClassifyRun
 from .types.edit_run import EditRun
 from .types.extract_run import ExtractRun
@@ -36,6 +38,7 @@ from .types.parse_request_response_type import ParseRequestResponseType
 from .types.parse_run import ParseRun
 from .types.run_metadata import RunMetadata
 from .types.split_run import SplitRun
+from .types.verify_run import VerifyRun
 
 if typing.TYPE_CHECKING:
     from .batch_processor_run.client import AsyncBatchProcessorRunClient, BatchProcessorRunClient
@@ -61,6 +64,7 @@ if typing.TYPE_CHECKING:
     from .split_runs.client import AsyncSplitRunsClient, SplitRunsClient
     from .splitter_versions.client import AsyncSplitterVersionsClient, SplitterVersionsClient
     from .splitters.client import AsyncSplittersClient, SplittersClient
+    from .verify_runs.client import AsyncVerifyRunsClient, VerifyRunsClient
     from .webhook_endpoints.client import AsyncWebhookEndpointsClient, WebhookEndpointsClient
     from .webhook_subscriptions.client import AsyncWebhookSubscriptionsClient, WebhookSubscriptionsClient
     from .workflow_runs.client import AsyncWorkflowRunsClient, WorkflowRunsClient
@@ -147,6 +151,7 @@ class Extend:
         self._edit_templates: typing.Optional[EditTemplatesClient] = None
         self._edit_schemas: typing.Optional[EditSchemasClient] = None
         self._form_detection_runs: typing.Optional[FormDetectionRunsClient] = None
+        self._verify_runs: typing.Optional[VerifyRunsClient] = None
         self._extract_runs: typing.Optional[ExtractRunsClient] = None
         self._extractors: typing.Optional[ExtractorsClient] = None
         self._extractor_versions: typing.Optional[ExtractorVersionsClient] = None
@@ -256,7 +261,8 @@ class Extend:
     def edit(
         self,
         *,
-        file: EditRequestFileParams,
+        file: typing.Optional[EditRequestFileParams] = OMIT,
+        template_id: typing.Optional[str] = OMIT,
         config: typing.Optional[EditConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> EditRun:
@@ -267,12 +273,23 @@ class Extend:
 
         The Edit endpoint allows you to detect and fill form fields in PDF documents.
 
+        Pass `file` to edit a document directly, or `templateId` to run against a saved [edit template](https://docs.extend.ai/2026-02-09/api-reference/endpoints/edit/get-edit-template). Exactly one of `file` or `templateId` must be provided.
+
         For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/editing/overview). See [Editing Error Handling](https://docs.extend.ai/2026-02-09/editing/error-handling) for HTTP errors and run failure reasons.
 
         Parameters
         ----------
-        file : EditRequestFileParams
-            The file to be edited. Files can be provided as a URL or an Extend file ID.
+        file : typing.Optional[EditRequestFileParams]
+            The file to be edited. Mutually exclusive with `templateId` — provide one or the other.
+
+            Files can be provided as a URL or an Extend file ID.
+
+        template_id : typing.Optional[str]
+            The ID of a saved [edit template](https://docs.extend.ai/2026-02-09/api-reference/endpoints/edit/get-edit-template) to run against. Mutually exclusive with `file` — provide one or the other.
+
+            The template's saved file is used as the input file, and its saved `config` (schema, instructions, engine version, and advanced options) is used to fill in any values not set on the request's own `config`. Values set on the request's `config` always take precedence over the template's.
+
+            Example: `"edt_xK9mLPqRtN3vS8wF5hB2cQ"`
 
         config : typing.Optional[EditConfigParams]
 
@@ -294,13 +311,15 @@ class Extend:
         client.edit(
             file={"url": "https://example.com/form.pdf"},
             config={
-                "engine_version": "0.0.1",
+                "engine_version": "1.0.0",
                 "instructions": "Fill out the form with the provided data",
                 "advanced_options": {"flatten_pdf": True},
             },
         )
         """
-        _response = self._raw_client.edit(file=file, config=config, request_options=request_options)
+        _response = self._raw_client.edit(
+            file=file, template_id=template_id, config=config, request_options=request_options
+        )
         return _response.data
 
     def detect_form(
@@ -340,13 +359,67 @@ class Extend:
         client.detect_form(
             file={"url": "https://example.com/form.pdf"},
             config={
-                "engine_version": "0.0.1",
+                "engine_version": "1.0.0",
                 "instructions": "Detect the form fields and use human-readable field names.",
                 "advanced_options": {"radio_enums_enabled": True},
             },
         )
         """
         _response = self._raw_client.detect_form(file=file, config=config, request_options=request_options)
+        return _response.data
+
+    def verify(
+        self,
+        *,
+        file: VerifyRequestFileParams,
+        extend_workspace_id: typing.Optional[str] = None,
+        config: typing.Optional[VerifyConfigParams] = OMIT,
+        metadata: typing.Optional[RunMetadata] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> VerifyRun:
+        """
+        Check a single document for evidence of tampering, forgery, or AI generation and wait for the result. This endpoint times out after 5 minutes on both engines. A timed-out request usually fails with `504 Gateway Timeout`; the run keeps processing in the background. Use `POST /verify_runs` for `verify_agentic` and for any document that may take longer.
+
+        For production workloads, use `POST /verify_runs` and poll `GET /verify_runs/{id}` instead. The response is a completed `verify_run`; read `output.riskLevel`, `output.summary`, and `output.signals`. An empty `signals` array means no Public Signals were detected; it is not a claim that the document is authentic.
+
+        Parameters
+        ----------
+        file : VerifyRequestFileParams
+            The file to verify, as a public URL or an Extend file ID. Verify runs against the exact submitted bytes, so `text` and `base64` inputs are not accepted. Supported inputs are PDF, JPEG, PNG, and WebP files; other types fail with `FILE_TYPE_NOT_SUPPORTED`.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+
+        config : typing.Optional[VerifyConfigParams]
+
+        metadata : typing.Optional[RunMetadata]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        VerifyRun
+            Successfully verified the file
+
+        Examples
+        --------
+        from extend_ai import Extend
+
+        client = Extend(
+            token="YOUR_TOKEN",
+        )
+        client.verify(
+            file={"url": "https://example.com/bank_statement.pdf"},
+        )
+        """
+        _response = self._raw_client.verify(
+            file=file,
+            extend_workspace_id=extend_workspace_id,
+            config=config,
+            metadata=metadata,
+            request_options=request_options,
+        )
         return _response.data
 
     def extract(
@@ -643,6 +716,14 @@ class Extend:
         return self._form_detection_runs
 
     @property
+    def verify_runs(self):
+        if self._verify_runs is None:
+            from .verify_runs.client import VerifyRunsClient  # noqa: E402
+
+            self._verify_runs = VerifyRunsClient(client_wrapper=self._client_wrapper)
+        return self._verify_runs
+
+    @property
     def extract_runs(self):
         if self._extract_runs is None:
             from .extract_runs.client import ExtractRunsClient  # noqa: E402
@@ -896,6 +977,7 @@ class AsyncExtend:
         self._edit_templates: typing.Optional[AsyncEditTemplatesClient] = None
         self._edit_schemas: typing.Optional[AsyncEditSchemasClient] = None
         self._form_detection_runs: typing.Optional[AsyncFormDetectionRunsClient] = None
+        self._verify_runs: typing.Optional[AsyncVerifyRunsClient] = None
         self._extract_runs: typing.Optional[AsyncExtractRunsClient] = None
         self._extractors: typing.Optional[AsyncExtractorsClient] = None
         self._extractor_versions: typing.Optional[AsyncExtractorVersionsClient] = None
@@ -1013,7 +1095,8 @@ class AsyncExtend:
     async def edit(
         self,
         *,
-        file: EditRequestFileParams,
+        file: typing.Optional[EditRequestFileParams] = OMIT,
+        template_id: typing.Optional[str] = OMIT,
         config: typing.Optional[EditConfigParams] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> EditRun:
@@ -1024,12 +1107,23 @@ class AsyncExtend:
 
         The Edit endpoint allows you to detect and fill form fields in PDF documents.
 
+        Pass `file` to edit a document directly, or `templateId` to run against a saved [edit template](https://docs.extend.ai/2026-02-09/api-reference/endpoints/edit/get-edit-template). Exactly one of `file` or `templateId` must be provided.
+
         For more details, see the [Edit File guide](https://docs.extend.ai/2026-02-09/editing/overview). See [Editing Error Handling](https://docs.extend.ai/2026-02-09/editing/error-handling) for HTTP errors and run failure reasons.
 
         Parameters
         ----------
-        file : EditRequestFileParams
-            The file to be edited. Files can be provided as a URL or an Extend file ID.
+        file : typing.Optional[EditRequestFileParams]
+            The file to be edited. Mutually exclusive with `templateId` — provide one or the other.
+
+            Files can be provided as a URL or an Extend file ID.
+
+        template_id : typing.Optional[str]
+            The ID of a saved [edit template](https://docs.extend.ai/2026-02-09/api-reference/endpoints/edit/get-edit-template) to run against. Mutually exclusive with `file` — provide one or the other.
+
+            The template's saved file is used as the input file, and its saved `config` (schema, instructions, engine version, and advanced options) is used to fill in any values not set on the request's own `config`. Values set on the request's `config` always take precedence over the template's.
+
+            Example: `"edt_xK9mLPqRtN3vS8wF5hB2cQ"`
 
         config : typing.Optional[EditConfigParams]
 
@@ -1056,7 +1150,7 @@ class AsyncExtend:
             await client.edit(
                 file={"url": "https://example.com/form.pdf"},
                 config={
-                    "engine_version": "0.0.1",
+                    "engine_version": "1.0.0",
                     "instructions": "Fill out the form with the provided data",
                     "advanced_options": {"flatten_pdf": True},
                 },
@@ -1065,7 +1159,9 @@ class AsyncExtend:
 
         asyncio.run(main())
         """
-        _response = await self._raw_client.edit(file=file, config=config, request_options=request_options)
+        _response = await self._raw_client.edit(
+            file=file, template_id=template_id, config=config, request_options=request_options
+        )
         return _response.data
 
     async def detect_form(
@@ -1110,7 +1206,7 @@ class AsyncExtend:
             await client.detect_form(
                 file={"url": "https://example.com/form.pdf"},
                 config={
-                    "engine_version": "0.0.1",
+                    "engine_version": "1.0.0",
                     "instructions": "Detect the form fields and use human-readable field names.",
                     "advanced_options": {"radio_enums_enabled": True},
                 },
@@ -1120,6 +1216,68 @@ class AsyncExtend:
         asyncio.run(main())
         """
         _response = await self._raw_client.detect_form(file=file, config=config, request_options=request_options)
+        return _response.data
+
+    async def verify(
+        self,
+        *,
+        file: VerifyRequestFileParams,
+        extend_workspace_id: typing.Optional[str] = None,
+        config: typing.Optional[VerifyConfigParams] = OMIT,
+        metadata: typing.Optional[RunMetadata] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> VerifyRun:
+        """
+        Check a single document for evidence of tampering, forgery, or AI generation and wait for the result. This endpoint times out after 5 minutes on both engines. A timed-out request usually fails with `504 Gateway Timeout`; the run keeps processing in the background. Use `POST /verify_runs` for `verify_agentic` and for any document that may take longer.
+
+        For production workloads, use `POST /verify_runs` and poll `GET /verify_runs/{id}` instead. The response is a completed `verify_run`; read `output.riskLevel`, `output.summary`, and `output.signals`. An empty `signals` array means no Public Signals were detected; it is not a claim that the document is authentic.
+
+        Parameters
+        ----------
+        file : VerifyRequestFileParams
+            The file to verify, as a public URL or an Extend file ID. Verify runs against the exact submitted bytes, so `text` and `base64` inputs are not accepted. Supported inputs are PDF, JPEG, PNG, and WebP files; other types fail with `FILE_TYPE_NOT_SUPPORTED`.
+
+        extend_workspace_id : typing.Optional[str]
+            The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+
+        config : typing.Optional[VerifyConfigParams]
+
+        metadata : typing.Optional[RunMetadata]
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        VerifyRun
+            Successfully verified the file
+
+        Examples
+        --------
+        import asyncio
+
+        from extend_ai import AsyncExtend
+
+        client = AsyncExtend(
+            token="YOUR_TOKEN",
+        )
+
+
+        async def main() -> None:
+            await client.verify(
+                file={"url": "https://example.com/bank_statement.pdf"},
+            )
+
+
+        asyncio.run(main())
+        """
+        _response = await self._raw_client.verify(
+            file=file,
+            extend_workspace_id=extend_workspace_id,
+            config=config,
+            metadata=metadata,
+            request_options=request_options,
+        )
         return _response.data
 
     async def extract(
@@ -1440,6 +1598,14 @@ class AsyncExtend:
 
             self._form_detection_runs = AsyncFormDetectionRunsClient(client_wrapper=self._client_wrapper)
         return self._form_detection_runs
+
+    @property
+    def verify_runs(self):
+        if self._verify_runs is None:
+            from .verify_runs.client import AsyncVerifyRunsClient  # noqa: E402
+
+            self._verify_runs = AsyncVerifyRunsClient(client_wrapper=self._client_wrapper)
+        return self._verify_runs
 
     @property
     def extract_runs(self):

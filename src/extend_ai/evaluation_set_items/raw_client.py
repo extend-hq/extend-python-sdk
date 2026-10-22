@@ -212,6 +212,11 @@ class RawEvaluationSetItemsClient:
         """
         Evaluation set items are the individual files and expected outputs that are used to evaluate the performance of a given extractor, classifier, or splitter in Extend. This endpoint will create new evaluation set items in Extend, which will be used during an evaluation run.
 
+        Each item references exactly one of:
+
+        - **`fileId`** — a single file. The item is evaluated as one single-file run.
+        - **`fileIds`** — an ordered package of 2–50 files. The item is evaluated as one [multifile extraction](https://docs.extend.ai/2026-02-09/extraction/multifile) run, with a single `expectedOutput` covering the whole package. Multifile items are only supported on evaluation sets attached to a JSON-schema extractor.
+
         **Limit:** You can create up to 100 items at a time.
 
         Learn more about how to create evaluation set items in the [Evaluation Sets](https://docs.extend.ai/2026-02-09/evaluation/overview) product page.
@@ -997,6 +1002,11 @@ class AsyncRawEvaluationSetItemsClient:
     ) -> AsyncHttpResponse[EvaluationSetItemsCreateResponse]:
         """
         Evaluation set items are the individual files and expected outputs that are used to evaluate the performance of a given extractor, classifier, or splitter in Extend. This endpoint will create new evaluation set items in Extend, which will be used during an evaluation run.
+
+        Each item references exactly one of:
+
+        - **`fileId`** — a single file. The item is evaluated as one single-file run.
+        - **`fileIds`** — an ordered package of 2–50 files. The item is evaluated as one [multifile extraction](https://docs.extend.ai/2026-02-09/extraction/multifile) run, with a single `expectedOutput` covering the whole package. Multifile items are only supported on evaluation sets attached to a JSON-schema extractor.
 
         **Limit:** You can create up to 100 items at a time.
 

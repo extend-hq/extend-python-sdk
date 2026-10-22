@@ -19,7 +19,7 @@ class ParseRunOutputMetadataPagesItem(UncheckedBaseModel):
         pydantic.Field(alias="rotationApplied", default=None)
     )
     """
-    Degrees Extend rotated the page clockwise to make it upright. `0` if rotation detection ran and the page was already upright; `null` if rotation detection was disabled for this run.
+    Degrees Extend rotated the page to make it upright, as a multiple of 90. Positive values are clockwise and negative values are counterclockwise (for example, `-90` is equivalent to `270`). `0` if rotation detection ran and the page was already upright; `null` if rotation detection was disabled for this run. Normalize with `((value % 360) + 360) % 360` before branching on it.
     """
 
     original_page_width: typing_extensions.Annotated[float, FieldMetadata(alias="originalPageWidth")] = pydantic.Field(

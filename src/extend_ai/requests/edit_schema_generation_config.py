@@ -15,7 +15,7 @@ class EditSchemaGenerationConfigParams(typing_extensions.TypedDict):
         typing_extensions.Annotated[str, FieldMetadata(alias="engineVersion")]
     ]
     """
-    The Edit engine version to use for form detection. Use an exact version for reproducible results, or `latest` to use the latest stable version. Defaults to `0.0.1` when omitted. Responses contain the resolved exact version.
+    The Edit engine version to use for form detection. Use an exact version for reproducible results, or `latest` to use the latest stable version. Defaults to `1.0.0` when omitted. Responses contain the resolved exact version.
     """
 
     input_schema: typing_extensions.NotRequired[

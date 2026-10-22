@@ -12,7 +12,7 @@ from .legacy_json_output_metadata_value_citations_item_polygon_item import (
 class LegacyJsonOutputMetadataValueCitationsItemParams(typing_extensions.TypedDict):
     page: typing_extensions.NotRequired[float]
     """
-    Page number where the citation was found
+    Page number where the citation was found. For Excel, the 1-based worksheet index; for CSV, always 1.
     """
 
     reference_text: typing_extensions.NotRequired[
@@ -25,6 +25,11 @@ class LegacyJsonOutputMetadataValueCitationsItemParams(typing_extensions.TypedDi
     polygon: typing_extensions.NotRequired[typing.Sequence[LegacyJsonOutputMetadataValueCitationsItemPolygonItemParams]]
     """
     Array of points defining the polygon around the referenced text
+    """
+
+    cell_range: typing_extensions.NotRequired[typing_extensions.Annotated[str, FieldMetadata(alias="cellRange")]]
+    """
+    The cited cell or range in A1 notation for Excel and CSV files. Returned instead of a polygon when a cell reference is available.
     """
 
     page_width: typing_extensions.NotRequired[typing_extensions.Annotated[float, FieldMetadata(alias="pageWidth")]]

@@ -73,11 +73,6 @@ class EditConditionalClause(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-from .edit_conditional_object_property import EditConditionalObjectProperty  # noqa: E402, I001
 from .edit_conditional_property import EditConditionalProperty  # noqa: E402, I001
 
-update_forward_refs(
-    EditConditionalClause,
-    EditConditionalObjectProperty=EditConditionalObjectProperty,
-    EditConditionalProperty=EditConditionalProperty,
-)
+update_forward_refs(EditConditionalClause, EditConditionalProperty=EditConditionalProperty)

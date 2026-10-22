@@ -3,21 +3,22 @@
 import typing
 
 import typing_extensions
+from ..types.run_usage_breakdown_charge_unit import RunUsageBreakdownChargeUnit
 
 
 class RunUsageBreakdownChargeParams(typing_extensions.TypedDict):
     """
-    A single cost driver within a breakdown entry's credit total. The per-unit rate is `credits / quantity`.
+    A single cost driver within a breakdown entry's credit total. The per-unit rate is `credits / quantity`. Certain charges, such as `agent_usage`, have a unit of `usd`
     """
 
     product: str
     """
-    Identifier for the billable cost driver.
+    Identifier for the billable cost driver. Base charges use the processor and tier (e.g. `extraction_performance`, `extraction_light`, `parse_light`); add-ons use the feature code (e.g. `review_agent`, `large_array_max_context`, `extraction_schema_groups`, `priority_parsing`, `agentic_text_correction`, `advanced_excel_parsing`); `agent_usage` is an Operator overage for unusually high effort relative to document size.
     """
 
-    unit: str
+    unit: RunUsageBreakdownChargeUnit
     """
-    The unit `quantity` is measured in.
+    The unit `quantity` is measured in. `page` for per-page charges, `cell` for advanced Excel parsing, `usd` for additional amounts billed such as Operator overages (`agent_usage`).
     """
 
     quantity: float

@@ -12,6 +12,7 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 from .edit_bounding_box import EditBoundingBox
 from .edit_json_extend_edit_field_type import EditJsonExtendEditFieldType
 from .edit_json_extend_edit_image import EditJsonExtendEditImage
+from .edit_source_acro_form import EditSourceAcroForm
 from .edit_text_options import EditTextOptions
 
 
@@ -83,6 +84,9 @@ class EditJson(UncheckedBaseModel):
     Width of the column as a percentage (for table fields)
     """
 
+    extend_edit_source_acroform: typing_extensions.Annotated[
+        typing.Optional[EditSourceAcroForm], FieldMetadata(alias="extend_edit:source_acroform")
+    ] = pydantic.Field(alias="extend_edit:source_acroform", default=None)
     extend_edit_value: typing_extensions.Annotated[
         typing.Optional[typing.Any], FieldMetadata(alias="extend_edit:value")
     ] = pydantic.Field(alias="extend_edit:value", default=None)
@@ -117,6 +121,13 @@ class EditJson(UncheckedBaseModel):
     enum: typing.Optional[typing.List[str]] = pydantic.Field(default=None)
     """
     Allowed values for enum/dropdown/radio fields
+    """
+
+    extend_descriptions: typing_extensions.Annotated[
+        typing.Optional[typing.List[str]], FieldMetadata(alias="extend:descriptions")
+    ] = pydantic.Field(alias="extend:descriptions", default=None)
+    """
+    Human-readable labels for the values in `enum`, in the same order. Include this property when using a schema returned by Detect Form.
     """
 
     max_items: typing_extensions.Annotated[typing.Optional[int], FieldMetadata(alias="maxItems")] = pydantic.Field(
