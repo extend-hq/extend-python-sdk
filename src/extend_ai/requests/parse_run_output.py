@@ -6,6 +6,7 @@ import typing_extensions
 from .chunk import ChunkParams
 from .parse_run_output_metadata import ParseRunOutputMetadataParams
 from .parse_run_output_ocr import ParseRunOutputOcrParams
+from .parse_run_output_source import ParseRunOutputSourceParams
 
 
 class ParseRunOutputParams(typing_extensions.TypedDict):
@@ -25,7 +26,12 @@ class ParseRunOutputParams(typing_extensions.TypedDict):
     Raw OCR data from the parsing process. Words and lines are independently enabled with `returnOcr.words` and `returnOcr.lines`; either array may be omitted.
     """
 
+    source: typing_extensions.NotRequired[ParseRunOutputSourceParams]
+    """
+    Word-level source anchors for text formats, the counterpart to `ocr` for documents parsed from markup rather than pixels. Only included when `advancedOptions.returnSourceNodes` is enabled and the file contains text.
+    """
+
     metadata: typing_extensions.NotRequired[typing.Optional[ParseRunOutputMetadataParams]]
     """
-    Rotation, dimension, and file-type metadata about the parse output. `null` for parse runs that completed before this field was introduced.
+    Rotation, dimension, file-type, and detected-language metadata about the parse output. `null` for parse runs that completed before this field was introduced.
     """

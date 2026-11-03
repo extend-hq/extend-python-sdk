@@ -7,12 +7,14 @@ import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.serialization import FieldMetadata
 from ..core.unchecked_base_model import UncheckedBaseModel
+from .parse_run_output_metadata_language_detected import ParseRunOutputMetadataLanguageDetected
 from .parse_run_output_metadata_pages_item import ParseRunOutputMetadataPagesItem
+from .parse_run_output_metadata_source_encoding import ParseRunOutputMetadataSourceEncoding
 
 
 class ParseRunOutputMetadata(UncheckedBaseModel):
     """
-    Rotation, dimension, and file-type metadata about the parse output. `null` for parse runs that completed before this field was introduced.
+    Rotation, dimension, file-type, and detected-language metadata about the parse output. `null` for parse runs that completed before this field was introduced.
     """
 
     original_mime_type: typing_extensions.Annotated[typing.Optional[str], FieldMetadata(alias="originalMimeType")] = (
@@ -29,9 +31,25 @@ class ParseRunOutputMetadata(UncheckedBaseModel):
     The file's media type after any format conversion.
     """
 
+    source_encoding: typing_extensions.Annotated[
+        typing.Optional[ParseRunOutputMetadataSourceEncoding], FieldMetadata(alias="sourceEncoding")
+    ] = pydantic.Field(alias="sourceEncoding", default=None)
+    """
+    The encoding that `source.byteOffset`/`byteLength` values are measured against. Only set when `advancedOptions.htmlSourceAnchors` is enabled.
+    """
+
     pages: typing.Optional[typing.List[ParseRunOutputMetadataPagesItem]] = pydantic.Field(default=None)
     """
-    Per-page rotation and original-dimension info. Set when file is a PDF or was converted to PDF.
+    Per-page rotation and original-dimension info. Set when file is a PDF or was converted to PDF, otherwise is null.
+    """
+
+    language_detected: typing_extensions.Annotated[
+        typing.Optional[ParseRunOutputMetadataLanguageDetected], FieldMetadata(alias="languageDetected")
+    ] = pydantic.Field(alias="languageDetected", default=None)
+    """
+    The languages detected in the document. Set for every supported file type, regardless of how the file was parsed.
+    
+    `null` when no reliable detection was possible because the document did not contain enough characters for the detector to reach a conclusion. This can happen on numeric-only documents such as ledgers or forms of bare amounts and dates. Omitted when the parse run completed before language detection was introduced.
     """
 
     if IS_PYDANTIC_V2:

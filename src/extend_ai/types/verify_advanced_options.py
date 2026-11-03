@@ -18,7 +18,7 @@ class VerifyAdvancedOptions(UncheckedBaseModel):
         pydantic.Field(alias="requireParsing", default=None)
     )
     """
-    If `true`, this forces the verify run to parse the document if it has not already been parsed in Extend. This is for checks that require OCR, like detecting mismatches with the text layer. `verify_agentic` requires this to be `true`, and rejects `false` with `400`. `verify_light` parses only when this is `true`. Defaults to `false` for `verify_light` to reduce latency. In both cases, if the file has already been parsed in Extend with Verify's default parse settings and you reuse the `fileId` without zero data retention (ZDR), then the parsed results will be used here.
+    If `true`, this forces the verify run to parse the document if it has not already been parsed in Extend. This is for checks that require OCR, like detecting mismatches with the text layer. `verify_agentic` requires this to be `true`, and rejects `false` with `400`. `verify_standard` parses only when this is `true`. Defaults to `false` for `verify_standard` to reduce latency. In both cases, if the file has already been parsed in Extend with Verify's default parse settings and you reuse the `fileId` without zero data retention (ZDR), then the parsed results will be used here.
     """
 
     if IS_PYDANTIC_V2:

@@ -13,6 +13,7 @@ from .evaluation_set_run_entity import EvaluationSetRunEntity
 from .evaluation_set_run_entity_version import EvaluationSetRunEntityVersion
 from .evaluation_set_run_metrics import EvaluationSetRunMetrics
 from .evaluation_set_run_options import EvaluationSetRunOptions
+from .evaluation_set_run_usage import EvaluationSetRunUsage
 from .updated_at import UpdatedAt
 
 
@@ -59,6 +60,11 @@ class EvaluationSetRun(UncheckedBaseModel):
     options: EvaluationSetRunOptions = pydantic.Field()
     """
     The options for the evaluation set run.
+    """
+
+    usage: typing.Optional[EvaluationSetRunUsage] = pydantic.Field(default=None)
+    """
+    Usage credits consumed by this evaluation set run, aggregated across the processor runs it executed.
     """
 
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")] = pydantic.Field(

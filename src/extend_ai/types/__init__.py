@@ -23,6 +23,7 @@ if typing.TYPE_CHECKING:
     from .block_metadata_page import BlockMetadataPage
     from .block_metadata_sheet import BlockMetadataSheet
     from .block_polygon_item import BlockPolygonItem
+    from .block_source import BlockSource
     from .block_type import BlockType
     from .bounding_box import BoundingBox
     from .cell_formatting import CellFormatting
@@ -157,6 +158,7 @@ if typing.TYPE_CHECKING:
     )
     from .evaluation_set_run_metrics_base import EvaluationSetRunMetricsBase
     from .evaluation_set_run_options import EvaluationSetRunOptions
+    from .evaluation_set_run_usage import EvaluationSetRunUsage
     from .excel_sheet_range import ExcelSheetRange
     from .external_data_validation_result import ExternalDataValidationResult
     from .external_data_validation_result_response import ExternalDataValidationResultResponse
@@ -255,6 +257,8 @@ if typing.TYPE_CHECKING:
     from .insight import Insight
     from .json_object import JsonObject
     from .key_value_details import KeyValueDetails
+    from .key_value_form_node import KeyValueFormNode
+    from .key_value_form_node_type import KeyValueFormNodeType
     from .legacy_batch_processor_run import LegacyBatchProcessorRun
     from .legacy_batch_processor_run_metrics import LegacyBatchProcessorRunMetrics
     from .legacy_batch_processor_run_options import LegacyBatchProcessorRunOptions
@@ -367,6 +371,7 @@ if typing.TYPE_CHECKING:
     )
     from .parse_config_advanced_options_image_conversion_quality import ParseConfigAdvancedOptionsImageConversionQuality
     from .parse_config_advanced_options_return_ocr import ParseConfigAdvancedOptionsReturnOcr
+    from .parse_config_advanced_options_text_extraction_method import ParseConfigAdvancedOptionsTextExtractionMethod
     from .parse_config_block_options import ParseConfigBlockOptions
     from .parse_config_block_options_barcodes import ParseConfigBlockOptionsBarcodes
     from .parse_config_block_options_figures import ParseConfigBlockOptionsFigures
@@ -390,10 +395,17 @@ if typing.TYPE_CHECKING:
     from .parse_run_metrics import ParseRunMetrics
     from .parse_run_output import ParseRunOutput
     from .parse_run_output_metadata import ParseRunOutputMetadata
+    from .parse_run_output_metadata_language_detected import ParseRunOutputMetadataLanguageDetected
+    from .parse_run_output_metadata_language_detected_languages_item import (
+        ParseRunOutputMetadataLanguageDetectedLanguagesItem,
+    )
     from .parse_run_output_metadata_pages_item import ParseRunOutputMetadataPagesItem
+    from .parse_run_output_metadata_source_encoding import ParseRunOutputMetadataSourceEncoding
     from .parse_run_output_ocr import ParseRunOutputOcr
     from .parse_run_output_ocr_lines_item import ParseRunOutputOcrLinesItem
     from .parse_run_output_ocr_words_item import ParseRunOutputOcrWordsItem
+    from .parse_run_output_source import ParseRunOutputSource
+    from .parse_run_output_source_nodes_item import ParseRunOutputSourceNodesItem
     from .parse_run_processed_webhook_event import ParseRunProcessedWebhookEvent
     from .parse_run_source import ParseRunSource
     from .parse_run_status import ParseRunStatus
@@ -655,6 +667,7 @@ if typing.TYPE_CHECKING:
     from .workflow_summary import WorkflowSummary
     from .workflow_version import WorkflowVersion
     from .workflow_version_summary import WorkflowVersionSummary
+    from .workspace import Workspace
 _dynamic_imports: typing.Dict[str, str] = {
     "ApiError": ".api_error",
     "ApiVersionEnum": ".api_version_enum",
@@ -673,6 +686,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "BlockMetadataPage": ".block_metadata_page",
     "BlockMetadataSheet": ".block_metadata_sheet",
     "BlockPolygonItem": ".block_polygon_item",
+    "BlockSource": ".block_source",
     "BlockType": ".block_type",
     "BoundingBox": ".bounding_box",
     "CellFormatting": ".cell_formatting",
@@ -797,6 +811,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "EvaluationSetRunMetrics_Extract": ".evaluation_set_run_metrics",
     "EvaluationSetRunMetrics_Splitter": ".evaluation_set_run_metrics",
     "EvaluationSetRunOptions": ".evaluation_set_run_options",
+    "EvaluationSetRunUsage": ".evaluation_set_run_usage",
     "ExcelSheetRange": ".excel_sheet_range",
     "ExternalDataValidationResult": ".external_data_validation_result",
     "ExternalDataValidationResultResponse": ".external_data_validation_result_response",
@@ -883,6 +898,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "Insight": ".insight",
     "JsonObject": ".json_object",
     "KeyValueDetails": ".key_value_details",
+    "KeyValueFormNode": ".key_value_form_node",
+    "KeyValueFormNodeType": ".key_value_form_node_type",
     "LegacyBatchProcessorRun": ".legacy_batch_processor_run",
     "LegacyBatchProcessorRunMetrics": ".legacy_batch_processor_run_metrics",
     "LegacyBatchProcessorRunOptions": ".legacy_batch_processor_run_options",
@@ -981,6 +998,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ParseConfigAdvancedOptionsFormattingDetectionItem": ".parse_config_advanced_options_formatting_detection_item",
     "ParseConfigAdvancedOptionsImageConversionQuality": ".parse_config_advanced_options_image_conversion_quality",
     "ParseConfigAdvancedOptionsReturnOcr": ".parse_config_advanced_options_return_ocr",
+    "ParseConfigAdvancedOptionsTextExtractionMethod": ".parse_config_advanced_options_text_extraction_method",
     "ParseConfigBlockOptions": ".parse_config_block_options",
     "ParseConfigBlockOptionsBarcodes": ".parse_config_block_options_barcodes",
     "ParseConfigBlockOptionsFigures": ".parse_config_block_options_figures",
@@ -1004,10 +1022,15 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ParseRunMetrics": ".parse_run_metrics",
     "ParseRunOutput": ".parse_run_output",
     "ParseRunOutputMetadata": ".parse_run_output_metadata",
+    "ParseRunOutputMetadataLanguageDetected": ".parse_run_output_metadata_language_detected",
+    "ParseRunOutputMetadataLanguageDetectedLanguagesItem": ".parse_run_output_metadata_language_detected_languages_item",
     "ParseRunOutputMetadataPagesItem": ".parse_run_output_metadata_pages_item",
+    "ParseRunOutputMetadataSourceEncoding": ".parse_run_output_metadata_source_encoding",
     "ParseRunOutputOcr": ".parse_run_output_ocr",
     "ParseRunOutputOcrLinesItem": ".parse_run_output_ocr_lines_item",
     "ParseRunOutputOcrWordsItem": ".parse_run_output_ocr_words_item",
+    "ParseRunOutputSource": ".parse_run_output_source",
+    "ParseRunOutputSourceNodesItem": ".parse_run_output_source_nodes_item",
     "ParseRunProcessedWebhookEvent": ".parse_run_processed_webhook_event",
     "ParseRunSource": ".parse_run_source",
     "ParseRunStatus": ".parse_run_status",
@@ -1261,6 +1284,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WorkflowSummary": ".workflow_summary",
     "WorkflowVersion": ".workflow_version",
     "WorkflowVersionSummary": ".workflow_version_summary",
+    "Workspace": ".workspace",
 }
 
 
@@ -1303,6 +1327,7 @@ __all__ = [
     "BlockMetadataPage",
     "BlockMetadataSheet",
     "BlockPolygonItem",
+    "BlockSource",
     "BlockType",
     "BoundingBox",
     "CellFormatting",
@@ -1427,6 +1452,7 @@ __all__ = [
     "EvaluationSetRunMetrics_Extract",
     "EvaluationSetRunMetrics_Splitter",
     "EvaluationSetRunOptions",
+    "EvaluationSetRunUsage",
     "ExcelSheetRange",
     "ExternalDataValidationResult",
     "ExternalDataValidationResultResponse",
@@ -1513,6 +1539,8 @@ __all__ = [
     "Insight",
     "JsonObject",
     "KeyValueDetails",
+    "KeyValueFormNode",
+    "KeyValueFormNodeType",
     "LegacyBatchProcessorRun",
     "LegacyBatchProcessorRunMetrics",
     "LegacyBatchProcessorRunOptions",
@@ -1611,6 +1639,7 @@ __all__ = [
     "ParseConfigAdvancedOptionsFormattingDetectionItem",
     "ParseConfigAdvancedOptionsImageConversionQuality",
     "ParseConfigAdvancedOptionsReturnOcr",
+    "ParseConfigAdvancedOptionsTextExtractionMethod",
     "ParseConfigBlockOptions",
     "ParseConfigBlockOptionsBarcodes",
     "ParseConfigBlockOptionsFigures",
@@ -1634,10 +1663,15 @@ __all__ = [
     "ParseRunMetrics",
     "ParseRunOutput",
     "ParseRunOutputMetadata",
+    "ParseRunOutputMetadataLanguageDetected",
+    "ParseRunOutputMetadataLanguageDetectedLanguagesItem",
     "ParseRunOutputMetadataPagesItem",
+    "ParseRunOutputMetadataSourceEncoding",
     "ParseRunOutputOcr",
     "ParseRunOutputOcrLinesItem",
     "ParseRunOutputOcrWordsItem",
+    "ParseRunOutputSource",
+    "ParseRunOutputSourceNodesItem",
     "ParseRunProcessedWebhookEvent",
     "ParseRunSource",
     "ParseRunStatus",
@@ -1891,4 +1925,5 @@ __all__ = [
     "WorkflowSummary",
     "WorkflowVersion",
     "WorkflowVersionSummary",
+    "Workspace",
 ]

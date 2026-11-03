@@ -20,6 +20,7 @@ if typing.TYPE_CHECKING:
     from .block_metadata_page import BlockMetadataPageParams
     from .block_metadata_sheet import BlockMetadataSheetParams
     from .block_polygon_item import BlockPolygonItemParams
+    from .block_source import BlockSourceParams
     from .bounding_box import BoundingBoxParams
     from .cell_formatting import CellFormattingParams
     from .chunk import ChunkParams
@@ -137,6 +138,7 @@ if typing.TYPE_CHECKING:
     )
     from .evaluation_set_run_metrics_base import EvaluationSetRunMetricsBaseParams
     from .evaluation_set_run_options import EvaluationSetRunOptionsParams
+    from .evaluation_set_run_usage import EvaluationSetRunUsageParams
     from .excel_sheet_range import ExcelSheetRangeParams
     from .external_data_validation_result import ExternalDataValidationResultParams
     from .external_data_validation_result_response import ExternalDataValidationResultResponseParams
@@ -210,6 +212,7 @@ if typing.TYPE_CHECKING:
     from .human_review_step_definition import HumanReviewStepDefinitionParams
     from .insight import InsightParams
     from .key_value_details import KeyValueDetailsParams
+    from .key_value_form_node import KeyValueFormNodeParams
     from .legacy_batch_processor_run import LegacyBatchProcessorRunParams
     from .legacy_batch_processor_run_metrics import LegacyBatchProcessorRunMetricsParams
     from .legacy_batch_processor_run_options import LegacyBatchProcessorRunOptionsParams
@@ -304,10 +307,16 @@ if typing.TYPE_CHECKING:
     from .parse_run_metrics import ParseRunMetricsParams
     from .parse_run_output import ParseRunOutputParams
     from .parse_run_output_metadata import ParseRunOutputMetadataParams
+    from .parse_run_output_metadata_language_detected import ParseRunOutputMetadataLanguageDetectedParams
+    from .parse_run_output_metadata_language_detected_languages_item import (
+        ParseRunOutputMetadataLanguageDetectedLanguagesItemParams,
+    )
     from .parse_run_output_metadata_pages_item import ParseRunOutputMetadataPagesItemParams
     from .parse_run_output_ocr import ParseRunOutputOcrParams
     from .parse_run_output_ocr_lines_item import ParseRunOutputOcrLinesItemParams
     from .parse_run_output_ocr_words_item import ParseRunOutputOcrWordsItemParams
+    from .parse_run_output_source import ParseRunOutputSourceParams
+    from .parse_run_output_source_nodes_item import ParseRunOutputSourceNodesItemParams
     from .parse_run_processed_webhook_event import ParseRunProcessedWebhookEventParams
     from .parse_run_status import ParseRunStatusParams
     from .parse_run_summary import ParseRunSummaryParams
@@ -536,6 +545,7 @@ if typing.TYPE_CHECKING:
     from .workflow_summary import WorkflowSummaryParams
     from .workflow_version import WorkflowVersionParams
     from .workflow_version_summary import WorkflowVersionSummaryParams
+    from .workspace import WorkspaceParams
 _dynamic_imports: typing.Dict[str, str] = {
     "ApiErrorParams": ".api_error",
     "ArrayStrategyParams": ".array_strategy",
@@ -551,6 +561,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "BlockMetadataSheetParams": ".block_metadata_sheet",
     "BlockParams": ".block",
     "BlockPolygonItemParams": ".block_polygon_item",
+    "BlockSourceParams": ".block_source",
     "BoundingBoxParams": ".bounding_box",
     "CellFormattingParams": ".cell_formatting",
     "ChunkMetadataPageRangeParams": ".chunk_metadata_page_range",
@@ -660,6 +671,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "EvaluationSetRunMetrics_SplitterParams": ".evaluation_set_run_metrics",
     "EvaluationSetRunOptionsParams": ".evaluation_set_run_options",
     "EvaluationSetRunParams": ".evaluation_set_run",
+    "EvaluationSetRunUsageParams": ".evaluation_set_run_usage",
     "ExcelSheetRangeParams": ".excel_sheet_range",
     "ExternalDataValidationResultParams": ".external_data_validation_result",
     "ExternalDataValidationResultResponseParams": ".external_data_validation_result_response",
@@ -729,6 +741,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "HumanReviewStepDefinitionParams": ".human_review_step_definition",
     "InsightParams": ".insight",
     "KeyValueDetailsParams": ".key_value_details",
+    "KeyValueFormNodeParams": ".key_value_form_node",
     "LegacyBatchProcessorRunMetricsParams": ".legacy_batch_processor_run_metrics",
     "LegacyBatchProcessorRunOptionsParams": ".legacy_batch_processor_run_options",
     "LegacyBatchProcessorRunParams": ".legacy_batch_processor_run",
@@ -812,12 +825,16 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ParseResultParams": ".parse_result",
     "ParseRunFailedWebhookEventParams": ".parse_run_failed_webhook_event",
     "ParseRunMetricsParams": ".parse_run_metrics",
+    "ParseRunOutputMetadataLanguageDetectedLanguagesItemParams": ".parse_run_output_metadata_language_detected_languages_item",
+    "ParseRunOutputMetadataLanguageDetectedParams": ".parse_run_output_metadata_language_detected",
     "ParseRunOutputMetadataPagesItemParams": ".parse_run_output_metadata_pages_item",
     "ParseRunOutputMetadataParams": ".parse_run_output_metadata",
     "ParseRunOutputOcrLinesItemParams": ".parse_run_output_ocr_lines_item",
     "ParseRunOutputOcrParams": ".parse_run_output_ocr",
     "ParseRunOutputOcrWordsItemParams": ".parse_run_output_ocr_words_item",
     "ParseRunOutputParams": ".parse_run_output",
+    "ParseRunOutputSourceNodesItemParams": ".parse_run_output_source_nodes_item",
+    "ParseRunOutputSourceParams": ".parse_run_output_source",
     "ParseRunParams": ".parse_run",
     "ParseRunProcessedWebhookEventParams": ".parse_run_processed_webhook_event",
     "ParseRunStatusParams": ".parse_run_status",
@@ -1035,6 +1052,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "WorkflowSummaryParams": ".workflow_summary",
     "WorkflowVersionParams": ".workflow_version",
     "WorkflowVersionSummaryParams": ".workflow_version_summary",
+    "WorkspaceParams": ".workspace",
 }
 
 
@@ -1074,6 +1092,7 @@ __all__ = [
     "BlockMetadataSheetParams",
     "BlockParams",
     "BlockPolygonItemParams",
+    "BlockSourceParams",
     "BoundingBoxParams",
     "CellFormattingParams",
     "ChunkMetadataPageRangeParams",
@@ -1183,6 +1202,7 @@ __all__ = [
     "EvaluationSetRunMetrics_SplitterParams",
     "EvaluationSetRunOptionsParams",
     "EvaluationSetRunParams",
+    "EvaluationSetRunUsageParams",
     "ExcelSheetRangeParams",
     "ExternalDataValidationResultParams",
     "ExternalDataValidationResultResponseParams",
@@ -1252,6 +1272,7 @@ __all__ = [
     "HumanReviewStepDefinitionParams",
     "InsightParams",
     "KeyValueDetailsParams",
+    "KeyValueFormNodeParams",
     "LegacyBatchProcessorRunMetricsParams",
     "LegacyBatchProcessorRunOptionsParams",
     "LegacyBatchProcessorRunParams",
@@ -1335,12 +1356,16 @@ __all__ = [
     "ParseResultParams",
     "ParseRunFailedWebhookEventParams",
     "ParseRunMetricsParams",
+    "ParseRunOutputMetadataLanguageDetectedLanguagesItemParams",
+    "ParseRunOutputMetadataLanguageDetectedParams",
     "ParseRunOutputMetadataPagesItemParams",
     "ParseRunOutputMetadataParams",
     "ParseRunOutputOcrLinesItemParams",
     "ParseRunOutputOcrParams",
     "ParseRunOutputOcrWordsItemParams",
     "ParseRunOutputParams",
+    "ParseRunOutputSourceNodesItemParams",
+    "ParseRunOutputSourceParams",
     "ParseRunParams",
     "ParseRunProcessedWebhookEventParams",
     "ParseRunStatusParams",
@@ -1558,4 +1583,5 @@ __all__ = [
     "WorkflowSummaryParams",
     "WorkflowVersionParams",
     "WorkflowVersionSummaryParams",
+    "WorkspaceParams",
 ]
