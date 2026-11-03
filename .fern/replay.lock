@@ -36,7 +36,13 @@ generations:
     cli_version: unknown
     generator_versions:
       fernapi/fern-python-sdk: 4.53.0
-current_generation: cd8dc6a5c55031016b3abc960484f44c53a33d6a
+  - commit_sha: 95d636a5885119c4b13cfeefbf643cc6fcb84403
+    tree_hash: 537ca6bd52a53212d44e97af402dc4c2d579f0f1
+    timestamp: 2026-11-03T19:06:36.815Z
+    cli_version: unknown
+    generator_versions:
+      fernapi/fern-python-sdk: 4.53.0
+current_generation: 95d636a5885119c4b13cfeefbf643cc6fcb84403
 patches:
   - id: patch-29b579f8
     content_hash: sha256:19cd61f1a6dd83c32c2b84be87c4195e51f4c531a09b504a5a4ec17b1de9b4a9
@@ -316,17 +322,17 @@ patches:
                 return headers
     status: unresolved
   - id: patch-a54c56a1
-    content_hash: sha256:ddd9c7ded1625decbfdc9e8d78f3413dc5ecd0c8b769c152648a9c33087fab43
+    content_hash: sha256:aea8adb233303039e9046c8df495a05d34c4c7f6dbca3dd077759249c0b87bb3
     original_commit: a54c56a1e4350c02b437fd7209862de0014fd1b0
     original_message: Harden pydantic schema conversion against late/silent failures
     original_author: jordan-extend <jordan@extend.app>
-    base_generation: cd8dc6a5c55031016b3abc960484f44c53a33d6a
+    base_generation: 95d636a5885119c4b13cfeefbf643cc6fcb84403
     files:
       - poetry.lock
       - pyproject.toml
     patch_content: |
       diff --git a/poetry.lock b/poetry.lock
-      index 7b896df..0a49d50 100644
+      index 3c1a608..b511561 100644
       --- a/poetry.lock
       +++ b/poetry.lock
       @@ -1,4 +1,4 @@
@@ -342,13 +348,13 @@ patches:
       -content-hash = "bcf31a142c86d9e556553c8c260a93b563ac64a043076dbd48b26111d422c26e"
       +content-hash = "f1e2ab5eda730c574ef9098656ce135835405a944b8ad9dcd4c65ef061581e5f"
       diff --git a/pyproject.toml b/pyproject.toml
-      index 7b59d2f..2fa9b37 100644
+      index 3b7fb69..f234d89 100644
       --- a/pyproject.toml
       +++ b/pyproject.toml
       @@ -5,10 +5,19 @@ dynamic = ["version"]
        [tool.poetry]
        name = "extend_ai"
-       version = "1.20.0"
+       version = "1.21.0"
       -description = ""
       +description = "Official Python SDK for Extend (extend.ai) — the document processing API. Parse, extract, classify, split, and edit PDFs and 35+ file types"
        readme = "README.md"
@@ -419,13 +425,13 @@ patches:
 
         [[package]]
         name = "certifi"
-        version = "2026.10.19"
+        version = "2026.10.23"
         description = "Python package for providing Mozilla's CA Bundle."
         optional = false
         python-versions = ">=3.7"
         files = [
-            {file = "certifi-2026.10.19-py3-none-any.whl", hash = "sha256:42d35340cc5b9ba78e818ddbff0c5b1c2b779de448a340fd1b989f5fa8670e1b"},
-            {file = "certifi-2026.10.19.tar.gz", hash = "sha256:035c1e85572b141bf1c3a3eff0e33a8eb74917522f2559075ff8d2fea780a1ae"},
+            {file = "certifi-2026.10.23-py3-none-any.whl", hash = "sha256:e9b54de76e530bb6cf0ccd036787103acb58fd42ba930ea8bf948ddbaa2f61d1"},
+            {file = "certifi-2026.10.23.tar.gz", hash = "sha256:a9895e6e2758b371e0545e321a3a8fd1fcfd9829ada8824a936dfb16aaaf36cd"},
         ]
 
         [[package]]
@@ -1003,7 +1009,7 @@ patches:
 
         [tool.poetry]
         name = "extend_ai"
-        version = "1.20.0"
+        version = "1.21.0"
         description = "Official Python SDK for Extend (extend.ai) — the document processing API. Parse, extract, classify, split, and edit PDFs and 35+ file types"
         readme = "README.md"
         authors = []
