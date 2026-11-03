@@ -11,11 +11,13 @@ class VerifyEngine(enum.StrEnum):
     """
     The verification engine:
     * `"verify_agentic"` - Parses the file and runs every check, including the checks that read the parse, and leverages an agent harness optimized for tamper detection. Slower and more expensive, but the most performant option for detecting difficult cases of document fraud.
-    * `"verify_light"` - Faster checks that do not require parsing, but will use parsed results if the file has already been parsed in Extend. Covers all checks except the agentic checks around content and OCR.
+    * `"verify_standard"` - Faster checks that do not require parsing, but will use parsed results if the file has already been parsed in Extend. Covers all checks except the agentic checks around content and OCR.
+
+    `verify_standard` was previously named `verify_light`. Requests that send `verify_light` are still accepted and run on `verify_standard`, and the resulting run reports `verify_standard` in `config.engine`.
     """
 
     VERIFY_AGENTIC = "verify_agentic"
-    VERIFY_LIGHT = "verify_light"
+    VERIFY_STANDARD = "verify_standard"
     _UNKNOWN = "__VERIFYENGINE_UNKNOWN__"
     """
     This member is used for forward compatibility. If the value is not recognized by the enum, it will be stored here, and the raw value is accessible through `.value`.
@@ -30,11 +32,11 @@ class VerifyEngine(enum.StrEnum):
     def visit(
         self,
         verify_agentic: typing.Callable[[], T_Result],
-        verify_light: typing.Callable[[], T_Result],
+        verify_standard: typing.Callable[[], T_Result],
         _unknown_member: typing.Callable[[str], T_Result],
     ) -> T_Result:
         if self is VerifyEngine.VERIFY_AGENTIC:
             return verify_agentic()
-        if self is VerifyEngine.VERIFY_LIGHT:
-            return verify_light()
+        if self is VerifyEngine.VERIFY_STANDARD:
+            return verify_standard()
         return _unknown_member(self._value_)

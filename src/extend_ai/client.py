@@ -70,6 +70,7 @@ if typing.TYPE_CHECKING:
     from .workflow_runs.client import AsyncWorkflowRunsClient, WorkflowRunsClient
     from .workflow_versions.client import AsyncWorkflowVersionsClient, WorkflowVersionsClient
     from .workflows.client import AsyncWorkflowsClient, WorkflowsClient
+    from .workspaces.client import AsyncWorkspacesClient, WorkspacesClient
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
@@ -174,6 +175,7 @@ class Extend:
         self._evaluation_set_runs: typing.Optional[EvaluationSetRunsClient] = None
         self._webhook_endpoints: typing.Optional[WebhookEndpointsClient] = None
         self._webhook_subscriptions: typing.Optional[WebhookSubscriptionsClient] = None
+        self._workspaces: typing.Optional[WorkspacesClient] = None
 
     @property
     def with_raw_response(self) -> RawExtend:
@@ -899,6 +901,14 @@ class Extend:
             self._webhook_subscriptions = WebhookSubscriptionsClient(client_wrapper=self._client_wrapper)
         return self._webhook_subscriptions
 
+    @property
+    def workspaces(self):
+        if self._workspaces is None:
+            from .workspaces.client import WorkspacesClient  # noqa: E402
+
+            self._workspaces = WorkspacesClient(client_wrapper=self._client_wrapper)
+        return self._workspaces
+
 
 class AsyncExtend:
     """
@@ -1000,6 +1010,7 @@ class AsyncExtend:
         self._evaluation_set_runs: typing.Optional[AsyncEvaluationSetRunsClient] = None
         self._webhook_endpoints: typing.Optional[AsyncWebhookEndpointsClient] = None
         self._webhook_subscriptions: typing.Optional[AsyncWebhookSubscriptionsClient] = None
+        self._workspaces: typing.Optional[AsyncWorkspacesClient] = None
 
     @property
     def with_raw_response(self) -> AsyncRawExtend:
@@ -1782,6 +1793,14 @@ class AsyncExtend:
 
             self._webhook_subscriptions = AsyncWebhookSubscriptionsClient(client_wrapper=self._client_wrapper)
         return self._webhook_subscriptions
+
+    @property
+    def workspaces(self):
+        if self._workspaces is None:
+            from .workspaces.client import AsyncWorkspacesClient  # noqa: E402
+
+            self._workspaces = AsyncWorkspacesClient(client_wrapper=self._client_wrapper)
+        return self._workspaces
 
 
 def _get_base_url(*, base_url: typing.Optional[str] = None, environment: ExtendEnvironment) -> str:

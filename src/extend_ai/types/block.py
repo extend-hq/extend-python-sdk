@@ -12,6 +12,7 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 from .block_details import BlockDetails
 from .block_metadata import BlockMetadata
 from .block_polygon_item import BlockPolygonItem
+from .block_source import BlockSource
 from .block_type import BlockType
 from .bounding_box import BoundingBox
 
@@ -67,21 +68,26 @@ class Block(UncheckedBaseModel):
     Metadata about the block.
     """
 
-    polygon: typing.List[BlockPolygonItem] = pydantic.Field()
+    polygon: typing.Optional[typing.List[BlockPolygonItem]] = pydantic.Field(default=None)
     """
-    An array of points defining the polygon that bounds the block.
+    An array of points defining the polygon that bounds the block. Omitted on blocks that carry a `source` anchor.
     """
 
-    bounding_box: typing_extensions.Annotated[BoundingBox, FieldMetadata(alias="boundingBox")] = pydantic.Field(
-        alias="boundingBox"
+    bounding_box: typing_extensions.Annotated[typing.Optional[BoundingBox], FieldMetadata(alias="boundingBox")] = (
+        pydantic.Field(alias="boundingBox", default=None)
     )
     """
-    A simplified bounding box for the block.
+    A simplified bounding box for the block. Omitted on blocks that carry a `source` anchor.
+    """
+
+    source: typing.Optional[BlockSource] = pydantic.Field(default=None)
+    """
+    The byte range this block came from in the uploaded file, measured in the encoding reported by `output.metadata.sourceEncoding`. Replaces `polygon`/`boundingBox`. Only set for HTML input when `advancedOptions.htmlSourceAnchors` is enabled.
     """
 
     children: typing.Optional[typing.List["Block"]] = pydantic.Field(default=None)
     """
-    An array of child blocks. For example, a table block may contain table cell blocks as children when `cellBlocksEnabled` is set to true.
+    An array of child blocks. For example, a table block may contain table cell blocks as children when `blockOptions.tables.cellBlocksEnabled` is set to true.
     """
 
     if IS_PYDANTIC_V2:

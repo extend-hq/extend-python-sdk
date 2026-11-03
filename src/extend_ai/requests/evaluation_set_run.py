@@ -11,6 +11,7 @@ from .evaluation_set_run_entity import EvaluationSetRunEntityParams
 from .evaluation_set_run_entity_version import EvaluationSetRunEntityVersionParams
 from .evaluation_set_run_metrics import EvaluationSetRunMetricsParams
 from .evaluation_set_run_options import EvaluationSetRunOptionsParams
+from .evaluation_set_run_usage import EvaluationSetRunUsageParams
 
 
 class EvaluationSetRunParams(typing_extensions.TypedDict):
@@ -54,6 +55,11 @@ class EvaluationSetRunParams(typing_extensions.TypedDict):
     options: EvaluationSetRunOptionsParams
     """
     The options for the evaluation set run.
+    """
+
+    usage: typing_extensions.NotRequired[typing.Optional[EvaluationSetRunUsageParams]]
+    """
+    Usage credits consumed by this evaluation set run, aggregated across the processor runs it executed.
     """
 
     created_at: typing_extensions.Annotated[CreatedAt, FieldMetadata(alias="createdAt")]

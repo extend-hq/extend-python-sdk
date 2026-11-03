@@ -348,7 +348,7 @@ client = Extend(
 client.verify(
     file={"id": "file_xK9mLPqRtN3vS8wF5hB2cQ"},
     config={
-        "engine": VerifyEngine.VERIFY_LIGHT,
+        "engine": VerifyEngine.VERIFY_STANDARD,
         "engine_version": "latest",
         "advanced_options": {"require_parsing": True},
     },
@@ -2876,7 +2876,7 @@ client = Extend(
 client.verify_runs.create(
     file={"id": "file_xK9mLPqRtN3vS8wF5hB2cQ"},
     config={
-        "engine": VerifyEngine.VERIFY_LIGHT,
+        "engine": VerifyEngine.VERIFY_STANDARD,
         "engine_version": "latest",
         "advanced_options": {"require_parsing": True},
     },
@@ -11959,6 +11959,272 @@ Example: `"whes_Xj8mK2pL9nR4vT7qY5wZ"`
 <dd>
 
 **extend_workspace_id:** `typing.Optional[str]` — The workspace ID to target. **Required** when using an organization-scoped API key; optional for workspace-scoped keys (the key is already tied to a workspace). See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Workspaces
+<details><summary><code>client.workspaces.<a href="src/extend_ai/workspaces/client.py">list</a>(...) -&gt; AsyncHttpResponse[WorkspacesListResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List every workspace in your organization.
+
+Requires an **organization-scoped** API key. See [Create Workspace](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workspace/create-workspace) for the availability and authentication rules that apply to all `/workspaces` endpoints.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.workspaces.list(
+    extend_workspace_id="x-extend-workspace-id",
+    next_page_token="xK9mLPqRtN3vS8wF5hB2cQ==:zWvUxYjM4nKpL7aDgE9HbTcR2mAyX3/Q+CNkfBSw1dZ=",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `str` — **Required** on this endpoint: it accepts only organization-scoped API keys. Pass any existing workspace ID in your organization — on `POST /workspaces` it identifies the workspace you are calling from, not the one being created. See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort_dir:** `typing.Optional[SortDir]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**next_page_token:** `typing.Optional[NextPageToken]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**max_page_size:** `typing.Optional[MaxPageSize]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.workspaces.<a href="src/extend_ai/workspaces/client.py">create</a>(...) -&gt; AsyncHttpResponse[Workspace]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new workspace in your organization. 
+
+**Availability.** Workspace management may be enabled for customers on the Enterprise plan. Contact [support@extend.ai](mailto:support@extend.ai) if you would like to have it enabled for your organization.
+
+**Authentication.** Requires an **organization-scoped** API key. As with every organization-key request, you must still send `x-extend-workspace-id` with an existing workspace.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.workspaces.create(
+    extend_workspace_id="x-extend-workspace-id",
+    name="Workspace A",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `str` — **Required** on this endpoint: it accepts only organization-scoped API keys. Pass any existing workspace ID in your organization — on `POST /workspaces` it identifies the workspace you are calling from, not the one being created. See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `str` — The name of the workspace.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `typing.Optional[RequestOptions]` — Request-specific configuration.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.workspaces.<a href="src/extend_ai/workspaces/client.py">retrieve</a>(...) -&gt; AsyncHttpResponse[Workspace]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a workspace by ID.
+
+Requires an **organization-scoped** API key. See [Create Workspace](https://docs.extend.ai/2026-02-09/api-reference/endpoints/workspace/create-workspace) for the availability and authentication rules that apply to all `/workspaces` endpoints.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```python
+from extend_ai import Extend
+
+client = Extend(
+    token="YOUR_TOKEN",
+)
+client.workspaces.retrieve(
+    id="workspace_id_here",
+    extend_workspace_id="x-extend-workspace-id",
+)
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `str` 
+
+The ID of the workspace.
+
+Example: `"ws_GSdEJY2mXL0FaQ3mL4kNY"`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**extend_workspace_id:** `str` — **Required** on this endpoint: it accepts only organization-scoped API keys. Pass any existing workspace ID in your organization — on `POST /workspaces` it identifies the workspace you are calling from, not the one being created. See [Authentication](https://docs.extend.ai/2026-02-09/api-reference/authentication) for details on API key scopes.
     
 </dd>
 </dl>
