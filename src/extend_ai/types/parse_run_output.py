@@ -10,6 +10,7 @@ from ..core.unchecked_base_model import UncheckedBaseModel
 from .chunk import Chunk
 from .parse_run_output_metadata import ParseRunOutputMetadata
 from .parse_run_output_ocr import ParseRunOutputOcr
+from .parse_run_output_source import ParseRunOutputSource
 
 
 class ParseRunOutput(UncheckedBaseModel):
@@ -29,9 +30,14 @@ class ParseRunOutput(UncheckedBaseModel):
     Raw OCR data from the parsing process. Words and lines are independently enabled with `returnOcr.words` and `returnOcr.lines`; either array may be omitted.
     """
 
+    source: typing.Optional[ParseRunOutputSource] = pydantic.Field(default=None)
+    """
+    Word-level source anchors for text formats, the counterpart to `ocr` for documents parsed from markup rather than pixels. Only included when `advancedOptions.returnSourceNodes` is enabled and the file contains text.
+    """
+
     metadata: typing.Optional[ParseRunOutputMetadata] = pydantic.Field(default=None)
     """
-    Rotation, dimension, and file-type metadata about the parse output. `null` for parse runs that completed before this field was introduced.
+    Rotation, dimension, file-type, and detected-language metadata about the parse output. `null` for parse runs that completed before this field was introduced.
     """
 
     if IS_PYDANTIC_V2:

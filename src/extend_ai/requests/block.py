@@ -10,6 +10,7 @@ from ..types.block_type import BlockType
 from .block_details import BlockDetailsParams
 from .block_metadata import BlockMetadataParams
 from .block_polygon_item import BlockPolygonItemParams
+from .block_source import BlockSourceParams
 from .bounding_box import BoundingBoxParams
 
 
@@ -64,17 +65,24 @@ class BlockParams(typing_extensions.TypedDict):
     Metadata about the block.
     """
 
-    polygon: typing.Sequence[BlockPolygonItemParams]
+    polygon: typing_extensions.NotRequired[typing.Sequence[BlockPolygonItemParams]]
     """
-    An array of points defining the polygon that bounds the block.
+    An array of points defining the polygon that bounds the block. Omitted on blocks that carry a `source` anchor.
     """
 
-    bounding_box: typing_extensions.Annotated[BoundingBoxParams, FieldMetadata(alias="boundingBox")]
+    bounding_box: typing_extensions.NotRequired[
+        typing_extensions.Annotated[BoundingBoxParams, FieldMetadata(alias="boundingBox")]
+    ]
     """
-    A simplified bounding box for the block.
+    A simplified bounding box for the block. Omitted on blocks that carry a `source` anchor.
+    """
+
+    source: typing_extensions.NotRequired[BlockSourceParams]
+    """
+    The byte range this block came from in the uploaded file, measured in the encoding reported by `output.metadata.sourceEncoding`. Replaces `polygon`/`boundingBox`. Only set for HTML input when `advancedOptions.htmlSourceAnchors` is enabled.
     """
 
     children: typing_extensions.NotRequired[typing.Sequence["BlockParams"]]
     """
-    An array of child blocks. For example, a table block may contain table cell blocks as children when `cellBlocksEnabled` is set to true.
+    An array of child blocks. For example, a table block may contain table cell blocks as children when `blockOptions.tables.cellBlocksEnabled` is set to true.
     """

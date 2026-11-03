@@ -3,6 +3,7 @@
 import typing
 
 import typing_extensions
+from .key_value_form_node import KeyValueFormNodeParams
 
 
 class KeyValueDetailsParams(typing_extensions.TypedDict):
@@ -13,4 +14,9 @@ class KeyValueDetailsParams(typing_extensions.TypedDict):
     type: typing.Literal["key_value_details"]
     """
     Indicates this is a key-value details object
+    """
+
+    form: typing_extensions.NotRequired[typing.Sequence[KeyValueFormNodeParams]]
+    """
+    The form region as a tree of nodes in reading order. Only set when `blockOptions.keyValue.structuredOutputEnabled` is `true`.
     """

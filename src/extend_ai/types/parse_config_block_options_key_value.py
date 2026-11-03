@@ -21,6 +21,13 @@ class ParseConfigBlockOptionsKeyValue(UncheckedBaseModel):
     Whether to preserve blank field formatting for key-value pairs with empty values.
     """
 
+    structured_output_enabled: typing_extensions.Annotated[
+        typing.Optional[bool], FieldMetadata(alias="structuredOutputEnabled")
+    ] = pydantic.Field(alias="structuredOutputEnabled", default=None)
+    """
+    Whether to return each form region as a typed tree of keys, filled values, empty fields, signatures, checkboxes, and tables, with a bounding box per node. When enabled, every `key_value` block includes `details.form`. Requires `parse_performance` >= `2.0.0`, `parse_light` >= `1.0.0`, or `parse_auto`.
+    """
+
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
     else:

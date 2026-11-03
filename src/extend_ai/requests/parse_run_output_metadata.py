@@ -4,12 +4,14 @@ import typing
 
 import typing_extensions
 from ..core.serialization import FieldMetadata
+from ..types.parse_run_output_metadata_source_encoding import ParseRunOutputMetadataSourceEncoding
+from .parse_run_output_metadata_language_detected import ParseRunOutputMetadataLanguageDetectedParams
 from .parse_run_output_metadata_pages_item import ParseRunOutputMetadataPagesItemParams
 
 
 class ParseRunOutputMetadataParams(typing_extensions.TypedDict):
     """
-    Rotation, dimension, and file-type metadata about the parse output. `null` for parse runs that completed before this field was introduced.
+    Rotation, dimension, file-type, and detected-language metadata about the parse output. `null` for parse runs that completed before this field was introduced.
     """
 
     original_mime_type: typing_extensions.NotRequired[
@@ -26,7 +28,25 @@ class ParseRunOutputMetadataParams(typing_extensions.TypedDict):
     The file's media type after any format conversion.
     """
 
+    source_encoding: typing_extensions.NotRequired[
+        typing_extensions.Annotated[ParseRunOutputMetadataSourceEncoding, FieldMetadata(alias="sourceEncoding")]
+    ]
+    """
+    The encoding that `source.byteOffset`/`byteLength` values are measured against. Only set when `advancedOptions.htmlSourceAnchors` is enabled.
+    """
+
     pages: typing_extensions.NotRequired[typing.Optional[typing.Sequence[ParseRunOutputMetadataPagesItemParams]]]
     """
-    Per-page rotation and original-dimension info. Set when file is a PDF or was converted to PDF.
+    Per-page rotation and original-dimension info. Set when file is a PDF or was converted to PDF, otherwise is null.
+    """
+
+    language_detected: typing_extensions.NotRequired[
+        typing_extensions.Annotated[
+            typing.Optional[ParseRunOutputMetadataLanguageDetectedParams], FieldMetadata(alias="languageDetected")
+        ]
+    ]
+    """
+    The languages detected in the document. Set for every supported file type, regardless of how the file was parsed.
+    
+    `null` when no reliable detection was possible because the document did not contain enough characters for the detector to reach a conclusion. This can happen on numeric-only documents such as ledgers or forms of bare amounts and dates. Omitted when the parse run completed before language detection was introduced.
     """
